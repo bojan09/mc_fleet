@@ -1,0 +1,25 @@
+{
+  "name": "Maintenance Coordinator Academy",
+  "short_name": "MC Academy",
+  "description": "Professional training academy for fleet Maintenance Coordinators — from fundamentals to expert fleet management.",
+  "id": "./",
+  "start_url": "./#/dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1a2e",
+  "theme_color": "#0b1a2e",
+  "lang": "en",
+  "categories": ["education", "productivity", "business"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Continue learning", "short_name": "Dashboard", "url": "./#/dashboard", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Curriculum", "url": "./#/curriculum", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Quick Reference", "url": "./#/reference", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Glossary", "url": "./#/glossary", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

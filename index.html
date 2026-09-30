@@ -7,6 +7,12 @@
   <meta name="description" content="Professional training academy for fleet Maintenance Coordinators — from fundamentals to expert fleet management." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='1' y='1' width='30' height='30' rx='8' fill='%23173255' stroke='%232a4a75'/%3E%3Cpath d='M8 21V11l8 6 8-6v10' fill='none' stroke='%23e7eef7' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M8 25h16' stroke='%234f8cc9' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#0b1a2e" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="MC Academy" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -83,6 +89,7 @@
     <symbol id="i-filter" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></symbol>
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
     <symbol id="i-cmd" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 0 0 0-6z"/></symbol>
   </svg>
 
@@ -142,6 +149,7 @@
             <span class="search-trigger__text">Search academy…</span>
             <kbd>Ctrl K</kbd>
           </button>
+          <button class="btn btn--sm btn--soft" id="installBtn" hidden><svg class="icon"><use href="#i-download"/></svg><span class="install-label">Install app</span></button>
           <button class="btn-icon" id="themeBtn" aria-label="Toggle dark mode"><svg class="icon"><use href="#i-moon"/></svg></button>
           <a class="topbar__progress" href="#/dashboard" id="topProgress" aria-label="Overall progress"></a>
         </div>

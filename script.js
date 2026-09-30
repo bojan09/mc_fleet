@@ -2602,7 +2602,7 @@ deep('beginner.m3.l2', [
   { title: 'Trailer electrical', blocks: [REF.pinout] },
   { title: 'Brake adjustment', blocks: [
     `S-cam air brakes need to stay in adjustment: as linings wear, the brake chamber pushrod travels farther before the brakes apply. Automatic slack adjusters compensate, but they can fail — and brakes out of adjustment are among the most common roadside inspection findings.`,
-    { ig: 'stats', icon: 'zap', title: 'Why adjustment matters', items: [{ v: '#1', l: 'category of vehicle out-of-service violations is often brake-related in CVSA roadside data', tone: 'critical' }, { v: '0', l: 'times a coordinator should suggest "manually adjusting" automatic slack adjusters instead of diagnosing why they drifted', tone: 'warning' }] },
+    { callout: { kind: 'warning', title: 'Why adjustment matters', text: 'Brake problems, including brakes out of adjustment, are among the most frequent vehicle out-of-service findings at CVSA roadside inspections. Automatic slack adjusters shouldn\'t need routine manual adjustment — if one keeps drifting, the brake needs diagnosis, not just re-adjusting.' } },
     { callout: { kind: 'info', title: 'What to ask the shop', text: 'If brakes are found out of adjustment, ask why — worn components, a failing automatic slack adjuster, or an installation issue. Repeated adjustment on the same wheel is a repeat failure.' } }
   ] }
 ]);
@@ -3139,6 +3139,381 @@ addModule('beginner', {
 enrich('beginner.m10.l1', { add: [industry('protransport', 'This is an example of a carrier — the party that hauls freight and issues invoices for it. Each carrier sets its own billing process; this lesson teaches the common fundamentals.')] });
 
 /* ---------------------------------------------------------------------------
+   CONTENT — Equipment, trailers, tires and loads (illustrated)
+   Uses the versus / anatomy / decode / axles / tread infographics.
+   Figures are U.S. federal rules or common industry practice and are labeled
+   as such; state rules and company procedures can differ.
+   --------------------------------------------------------------------------- */
+Object.assign(REF, {
+  powerUnits: { ig: 'versus', icon: 'truck', title: 'Power units: what pulls or carries the freight', items: [
+    { art: 'daycab', t: 'Day cab tractor', sub: 'No sleeping compartment.', facts: [['Typical work', 'Local and regional — driver home daily'], ['Duty', 'Many stops, frequent coupling and uncoupling']], watch: 'Brakes and clutch/transmission wear from stop-start work; fifth wheel and glad hands from frequent coupling.' },
+    { art: 'sleeper', t: 'Sleeper tractor', sub: 'Sleeper berth behind the seats.', facts: [['Typical work', 'Long-haul, multi-day trips'], ['Duty', 'Long highway miles']], watch: 'Mileage-based PMs, aftertreatment, and cab comfort systems the driver lives with (HVAC, APU — auxiliary power unit — if equipped).' },
+    { art: 'straight', t: 'Straight truck (box truck)', sub: 'Cab and cargo body on one chassis — no separate trailer.', facts: [['Typical work', 'Local delivery'], ['License', 'Class B CDL when GVWR is 26,001 lb or more']], watch: 'Cargo body, doors and liftgate (if equipped) — plus the same brakes and tires as any truck.' },
+    { art: 'yard', t: 'Yard tractor', sub: 'Also called a terminal tractor, spotter or yard dog.', facts: [['Typical work', 'Moving trailers around yards, ports and warehouses'], ['Coupling', 'Hydraulic fifth wheel lifts the trailer']], watch: 'Hydraulics and fifth wheel; very high engine hours compared with miles, so PMs are usually hour-based.' }
+  ], key: 'A tractor pulls a separate trailer; a straight truck carries the cargo on its own chassis. Knowing which one broke tells you whether the freight can be moved by swapping power.' },
+  axleConfigs: { ig: 'versus', icon: 'gauge', title: 'Tractor axle configurations (driven wheels highlighted)', items: [
+    { art: 'axle-4x2', t: '4x2', sub: 'Two axles — one driven rear axle.', facts: [['Weight', 'Lightest of the three'], ['Common use', 'Local and regional work, lighter loads']] },
+    { art: 'axle-6x4', t: '6x4', sub: 'Three axles — both rear axles driven.', facts: [['Traction', 'Best of the three'], ['Common use', 'The usual setup for heavy over-the-road tractors']] },
+    { art: 'axle-6x2', t: '6x2', sub: 'Three axles — only one rear axle driven.', facts: [['Trade-off', 'Lighter, can save fuel, but less traction on slippery roads'], ['Common use', 'Highway fleets focused on fuel economy']] }
+  ], key: 'The first number counts wheel positions (duals count as one); the second counts how many of them are driven. A 6x2 stuck on ice is a traction limit, not necessarily a defect — ask before you send a technician.' },
+  enclosedTrailers: { ig: 'versus', icon: 'layers', title: 'Enclosed trailers: dry van vs reefer', items: [
+    { art: 'dryvan', t: 'Dry van', sub: 'Enclosed box, no temperature control. The most common trailer in truckload freight.', facts: [['Common lengths', '53 ft; also 48 ft and 28 ft "pups"'], ['Width', '102 in (8.5 ft) — U.S. federal width limit'], ['Freight', 'Palletized and boxed general freight']], use: 'Retail, packaged goods, paper, parts — anything that doesn\'t need temperature control.', watch: 'Doors, hinges and seals; floor and roof damage; lights; tires; brakes; tandem slider pins.' },
+    { art: 'reefer', tone: 'info', t: 'Reefer (refrigerated van)', sub: 'Insulated box plus a front-mounted refrigeration unit, commonly with its own diesel engine and fuel tank.', facts: [['Tracked by', 'Trailer miles + reefer unit engine hours'], ['Setpoint', 'From the shipper\'s instructions on the load paperwork'], ['Inside space', 'Slightly less than a dry van (insulated walls)']], use: 'Food, pharmaceuticals, flowers, chemicals — anything temperature-sensitive, hot or cold.', watch: 'Unit PMs by hours, alarms, unit fuel, door seals, and temperature records. A reefer failure with cargo aboard is time-critical.' }
+  ], key: 'Same box, different risk: a dry-van breakdown delays freight; a reefer failure can destroy it. Reefer units often need a refrigeration technician, not a trailer shop.' },
+  openDeck: { ig: 'versus', icon: 'layers', title: 'Open-deck trailers: how deck height changes what fits', items: [
+    { art: 'flatbed', t: 'Flatbed', sub: 'One flat deck (roughly 5 ft off the ground), loaded from the sides or top.', facts: [['Common lengths', '48 ft and 53 ft'], ['Securement', 'Straps, chains and tarps — 49 CFR 393 Subpart I']], use: 'Lumber, steel, building materials, pipe.', watch: 'Deck boards, winches, stake pockets, worn straps/chains, lights, tires.' },
+    { art: 'stepdeck', t: 'Step deck (drop deck)', sub: 'Short upper deck over the kingpin, then a lower main deck.', facts: [['Why', 'Lower deck carries taller cargo than a flatbed within the same height limit'], ['Wheels', 'Often smaller, low-profile tires']], use: 'Machinery and tall loads that would be over height on a flatbed.', watch: 'Low-profile tires (check stock before a roadside call), deck, ramps if equipped.' },
+    { art: 'rgn', t: 'RGN / lowboy', sub: 'Removable gooseneck (RGN) detaches so equipment can drive on from the front; very low well deck.', facts: [['Why', 'Tallest and heaviest equipment'], ['Permits', 'Loads are often oversize/overweight and need state permits']], use: 'Excavators, dozers, cranes, transformers.', watch: 'Gooseneck hydraulics or mechanism, extra axles, deck — and the permit conditions if a breakdown delays the move.' }
+  ], key: 'The lower the deck, the taller the cargo that fits under the height limit (dashed red line). The limit itself varies by state — commonly 13 ft 6 in — so drivers and dispatch check routes for tall loads.' },
+  specialtyTrailers: { ig: 'versus', icon: 'layers', title: 'Specialty equipment: tanker, intermodal chassis, doubles', items: [
+    { art: 'tanker', t: 'Tanker', sub: 'Carries liquids, gases or dry bulk.', facts: [['Driver', 'CDL tank vehicle (N) endorsement; hazmat (H) too if the load is placarded hazmat'], ['Handling', 'Liquid surge; many tanks have baffles or compartments']], watch: 'Valves, hoses, vapor recovery, wash records. Hazmat cargo tanks have periodic test and inspection requirements (49 CFR Part 180).' },
+    { art: 'intermodal', t: 'Intermodal chassis', sub: 'A frame that carries a shipping container between ports, rail ramps and customers.', facts: [['Containers', 'Commonly 20, 40, 45 and 53 ft'], ['Ownership', 'Often a chassis pool or provider — not the carrier']], watch: 'Lights, tires, brakes and twist locks. Confirm who provides the chassis before arranging a repair — that decides who authorizes and pays.' },
+    { art: 'doubles', t: 'Doubles', sub: 'Two short (about 28 ft) trailers joined by a converter dolly.', facts: [['Driver', 'CDL doubles/triples (T) endorsement'], ['Common in', 'LTL networks']], watch: 'The dolly is its own unit: tires, brakes, lights, drawbar eye and safety chains.' }
+  ], key: 'Each of these adds a party or a requirement: tank qualifications, a chassis owner, or a third unit (the dolly) that needs its own inspection and records.' },
+  dryVanAnatomy: { ig: 'anatomy', icon: 'search', title: 'Parts of a dry van trailer', art: 'dryvan', w: 680, pins: [
+    { x: 8, y: 38.5, t: 'Rear swing doors', d: 'Hinges, seals, lock rods. A door that won\'t latch can stop a load.' },
+    { x: 8.5, y: 73, t: 'Rear impact guard', d: 'The "ICC bar." Damage or missing parts are inspection violations.' },
+    { x: 20, y: 85, t: 'Sliding tandem', d: 'Axles slide on a rail to adjust weight distribution; locking pins must engage.' },
+    { x: 46, y: 38.5, t: 'Sidewalls & logistic posts', d: 'Holes or bent posts let in water and weaken the box.' },
+    { x: 78.5, y: 79, t: 'Landing gear', d: 'Supports the parked trailer. "Won\'t crank" is a common yard call.' },
+    { x: 89.5, y: 66, t: 'Kingpin', d: 'Locks into the tractor\'s fifth wheel. Wear or damage is a coupling safety issue.' },
+    { x: 93, y: 35, t: 'Nose: glad hands & 7-way', d: 'Air and electrical connections to the tractor.' }
+  ], note: 'Whether a part belongs to the tractor or the trailer decides which unit the case is opened on.' },
+  loadTypes: { ig: 'versus', icon: 'layers', title: 'How freight fills a trailer: FTL vs LTL vs partial', items: [
+    { art: 'ftl', t: 'Full truckload (FTL)', sub: 'One shipper\'s freight uses the trailer.', facts: [['Route', 'Pickup → delivery, usually direct'], ['Handling', 'Loaded once, unloaded once']], watch: 'A breakdown delays one customer, but the whole trailer — recovery often means a tractor swap.' },
+    { art: 'ltl', t: 'Less-than-truckload (LTL)', sub: 'Many shippers\' freight shares one trailer.', facts: [['Route', 'Through terminals (hub-and-spoke)'], ['Pricing', 'Freight class (NMFC classes 50–500), weight and distance']], watch: 'Linehaul schedules between terminals: a late trailer can miss its departure and delay every shipment on it.' },
+    { art: 'partial', t: 'Partial / volume', sub: 'More than typical LTL, less than a full trailer.', facts: [['Route', 'Often shares a trailer with another partial; few stops'], ['Handling', 'Usually not rehandled at terminals']], watch: 'Multiple appointments on one trip — a delay affects every stop.' }
+  ], key: 'The load type tells you how many customers a breakdown affects and whether the freight can wait.' },
+  dockTypes: { ig: 'versus', icon: 'clock', title: 'Live load vs drop and hook', items: [
+    { art: 'live', tone: 'warning', t: 'Live load / live unload', sub: 'The driver and tractor wait at the dock while freight is loaded or unloaded.', facts: [['Time', 'Free time, then detention per the rate agreement'], ['Equipment', 'Tractor and trailer tied up together']], watch: 'A no-start at the dock blocks the customer\'s door — these calls are urgent even when the fix is simple.' },
+    { art: 'drop', tone: 'success', t: 'Drop and hook', sub: 'The driver drops one trailer and hooks a preloaded one.', facts: [['Time', 'Usually much faster for the driver'], ['Equipment', 'Needs more trailers than tractors (a trailer pool)']], watch: 'Trailers sit in customer yards for days. Defects surface at pickup — plan trailer PMs and inspections so pooled trailers don\'t fall behind.' }
+  ], key: 'Live loads tie up the tractor; drop-and-hook ties up trailers. Both change where and when you can schedule maintenance.' },
+  cargoTypes: { ig: 'versus', icon: 'shield', title: 'Cargo types and what changes for maintenance', items: [
+    { art: 'dryvan', t: 'Dry freight', sub: 'No temperature control.', watch: 'Standard urgency — the freight can usually wait for a repair.' },
+    { art: 'reefer', tone: 'info', t: 'Temperature-controlled', sub: 'Setpoint from the shipper\'s instructions.', watch: 'Reefer faults are time-critical. Keep the unit running and cargo in range while you arrange service.' },
+    { art: 'hazmat', tone: 'critical', t: 'Hazardous materials', sub: 'Regulated under 49 CFR Parts 171–180 (U.S. DOT / PHMSA).', facts: [['Placards', 'Table 1 materials: any amount. Table 2: 1,001 lb or more aggregate'], ['Driver', 'Hazmat (H) endorsement when placards are required']], watch: 'Leaks, fire risk and vendor qualifications. Follow your safety department\'s procedure before arranging any repair.' },
+    { art: 'oversize', tone: 'warning', t: 'Oversize / overweight', sub: 'Beyond legal size or weight limits.', facts: [['Permits', 'State permits set routes, travel times, signs/flags and escorts — rules vary by state']], watch: 'A breakdown can push the move outside its permitted route or hours. Involve dispatch or the permit team immediately.' }
+  ] },
+  weights: { ig: 'axles', icon: 'bar', title: 'Weight per axle group: gross weight isn\'t the only limit', art: 'rig',
+    groups: [{ t: 'Trailer tandem', x: 13.2 }, { t: 'Drive tandem', x: 77.2 }, { t: 'Steer axle', x: 91.3 }], limits: [34000, 34000, 12000], gross: 80000,
+    rows: [
+      { l: 'Balanced', d: 'Legal on every axle group', v: [33900, 33600, 11800] },
+      { l: 'Heavy on the drives', d: 'Legal gross, illegal drive tandem', v: [32400, 35200, 11900] },
+      { l: 'Over gross', d: 'The load itself must change', v: [35800, 34000, 12000] }
+    ],
+    note: 'U.S. federal Interstate limits: 34,000 lb per tandem axle group and 80,000 lb gross (23 CFR 658.17), subject to the bridge formula; states set rules for other roads and permits. The 12,000 lb steer figure is a common axle/tire rating used here for illustration, not a federal limit. Sliding the trailer tandem generally shifts weight between the drives and trailer axles; sliding the fifth wheel shifts it between the steer and drives — the driver confirms at a scale.' },
+  securement: { ig: 'table', icon: 'shield', title: 'Cargo securement basics (U.S. — 49 CFR 393 Subpart I)', head: ['Rule', 'Requirement', 'Source'], rows: [
+    ['Aggregate working load limit', 'Tiedowns together must be rated for at least 50% of the cargo weight', '393.106(d)'],
+    ['Article 5 ft or shorter, 1,100 lb or less', 'At least 1 tiedown', '393.110(b)'],
+    ['Article 5 ft or shorter over 1,100 lb, or 5–10 ft long', 'At least 2 tiedowns', '393.110(b)'],
+    ['Article longer than 10 ft', '2 tiedowns for the first 10 ft, plus 1 for each additional 10 ft or part of 10 ft', '393.110(b)'],
+    ['Driver re-inspection', 'Within the first 50 miles, then every 3 hours or 150 miles, whichever comes first', '392.9']
+  ], note: 'Tiedown counts apply when an article is not blocked against forward movement; commodity-specific rules (logs, metal coils, heavy equipment and others) add requirements. Summary for orientation only — the regulation and your safety department are the authority.' },
+  treadPositions: { ig: 'versus', icon: 'target', title: 'Steer, drive and trailer tires look different for a reason', items: [
+    { art: 'tread-steer', t: 'Steer tire', sub: 'Front axle — steering and handling.', facts: [['Tread', 'Rib: grooves run around the tire'], ['U.S. minimum', '4/32 in tread depth'], ['Rule', 'Regrooved tires aren\'t allowed on the front wheels of heavy trucks and tractors (49 CFR 393.75)']] },
+    { art: 'tread-drive', t: 'Drive tire', sub: 'Powered axles — traction.', facts: [['Tread', 'Lug/block pattern with deep side slots'], ['U.S. minimum', '2/32 in tread depth'], ['Retreads', 'Commonly used here']] },
+    { art: 'tread-trailer', t: 'Trailer tire', sub: 'Free-rolling — carries load, no steering or power.', facts: [['Tread', 'Rib pattern, often shallower'], ['U.S. minimum', '2/32 in tread depth'], ['Retreads', 'Commonly used here']] }
+  ], key: 'A tire that is legal on a drive or trailer axle can be illegal on the steer axle. Always record the exact position: steer, drive or trailer — axle, side, inside or outside dual.' },
+  tireSection: { ig: 'anatomy', icon: 'target', title: 'Inside a truck tire (cross-section)', art: 'tire-section', w: 420, pins: [
+    { x: 50, y: 14, t: 'Tread', d: 'The rubber that touches the road. Depth is measured in the grooves in 32nds of an inch.' },
+    { x: 50, y: 30, t: 'Steel belts', d: 'Stiffen the tread area. Belt separation shows up as bulges and vibration — remove from service.' },
+    { x: 15, y: 57, t: 'Sidewall', d: 'Carries the size, load and DOT codes. Cuts, bulges or exposed cords are serious — the sidewall isn\'t repairable like the tread area.' },
+    { x: 78, y: 62, t: 'Inner liner', d: 'Holds the air in a tubeless tire.' },
+    { x: 25.5, y: 85, t: 'Bead', d: 'Steel wire bundle that seals the tire against the wheel.' },
+    { x: 50, y: 94, t: 'Wheel (rim)', d: 'Must match the tire\'s rim size exactly. Cracked wheels and loose lug nuts are separate, serious defects.' }
+  ] },
+  tireCode: { ig: 'decode', icon: 'search', title: 'Reading a tire sidewall: 295/75R22.5 144/141L', parts: [
+    ['295', 'Section width', 'Tire width in millimeters, sidewall to sidewall.'], ['/', null],
+    ['75', 'Aspect ratio', 'Sidewall height as a percentage of width — 75% of 295 mm.'],
+    ['R', 'Construction', 'R = radial.'],
+    ['22.5', 'Rim diameter', 'Wheel diameter in inches. Tire and wheel must match.'], [' ', null],
+    ['144/141', 'Load index (single/dual)', '144 = 2,800 kg (about 6,170 lb) per tire used single; 141 = 2,575 kg (about 5,680 lb) per tire used in duals.'],
+    ['L', 'Speed symbol', 'L = 120 km/h (75 mph) maximum.']
+  ], note: 'Other common sizes use an older format, like 11R22.5 (11 = nominal width in inches). The DOT code\'s last four digits show when the tire was made: "2324" = week 23 of 2024. Give the vendor the full size from the sidewall, not from memory.' },
+  treadMin: { ig: 'tread', icon: 'target', title: 'Same depth, different verdict: tread depth by position', max: 12, items: [
+    { l: 'Steer', v: 6, min: 4 }, { l: 'Steer', v: 3, min: 4 }, { l: 'Drive', v: 3, min: 2 }, { l: 'Trailer', v: 1, min: 2 }
+  ], note: 'U.S. minimums under 49 CFR 393.75: 4/32 in for steer tires, 2/32 in for all other positions. 3/32 in is legal on a drive tire but not on a steer tire. Many fleets replace tires well before the legal minimum by policy.' },
+  plyTypes: { ig: 'versus', icon: 'layers', title: 'Radial vs bias-ply construction', items: [
+    { art: 'radial', t: 'Radial', sub: 'Cords run straight across from bead to bead, with steel belts under the tread.', facts: [['Where', 'The standard for modern highway truck tires'], ['Why', 'Flexible sidewall, stable tread: longer wear, lower rolling resistance']] },
+    { art: 'bias', t: 'Bias-ply', sub: 'Cords cross each other at alternating angles.', facts: [['Where', 'Older design; still found on some specialty and off-road equipment'], ['Why', 'Stiff, tough sidewall; more heat and wear at highway speed']] }
+  ], key: 'The "R" in the size tells you it\'s radial. Radial and bias tires shouldn\'t be mixed on the same axle.' },
+  dualsWide: { ig: 'versus', icon: 'target', title: 'Duals vs wide-base singles', items: [
+    { art: 'duals', t: 'Dual tires', sub: 'Two tires on each end of a drive or trailer axle.', facts: [['Plus', 'If one fails, the wheel end isn\'t left bare — but the partner is suddenly overloaded'], ['Watch', 'Both tires must be matched in size and wear to share the load']], watch: 'An underinflated inner dual overloads the outer one. After a flat, have the partner inspected too.' },
+    { art: 'widebase', t: 'Wide-base single', sub: 'One wide tire replaces each pair of duals (for example, 445/50R22.5).', facts: [['Plus', 'Lighter; can improve fuel economy'], ['Watch', 'No partner tire — a failure leaves that wheel end with nothing']], watch: 'Roadside stock is thinner in some areas. Keep your fleet\'s wide-base sizes in the tire vendor list.' }
+  ], key: 'With duals, the partner tire takes the whole load when one fails and must be inspected too; with a wide-base single there is no partner at all. Either way, the driver stops safely and a tire technician decides whether the unit can move.' },
+  brakeTypes: { ig: 'versus', icon: 'zap', title: 'Drum vs air disc brakes', items: [
+    { art: 'drum', t: 'S-cam drum brake', sub: 'An S-shaped cam pushes brake shoes against the inside of a drum.', facts: [['Where', 'Long the most common type on North American trucks and trailers'], ['Adjustment', 'Slack adjusters keep the brake in adjustment as linings wear']], watch: 'Out-of-adjustment brakes are a common inspection violation — ask why a brake keeps drifting.' },
+    { art: 'disc', t: 'Air disc brake', sub: 'A caliper squeezes pads against a rotor.', facts: [['Where', 'Increasingly common, especially on steer axles'], ['Differences', 'Generally resists fade better; faster pad changes; higher purchase cost']], watch: 'Pads and rotors are different parts from drum shoes — confirm the brake type before ordering or sending a vendor.' }
+  ], key: 'Both are air-operated and both are safety-critical. The brake type changes the parts, the labor, and which vendor can do the job.' }
+});
+
+/* Beginner M1 — freight and load types */
+addLesson('beginner', 'm1', {
+  id: 'l3', title: 'Freight, Loads and Weight Basics', minutes: 18,
+  objectives: ['Tell FTL, LTL and partial loads apart', 'Explain live loading vs drop and hook', 'Recognize how cargo type changes the urgency of a repair', 'Read axle-group weights against U.S. limits'],
+  body: [
+    `Every unit you coordinate is either carrying freight, going to get freight, or waiting for it. <strong>What kind of load is on the truck</strong> changes who is affected by a breakdown, how fast you need to move, and which vendor can help.`,
+    REF.loadTypes,
+    REF.dockTypes,
+    { h: 'Cargo type changes the urgency' },
+    REF.cargoTypes,
+    { h: 'Weight: gross and per axle' },
+    `Trucks are limited in total (gross) weight <em>and</em> in weight per axle group. A load can be under 80,000 lb and still be overweight on one axle group — usually fixed by adjusting the trailer tandem slide or re-working the load.`,
+    REF.weights,
+    { h: 'Securing the load' },
+    REF.securement,
+    { callout: { kind: 'info', title: 'Who decides?', text: 'Load legality, weight and securement are the driver\'s, dispatch\'s and the safety department\'s responsibility. The coordinator\'s part is knowing that these conditions change the urgency of a repair and the vendor you call — for example, a flatbed breakdown with a strap failure, or a reefer alarm with a temperature-sensitive load.' } }
+  ],
+  example: { title: 'Same breakdown, three different urgencies', text: `Three tractors lose an alternator on the same morning. <span class="mono">T-201</span> is hauling a dry van of paper towels due tomorrow — you schedule a repair on the route. <span class="mono">T-214</span> is live-unloading at a grocery DC and won\'t restart — the customer\'s dock is blocked, so you call a mobile tech now and tell dispatch. <span class="mono">T-230</span> pulls a reefer with ice cream — the reefer runs on its own engine, so the cargo is safe for now, but you confirm the unit\'s fuel level and temperature before choosing between a mobile repair and a power swap.` },
+  practical: { title: 'Name the load type', exercise: {
+    type: 'classify', prompt: 'Which kind of load is each description?', categories: ['Full truckload', 'LTL', 'Partial'],
+    items: [
+      { text: 'Freight from nine shippers moving through a terminal', answer: 'LTL', why: 'Many shippers sharing a trailer through terminals is LTL.' },
+      { text: 'One shipper\'s 26 pallets, picked up and delivered direct', answer: 'Full truckload', why: 'One shipper using the whole trailer.' },
+      { text: '10 pallets sharing a trailer with another 10-pallet shipment, two delivery stops', answer: 'Partial', why: 'Larger than typical LTL, less than a full trailer, few stops.' },
+      { text: 'Priced by freight class, weight and distance', answer: 'LTL', why: 'Freight class (NMFC) pricing is an LTL feature.' },
+      { text: 'Trailer sealed at the shipper, opened only at the consignee', answer: 'Full truckload', why: 'No stops or rehandling in between.' }
+    ]
+  } },
+  check: [
+    { t: 'mc', q: 'What is the U.S. federal Interstate limit for a tandem axle group?', o: ['20,000 lb', '34,000 lb', '40,000 lb', '80,000 lb'], a: 1, e: '34,000 lb per tandem group; 20,000 lb per single axle; 80,000 lb gross — subject to the bridge formula (23 CFR 658.17).' },
+    { t: 'mc', q: 'What does drop and hook require that live loading doesn\'t?', o: ['A hazmat endorsement', 'More trailers than tractors', 'A reefer unit', 'A step deck'], a: 1, e: 'Preloaded trailers wait for drivers, so the fleet needs a pool of extra trailers.' },
+    { t: 'tf', q: 'A truck under 80,000 lb gross can still be overweight.', a: true, e: 'Axle-group limits apply separately. Too much weight on the drives is illegal even when the gross is fine.' }
+  ],
+  takeaways: ['FTL = one shipper; LTL = many shippers through terminals; partial = in between.', 'Live loads tie up the tractor; drop and hook ties up trailers.', 'Reefer, hazmat and oversize loads raise the urgency and narrow the vendor list.', 'Weight limits apply per axle group as well as in total.'],
+  tips: ['On every breakdown call, ask "loaded or empty — and with what?" before choosing a plan.', 'For pooled trailers, schedule inspections when a trailer is empty in your own yard.'],
+  mistakes: ['Treating a reefer load like dry freight because the tractor issue "isn\'t urgent."', 'Assuming that under 80,000 lb gross means the truck is legal.']
+});
+
+/* Beginner M3 — equipment types */
+addLesson('beginner', 'm3', {
+  id: 'l4', title: 'Equipment Types: Tractors, Trucks and Trailers', minutes: 18,
+  objectives: ['Identify common power units and axle configurations', 'Tell the main trailer types apart by sight', 'Explain how equipment type changes the vendor and urgency'],
+  body: [
+    `Drivers and shops will describe equipment by type — "the 6x2 day cab," "the step deck," "the chassis." Knowing what each looks like and why it exists helps you ask the right questions and send the right vendor.`,
+    REF.powerUnits,
+    REF.axleConfigs,
+    { h: 'Trailer types' },
+    REF.enclosedTrailers,
+    REF.openDeck,
+    REF.specialtyTrailers,
+    { h: 'Know the parts of a trailer' },
+    REF.dryVanAnatomy,
+    { h: 'What equipment type changes for you' },
+    { ig: 'table', icon: 'wrench', title: 'Equipment type → coordinator impact', head: ['Equipment', 'Who can usually fix it', 'Extra question to ask'], rows: [
+      ['Reefer unit', 'Refrigeration technician or dealer — many trailer shops don\'t service units', 'Box temperature, setpoint and unit fuel level?'],
+      ['Tanker', 'Shops qualified for tank equipment (and hazmat work, if applicable)', 'Loaded or empty — and with what? Any leak?'],
+      ['Intermodal chassis', 'The chassis provider\'s repair process, or a vendor they authorize', 'Whose chassis is it? (Number is on the chassis.)'],
+      ['Step deck / RGN', 'Tire vendors with low-profile sizes; heavy-haul capable shops', 'Is the load permitted? Any route or time conditions?'],
+      ['Doubles', 'Any trailer shop — but the dolly is a separate unit', 'Which unit: lead trailer, dolly or rear trailer?']
+    ], note: 'Typical patterns, not rules — your vendor list and company procedures decide.' }
+  ],
+  example: { title: '"The trailer won\'t hold air"', text: `A driver on a step deck reports an air leak at the rear axles. Because you know step decks often run low-profile tires, you ask for the tire size along with the leak details — the driver also mentions a tire is low. You tell the mobile vendor the exact size up front, so they bring a low-profile tire instead of making a second trip.` },
+  practical: { title: 'Match the description to the trailer', exercise: {
+    type: 'classify', prompt: 'Which trailer type is described?', categories: ['Dry van', 'Reefer', 'Flatbed', 'Step deck', 'Tanker'],
+    items: [
+      { text: 'Enclosed trailer with a diesel-powered unit on the front wall', answer: 'Reefer', why: 'The refrigeration unit is the giveaway.' },
+      { text: 'Open deck; cargo held with straps and covered by tarps', answer: 'Flatbed', why: 'One flat open deck, secured and tarped.' },
+      { text: 'Two deck heights so taller machinery fits under the height limit', answer: 'Step deck', why: 'The lower main deck gains cargo height.' },
+      { text: 'Carries liquid; the driver needs an N endorsement', answer: 'Tanker', why: 'The tank vehicle endorsement is N.' },
+      { text: 'Enclosed box for palletized general freight, no temperature control', answer: 'Dry van', why: 'The most common trailer in truckload freight.' }
+    ]
+  } },
+  check: [
+    { t: 'mc', q: 'In a 6x4 tractor, how many axles are driven?', o: ['One', 'Two', 'Four', 'Six'], a: 1, e: 'Six wheel positions, four of them driven — both rear axles.' },
+    { t: 'mc', q: 'Main advantage of a step deck over a flatbed?', o: ['It\'s enclosed', 'It carries taller cargo under the same height limit', 'It needs no securement', 'It has a refrigeration unit'], a: 1, e: 'The lower main deck leaves more room under the height limit.' },
+    { t: 'tf', q: 'Reefer unit engine hours are tracked separately from trailer miles.', a: true, e: 'The refrigeration unit has its own engine and PM schedule, usually by hours.' }
+  ],
+  takeaways: ['Day cabs work local; sleepers work long-haul; straight trucks carry cargo on their own chassis.', 'Axle configuration = wheel positions × driven positions.', 'Deck height decides how tall a load fits on open-deck trailers.', 'Reefers, tankers, chassis and dollies each bring their own vendor and questions.'],
+  tips: ['Keep a photo sheet of each trailer type your fleet runs, with the unit-number format.', 'Add the equipment type to every case title — "TR-532 reefer" beats "TR-532."'],
+  mistakes: ['Sending a trailer shop to a reefer unit fault.', 'Arranging a repair on an intermodal chassis before confirming who owns it.']
+});
+
+/* Beginner M3 — tire basics */
+addLesson('beginner', 'm3', {
+  id: 'l5', title: 'Tire Basics: Positions, Construction and Sidewall Codes', minutes: 16,
+  objectives: ['Explain why steer, drive and trailer tires differ', 'Name the main parts of a tire', 'Read a tire size and load index', 'Apply U.S. tread-depth minimums by position'],
+  body: [
+    `Tire calls are among the most common roadside events. You don\'t change tires — but a precise description of the position, size and damage gets the right tire to the right place on the first trip.`,
+    REF.treadPositions,
+    REF.tireSection,
+    REF.tireCode,
+    REF.treadMin,
+    REF.plyTypes,
+    REF.dualsWide,
+    { callout: { kind: 'safety', title: 'Steer tires are never "limp it in"', text: 'A damaged, bulging or low steer tire affects steering control. The driver stops in a safe place and a qualified tire technician decides — never suggest driving on it to reach a cheaper vendor.' } },
+    { h: 'The tire-call checklist' },
+    { ul: ['Unit number — tractor or trailer?', 'Position: steer, drive or trailer; which axle; left or right; inside or outside dual', 'Full tire size from the sidewall (and wide-base or dual?)', 'What happened: flat, blowout, cut, bulge, low pressure', 'Is the wheel or anything else damaged?', 'Loaded or empty, and exact location'] }
+  ],
+  example: { title: 'The second trip', text: `A driver reported "a flat on the trailer." The vendor arrived with a standard 11R22.5 — but the trailer ran wide-base singles. The vendor had to leave and come back, adding three hours of downtime. A coordinator who asks for the sidewall size and "dual or single?" avoids the second trip.` },
+  practical: { title: 'Which position?', exercise: {
+    type: 'classify', prompt: 'Which tire position does each description fit best?', categories: ['Steer', 'Drive', 'Trailer'],
+    items: [
+      { text: 'Rib tread on the front axle, handles steering', answer: 'Steer', why: 'Steer tires use rib patterns for handling.' },
+      { text: 'Deep lug tread under the tractor\'s rear axles', answer: 'Drive', why: 'Lugs give traction on powered axles.' },
+      { text: 'Free-rolling, often shallower rib tread', answer: 'Trailer', why: 'Trailer tires carry load but don\'t steer or drive.' },
+      { text: 'Must have at least 4/32 in of tread in the U.S.', answer: 'Steer', why: 'Other positions have a 2/32 in minimum.' }
+    ]
+  } },
+  check: [
+    { t: 'mc', q: 'In 295/75R22.5, what does 22.5 mean?', o: ['Tread depth', 'Rim diameter in inches', 'Load index', 'Width in inches'], a: 1, e: 'The last number of the size is the wheel (rim) diameter in inches.' },
+    { t: 'tf', q: 'A tire at 3/32 in meets the U.S. minimum on a steer axle.', a: false, e: 'Steer tires need at least 4/32 in. 3/32 in is legal only on other positions.' },
+    { t: 'mc', q: 'What is different about a flat on a wide-base single compared with a flat on one dual?', o: ['Wide-base tires cost less', 'There is no partner tire at that wheel end', 'Wide-base tires are only used on steers', 'Duals can\'t go flat'], a: 1, e: 'A wide-base single replaces the pair — when it fails, that wheel end has nothing.' }
+  ],
+  takeaways: ['Tread pattern matches the job: rib to steer, lug to drive, free-rolling on trailers.', 'Read the size from the sidewall and give it to the vendor exactly.', 'Tread minimums differ by position: 4/32 in steer, 2/32 in others (U.S.).', 'Duals share the load; wide-base singles have no backup.'],
+  tips: ['Ask the driver for a photo of the sidewall size and the damage when it\'s safe.', 'Keep your fleet\'s tire sizes per unit type in your vendor notes.'],
+  mistakes: ['Ordering by "the usual size" without checking the unit.', 'Recording "rear tire" instead of axle, side and inside/outside.']
+});
+
+/* Existing lessons: brakes and advanced tires */
+enrich('beginner.m3.l2', { at: 3, add: [REF.brakeTypes] });
+enrich('advanced.m4.l3', { add: [REF.treadMin, REF.dualsWide] });
+
+/* Official sources for the regulatory facts used across the academy */
+Object.assign(REF, {
+  scope: { callout: { kind: 'info', title: 'Scope of this academy', text: 'MC Academy is educational training. Regulations cited are U.S. federal rules (FMCSA, PHMSA, FHWA) and the CVSA inspection standards used in North America; states can add their own rules, and every carrier has its own procedures and approval limits. Nothing here is legal, regulatory or professional advice — when a rule matters for a real decision, check the current official source and your safety department.' } },
+  sources: { ig: 'table', icon: 'shield', title: 'Official sources for the academy regulatory facts', head: ['Topic', 'Official source', 'Used in'], rows: [
+    ['Federal Motor Carrier Safety Regulations (49 CFR Parts 390-399)', '<a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B" target="_blank" rel="noopener noreferrer">eCFR - Title 49, Subchapter B</a>', 'Vehicle parts, inspection, repair and maintenance, driving rules'],
+    ['Tires, including tread depth (49 CFR 393.75)', '<a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-393/subpart-G/section-393.75" target="_blank" rel="noopener noreferrer">eCFR - 393.75</a>', 'Tire lessons, Quick Reference'],
+    ['Cargo securement (49 CFR 393 Subpart I)', '<a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-393/subpart-I" target="_blank" rel="noopener noreferrer">eCFR - Part 393, Subpart I</a>', 'Freight and loads lesson'],
+    ['Inspection, repair and maintenance; DVIRs (49 CFR Part 396)', '<a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396" target="_blank" rel="noopener noreferrer">eCFR - Part 396</a>', 'Inspections and DVIR lessons'],
+    ['Warning devices after a stop (49 CFR 392.22)', '<a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-392/subpart-C/section-392.22" target="_blank" rel="noopener noreferrer">eCFR - 392.22</a>', 'Roadside lessons'],
+    ['Hours of Service', '<a href="https://www.fmcsa.dot.gov/regulations/hours-of-service" target="_blank" rel="noopener noreferrer">FMCSA - Hours of Service</a>', 'Dispatch and downtime lessons'],
+    ['CDL endorsements (49 CFR 383.93)', '<a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-383/subpart-E/section-383.93" target="_blank" rel="noopener noreferrer">eCFR - 383.93</a>', 'Equipment types lesson'],
+    ['Vehicle weight limits (23 CFR 658.17)', '<a href="https://www.ecfr.gov/current/title-23/chapter-I/subchapter-G/part-658/section-658.17" target="_blank" rel="noopener noreferrer">eCFR - 658.17</a>', 'Freight and loads lesson'],
+    ['Bridge formula', '<a href="https://ops.fhwa.dot.gov/freight/publications/brdg_frm_wghts/" target="_blank" rel="noopener noreferrer">FHWA - Bridge Formula Weights</a>', 'Freight and loads lesson'],
+    ['Hazmat placarding (49 CFR 172.504)', '<a href="https://www.ecfr.gov/current/title-49/subtitle-B/chapter-I/subchapter-C/part-172/subpart-F/section-172.504" target="_blank" rel="noopener noreferrer">eCFR - 172.504</a>', 'Cargo types'],
+    ['Hazardous materials program', '<a href="https://www.phmsa.dot.gov/about-phmsa/offices/office-hazardous-materials-safety" target="_blank" rel="noopener noreferrer">PHMSA - Office of Hazardous Materials Safety</a>', 'Cargo types'],
+    ['Out-of-service criteria', '<a href="https://cvsa.org/inspections/out-of-service-criteria/" target="_blank" rel="noopener noreferrer">CVSA - Out-of-Service Criteria</a>', 'Safety and inspection lessons'],
+    ['Roadside inspection levels', '<a href="https://cvsa.org/inspections/all-inspection-levels/" target="_blank" rel="noopener noreferrer">CVSA - All Inspection Levels</a>', 'Inspection lessons, Quick Reference']
+  ], note: 'Regulations change. The links go to the current official text; the academy summarizes it for orientation only.' }
+});
+
+/* ---------------------------------------------------------------------------
+   CONTENT — Freight market, dispatch, route planning, fuel and HOS basics
+   Context a maintenance coordinator needs to talk the language of operations.
+   U.S. federal rules are cited; company procedures and state rules can differ.
+   --------------------------------------------------------------------------- */
+Object.assign(REF, {
+  carrierTypes: { ig: 'versus', icon: 'truck', title: 'Types of carriers and freight companies', items: [
+    { t: 'For-hire carrier', sub: 'Hauls other companies\' freight for pay.', facts: [['Registration', 'USDOT number; interstate for-hire carriers also need FMCSA operating authority (currently identified by an MC number)'], ['Example', 'A truckload carrier moving retail freight for many shippers']], watch: 'Uptime is revenue: every down unit is a load that isn\'t moving or a customer at risk.' },
+    { t: 'Private fleet', sub: 'A company hauling its own goods.', facts: [['Registration', 'USDOT number for interstate commercial vehicles'], ['Example', 'A grocery chain delivering to its own stores']], watch: 'Service to the company\'s own stores or plants drives priorities more than load revenue.' },
+    { t: 'Owner-operator', sub: 'A driver who owns (or leases) their truck.', facts: [['How they work', 'Often leased onto a carrier\'s authority; some run under their own authority'], ['Who pays repairs', 'Set by the lease agreement — usually the owner-operator for their own truck']], watch: 'Confirm who owns the unit before arranging or approving any repair.' },
+    { t: 'Freight broker', sub: 'Arranges transportation between shippers and carriers — doesn\'t haul the freight.', facts: [['Registration', 'FMCSA broker authority and a $75,000 financial security (surety bond or trust)'], ['Documents', 'Sends the carrier a rate confirmation for each load']], watch: 'On brokered loads, the broker needs delay updates — through your dispatch team, following company procedure.' }
+  ], key: 'The same breakdown call can involve different decision-makers: your own fleet, an owner-operator, a chassis provider, or a broker waiting for an update. Ask who owns the unit and whose load it is.' },
+  loadLifecycle: { ig: 'process', icon: 'route', title: 'The life of a load', items: [
+    { icon: 'search', t: 'Load found', d: 'Customer contract, broker or load board' }, { icon: 'file', t: 'Rate confirmed', d: 'Rate con: pickup, delivery, rate, rules' },
+    { icon: 'truck', t: 'Dispatched', d: 'Driver, tractor, trailer assigned' }, { icon: 'clipboard', t: 'Picked up', d: 'BOL signed, seal number noted' },
+    { icon: 'pin', t: 'In transit', d: 'Tracking and check calls' }, { icon: 'check-circle', t: 'Delivered', d: 'Signed BOL = proof of delivery' },
+    { icon: 'dollar', t: 'Invoiced & paid', d: 'Invoice + documents, then payment' }
+  ], note: 'A breakdown can interrupt any step. The earlier it happens, the more options dispatch has — which is why fast, accurate ETRs matter.' },
+  loadBoard: { ig: 'card', icon: 'search', title: 'Reading a load board posting (example)', form: 'Load board posting · example', rows: [
+    ['Origin → destination', 'Dallas, TX → Atlanta, GA (≈ 780 mi)'], ['Pickup / delivery', '06/12 14:00–16:00 · 06/13 08:00 appointment'], ['Equipment', 'Van, 53 ft'],
+    ['Weight / length', '38,000 lb · full load'], ['Commodity', 'Packaged consumer goods'], ['Rate', 'Posted all-in rate, or "call for rate"'],
+    ['Posted by', 'Broker name, MC number, contact'], ['Extras', 'Drop trailer at pickup; driver assist: no']
+  ], note: 'Illustrative example — every load board and broker formats postings differently. Dispatch books loads; the coordinator needs to know the equipment and appointment details because they decide how urgent a repair is.' },
+  hosBasics: { ig: 'stats', icon: 'clock', title: 'Hours of Service basics — property-carrying drivers (U.S.)', items: [
+    { v: '11', u: 'h', l: 'maximum driving after 10 consecutive hours off duty', tone: 'info' },
+    { v: '14', u: 'h', l: 'on-duty window — no driving after the 14th hour, even with breaks', tone: 'warning' },
+    { v: '30', u: 'min', l: 'break required after 8 cumulative hours of driving', tone: 'info' },
+    { v: '60/70', u: 'h', l: 'on-duty limit in 7/8 consecutive days', tone: 'info' }
+  ], note: 'Summary of FMCSA rules (49 CFR Part 395). Exceptions exist (short-haul, adverse driving conditions, sleeper-berth split and others). Dispatch and the safety department apply HOS — the coordinator uses it to judge whether a repair time still works for the load.' },
+  routeFactors: { ig: 'hub', icon: 'route', title: 'What goes into a truck route', center: { icon: 'route', t: 'Route plan' }, items: [
+    { icon: 'clock', t: 'Appointments', d: 'Pickup and delivery windows' }, { icon: 'users', t: 'Driver hours', d: 'HOS and planned breaks' },
+    { icon: 'alert', t: 'Restrictions', d: 'Low clearances, weight limits, hazmat routes' }, { icon: 'gauge', t: 'Fuel stops', d: 'Network, price, DEF' },
+    { icon: 'wrench', t: 'Service points', d: 'PM due, known vendors on the lane' }, { icon: 'sun', t: 'Weather & traffic', d: 'Closures, chain laws, delays' }
+  ] },
+  fuelSignals: { ig: 'table', icon: 'gauge', title: 'Fuel data as a maintenance signal', head: ['What the data shows', 'Possible maintenance causes', 'Coordinator action'], rows: [
+    ['MPG drops on one unit, same lanes and loads', 'Underinflated tires, dragging brakes, aftertreatment or injector problems', 'Check recent faults; schedule an inspection'],
+    ['High idle time', 'Driver comfort needs (HVAC, APU not working), or habit', 'Ask the driver; check APU/HVAC repair history'],
+    ['DEF use far from normal', 'SCR/DEF system issue, or DEF purchases not captured', 'Check DEF-related fault codes'],
+    ['Fuel purchased with no miles driven', 'Unit in the shop, reefer fueling, or a data issue', 'Confirm with fuel records before assuming misuse']
+  ], note: 'Patterns point to questions, not diagnoses. A technician confirms any mechanical cause.' },
+  ifta: { ig: 'table', icon: 'file', title: 'Fuel tax and trip records: IFTA in brief', head: ['Question', 'Answer'], rows: [
+    ['What is IFTA?', 'The International Fuel Tax Agreement among the 48 contiguous U.S. states and 10 Canadian provinces. Carriers report fuel and miles by jurisdiction on one quarterly return.'],
+    ['Which vehicles?', 'Generally, qualified motor vehicles used in interstate operation: two axles and over 26,000 lb, three or more axles, or a combination over 26,000 lb.'],
+    ['Why it touches maintenance', 'Miles driven to and from shops, and fuel bought during repairs, still belong in trip records. Accurate odometer readings on work orders help.'],
+    ['Who handles it', 'Usually accounting, fuel tax or safety/compliance staff — not the maintenance coordinator.']
+  ], note: 'Overview only. Your base jurisdiction and your company\'s tax staff are the authority on IFTA reporting.' }
+});
+
+addLesson('beginner', 'm1', {
+  id: 'l4', title: 'The Freight Market: Carriers, Brokers, Load Boards and Dispatch', minutes: 16,
+  objectives: ['Tell for-hire carriers, private fleets, owner-operators and brokers apart', 'Follow a load from booking to payment', 'Read the basic fields of a load posting', 'Explain what a dispatcher does and what they need from maintenance'],
+  body: [
+    `Maintenance doesn\'t happen in a vacuum. Every repair decision lands on a load, a customer and a driver. This lesson gives you the vocabulary of the freight side of the business, so conversations with dispatch make sense from day one.`,
+    REF.carrierTypes,
+    { h: 'From booking to payment' },
+    REF.loadLifecycle,
+    `Loads come from a carrier\'s own customer contracts, from freight brokers, or from <strong>load boards</strong> — online marketplaces where brokers and shippers post available loads and carriers post available trucks. The load details are then confirmed on a [[Rate confirmation|rate confirmation]].`,
+    REF.loadBoard,
+    { h: 'What a dispatcher does' },
+    { tiles: [
+      { icon: 'search', title: 'Plans loads', text: 'Matches loads to drivers, tractors and trailers — right equipment, right location, enough driver hours.' },
+      { icon: 'phone', title: 'Tracks the trip', text: 'Watches location and ETA; handles check calls, delays and appointment changes.' },
+      { icon: 'message', title: 'Updates customers', text: 'Keeps shippers, receivers or brokers informed when something changes.' },
+      { icon: 'route', title: 'Recovers from problems', text: 'Reassigns loads, arranges power swaps or relays when equipment goes down.' }
+    ] },
+    { callout: { kind: 'tip', title: 'What dispatch needs from you', text: 'Unit status, a realistic ETR with a confidence level, and early warning when it changes. Dispatch can only protect a load they know is at risk.' } }
+  ],
+  example: { title: 'Whose truck is it?', text: `A driver calls about a flat tire on a tractor that isn\'t in your fleet list. Before sending a vendor, the coordinator checks and learns it\'s an owner-operator leased onto the company. The lease says the owner-operator pays for their own repairs, so the coordinator connects the driver with a tire vendor, notes it on the load record, and tells dispatch the ETA — without approving charges on the company account.` },
+  practical: { title: 'Who is who?', exercise: {
+    type: 'classify', prompt: 'Match each description to the type of company or person.', categories: ['For-hire carrier', 'Private fleet', 'Owner-operator', 'Freight broker'],
+    items: [
+      { text: 'Arranges the move and sends the carrier a rate confirmation, but owns no trucks', answer: 'Freight broker', why: 'Brokers connect shippers and carriers.' },
+      { text: 'A beverage company delivering its own products to its own warehouses', answer: 'Private fleet', why: 'It hauls its own goods.' },
+      { text: 'Driver who owns the tractor and is leased onto a larger carrier', answer: 'Owner-operator', why: 'Owns the equipment; works under a lease.' },
+      { text: 'Hauls freight for many different shippers under its own operating authority', answer: 'For-hire carrier', why: 'Paid to move other companies\' freight.' }
+    ]
+  } },
+  check: [
+    { t: 'mc', q: 'What is a load board?', o: ['A dispatch whiteboard in the terminal', 'An online marketplace where loads and available trucks are posted', 'A government registry of carriers', 'A type of trailer floor'], a: 1, e: 'Brokers and shippers post loads; carriers post trucks and book loads.' },
+    { t: 'tf', q: 'A freight broker usually owns the trucks that haul its loads.', a: false, e: 'Brokers arrange transportation; carriers haul the freight.' },
+    { t: 'mc', q: 'Before arranging a repair on an unfamiliar tractor, what should you confirm first?', o: ['The driver\'s favorite shop', 'Who owns the unit and who pays for repairs', 'The load\'s commodity code', 'The tractor\'s paint color'], a: 1, e: 'Ownership decides who authorizes and pays for the repair.' }
+  ],
+  takeaways: ['Carriers haul; brokers arrange; private fleets haul their own goods; owner-operators own their trucks.', 'A load runs: booked → rate confirmed → dispatched → picked up → delivered → invoiced → paid.', 'Dispatch needs status, ETR and early warnings from maintenance.'],
+  tips: ['Learn your dispatch board\'s layout — it tells you which loads each repair affects.', 'Keep a list of owner-operator units and their repair arrangements.'],
+  mistakes: ['Approving a repair on a unit your company doesn\'t own.', 'Updating a broker directly when company procedure routes it through dispatch.']
+});
+
+addLesson('advanced', 'm6', {
+  id: 'l3', title: 'Hours of Service, Route Planning and Fuel', minutes: 17,
+  objectives: ['Apply HOS basics to repair timing', 'List the factors in a truck route and where maintenance fits', 'Use fuel data as an early maintenance signal', 'Know what IFTA is and who handles it'],
+  body: [
+    `A repair that finishes "on time" can still fail the load if the driver is out of hours or the route to the delivery doesn\'t work. This lesson connects repair timing to the operational limits dispatch works with every day.`,
+    REF.hosBasics,
+    { callout: { kind: 'info', title: 'Why the 14-hour window matters to you', text: 'Waiting at a shop usually counts as on-duty time, and the 14-hour window keeps running. A 3-hour repair that starts late in a driver\'s day can mean the truck is fixed but the driver can\'t drive. Give dispatch ETRs early so they can plan a relay or a reset.' } },
+    { h: 'Route planning' },
+    REF.routeFactors,
+    `Truck routes are planned around restrictions cars never see: low bridges, weight-limited roads, hazmat restrictions and truck-prohibited routes. When you route a unit to a shop, the shop has to be reachable on a truck-legal route — and able to take the vehicle size.`,
+    { h: 'Fuel and trip expenses' },
+    `Fuel is usually the largest variable cost in trucking. Fleets control it with fuel cards, preferred fuel networks and fuel surcharges billed to customers. For maintenance, fuel data is useful as an early-warning signal.`,
+    REF.fuelSignals,
+    REF.ifta
+  ],
+  example: { title: 'Fixed at 17:00 — delivered tomorrow', text: `<span class="mono">T-122</span> went into a shop at 12:30 with a starter failure; the driver had started duty at 06:00. The shop quoted three hours. The coordinator told dispatch right away: repair done around 15:30, leaving the driver about 4.5 hours in the 14-hour window, against a 5-hour run to delivery. Dispatch arranged a relay driver at the shop, and the load delivered on time. Had the ETR arrived at 17:00, the relay would have been too late to set up.` },
+  practical: { title: 'Can the driver still make it?', exercise: {
+    type: 'choose', prompt: 'Driver started duty at 05:00 and has driven 6 hours. The truck is at a shop; repair ETR is 14:30. Delivery is 4 hours of driving away. What should you tell dispatch?',
+    options: [
+      { text: 'Nothing — the truck will be fixed today.', correct: false, why: 'Fixed isn\'t the same as able to deliver. The window matters.' },
+      { text: 'At 14:30 the driver has 4.5 hours left in the 14-hour window (ends 19:00) and 5 hours of driving time; the 4-hour run plus the 30-minute break due after 8 hours of driving uses the whole window, with no margin. Flag the risk now.', correct: true, why: 'Give dispatch the numbers early so they can decide on a relay or a new appointment.' },
+      { text: 'Tell the driver to skip the 30-minute break to save time.', correct: false, why: 'Never suggest breaking HOS rules. Dispatch and safety own HOS decisions.' }
+    ]
+  } },
+  check: [
+    { t: 'mc', q: 'A property-carrying driver starts duty at 06:00. When does the 14-hour driving window end?', o: ['14:00', '17:00', '20:00', 'It pauses during repairs'], a: 2, e: '06:00 + 14 hours = 20:00. The window keeps running during breaks and shop time.' },
+    { t: 'tf', q: 'A sudden MPG drop on one unit can be a maintenance signal.', a: true, e: 'Tire pressure, brakes and engine or aftertreatment issues can all raise fuel use.' },
+    { t: 'mc', q: 'Who usually prepares a carrier\'s IFTA return?', o: ['The maintenance coordinator', 'Accounting, fuel tax or compliance staff', 'The driver', 'The repair shop'], a: 1, e: 'The coordinator\'s part is accurate mileage on work orders and trip records.' }
+  ],
+  takeaways: ['A repair ETR only helps if it fits the driver\'s remaining hours.', 'Shops must be reachable on truck-legal routes.', 'Fuel data can flag tire, brake and engine problems early.', 'IFTA is a quarterly fuel-tax report — handled by tax or compliance staff.'],
+  tips: ['Ask the driver\'s duty start time on every mid-day breakdown.', 'Keep fuel-economy outliers on your weekly review list.'],
+  mistakes: ['Giving a late ETR that leaves dispatch no time to arrange a relay.', 'Sending a unit to a shop it can\'t legally reach.']
+});
+
+// Teach the freight market (who's who) before load types and weights.
+(() => { const ls = TRACKS.find((t) => t.id === 'beginner').modules.find((m) => m.id === 'm1').lessons; const a = ls.findIndex((l) => l.id === 'l3'); const b = ls.findIndex((l) => l.id === 'l4'); [ls[a], ls[b]] = [ls[b], ls[a]]; })();
+
+/* ---------------------------------------------------------------------------
    2. PRACTICE DATA — Glossary
    --------------------------------------------------------------------------- */
 const GLOSSARY = [
@@ -3179,7 +3554,7 @@ const GLOSSARY = [
   { term: 'Core', full: 'Core / core charge', cat: 'Finance', def: 'The used, rebuildable part (such as a starter, alternator or turbocharger) returned to the supplier. A core charge is a deposit added to the price of a remanufactured part and refunded when the old part is returned in acceptable condition.', simple: 'A refundable deposit — return the old part and get your money back.', example: 'An alternator invoice includes a $120 core charge; the coordinator confirms the shop returned the old unit so the credit is applied.', related: ['Parts', 'Estimate'] },
   { term: 'Corrective maintenance', full: 'Corrective (reactive) maintenance', cat: 'Maintenance', def: 'Maintenance performed to restore equipment to working condition after a failure or defect has been identified.', simple: 'Fixing something after it breaks or is found defective.', example: 'Replacing a blown tire on the roadside is corrective maintenance.', related: ['Preventive maintenance', 'Roadside', 'Downtime'] },
   { term: 'CPM', full: 'Cost Per Mile', cat: 'Finance', def: 'Maintenance cost divided by miles driven over the same period.', simple: 'How much maintenance costs for every mile the truck runs.', example: '$14,000 in maintenance over 125,000 miles = $0.112 per mile.', related: ['Downtime', 'MTBF'] },
-  { term: 'Deadhead', full: 'Deadhead miles', cat: 'Operations', def: 'Miles driven without a revenue-producing load, such as driving empty to a pickup or to recover equipment.', simple: 'Driving empty — miles that don\'t earn money.', example: 'Sending an empty tractor 50 miles to pick up a stranded trailer adds 50 deadhead miles.', related: ['Power swap', 'Dispatch'] },
+  { term: 'Deadhead', full: 'Deadhead miles', cat: 'Operations', def: 'Miles driven without a revenue-producing load, such as driving empty to a pickup or to recover equipment.', simple: 'Driving empty — miles that don\'t earn money.', example: 'Sending an empty tractor 50 miles to pick up a stranded trailer adds 50 deadhead miles.', related: ['Power swap', 'Downtime'] },
   { term: 'DEF', full: 'Diesel Exhaust Fluid', cat: 'Emissions', def: 'A solution of high-purity urea and deionized water (32.5% urea) injected into the exhaust stream for use by the SCR system to reduce nitrogen oxides (NOx).', simple: 'A fluid the truck needs (like fuel) to clean its exhaust. Running low can limit engine power.', example: 'A driver reports a DEF warning and reduced power — the coordinator asks about DEF level before sending a mechanic.', related: ['SCR', 'Aftertreatment', 'Derate'] },
   { term: 'Derate', full: 'Engine derate', cat: 'Diagnostics', def: 'An engine protection mode in which the engine control module limits power or vehicle speed in response to a detected fault, often related to emissions or engine protection.', simple: 'The truck deliberately limits its power because something is wrong.', example: '"My truck won\'t go over 5 mph" with an amber DPF lamp is a classic derate call.', related: ['DPF', 'DEF', 'ECM', 'DTC'] },
   { term: 'Diagnostic', full: 'Diagnostics / diagnosis', cat: 'Diagnostics', def: 'The process a technician uses to identify the cause of a problem, using inspection, testing and diagnostic tools. Diagnostic time is typically billed separately from repair time.', simple: 'Figuring out what\'s actually wrong.', example: 'The shop bills 1.0 hour of diagnostics before providing an estimate for the repair.', related: ['DTC', 'Labor', 'Estimate'] },
@@ -3567,6 +3942,29 @@ const FLEET = [
     history: [['06/14', 'Reefer alarm — load transferred to backup trailer'], ['04/20', 'Reefer PM completed']] }
 ];
 
+/* Glossary — equipment, tire and load terms used by the illustrated lessons */
+GLOSSARY.push(
+  { term: 'Day cab', full: 'Day cab tractor', cat: 'Equipment', def: 'A tractor with no sleeping compartment, used where the driver returns home daily.', simple: 'A tractor without a bed.', example: 'Local LTL pickup-and-delivery fleets usually run day cabs.', related: ['Sleeper cab', 'Straight truck'] },
+  { term: 'Sleeper cab', full: 'Sleeper tractor', cat: 'Equipment', def: 'A tractor with a sleeper berth behind the seats, used for long-haul work where drivers rest on the truck.', simple: 'A tractor with a bed.', example: 'A sleeper\'s HVAC failure in summer can end a driver\'s trip even though the truck still runs.', related: ['Day cab', 'HOS'] },
+  { term: 'Straight truck', full: 'Straight truck (box truck)', cat: 'Equipment', def: 'A truck whose cab and cargo body are mounted on the same chassis, with no separate trailer. A Class B CDL is required when the GVWR is 26,001 lb or more.', simple: 'A truck with the box built on.', example: 'If a straight truck breaks down, the cargo can\'t be moved by swapping tractors — it has to be transloaded or wait.', related: ['Day cab'] },
+  { term: 'Axle configuration', full: 'Axle configuration (4x2, 6x4, 6x2)', cat: 'Equipment', def: 'Notation for a vehicle\'s wheel positions and how many are driven. The first number counts wheel positions (duals count as one); the second counts the driven positions.', simple: 'How many wheels, and how many are powered.', example: 'A 6x4 tractor has three axles, with both rear axles driven.', related: ['Duals'] },
+  { term: 'Dry van', full: 'Dry van trailer', cat: 'Equipment', def: 'An enclosed trailer without temperature control; commonly 53 ft long and 102 in wide in U.S. truckload service.', simple: 'A plain enclosed box trailer.', example: 'A dry van with a door that won\'t latch can\'t be sealed, so the load can\'t leave.', related: ['Reefer', 'Kingpin'] },
+  { term: 'Flatbed', full: 'Flatbed trailer', cat: 'Equipment', def: 'An open-deck trailer loaded from the sides or top; cargo is secured with straps or chains under 49 CFR 393 Subpart I.', simple: 'An open trailer with no walls.', example: 'A torn tarp or broken winch on a flatbed is a securement issue, not just damage.', related: ['Step deck', 'RGN'] },
+  { term: 'Step deck', full: 'Step deck (drop deck) trailer', cat: 'Equipment', def: 'An open-deck trailer with a short upper deck over the kingpin and a lower main deck, allowing taller cargo within height limits.', simple: 'A flatbed with a step down.', example: 'Step decks often use low-profile tires, so the size matters on every tire call.', related: ['Flatbed', 'RGN'] },
+  { term: 'RGN', full: 'Removable gooseneck trailer', cat: 'Equipment', def: 'A lowboy trailer whose front (gooseneck) detaches so equipment can drive onto a very low deck from the front.', simple: 'A low trailer for heavy machines.', example: 'RGN loads are often oversize and permitted, so breakdowns can affect permit route and time conditions.', related: ['Step deck', 'Oversize load'] },
+  { term: 'Intermodal chassis', full: 'Intermodal container chassis', cat: 'Equipment', def: 'A trailer frame that carries a shipping container, secured at its corner castings with twist locks. Chassis are often supplied by pools or providers rather than owned by the carrier.', simple: 'A frame that carries a shipping container.', example: 'Before arranging a tire repair on a chassis, the coordinator confirms which provider owns it.', related: ['Dry van'] },
+  { term: 'Converter dolly', full: 'Converter dolly', cat: 'Equipment', def: 'An axle assembly with a fifth wheel that converts a semitrailer into a full trailer, connecting the second trailer in a doubles combination.', simple: 'The short axle that links two trailers.', example: 'A dolly has its own tires, brakes and lights — and should be tracked as its own unit.', related: ['Fifth wheel', 'Kingpin'] },
+  { term: 'FTL', full: 'Full truckload', cat: 'Cargo', def: 'A shipment from one shipper that uses a whole trailer, usually moving directly from pickup to delivery.', simple: 'One customer, one trailer.', example: 'An FTL breakdown affects one customer but the whole trailer\'s freight.', related: ['LTL', 'Shipper'] },
+  { term: 'LTL', full: 'Less-than-truckload', cat: 'Cargo', def: 'Freight from multiple shippers sharing a trailer, moved through a terminal network and priced largely by NMFC freight class, weight and distance.', simple: 'Many customers\' freight in one trailer.', example: 'A late LTL linehaul trailer can miss its terminal departure and delay dozens of shipments.', related: ['FTL'] },
+  { term: 'Drop and hook', full: 'Drop and hook', cat: 'Cargo', def: 'An operation where the driver drops one trailer and hooks another, preloaded trailer instead of waiting to be loaded.', simple: 'Swap trailers instead of waiting.', example: 'Drop-and-hook trailers can sit in customer yards for days, so defects often show up at pickup.', related: ['Detention'] },
+  { term: 'Wide-base single', full: 'Wide-base single tire', cat: 'Components', def: 'One wide tire that replaces a pair of duals on a wheel end (for example, 445/50R22.5).', simple: 'One big tire instead of two.', example: 'A flat on a wide-base single usually stops the unit — there\'s no partner tire.', related: ['Duals', 'Tread depth'] },
+  { term: 'Retread', full: 'Retreaded tire', cat: 'Components', def: 'A used tire casing that has passed inspection and had new tread bonded to it; commonly used on drive and trailer positions.', simple: 'An old tire with new tread.', example: 'A fleet\'s tire policy may allow retreads on trailers but not on steer axles.', related: ['Tread depth', 'Duals'] },
+  { term: 'Load index', full: 'Tire load index', cat: 'Components', def: 'A number on the sidewall that corresponds to the maximum load a tire can carry; truck tires show two values, for single and dual use.', simple: 'How much weight a tire can carry.', example: 'In 144/141, 144 is the single-use rating and 141 is the dual-use rating.', related: ['Duals'] },
+  { term: 'Air disc brake', full: 'Air disc brake', cat: 'Components', def: 'An air-operated brake in which a caliper squeezes pads against a rotor, instead of shoes pressing inside a drum.', simple: 'A disc brake operated by air.', example: 'The coordinator confirms disc vs drum before ordering brake parts.', related: ['Air brakes', 'Slack adjuster'] },
+  { term: 'Bridge formula', full: 'Federal Bridge Gross Weight Formula', cat: 'Regulatory', def: 'A federal formula that limits the weight on groups of axles based on the number of axles and the distance between them, protecting bridges.', simple: 'Weight allowed depends on how spread out the axles are.', example: 'Sliding a trailer\'s tandem changes axle spacing, which can matter for bridge-formula compliance.', related: ['DOT'] },
+  { term: 'Oversize load', full: 'Oversize / overweight load', cat: 'Cargo', def: 'A load that exceeds legal size or weight limits and needs state permits, which can set routes, travel times, signs, flags and escort requirements.', simple: 'A load too big for normal rules.', example: 'A breakdown that delays a permitted load past its allowed travel hours needs dispatch involved immediately.', related: ['RGN'] }
+);
+
 /* ---------------------------------------------------------------------------
    3. ASSESSMENTS
    Step-based exams reuse the exercise engine (choose / multi / extract /
@@ -3779,9 +4177,235 @@ const SIM = {
 };
 
 /* ===========================================================================
+   ILLUSTRATIONS — line-art SVGs for equipment, tires, brakes and loads.
+   ART[key]() returns { vb, svg }. All colors come from CSS classes (.art-*),
+   so every drawing follows the light/dark theme. Vehicles face right and sit
+   on a ground line at y = AG. Drawings are schematic, not to exact scale.
+   =========================================================================== */
+const AG = 100;
+const aWheel = (cx, r = 9, cls = '') => `<g class="art-wheel ${cls}"><circle cx="${cx}" cy="${AG - r}" r="${r}"/><circle class="art-hub" cx="${cx}" cy="${AG - r}" r="${(r * 0.36).toFixed(1)}"/></g>`;
+const aGround = (w) => `<line class="art-ground" x1="2" y1="${AG + 0.5}" x2="${w - 2}" y2="${AG + 0.5}"/>`;
+const aLabel = (x, y, t, anchor = 'middle', cls = '') => `<text class="art-label ${cls}" x="${x}" y="${y}" text-anchor="${anchor}">${t}</text>`;
+
+/* Tractor facing right; x0 = rear of frame. Returns svg + where a trailer's front sits. */
+function artTractor(x0, o = {}) {
+  const sl = !!o.sleeper; const cb = x0 + (sl ? 28 : 44); const roof = sl ? AG - 72 : AG - 62;
+  const top = sl
+    ? `M${cb} ${AG - 24} V${roof + 4} Q${cb} ${roof} ${cb + 4} ${roof} H${x0 + 54} L${x0 + 60} ${AG - 62} L${x0 + 65} ${AG - 46}`
+    : `M${cb} ${AG - 24} V${roof + 3} Q${cb} ${roof} ${cb + 3} ${roof} H${x0 + 60} L${x0 + 65} ${AG - 46}`;
+  const axles = o.axles || '6x4';
+  const rear = axles === '4x2' ? [x0 + 21] : [x0 + 12, x0 + 31];
+  const driven = (i) => (o.showDrive && (axles !== '6x2' || i === 1) ? 'is-driven' : '');
+  let s = `<rect class="art-frame" x="${x0 - (o.frameBack || 0)}" y="${AG - 26}" width="${74 + (o.frameBack || 0)}" height="4" rx="1"/>`;
+  if (o.fifth !== false) s += `<rect class="art-dark" x="${x0 + 10}" y="${AG - 30}" width="20" height="4" rx="1.5"/>`;
+  s += `<path class="art-body" d="${top} L${x0 + 73} ${AG - 44} Q${x0 + 77} ${AG - 43} ${x0 + 77} ${AG - 38} V${AG - 24} Z"/>`;
+  s += `<path class="art-glass" d="M${x0 + 53} ${AG - 59} H${x0 + 60} L${x0 + 63} ${AG - 48} H${x0 + 53} Z"/>`;
+  s += `<path class="art-seam" d="M${x0 + 51} ${AG - 60} V${AG - 26} M${x0 + 67} ${AG - 40} H${x0 + 76}"/>`;
+  if (sl) s += `<rect class="art-glass" x="${x0 + 33}" y="${AG - 54}" width="9" height="5" rx="1"/>`;
+  s += `<rect class="art-steel" x="${x0 + 40}" y="${AG - 23}" width="13" height="10" rx="4"/>`;
+  s += `<rect class="art-dark" x="${x0 + 75}" y="${AG - 31}" width="4" height="9" rx="1"/><rect class="art-hi" x="${x0 + 73.5}" y="${AG - 41}" width="3" height="3" rx="1"/>`;
+  if (!o.noRear) s += rear.map((x, i) => aWheel(x, 9, driven(i))).join('');
+  s += aWheel(x0 + 64, 9, o.showDrive ? 'is-steer' : '');
+  return { svg: s, hitch: sl ? x0 + 26 : x0 + 42 };
+}
+
+/* Trailer undercarriage: tandem, landing gear, rear guard, kingpin. */
+function artTrailerUnder(left, front, deckY, o = {}) {
+  const r = o.r || 9; const t = o.tandem || [left + 14, left + 33];
+  let s = `<rect class="art-dark" x="${t[0] - 8}" y="${deckY}" width="${t[t.length - 1] - t[0] + 16}" height="${Math.max(3, AG - 2 * r - deckY - 1)}" rx="1"/>`;
+  s += t.map((x) => aWheel(x, r)).join('');
+  if (o.guard !== false) s += `<path class="art-line" d="M${left + 4} ${deckY} V${AG - 20}"/><rect class="art-dark" x="${left + 1}" y="${AG - 21}" width="9" height="3" rx="1"/>`;
+  const lg = front - 34; const fy = o.frontY || deckY;
+  if (o.gear !== false) s += o.coupled
+    ? `<path class="art-line" d="M${lg} ${fy} V${fy + 12}"/><rect class="art-dark" x="${lg - 3}" y="${fy + 12}" width="6" height="2" rx="1"/>`
+    : `<path class="art-line" d="M${lg} ${fy} V${AG - 3}"/><rect class="art-dark" x="${lg - 4}" y="${AG - 3}" width="8" height="3" rx="1"/>`;
+  if (!o.coupled && o.kingpin !== false) s += `<rect class="art-dark" x="${front - 9}" y="${fy}" width="3" height="4"/>`;
+  return s;
+}
+
+function artVanBox(left, front, o = {}) {
+  const topY = AG - 74; const h = 43;
+  let s = `<rect class="art-frame" x="${left}" y="${AG - 31}" width="${front - left}" height="3"/>`;
+  s += `<rect class="art-body ${o.cls || ''}" x="${left}" y="${topY}" width="${front - left}" height="${h}" rx="2"/>`;
+  if (!o.cut) { let posts = ''; for (let x = left + 16; x < front - 6; x += 16) posts += `M${x} ${topY + 2} V${topY + h - 2}`; s += `<path class="art-seam" d="${posts}"/>`; }
+  s += `<path class="art-seam art-seam--strong" d="M${left + 3} ${topY + 1} V${topY + h - 1}"/>`;
+  return s;
+}
+
+function trailerVan(left, front, o = {}) {
+  let s = artVanBox(left, front, o);
+  if (o.reefer) {
+    s += `<rect class="art-steel" x="${front}" y="${AG - 72}" width="11" height="26" rx="2"/><path class="art-seam" d="M${front + 3} ${AG - 67} H${front + 9} M${front + 3} ${AG - 63} H${front + 9} M${front + 3} ${AG - 59} H${front + 9} M${front + 3} ${AG - 55} H${front + 9}"/>`;
+    s += `<rect class="art-steel" x="${front - 72}" y="${AG - 28}" width="18" height="8" rx="3"/>`;
+    const cx = left + 26, cy = AG - 52; s += `<path class="art-snow" d="M${cx} ${cy - 7} V${cy + 7} M${cx - 6} ${cy - 3.5} L${cx + 6} ${cy + 3.5} M${cx - 6} ${cy + 3.5} L${cx + 6} ${cy - 3.5}"/>`;
+  }
+  return s + artTrailerUnder(left, front, AG - 28, o);
+}
+
+function cargoBlocks(list) {
+  return list.map(([x, y, w, h, c]) => `<rect class="art-cargo ${c || 'c4'}" x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5"/>`).join('');
+}
+function straps(xs, y1, y2) { return `<path class="art-strap" d="${xs.map((x) => `M${x} ${y1} V${y2}`).join(' ')}"/>`; }
+const heightLine = (w) => `<line class="art-limit" x1="6" y1="${AG - 76}" x2="${w - 6}" y2="${AG - 76}"/>${aLabel(w - 8, AG - 79, 'height limit', 'end', 'art-label--limit')}`;
+
+const ART = {
+  /* ---- Power units ---- */
+  daycab: () => ({ vb: '24 22 98 82', svg: aGround(150) + artTractor(34).svg }),
+  sleeper: () => ({ vb: '24 22 98 82', svg: aGround(150) + artTractor(34, { sleeper: true }).svg }),
+  'axle-4x2': () => ({ vb: '24 22 98 82', svg: aGround(150) + artTractor(34, { axles: '4x2', showDrive: true }).svg }),
+  'axle-6x4': () => ({ vb: '24 22 98 82', svg: aGround(150) + artTractor(34, { axles: '6x4', showDrive: true }).svg }),
+  'axle-6x2': () => ({ vb: '24 22 98 82', svg: aGround(150) + artTractor(34, { axles: '6x2', showDrive: true }).svg }),
+  straight: () => {
+    const t = artTractor(110, { fifth: false, noRear: true, frameBack: 96 });
+    return { vb: '8 24 184 80', svg: aGround(200) + t.svg + `<rect class="art-body" x="16" y="${AG - 70}" width="134" height="42" rx="2"/><path class="art-seam" d="M34 ${AG - 68} V${AG - 30} M52 ${AG - 68} V${AG - 30} M70 ${AG - 68} V${AG - 30} M88 ${AG - 68} V${AG - 30} M106 ${AG - 68} V${AG - 30} M124 ${AG - 68} V${AG - 30}"/><path class="art-seam art-seam--strong" d="M19 ${AG - 69} V${AG - 29}"/>` + aWheel(52) + `<rect class="art-dark" x="16" y="${AG - 22}" width="8" height="3" rx="1"/>` };
+  },
+  yard: () => ({ vb: '26 26 94 78', svg: aGround(150) +
+    `<rect class="art-frame" x="36" y="${AG - 24}" width="72" height="5" rx="1"/><path class="art-dark" d="M40 ${AG - 28} L62 ${AG - 34} L66 ${AG - 28} Z"/><rect class="art-dark" x="44" y="${AG - 34}" width="18" height="4" rx="1.5"/>` +
+    `<path class="art-body" d="M72 ${AG - 22} V${AG - 66} Q72 ${AG - 68} 74 ${AG - 68} H92 Q94 ${AG - 68} 94 ${AG - 66} V${AG - 22} Z"/><rect class="art-glass" x="76" y="${AG - 64}" width="15" height="18" rx="1.5"/>` +
+    `<path class="art-body" d="M94 ${AG - 40} H106 Q109 ${AG - 40} 109 ${AG - 37} V${AG - 22} H94 Z"/>` + aWheel(52, 10) + aWheel(100, 8) }),
+
+  /* ---- Trailers (parked, landing gear down) ---- */
+  dryvan: () => ({ vb: '0 12 240 94', svg: aGround(240) + trailerVan(16, 222) }),
+  reefer: () => ({ vb: '0 12 240 94', svg: aGround(240) + trailerVan(14, 212, { reefer: true, cls: 'art-body--insul' }) + aLabel(228, AG - 76, 'reefer unit', 'end') }),
+  flatbed: () => ({ vb: '0 12 240 94', svg: aGround(240) + heightLine(240) +
+    `<rect class="art-steel" x="16" y="${AG - 36}" width="206" height="6" rx="1"/>` + cargoBlocks([[22, AG - 58, 56, 22], [84, AG - 58, 56, 22], [146, AG - 58, 64, 22]]) +
+    straps([34, 66, 96, 128, 160, 196], AG - 58, AG - 36) + artTrailerUnder(16, 222, AG - 30) }),
+  stepdeck: () => ({ vb: '0 12 240 94', svg: aGround(240) + heightLine(240) +
+    `<path class="art-steel" d="M16 ${AG - 28} H176 V${AG - 40} H222 V${AG - 34} H182 V${AG - 22} H16 Z"/>` +
+    cargoBlocks([[34, AG - 70, 70, 42, 'c2'], [112, AG - 58, 54, 30, 'c4']]) + straps([46, 92], AG - 70, AG - 28) + straps([124, 154], AG - 58, AG - 28) +
+    artTrailerUnder(16, 222, AG - 22, { r: 7, tandem: [30, 46], frontY: AG - 34 }) + aLabel(200, AG - 44, 'upper deck') + aLabel(100, AG - 14, 'lower deck') }),
+  rgn: () => ({ vb: '0 12 240 94', svg: aGround(240) + heightLine(240) +
+    `<path class="art-steel" d="M16 ${AG - 30} H60 L70 ${AG - 16} H176 L184 ${AG - 36} H222 V${AG - 30} H188 L180 ${AG - 12} H68 L58 ${AG - 24} H16 Z"/>` +
+    `<line class="art-break" x1="186" y1="${AG - 44}" x2="186" y2="${AG - 6}"/>` +
+    `<rect class="art-dark" x="78" y="${AG - 26}" width="84" height="10" rx="5"/><rect class="art-cargo c4" x="96" y="${AG - 54}" width="40" height="28" rx="2"/><rect class="art-glass" x="118" y="${AG - 51}" width="14" height="12" rx="1"/>` +
+    `<path class="art-cargo-line" d="M100 ${AG - 46} L78 ${AG - 66} L66 ${AG - 40}"/><path class="art-cargo c4" d="M62 ${AG - 42} h10 l-3 12 h-9 Z"/>` +
+    aWheel(24, 7) + aWheel(40, 7) + aWheel(54, 7) + `<rect class="art-dark" x="16" y="${AG - 24}" width="46" height="4" rx="1"/>` +
+    aLabel(204, AG - 42, 'gooseneck') + aLabel(206, AG - 10, 'detaches ↔') + aLabel(128, AG - 4, 'low well') }),
+  tanker: (o = {}) => ({ vb: '0 12 240 94', svg: aGround(240) +
+    `<rect class="art-steel" x="40" y="${AG - 34}" width="170" height="4" rx="1"/><rect class="art-body art-body--tank" x="14" y="${AG - 70}" width="204" height="38" rx="19"/>` +
+    `<path class="art-seam" d="M62 ${AG - 69} V${AG - 33} M112 ${AG - 69} V${AG - 33} M162 ${AG - 69} V${AG - 33}"/><rect class="art-dark" x="36" y="${AG - 73}" width="164" height="2" rx="1"/>` +
+    `<rect class="art-dark" x="80" y="${AG - 76}" width="10" height="4" rx="1"/><rect class="art-dark" x="132" y="${AG - 76}" width="10" height="4" rx="1"/>` +
+    `<path class="art-line" d="M88 ${AG - 32} V${AG - 24} M136 ${AG - 32} V${AG - 24}"/><rect class="art-dark" x="84" y="${AG - 24}" width="8" height="3"/><rect class="art-dark" x="132" y="${AG - 24}" width="8" height="3"/>` +
+    (o.hazmat ? `<g class="art-placard"><rect x="-7" y="-7" width="14" height="14" transform="translate(40 ${AG - 51}) rotate(45)"/><text x="40" y="${AG - 48}" text-anchor="middle">3</text></g>` : '') +
+    artTrailerUnder(14, 218, AG - 30, { guard: true }) }),
+  hazmat: () => ART.tanker({ hazmat: true }),
+  intermodal: () => ({ vb: '0 12 240 94', svg: aGround(240) +
+    `<path class="art-steel" d="M16 ${AG - 30} H214 V${AG - 34} H222 V${AG - 26} H16 Z"/>` +
+    `<rect class="art-cargo c2" x="18" y="${AG - 74}" width="200" height="40" rx="1"/><path class="art-rib" d="${Array.from({ length: 24 }, (_, i) => `M${26 + i * 8} ${AG - 72} V${AG - 36}`).join(' ')}"/>` +
+    `<path class="art-dark" d="M18 ${AG - 74} h6 v5 h-6 Z M212 ${AG - 74} h6 v5 h-6 Z M18 ${AG - 39} h6 v5 h-6 Z M212 ${AG - 39} h6 v5 h-6 Z"/>` +
+    artTrailerUnder(16, 222, AG - 26) + aLabel(118, AG - 78, 'container locks onto the chassis at the corners') }),
+  doubles: () => {
+    const t = artTractor(214, { fifth: true });
+    const pup = (l, f) => artVanBox(l, f) + artTrailerUnder(l, f, AG - 28, { tandem: [l + 16], coupled: true, gear: true });
+    return { vb: '0 14 300 92', svg: aGround(300) + `<path class="art-line" d="M117 ${AG - 12} H136"/><rect class="art-dark" x="108" y="${AG - 26}" width="18" height="4" rx="1.5"/>` + aWheel(117) + pup(10, 126) + pup(136, 254) + t.svg + aLabel(117, AG - 78, 'converter dolly') };
+  },
+  rig: () => {
+    const t = artTractor(210, { sleeper: true });
+    return { vb: '0 14 300 92', svg: aGround(300) + artVanBox(16, 236) + artTrailerUnder(16, 236, AG - 28, { coupled: true }) + t.svg };
+  },
+
+  /* ---- Loads (van cutaways and docks) ---- */
+  ftl: () => loadArt(Array.from({ length: 13 }, () => [34, 'c2'])),
+  ltl: () => loadArt([[30, 'c1'], [22, 'c4'], [34, 'c4'], [18, 'c6'], [26, 'c2'], [26, 'c2'], [14, 'c5'], [30, 'c1'], [20, 'c6'], null, null, null, null]),
+  partial: () => loadArt([[32, 'c1'], [32, 'c1'], [32, 'c1'], [32, 'c1'], [32, 'c1'], [32, 'c1'], null, null, null, null, null, null, null], true),
+  live: () => dockArt(true),
+  drop: () => dockArt(false),
+  oversize: () => ({ vb: '0 8 240 98', svg: aGround(240) +
+    `<rect class="art-steel" x="16" y="${AG - 36}" width="206" height="6" rx="1"/>` +
+    `<path class="art-cargo c5" d="M36 ${AG - 36} V${AG - 82} Q36 ${AG - 86} 40 ${AG - 86} H156 Q160 ${AG - 86} 160 ${AG - 82} V${AG - 36} Z"/><path class="art-seam" d="M66 ${AG - 84} V${AG - 38} M98 ${AG - 84} V${AG - 38} M130 ${AG - 84} V${AG - 38}"/>` +
+    straps([52, 114, 146], AG - 86, AG - 36) + `<path class="art-flag" d="M36 ${AG - 86} l-8 -2 v6 Z M160 ${AG - 86} l8 -2 v6 Z"/>` + heightLine(240) +
+    `<rect class="art-banner" x="10" y="${AG - 26}" width="46" height="8" rx="1"/>` + aLabel(33, AG - 20, 'OVERSIZE LOAD', 'middle', 'art-label--banner') + artTrailerUnder(16, 222, AG - 30, { guard: false }) }),
+
+  /* ---- Tires ---- */
+  'tread-steer': () => treadArt('rib'),
+  'tread-drive': () => treadArt('lug'),
+  'tread-trailer': () => treadArt('trailer'),
+  duals: () => ({ vb: '0 0 150 112', svg: `<rect class="art-dark" x="4" y="44" width="142" height="6" rx="2"/>` + tireFront(33, 30) + tireFront(67, 30) + aLabel(64, 104, 'two tires per wheel end') }),
+  widebase: () => ({ vb: '0 0 150 112', svg: `<rect class="art-dark" x="4" y="44" width="142" height="6" rx="2"/>` + tireFront(36, 58) + aLabel(64, 104, 'one wide tire per wheel end') }),
+  radial: () => plyArt(true),
+  bias: () => plyArt(false),
+  'tire-section': () => ({ vb: '0 0 200 140', svg:
+    `<path class="art-rim" d="M36 118 H58 V124 H142 V118 H164 V132 Q164 134 162 134 H38 Q36 134 36 132 Z"/>` +
+    `<path class="art-rubber" d="M46 120 C30 96 26 58 46 36 Q100 18 154 36 C174 58 170 96 154 120 L144 120 C158 96 158 64 144 48 Q100 34 56 48 C42 64 42 96 56 120 Z"/>` +
+    `<path class="art-liner" d="M56 118 C42 96 42 64 56 48 Q100 34 144 48 C158 64 158 96 144 118"/>` +
+    `<path class="art-belt" d="M58 42 Q100 29 142 42 M60 46 Q100 33 140 46"/>` +
+    `<path class="art-groove" d="M72 30 v5 M90 27.5 v5 M110 27.5 v5 M128 30 v5"/>` +
+    `<circle class="art-bead" cx="51" cy="116" r="4"/><circle class="art-bead" cx="149" cy="116" r="4"/>` }),
+
+  /* ---- Brakes ---- */
+  drum: () => ({ vb: '0 0 170 120', svg:
+    `<circle class="art-steel" cx="70" cy="60" r="46"/><circle class="art-inner" cx="70" cy="60" r="39"/>` +
+    `<path class="art-lining" d="M42 36 A35 35 0 0 0 42 84 M98 36 A35 35 0 0 1 98 84"/><path class="art-shoe" d="M46 38 A31 31 0 0 0 46 82 M94 38 A31 31 0 0 1 94 82"/>` +
+    `<circle class="art-dark" cx="70" cy="93" r="4"/><circle class="art-accent" cx="70" cy="28" r="6"/><path class="art-s" d="M73 25 Q67 22 67 27 Q67 30 70 30 Q73 30 73 33 Q73 36 67 32"/>` +
+    `<path class="art-arm" d="M70 28 L120 14"/><rect class="art-steel" x="126" y="4" width="36" height="22" rx="8"/><path class="art-line" d="M120 14 H126"/>` +
+    aLabel(144, 38, 'chamber') + aLabel(70, 116, 'S-cam pushes shoes into drum') }),
+  disc: () => ({ vb: '0 0 170 120', svg:
+    `<circle class="art-steel" cx="70" cy="60" r="46"/><circle class="art-inner" cx="70" cy="60" r="18"/>` +
+    `<path class="art-seam art-seam--strong" d="${Array.from({ length: 16 }, (_, i) => { const a = (i * Math.PI) / 8; return `M${(70 + 24 * Math.cos(a)).toFixed(1)} ${(60 + 24 * Math.sin(a)).toFixed(1)} L${(70 + 42 * Math.cos(a)).toFixed(1)} ${(60 + 42 * Math.sin(a)).toFixed(1)}`; }).join(' ')}"/>` +
+    `<circle class="art-dark" cx="70" cy="60" r="5"/>` +
+    `<path class="art-caliper" d="M96 20 Q118 24 124 44 V76 Q118 96 96 100 L92 88 Q108 80 110 60 Q108 40 92 32 Z"/>` +
+    `<rect class="art-steel" x="128" y="46" width="34" height="28" rx="8"/><path class="art-line" d="M124 60 H128"/>` +
+    aLabel(145, 86, 'chamber') + aLabel(70, 116, 'caliper squeezes pads on rotor') })
+};
+
+function loadArt(slots, partial) {
+  const left = 16, front = 222; const w = (front - left - 8) / 13; let s = aGround(240) + artVanBox(left, front, { cut: true, cls: 'art-body--cut' });
+  slots.forEach((p, i) => {
+    const x = left + 4 + i * w;
+    if (!p) { if (partial) s += `<rect class="art-empty" x="${(x + 0.6).toFixed(1)}" y="${AG - 66}" width="${(w - 1.2).toFixed(1)}" height="34" rx="1"/>`; return; }
+    s += `<rect class="art-pallet" x="${(x + 0.6).toFixed(1)}" y="${AG - 34}" width="${(w - 1.2).toFixed(1)}" height="2.5"/><rect class="art-cargo ${p[1]}" x="${(x + 0.6).toFixed(1)}" y="${AG - 34 - p[0]}" width="${(w - 1.2).toFixed(1)}" height="${p[0]}" rx="1"/>`;
+  });
+  return { vb: '0 12 240 94', svg: s + artTrailerUnder(left, front, AG - 28) };
+}
+function dockArt(live) {
+  let s = aGround(240) + `<rect class="art-dock" x="0" y="${AG - 92}" width="22" height="92"/><rect class="art-dark" x="18" y="${AG - 32}" width="6" height="32"/><rect class="art-door" x="4" y="${AG - 76}" width="12" height="42"/>`;
+  s += artVanBox(26, 160) + artTrailerUnder(26, 160, AG - 28, { coupled: live });
+  if (live) {
+    s += artTractor(118).svg;
+    s += `<g class="art-clock"><circle cx="92" cy="12" r="9"/><path d="M92 6 V12 L97 15"/></g>` + aLabel(92, 32, 'driver waits');
+  } else {
+    s += `<g class="art-ghost">${artTractor(158).svg}</g>` + `<path class="art-arrow" d="M200 14 H228 M222 9 L228 14 L222 19"/>` + aLabel(214, 32, 'tractor leaves');
+  }
+  return { vb: '0 4 240 102', svg: s };
+}
+function tireFront(x, w) {
+  let g = ''; const n = Math.max(2, Math.round(w / 12)); for (let i = 1; i < n; i++) { const gx = x + (i * w) / n; g += `M${gx.toFixed(1)} 9 V85`; }
+  return `<rect class="art-tire" x="${x}" y="4" width="${w}" height="86" rx="${Math.min(12, w / 3)}"/><path class="art-groove-line" d="${g}"/>`;
+}
+function treadArt(kind) {
+  const x = 38, w = 44; let s = `<rect class="art-tire" x="${x}" y="6" width="${w}" height="98" rx="12"/>`;
+  if (kind === 'rib') {
+    [49, 60, 71].forEach((gx) => { let d = `M${gx} 10`; for (let y = 16; y <= 100; y += 6) d += ` L${gx + ((y / 6) % 2 ? 1.6 : -1.6)} ${y}`; s += `<path class="art-groove-line" d="${d}"/>`; });
+  } else if (kind === 'lug') {
+    let d = ''; for (let y = 12; y < 100; y += 11) { d += `M${x} ${y} L${x + 17} ${y + 3} M${x + w} ${y + 5.5} L${x + w - 17} ${y + 8.5} `; }
+    s += `<path class="art-lug" d="${d}"/><path class="art-groove-line" d="M60 10 V100"/>`;
+  } else {
+    s += `<path class="art-groove-line art-groove-line--thin" d="M49 10 V100 M60 10 V100 M71 10 V100"/>`;
+  }
+  return { vb: '0 0 120 112', svg: s + `<path class="art-arrow" d="M100 80 V30 M95 36 L100 30 L105 36"/>` + aLabel(100, 92, 'travel') };
+}
+function plyArt(radial) {
+  let s = `<rect class="art-casing" x="14" y="16" width="132" height="70" rx="6"/>`;
+  if (radial) {
+    let d = ''; for (let x = 20; x <= 140; x += 6) d += `M${x} 18 V84 `; s += `<path class="art-ply" d="${d}"/>`;
+    let b = ''; for (let x = 16; x <= 136; x += 6) b += `M${x} 24 L${x + 8} 38 `; s += `<rect class="art-beltband" x="14" y="22" width="132" height="18"/><path class="art-belt-thin" d="${b}"/>`;
+  } else {
+    const cid = nextId('ply'); let d = ''; for (let x = -60; x <= 150; x += 8) d += `M${x} 86 L${x + 48} 18 M${x + 48} 86 L${x} 18 `; s += `<clipPath id="${cid}"><rect x="14" y="16" width="132" height="70" rx="6"/></clipPath><path class="art-ply" clip-path="url(#${cid})" d="${d}"/>`;
+  }
+  return { vb: '0 0 160 112', svg: s + `<path class="art-arrow" d="M30 100 H130 M124 95 L130 100 L124 105"/>` + aLabel(80, 96, 'direction of travel') };
+}
+function artSVG(key, label) {
+  const f = ART[key]; if (!f) return '';
+  const a = f();
+  return `<svg class="art" viewBox="${a.vb}" role="img" aria-label="${esc(label || key)}" focusable="false">${a.svg}</svg>`;
+}
+
+/* ===========================================================================
    INFOGRAPHICS — { ig: '<type>', title, ... } blocks.
    Types: stats, bars, donut, process, hub, matrix, scale, gantt, pipeline,
-   card, annotated, stackcompare, fishbone, pyramid, ladder, formulas.
+   card, annotated, stackcompare, fishbone, pyramid, ladder, formulas, cycle,
+   waterfall, heatmap, ratings, table, versus, anatomy, decode, axles, tread.
+   versus / anatomy / axles use the line-art library in ART (05a-art.js).
    Motion is CSS-only (staggered entrance via --i, bar/segment fills).
    =========================================================================== */
 const toneCls = (t) => `tone-${t || 'info'}`;
@@ -3917,6 +4541,39 @@ function infographicHTML(b) {
       inner = `<div class="table-wrap ig-table"><table class="table"><thead><tr>${b.head.map((h) => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${b.rows.map((r) => `<tr>${r.map((c, i) => (i === 0 ? `<td><strong>${inline(c)}</strong></td>` : `<td>${inline(c)}</td>`)).join('')}</tr>`).join('')}</tbody></table></div>`;
       break;
 
+    case 'versus':
+      inner = `<div class="ig-vs" style="--min:${b.items.length === 3 ? 170 : 230}px">${b.items.map((it, i) => `<article class="ig-vs__item ${toneCls(it.tone)}" style="--i:${i}">
+        ${it.art ? `<div class="ig-vs__art">${artSVG(it.art, it.t)}</div>` : ''}
+        <div class="ig-vs__body"><h4 class="ig-vs__t">${esc(it.t)}</h4>${it.sub ? `<p class="ig-vs__sub">${inline(it.sub)}</p>` : ''}
+        ${it.facts ? `<dl class="ig-vs__facts">${it.facts.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${inline(v)}</dd></div>`).join('')}</dl>` : ''}
+        ${it.use ? `<p class="ig-vs__use">${icon('check', 'icon--sm')}<span><strong>Used for:</strong> ${inline(it.use)}</span></p>` : ''}
+        ${it.watch ? `<p class="ig-vs__watch">${icon('wrench', 'icon--sm')}<span><strong>Maintenance focus:</strong> ${inline(it.watch)}</span></p>` : ''}</div></article>`).join('')}</div>
+        ${b.key ? `<div class="ig-vs__key">${icon('target', 'icon--sm')}<span><strong>Key difference:</strong> ${inline(b.key)}</span></div>` : ''}`;
+      break;
+    case 'anatomy':
+      inner = `<div class="ig-anat"><div class="ig-anat__fig"><div class="ig-anat__canvas" style="max-width:${b.w || 560}px">${artSVG(b.art, b.title)}${b.pins.map((p, i) => `<span class="ig-anat__pin" style="left:${p.x}%;top:${p.y}%;--i:${i}" aria-hidden="true">${i + 1}</span>`).join('')}</div></div>
+        <ol class="ig-anno__notes ig-anat__notes">${b.pins.map((p, i) => `<li style="--i:${i}"><span class="ig-anno__mk">${i + 1}</span><div><strong>${esc(p.t)}</strong><p>${inline(p.d)}</p></div></li>`).join('')}</ol></div>`;
+      break;
+    case 'decode':
+      inner = `<div class="ig-decode"><div class="ig-decode__code">${b.parts.map((p, i) => (p[1] ? `<span class="ig-decode__seg" style="--c:var(--ig-${(i % 6) + 1});--i:${i}"><b>${esc(p[0])}</b><i>${b.parts.slice(0, i + 1).filter((x) => x[1]).length}</i></span>` : `<span class="ig-decode__sep">${esc(p[0])}</span>`)).join('')}</div>
+        <ol class="ig-decode__legend">${b.parts.filter((p) => p[1]).map((p, i) => `<li style="--i:${i}"><span class="ig-decode__n" style="--c:var(--ig-${(b.parts.indexOf(p) % 6) + 1})">${i + 1}</span><div><strong><code>${esc(p[0])}</code> — ${esc(p[1])}</strong><p>${inline(p[2] || '')}</p></div></li>`).join('')}</ol></div>`;
+      break;
+    case 'axles': {
+      const lim = b.limits;
+      inner = `<div class="ig-axles"><div class="ig-axles__art"><div class="ig-anat__canvas">${artSVG(b.art || 'rig', 'Five-axle tractor-trailer')}${b.groups.map((g) => `<span class="ig-axles__tag" style="left:${g.x}%">${esc(g.t)}</span>`).join('')}</div></div>
+        <div class="table-wrap"><table class="table ig-axles__table"><thead><tr><th scope="col">Scenario</th>${b.groups.map((g, gi) => `<th scope="col">${esc(g.t)}<small>limit ${fmtNum(lim[gi])} lb</small></th>`).join('')}<th scope="col">Gross<small>limit ${fmtNum(b.gross)} lb</small></th></tr></thead>
+        <tbody>${b.rows.map((r) => { const tot = r.v.reduce((a2, x) => a2 + x, 0); const cellv = (v, max) => { const over = v > max; return `<td><span class="ig-axles__v num ${over ? 'is-over' : ''}">${fmtNum(v)}</span><span class="ig-axles__track"><span class="ig-axles__fill ${over ? 'tone-critical' : 'tone-success'}" style="--p:${Math.min(1, v / max).toFixed(3)}"></span></span>${over ? `<span class="badge badge--critical">+${fmtNum(v - max)} over</span>` : ''}</td>`; };
+          return `<tr><th scope="row">${esc(r.l)}${r.d ? `<small>${esc(r.d)}</small>` : ''}</th>${r.v.map((v, vi) => cellv(v, lim[vi])).join('')}${cellv(tot, b.gross)}</tr>`; }).join('')}</tbody></table></div></div>`;
+      break;
+    }
+    case 'tread': {
+      const max = b.max || 20;
+      inner = `<div class="ig-tread" style="--n:${b.items.length}">${b.items.map((t, i) => { const ok = t.v >= t.min; return `<div class="ig-tread__item ${ok ? 'tone-success' : 'tone-critical'}" style="--i:${i}">
+        <div class="ig-tread__groove" role="img" aria-label="${esc(t.l)}: ${t.v}/32 inch, minimum ${t.min}/32"><span class="ig-tread__rubber" style="--p:${(t.v / max).toFixed(3)}"></span><span class="ig-tread__min" style="--p:${(t.min / max).toFixed(3)}"><em>min ${t.min}/32</em></span></div>
+        <strong>${esc(t.l)}</strong><span class="num">${t.v}/32&Prime;</span><span class="badge ${ok ? 'badge--success' : 'badge--critical'}">${ok ? 'Meets minimum' : 'Below minimum'}</span></div>`; }).join('')}</div>`;
+      break;
+    }
+
     default: return '';
   }
   return `<figure class="ig ${cls}"><figcaption class="ig__head"><span class="ig__tag">${icon(b.icon || 'bar', 'icon--sm')} Infographic</span><span class="ig__title">${esc(b.title)}</span></figcaption>${inner}${b.note ? `<p class="ig__note">${icon('info', 'icon--sm')}<span>${inline(b.note)}</span></p>` : ''}</figure>`;
@@ -4040,7 +4697,9 @@ function viewReference() {
     ['Triage & urgency', [REF.urgency, REF.lamps, REF.triage]],
     ['Calls & communication', [REF.intake, REF.update, REF.roadside, REF.ladder]],
     ['Documentation & numbers', [REF.workorder, REF.kpis, REF.tireRules]],
-    ['Compliance, parts & diagnostics', [REF.dvir, REF.cvsa, REF.fmi, REF.pinout, REF.reorder]]
+    ['Equipment, tires & loads', [REF.enclosedTrailers, REF.openDeck, REF.treadMin, REF.tireCode, REF.weights, REF.securement]],
+    ['Compliance, parts & diagnostics', [REF.dvir, REF.cvsa, REF.fmi, REF.pinout, REF.reorder]],
+    ['Sources & scope', [REF.scope, REF.sources]]
   ];
   const html = `<div class="page page--narrow ref-page">${pageHead({ eyebrow: `${icon('file', 'icon--sm')} Reference`, title: 'Quick Reference', text: 'The academy\'s most-used frameworks on one page — keep it open on your second screen or print it for your desk.', right: `<button type="button" class="btn" data-print>${icon('print')} Print cheat sheet</button>` })}
     <nav class="row row--wrap mb-6" aria-label="Jump to section">${sections.map(([t], i) => `<a class="chip" href="#ref-${i}" data-jump="ref-${i}">${esc(t)}</a>`).join('')}</nav>
@@ -4828,6 +5487,7 @@ function viewDashboard() {
         </section>
       </div>
     </div>
+    <p class="scope-note">${icon('info', 'icon--sm')}<span>Educational training focused on U.S. trucking practice. Not legal or regulatory advice — company procedures and current official rules come first. <a href="#/reference">Sources &amp; scope</a></span></p>
   </div>`;
   return { html, title: 'Dashboard', nav: 'dashboard' };
 }
@@ -5274,7 +5934,8 @@ function certificateHTML(t) {
     <p>This certifies that</p>
     <div class="cert-name">${esc(state.name || 'Your Name')}</div>
     <p>has completed the ${t.level} curriculum and passed the final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'}<br>with a score of <strong style="color:#0b1a2e">${f ? pct(f.score) : 0}%</strong>.</p>
-    <div class="cert-meta"><div><strong>${date}</strong>Date awarded</div><div><strong>${t.modules.length} modules · ${t.modules.reduce((a, m) => a + m.lessons.length, 0)} lessons</strong>Curriculum</div><div><strong>MCA-${t.id.slice(0, 3).toUpperCase()}-${(f && f.at ? f.at : 0).toString(36).toUpperCase().slice(-6)}</strong>Credential ID</div></div>
+    <div class="cert-meta"><div><strong>${date}</strong>Date awarded</div><div><strong>${t.modules.length} modules · ${t.modules.reduce((a, m) => a + m.lessons.length, 0)} lessons</strong>Curriculum</div><div><strong>MCA-${t.id.slice(0, 3).toUpperCase()}-${(f && f.at ? f.at : 0).toString(36).toUpperCase().slice(-6)}</strong>Record ID</div></div>
+    <p class="cert-note">A self-paced training record from MC Academy. It is not a CDL, government license or third-party industry certification.</p>
   </div>`;
 }
 function showCertificate(t) {
@@ -6104,6 +6765,26 @@ function onDocKey(e) {
   }
 }
 
+/* ---------- PWA: service worker, install prompt, connectivity ---------- */
+let deferredInstall = null;
+function setupPWA() {
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch((err) => console.warn('Service worker registration failed:', err)); });
+  }
+  const btn = $('#installBtn');
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredInstall = e; btn.hidden = false; });
+  btn.addEventListener('click', async () => {
+    if (!deferredInstall) return;
+    deferredInstall.prompt();
+    const { outcome } = await deferredInstall.userChoice;
+    deferredInstall = null; btn.hidden = true;
+    if (outcome === 'accepted') toast({ kind: 'success', title: 'Installing MC Academy', text: 'Open it from your home screen or app list.', icon: 'download' });
+  });
+  window.addEventListener('appinstalled', () => { btn.hidden = true; deferredInstall = null; });
+  window.addEventListener('offline', () => toast({ kind: 'warning', title: 'You\'re offline', text: 'Lessons you\'ve opened keep working. Progress still saves on this device.' }));
+  window.addEventListener('online', () => toast({ kind: 'success', title: 'Back online', timeout: 2500 }));
+}
+
 /* ---------- Boot ---------- */
 function boot() {
   applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
@@ -6121,6 +6802,7 @@ function boot() {
   document.addEventListener('click', onDocClick);
   document.addEventListener('keydown', onDocKey);
   window.addEventListener('hashchange', router);
+  setupPWA();
   markActiveDay();
   if (!storageOk) setTimeout(() => toast({ kind: 'warning', title: 'Progress won\'t be saved', text: 'Local storage is unavailable in this browser session.' }), 600);
   router();
