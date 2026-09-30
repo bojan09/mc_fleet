@@ -6,7 +6,7 @@
      on the next visit.
    - Google Fonts: cache-first (fonts are immutable per URL).
    Bump VERSION on every deploy so old caches are cleared. */
-const VERSION = 'mca-v2';
+const VERSION = 'mca-v3';
 const APP_CACHE = `${VERSION}-app`;
 const FONT_CACHE = `${VERSION}-fonts`;
 const APP_SHELL = [

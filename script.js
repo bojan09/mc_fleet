@@ -3510,8 +3510,51 @@ addLesson('advanced', 'm6', {
   mistakes: ['Giving a late ETR that leaves dispatch no time to arrange a relay.', 'Sending a unit to a shop it can\'t legally reach.']
 });
 
-// Teach the freight market (who's who) before load types and weights.
-(() => { const ls = TRACKS.find((t) => t.id === 'beginner').modules.find((m) => m.id === 'm1').lessons; const a = ls.findIndex((l) => l.id === 'l3'); const b = ls.findIndex((l) => l.id === 'l4'); [ls[a], ls[b]] = [ls[b], ls[a]]; })();
+
+/* ---------------------------------------------------------------------------
+   CONTENT — OPERATIONS track (optional)
+   Freight-side knowledge that surrounds maintenance work: the freight market,
+   dispatch, Hours of Service, route planning, fuel and trucking invoicing.
+   Lessons are moved here from the maintenance tracks; LESSON_MOVES lets saved
+   progress follow them (see migrateState in the engine).
+   --------------------------------------------------------------------------- */
+function takeLesson(trackId, moduleId, lessonId) {
+  const m = TRACKS.find((t) => t.id === trackId).modules.find((x) => x.id === moduleId);
+  const i = m.lessons.findIndex((l) => l.id === lessonId);
+  return m.lessons.splice(i, 1)[0];
+}
+function takeModule(trackId, moduleId) {
+  const t = TRACKS.find((x) => x.id === trackId);
+  return t.modules.splice(t.modules.findIndex((m) => m.id === moduleId), 1)[0];
+}
+
+const OPS_MARKET = [takeLesson('beginner', 'm1', 'l4'), takeLesson('advanced', 'm6', 'l3')];
+const OPS_INVOICING = takeModule('beginner', 'm10');
+OPS_MARKET.forEach((l, i) => { l.id = `l${i + 1}`; });
+
+const OPERATIONS = {
+  id: 'operations',
+  level: 'Operations',
+  title: 'Transportation Operations',
+  short: 'Operations',
+  icon: 'route',
+  color: 'var(--track-operations)',
+  summary: 'An optional track on the freight side of trucking: carriers and brokers, load boards and dispatch, Hours of Service, route planning and fuel, and how carriers invoice and get paid. Take it any time — it doesn\'t depend on the maintenance tracks.',
+  outcomes: ['Explain who is who on a load: shipper, broker, carrier, driver and receiver', 'Follow a load from booking to payment', 'Judge whether a delay still fits a driver\'s hours and the delivery appointment', 'Prepare an accurate invoice with the right supporting documents'],
+  modules: [
+    { id: 'm1', title: 'Freight Market, Dispatch and Driver Hours', summary: 'Carriers, brokers, load boards and dispatch — plus the Hours of Service, route and fuel limits dispatch plans around.', lessons: OPS_MARKET },
+    Object.assign(OPS_INVOICING, { id: 'm2' })
+  ],
+  final: { id: 'operations-final', kind: 'exam', title: 'Operations Final: From Load to Payment', minutes: 25 }
+};
+TRACKS.push(OPERATIONS);
+
+/* Old lesson/module keys → new keys, so saved progress follows moved lessons. */
+const LESSON_MOVES = {
+  'beginner.m1.l4': 'operations.m1.l1',
+  'advanced.m6.l3': 'operations.m1.l2',
+  'beginner.m10': 'operations.m2'
+};
 
 /* ---------------------------------------------------------------------------
    2. PRACTICE DATA — Glossary
@@ -4544,7 +4587,7 @@ function infographicHTML(b) {
     case 'versus':
       inner = `<div class="ig-vs" style="--min:${b.items.length === 3 ? 170 : 230}px">${b.items.map((it, i) => `<article class="ig-vs__item ${toneCls(it.tone)}" style="--i:${i}">
         ${it.art ? `<div class="ig-vs__art">${artSVG(it.art, it.t)}</div>` : ''}
-        <div class="ig-vs__body"><h4 class="ig-vs__t">${esc(it.t)}</h4>${it.sub ? `<p class="ig-vs__sub">${inline(it.sub)}</p>` : ''}
+        <div class="ig-vs__body"><${hx()} class="ig-vs__t">${esc(it.t)}</${hx()}>${it.sub ? `<p class="ig-vs__sub">${inline(it.sub)}</p>` : ''}
         ${it.facts ? `<dl class="ig-vs__facts">${it.facts.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${inline(v)}</dd></div>`).join('')}</dl>` : ''}
         ${it.use ? `<p class="ig-vs__use">${icon('check', 'icon--sm')}<span><strong>Used for:</strong> ${inline(it.use)}</span></p>` : ''}
         ${it.watch ? `<p class="ig-vs__watch">${icon('wrench', 'icon--sm')}<span><strong>Maintenance focus:</strong> ${inline(it.watch)}</span></p>` : ''}</div></article>`).join('')}</div>
@@ -4790,6 +4833,70 @@ function mountInvoiceWidget(el) {
   preview();
 }
 
+/* Operations final — one brokered load from booking to payment (fictional companies). */
+EXAMS.operations = {
+  passing: 0.75,
+  intro: 'Monday, 07:10. A brokered load is on your board. Follow it from the rate confirmation to a paid invoice: identify the parties, read the rate con, handle a mid-trip delay, gather the documents, build the invoice and fix a rejection. Each step is scored; 75% is required to pass.',
+  caseFile: [['Load', 'NFB-452907'], ['Broker', 'Northgate Freight Brokerage (fictional)'], ['Lane', 'Memphis, TN → Charlotte, NC']],
+  steps: [
+    { label: 'Parties', title: 'Identify who is who',
+      exercise: { type: 'classify', prompt: 'Match each company to its role on this load.', categories: ['Shipper', 'Broker', 'Carrier', 'Receiver'],
+        items: [
+          { text: 'Harbor Foods Co. — owns the freight and needs it moved', answer: 'Shipper', why: 'The shipper owns and tenders the freight.' },
+          { text: 'Northgate Freight Brokerage — sent the rate confirmation', answer: 'Broker', why: 'Brokers arrange the move and confirm the rate with the carrier.' },
+          { text: 'Crestline Freight Lines — hauls the load and sends the invoice', answer: 'Carrier', why: 'The carrier moves the freight and bills for it.' },
+          { text: 'Peach State DC — signs the bill of lading at delivery', answer: 'Receiver', why: 'The receiver (consignee) signs the BOL, creating the proof of delivery.' }
+        ] },
+      reveal: [['Carrier', 'Crestline Freight Lines (fictional)'], ['Receiver', 'Peach State DC, Charlotte']] },
+    { label: 'Rate con', title: 'Read the rate confirmation',
+      exercise: { type: 'extract', sourceLabel: 'Rate confirmation',
+        source: 'RATE CONFIRMATION — Northgate Freight Brokerage (fictional)\nLoad #: NFB-452907\nPickup: Memphis, TN · 06/16 06:00  |  Delivery: Charlotte, NC · 06/17 07:30 appointment\nEquipment: 53\' dry van · Miles: 623\nLinehaul: $2,150.00   Fuel surcharge: $310.00 flat\nDetention: $50/hr after 2 hours free, billed in 15-minute increments · in/out times required on BOL\nLumper: reimbursed with receipt\nPayment terms: Net 30 from receipt of invoice with signed POD',
+        fields: [
+          { label: 'Load number', accept: ['nfb-452907', 'nfb452907', '452907'] },
+          { label: 'Linehaul ($)', accept: ['2150', '2,150', '2150.00', '2,150.00'] },
+          { label: 'Detention rate ($/hr)', accept: ['50'] },
+          { label: 'Free time before detention (hours)', accept: ['2'] }
+        ] },
+      reveal: [['Linehaul', '$2,150.00'], ['FSC', '$310.00'], ['Detention', '$50/hr after 2 h']] },
+    { label: 'Delay', title: 'Handle a mid-trip delay',
+      blocks: [{ msg: { kind: 'note', title: 'Situation', text: 'The driver started duty at 05:00 and has driven 5 hours. A charging-system fault stopped the tractor; the shop\'s ETR is 13:00. From the shop, the delivery is 6 hours of driving.' } }],
+      exercise: { type: 'choose', prompt: 'What do you tell dispatch?', options: [
+        { text: '"Truck will be fixed at 13:00, all good."', correct: false, why: 'Fixed isn\'t the same as able to deliver. Check the driver\'s hours.' },
+        { text: '"ETR 13:00. At that point the driver has 6 hours left in the 14-hour window (ends 19:00) and a 30-minute break due after 3 more hours of driving — 6 hours of driving plus the break doesn\'t fit. Today\'s run to Charlotte isn\'t possible with this driver; the broker needs an update on the 07:30 appointment."', correct: true, why: 'Numbers early let dispatch update the broker, protect the appointment or plan a relay.' },
+        { text: '"Tell the driver to skip the break so he makes it."', correct: false, why: 'Never suggest breaking Hours of Service rules.' }
+      ] },
+      reveal: [['Delay', 'Tractor repair, ETR 13:00'], ['Broker update', 'Via dispatch, 11:20']] },
+    { label: 'Documents', title: 'Gather the invoice documents',
+      blocks: [{ msg: { kind: 'note', title: 'Delivery', text: 'Delivered 06/17. Arrived 07:30 on time · departed 12:15 (in/out times signed on the BOL). Lumper paid by driver: $210.00, receipt #L-9024. BOL signed by receiver, no exceptions.' } }],
+      exercise: { type: 'multi', prompt: 'Which documents go with the invoice? Select all that apply.', options: [
+        { text: 'Rate confirmation', correct: true, why: 'Shows the agreed rate and accessorial terms.' },
+        { text: 'Signed BOL (proof of delivery)', correct: true, why: 'Payment terms start from receipt of the invoice with signed POD.' },
+        { text: 'Lumper receipt #L-9024', correct: true, why: 'Lumper is reimbursed only with a receipt.' },
+        { text: 'In/out times signed on the BOL', correct: true, why: 'The rate con requires them for detention.' },
+        { text: 'The shop invoice for the tractor repair', correct: false, why: 'The carrier\'s own repair cost isn\'t billed to the broker.' },
+        { text: 'The driver\'s fuel receipts', correct: false, why: 'Fuel is covered by linehaul and the fuel surcharge, not billed with receipts.' }
+      ] },
+      reveal: [['Documents', 'Rate con, signed BOL, lumper receipt']] },
+    { label: 'Invoice', title: 'Build the invoice total',
+      exercise: { type: 'choose', prompt: 'Arrived 07:30, departed 12:15; 2 hours free; $50/hr in 15-minute increments. What is the correct invoice total?', options: [
+        { text: '$2,807.50 — linehaul $2,150 + FSC $310 + detention $137.50 (2.75 h) + lumper $210', correct: true, why: '4 h 45 min at the dock minus 2 h free = 2.75 billable hours × $50 = $137.50.' },
+        { text: '$2,907.50 — detention for all 4.75 hours', correct: false, why: 'The first 2 hours are free time.' },
+        { text: '$2,597.50 — lumper left off', correct: false, why: 'The lumper is reimbursable with the receipt.' },
+        { text: '$2,460.00 — linehaul and FSC only', correct: false, why: 'Leaves out earned accessorials.' }
+      ] },
+      reveal: [['Invoice total', '$2,807.50'], ['Status', 'Submitted 06/17']] },
+    { label: 'Rejection', title: 'Fix a rejected invoice',
+      blocks: [{ msg: { kind: 'note', title: 'Broker AP reply', text: 'Invoice CFL-2207 rejected: detention not approved — in/out times not received.' } }],
+      exercise: { type: 'choose', prompt: 'What is the best response?', options: [
+        { text: 'Resubmit the same invoice without changes.', correct: false, why: 'The same packet will be rejected again.' },
+        { text: 'Send the BOL page with the signed in/out times, reference invoice CFL-2207 and load NFB-452907, and ask AP to confirm the corrected packet is complete.', correct: true, why: 'Supplies the missing support and makes the resubmission easy to match.' },
+        { text: 'Remove detention and never mention it again.', correct: false, why: 'The detention was earned and documented — supply the support instead of dropping it.' },
+        { text: 'Tell the broker you\'ll stop hauling their loads.', correct: false, why: 'Unprofessional, and it doesn\'t fix the missing document.' }
+      ] },
+      reveal: [['Resubmitted', 'With signed in/out times'], ['Status', 'Approved for payment']] }
+  ]
+};
+
 /* ===========================================================================
    4. ENGINE
    =========================================================================== */
@@ -4830,7 +4937,20 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 const STORE_KEY = 'mca.v1';
 const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [] };
 let storageOk = true;
-let state = loadState();
+let state = migrateState(loadState());
+/* Lessons that moved between tracks keep their saved progress (LESSON_MOVES). */
+function migrateState(st) {
+  const reEsc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const rules = Object.entries(LESSON_MOVES).map(([from, to]) => [new RegExp(`(^|[^\\w.])${reEsc(from)}(?=$|[^\\w])`), to]);
+  const move = (k) => rules.reduce((acc, [re, to]) => acc.replace(re, `$1${to}`), k);
+  let changed = false;
+  const remap = (obj) => Object.fromEntries(Object.entries(obj || {}).map(([k, v]) => { const n = move(k); if (n !== k) changed = true; return [n, v]; }));
+  ['completed', 'checks', 'quizzes', 'exercises'].forEach((f) => { st[f] = remap(st[f]); });
+  st.bookmarks = (st.bookmarks || []).map((k) => { const n = move(k); if (n !== k) changed = true; return n; });
+  if (st.last) { const n = move(st.last); if (n !== st.last) { changed = true; st.last = n; } }
+  if (changed) { try { localStorage.setItem(STORE_KEY, JSON.stringify(st)); } catch (e) {} }
+  return st;
+}
 function loadState() {
   const base = JSON.parse(JSON.stringify(DEFAULT_STATE));
   try {
@@ -4925,9 +5045,10 @@ const ACHIEVEMENTS = [
   { id: 'glossary', title: 'Reference Reader', desc: 'Open 10 glossary terms.', icon: 'book', test: () => Object.keys(state.glossaryViewed).length >= 10 },
   { id: 'calc', title: 'By the Numbers', desc: 'Use 3 different calculators.', icon: 'calc', test: () => Object.keys(state.calcUsed).length >= 3 },
   { id: 'cert-beginner', title: 'Fundamentals Certified', desc: 'Pass the Beginner final exam.', icon: 'grad', test: () => finalPassed(BEGINNER) },
-  { id: 'cert-advanced', title: 'Operations Certified', desc: 'Pass the Advanced final project.', icon: 'wrench', test: () => finalPassed(ADVANCED) },
+  { id: 'cert-advanced', title: 'Fleet Operations Certified', desc: 'Pass the Advanced final project.', icon: 'wrench', test: () => finalPassed(ADVANCED) },
   { id: 'cert-expert', title: 'Fleet Management Certified', desc: 'Pass the Expert final simulation.', icon: 'award', test: () => finalPassed(EXPERT) },
-  { id: 'master', title: 'Master Coordinator', desc: 'Earn all three certificates.', icon: 'star', test: () => TRACKS.every(finalPassed) }
+  { id: 'cert-operations', title: 'Transportation Operations Certified', desc: 'Pass the Operations final exam.', icon: 'route', test: () => finalPassed(OPERATIONS) },
+  { id: 'master', title: 'Master Coordinator', desc: 'Earn the Beginner, Advanced and Expert certificates.', icon: 'star', test: () => [BEGINNER, ADVANCED, EXPERT].every(finalPassed) }
 ];
 function checkAchievements() {
   let changed = false;
@@ -5041,7 +5162,16 @@ function inline(s) {
 
 /* ---------- Content block renderer ---------- */
 const EX_REG = new Map();
-function renderBlocks(blocks) { return (blocks || []).map(renderBlock).join(''); }
+/* Component headings (callouts, tiles, cards…) sit one level below the nearest
+   heading: h3 directly under a section h2, h4 once a block list has its own {h}. */
+let BLOCK_HL = 3;
+const hx = () => `h${BLOCK_HL}`;
+function renderBlocks(blocks) {
+  const prev = BLOCK_HL; BLOCK_HL = 3;
+  const html = (blocks || []).map((b) => { const out = renderBlock(b); if (b && b.h) BLOCK_HL = 4; return out; }).join('');
+  BLOCK_HL = prev;
+  return html;
+}
 function renderBlock(b) {
   if (typeof b === 'string') return `<p>${inline(b)}</p>`;
   if (b.h) return `<h3>${inline(b.h)}</h3>`;
@@ -5049,11 +5179,11 @@ function renderBlock(b) {
   if (b.ol) return `<ol>${b.ol.map((i) => `<li>${inline(i)}</li>`).join('')}</ol>`;
   if (b.callout) {
     const c = b.callout; const ic = { info: 'info', tip: 'bulb', warning: 'alert', safety: 'shield' }[c.kind] || 'info';
-    return `<div class="callout callout--${c.kind}" role="note"><span class="callout__icon">${icon(ic)}</span><div>${c.title ? `<h4>${esc(c.title)}</h4>` : ''}<p>${inline(c.text)}</p></div></div>`;
+    return `<div class="callout callout--${c.kind}" role="note"><span class="callout__icon">${icon(ic)}</span><div>${c.title ? `<${hx()}>${esc(c.title)}</${hx()}>` : ''}<p>${inline(c.text)}</p></div></div>`;
   }
-  if (b.tiles) return `<div class="info-grid">${b.tiles.map((t) => `<div class="info-tile"><div class="info-tile__icon">${icon(t.icon)}</div><h4>${esc(t.title)}</h4><p>${inline(t.text)}</p></div>`).join('')}</div>`;
+  if (b.tiles) return `<div class="info-grid">${b.tiles.map((t) => `<div class="info-tile"><div class="info-tile__icon">${icon(t.icon)}</div><${hx()}>${esc(t.title)}</${hx()}><p>${inline(t.text)}</p></div>`).join('')}</div>`;
   if (b.compare) {
-    const col = (c, k) => `<div class="compare__col compare__col--${k}"><h4>${icon(k === 'yes' ? 'check-circle' : 'x-circle')} ${esc(c.title)}</h4><ul>${c.items.map((i) => `<li>${icon(k === 'yes' ? 'check' : 'x')}<span>${inline(i)}</span></li>`).join('')}</ul></div>`;
+    const col = (c, k) => `<div class="compare__col compare__col--${k}"><${hx()}>${icon(k === 'yes' ? 'check-circle' : 'x-circle')} ${esc(c.title)}</${hx()}><ul>${c.items.map((i) => `<li>${icon(k === 'yes' ? 'check' : 'x')}<span>${inline(i)}</span></li>`).join('')}</ul></div>`;
     return `<div class="compare">${col(b.compare.yes, 'yes')}${col(b.compare.no, 'no')}</div>`;
   }
   if (b.table) {
@@ -5082,7 +5212,7 @@ function renderBlock(b) {
   if (b.accordion) {
     return `<div class="accordion">${b.accordion.map((a) => {
       const pid = nextId('acc');
-      return `<div class="acc-item"><h4><button type="button" class="acc-trigger" aria-expanded="false" aria-controls="${pid}">${esc(a.title)}${icon('chev-d')}</button></h4><div class="acc-panel" id="${pid}" role="region"><div><div class="acc-panel__inner"><p>${inline(a.text)}</p></div></div></div></div>`;
+      return `<div class="acc-item"><${hx()}><button type="button" class="acc-trigger" aria-expanded="false" aria-controls="${pid}">${esc(a.title)}${icon('chev-d')}</button></${hx()}><div class="acc-panel" id="${pid}" role="region"><div><div class="acc-panel__inner"><p>${inline(a.text)}</p></div></div></div></div>`;
     }).join('')}</div>`;
   }
   if (b.tabs) {
@@ -5094,7 +5224,7 @@ function renderBlock(b) {
   if (b.industry) {
     const x = b.industry;
     return `<aside class="industry" aria-label="Industry example: ${esc(x.name)}"><div class="industry__head"><span class="industry__tag">${icon('pin', 'icon--sm')} Industry example</span><span class="badge badge--outline">${esc(x.cat)}</span></div>`
-      + `<h4>${esc(x.name)}</h4><p>${inline(x.text)}</p>${x.relevance ? `<p class="industry__why"><strong>Why it matters here:</strong> ${inline(x.relevance)}</p>` : ''}`
+      + `<${hx()} class="industry__name">${esc(x.name)}</${hx()}><p>${inline(x.text)}</p>${x.relevance ? `<p class="industry__why"><strong>Why it matters here:</strong> ${inline(x.relevance)}</p>` : ''}`
       + `<div class="industry__foot"><a class="industry__link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">Official website ${icon('external', 'icon--sm')}<span class="sr-only"> (opens in a new tab)</span></a><span class="industry__note">Referenced as an example — not an endorsement or affiliation.</span></div></aside>`;
   }
   if (b.widget) return `<div class="widget" data-widget="${esc(b.widget)}"></div>`;
@@ -5445,14 +5575,14 @@ function viewDashboard() {
     <div class="grid grid--4 mt-6 stagger">
       ${statCard('book', done, `/ ${LESSONS.length}`, 'Lessons completed')}
       ${statCard('target', avg == null ? '—' : pct(avg), avg == null ? '' : '%', 'Average quiz score')}
-      ${statCard('award', certs, '/ 3', 'Certificates earned')}
+      ${statCard('award', certs, `/ ${TRACKS.length}`, 'Certificates earned')}
       ${statCard('activity', streak(), streak() === 1 ? 'day' : 'days', 'Study streak')}
     </div>
 
     <div class="dash-cols mt-6">
       <div class="stack">
         <section class="card" aria-labelledby="tpTitle">
-          <div class="card__head"><h3 id="tpTitle">Curriculum progress</h3><a class="btn btn--ghost btn--sm" href="#/curriculum">All tracks ${icon('chev-r', 'icon--sm')}</a></div>
+          <div class="card__head"><h2 id="tpTitle">Curriculum progress</h2><a class="btn btn--ghost btn--sm" href="#/curriculum">All tracks ${icon('chev-r', 'icon--sm')}</a></div>
           <div class="card__body track-progress">
             ${TRACKS.map((t) => { const s = trackStats(t); return `<a class="tp-row" href="#/track/${t.id}" style="color:inherit;text-decoration:none">
               <span class="track-icon" style="--c:${t.color}">${icon(t.icon)}</span>
@@ -5465,7 +5595,7 @@ function viewDashboard() {
           <span class="grow"><span class="eyebrow">Recommended next</span><strong style="display:block;font-size:var(--fs-md);margin-top:2px">${esc(rec.title)}</strong><span class="small muted">${esc(rec.sub)}</span></span>
           ${icon('arrow-r', 'icon--go')}</a>` : ''}
         <section class="card" aria-labelledby="nowTitle">
-          <div class="card__head"><h3 id="nowTitle">Where you are</h3></div>
+          <div class="card__head"><h2 id="nowTitle">Where you are</h2></div>
           <div class="card__body">
             <dl class="grid grid--3" style="gap:var(--sp-4)">
               <div><dt class="eyebrow">Curriculum</dt><dd class="mt-2"><strong>${esc(ctx.t.title)}</strong></dd></div>
@@ -5477,12 +5607,12 @@ function viewDashboard() {
       </div>
       <div class="stack">
         <section class="card" aria-labelledby="qsTitle">
-          <div class="card__head"><h3 id="qsTitle">Quiz &amp; assessment scores</h3></div>
+          <div class="card__head"><h2 id="qsTitle">Quiz &amp; assessment scores</h2></div>
           <div class="card__body">${quizRows.length ? `<div class="score-list">${quizRows.slice(0, 6).map((r) => `<a class="score-list__row" href="${r.href}" style="text-decoration:none">${icon(r.final ? 'award' : 'target', 'icon--sm')}<span class="grow">${esc(r.label)}</span>${scorePill(r.s)}</a>`).join('')}</div>`
             : `<div class="center" style="padding:var(--sp-4) 0"><p class="small muted">No quiz scores yet. Complete a module and take its quiz to see results here.</p></div>`}</div>
         </section>
         <section class="card" aria-labelledby="achTitle">
-          <div class="card__head"><h3 id="achTitle">Achievements</h3><a class="btn btn--ghost btn--sm" href="#/achievements">${earned.length}/${ACHIEVEMENTS.length} ${icon('chev-r', 'icon--sm')}</a></div>
+          <div class="card__head"><h2 id="achTitle">Achievements</h2><a class="btn btn--ghost btn--sm" href="#/achievements">${earned.length}/${ACHIEVEMENTS.length} ${icon('chev-r', 'icon--sm')}</a></div>
           <div class="card__body" style="display:grid;gap:var(--sp-3)">${achShow.map(achHTML).join('')}</div>
         </section>
       </div>
@@ -5496,17 +5626,17 @@ function statCard(ic, v, unit, label) {
 }
 function achHTML(a) {
   const got = state.achievements[a.id];
-  return `<div class="ach ${got ? 'is-earned' : ''}"><span class="ach__icon">${icon(got ? a.icon : 'lock')}</span><div><h4>${esc(a.title)}</h4><p>${esc(a.desc)}${got ? ` · ${new Date(got).toLocaleDateString()}` : ''}</p></div></div>`;
+  return `<div class="ach ${got ? 'is-earned' : ''}"><span class="ach__icon">${icon(got ? a.icon : 'lock')}</span><div><h3>${esc(a.title)}</h3><p>${esc(a.desc)}${got ? ` · ${new Date(got).toLocaleDateString()}` : ''}</p></div></div>`;
 }
 
 /* ---------- Curriculum ---------- */
 function viewCurriculum() {
   const html = `<div class="page">
-    ${pageHead({ eyebrow: `${icon('layers', 'icon--sm')} Curriculum`, title: 'Your learning path', text: 'Three progressive tracks take you from zero knowledge to expert fleet maintenance coordination. Each track includes modules, lessons, knowledge checks, practical exercises, module quizzes and a final assessment.' })}
+    ${pageHead({ eyebrow: `${icon('layers', 'icon--sm')} Curriculum`, title: 'Your learning path', text: 'Three progressive maintenance tracks take you from zero knowledge to expert fleet maintenance coordination, and an optional Operations track covers the freight side: brokers, dispatch, Hours of Service and invoicing. Each track includes modules, lessons, knowledge checks, practical exercises, module quizzes and a final assessment.' })}
     <div class="grid grid--3 stagger">${TRACKS.map(trackCard).join('')}</div>
     <div class="section-head"><div><span class="eyebrow">How it works</span><h2>Built around the real job</h2></div></div>
     <div class="info-grid stagger">
-      ${[['book', 'Structured lessons', 'Objectives, explanation, real-world examples, visuals, practical examples and key takeaways.'], ['target', 'Knowledge checks', 'Multiple choice, true/false, scenario and what-would-you-do questions with explanations.'], ['message', 'Scenario practice', 'Respond to realistic driver, dispatch, shop and management messages.'], ['clipboard', 'Practical exercises', 'Extract case data, prioritize, classify urgency and review estimates.'], ['award', 'Final assessments', 'A realistic call, a multi-case operations board and a full-day fleet simulation.']].map(([i, t, d]) => `<div class="info-tile"><div class="info-tile__icon">${icon(i)}</div><h4>${t}</h4><p>${d}</p></div>`).join('')}
+      ${[['book', 'Structured lessons', 'Objectives, explanation, real-world examples, visuals, practical examples and key takeaways.'], ['target', 'Knowledge checks', 'Multiple choice, true/false, scenario and what-would-you-do questions with explanations.'], ['message', 'Scenario practice', 'Respond to realistic driver, dispatch, shop and management messages.'], ['clipboard', 'Practical exercises', 'Extract case data, prioritize, classify urgency and review estimates.'], ['award', 'Final assessments', 'A realistic call, a multi-case operations board and a full-day fleet simulation.']].map(([i, t, d]) => `<div class="info-tile"><div class="info-tile__icon">${icon(i)}</div><h3>${t}</h3><p>${d}</p></div>`).join('')}
     </div>
   </div>`;
   return { html, title: 'Curriculum', nav: 'curriculum', crumbs: [['Curriculum']] };
@@ -5518,7 +5648,7 @@ function trackCard(t) {
   return `<article class="card card--hover track-card" style="--c:${t.color}">
     <div class="track-card__top">
       <div class="track-card__level"><span class="track-icon">${icon(t.icon)}</span><span class="badge badge--track" style="--c:${t.color}">${t.level}</span></div>
-      <h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p>
+      <h2>${esc(t.title)}</h2><p>${esc(t.summary)}</p>
       <div class="track-card__meta"><span>${icon('layers')} ${t.modules.length} modules</span><span>${icon('book')} ${s.lessons} lessons</span><span>${icon('clock')} ~${Math.round(mins / 60)} h</span></div>
     </div>
     <div class="track-card__bottom">
@@ -5551,7 +5681,7 @@ function viewTrack(tid) {
     <div class="module-list stagger">${t.modules.map((m, i) => moduleHTML(t, m, i, m.id === openMod)).join('')}</div>
     <div class="final-card mt-6 ${fin && fin.passed ? 'is-passed' : ''}">
       <span class="final-card__icon">${icon('award')}</span>
-      <div class="grow"><span class="eyebrow">Final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'} · ~${t.final.minutes} min</span><h3 style="margin-top:4px">${esc(t.final.title)}</h3>
+      <div class="grow"><span class="eyebrow">Final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'} · ~${t.final.minutes} min</span><h2 style="margin-top:4px;font-size:var(--fs-lg)">${esc(t.final.title)}</h2>
         <p class="small mt-2">${fin ? `Best score ${pct(fin.score)}% — ${fin.passed ? 'passed. Certificate earned.' : 'not yet passed (75% required).'}` : `Complete the modules, then prove it. ${s.done < s.lessons ? `${s.lessons - s.done} lessons remaining — you can attempt it anytime.` : 'You are ready.'}`}</p></div>
       <a class="btn ${fin && fin.passed ? '' : 'btn--primary'}" href="#/final/${t.id}">${fin ? (fin.passed ? 'Retake' : 'Try again') : 'Start'} ${icon('arrow-r', 'icon--nudge')}</a>
     </div>
@@ -5604,7 +5734,7 @@ function viewLesson(tid, mid, lid) {
   const sections = [
     ['objectives', 'Objectives'], ['explanation', 'Explanation'], ...(l.deep ? [['deep', 'Deep dive']] : []), ['example', 'Real-world example'], ['practical', 'Practical example'], ...(hasNotes ? [['notes', 'Field notes']] : []), ['check', 'Knowledge check'], ['takeaways', 'Key takeaways']
   ];
-  const notesHTML = hasNotes ? `<section class="lesson-section" id="sec-notes"><h2><span class="sec-ico">${icon('bulb')}</span>Field notes</h2><div class="compare">${l.tips ? `<div class="compare__col compare__col--yes"><h4>${icon('bulb')} Pro tips</h4><ul>${l.tips.map((i) => `<li>${icon('check')}<span>${inline(i)}</span></li>`).join('')}</ul></div>` : ''}${l.mistakes ? `<div class="compare__col compare__col--no"><h4>${icon('alert')} Common mistakes</h4><ul>${l.mistakes.map((i) => `<li>${icon('x')}<span>${inline(i)}</span></li>`).join('')}</ul></div>` : ''}</div></section>` : '';
+  const notesHTML = hasNotes ? `<section class="lesson-section" id="sec-notes"><h2><span class="sec-ico">${icon('bulb')}</span>Field notes</h2><div class="compare">${l.tips ? `<div class="compare__col compare__col--yes"><h3>${icon('bulb')} Pro tips</h3><ul>${l.tips.map((i) => `<li>${icon('check')}<span>${inline(i)}</span></li>`).join('')}</ul></div>` : ''}${l.mistakes ? `<div class="compare__col compare__col--no"><h3>${icon('alert')} Common mistakes</h3><ul>${l.mistakes.map((i) => `<li>${icon('x')}<span>${inline(i)}</span></li>`).join('')}</ul></div>` : ''}</div></section>` : '';
   const nextHref = nextIsQuiz ? `#/quiz/${t.id}/${m.id}` : lessonHref(next);
   const nextLabel = nextIsQuiz ? 'Module quiz' : 'Next lesson';
   const html = `<div class="lesson-layout">
@@ -5652,8 +5782,8 @@ function viewLesson(tid, mid, lid) {
     </article>
 
     <aside class="lesson-rail" aria-label="Lesson navigation">
-      <div class="rail-card"><h4>On this page</h4><nav class="toc">${sections.map(([id, label]) => `<a href="#sec-${id}" data-toc="${id}">${label}</a>`).join('')}</nav></div>
-      <div class="rail-card"><h4>Module ${m.id.slice(1)} · ${esc(m.title)}</h4><div class="rail-lessons">
+      <div class="rail-card"><h2>On this page</h2><nav class="toc">${sections.map(([id, label]) => `<a href="#sec-${id}" data-toc="${id}">${label}</a>`).join('')}</nav></div>
+      <div class="rail-card"><h2>Module ${m.id.slice(1)} · ${esc(m.title)}</h2><div class="rail-lessons">
         ${m.lessons.map((ll) => { const k = `${t.id}.${m.id}.${ll.id}`; const xx = LESSON_MAP.get(k); return `<a href="${lessonHref(xx)}" class="${isDone(k) ? 'is-done' : ''}" ${k === key ? 'aria-current="page"' : ''}><span class="dot">${isDone(k) ? icon('check') : ''}</span><span>${esc(ll.title)}</span></a>`; }).join('')}
         <a href="#/quiz/${t.id}/${m.id}" class="${quizPassed(t, m) ? 'is-done' : ''}"><span class="dot">${quizPassed(t, m) ? icon('check') : ''}</span><span>Module quiz</span></a>
       </div></div>
@@ -5784,7 +5914,7 @@ function finalIntro(root, t, intro, steps, onStart) {
   root.innerHTML = `<div class="page--narrow" style="margin:0 auto">
     ${pageHead({ eyebrow: `<span class="badge badge--track" style="--c:${t.color}">${t.level}</span> Final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'}`, title: esc(t.final.title), text: esc(intro) })}
     <div class="card card--pad">
-      <div class="row row--between row--wrap"><h3>What you'll do</h3><span class="badge badge--outline">${icon('clock')} ~${t.final.minutes} min · Pass 75%</span></div>
+      <div class="row row--between row--wrap"><h2 style="font-size:var(--fs-lg)">What you'll do</h2><span class="badge badge--outline">${icon('clock')} ~${t.final.minutes} min · Pass 75%</span></div>
       <ol class="timeline mt-4">${steps.map((s, i) => `<li class="tl-step is-seen" style="padding-bottom:6px"><span class="tl-step__num">${i + 1}</span><div style="padding:14px 0 0"><span class="tl-step__title">${esc(s)}</span></div></li>`).join('')}</ol>
       ${prev ? `<div class="feedback feedback--${prev.passed ? 'correct' : 'partial'}">${icon(prev.passed ? 'award' : 'info')}<div><strong>Previous best: ${pct(prev.score)}%</strong><p>${prev.passed ? 'Passed — your certificate is available.' : 'Not yet passed. Try again!'}</p></div></div>` : ''}
       <div class="row row--wrap mt-6"><button class="btn btn--primary btn--lg" data-start>${icon('play')} ${prev ? 'Start again' : 'Begin'}</button>${prev && prev.passed ? `<button class="btn btn--lg" data-cert>${icon('award')} View certificate</button>` : ''}</div>
@@ -5961,7 +6091,7 @@ function viewPractice() {
     ['fleet', 'truck', 'Fleet Board', 'An interactive fleet status dashboard with PM status, open repairs, downtime and repeat failures.', `${FLEET.length} units`]
   ];
   const html = `<div class="page">${pageHead({ eyebrow: `${icon('flask', 'icon--sm')} Practice Lab`, title: 'Practice like it\'s a real shift', text: 'Hands-on tools to build judgment and speed. Everything here also appears inside the relevant lessons.' })}
-    <div class="grid grid--3 stagger">${tools.map(([id, ic, t, d, meta]) => `<a class="card card--hover" href="#/${id}"><div class="lab-card"><span class="lab-card__icon">${icon(ic)}</span><h3>${t}</h3><p>${d}</p><div class="row row--between"><span class="lab-card__go">Open ${icon('arrow-r')}</span><span class="small muted">${meta}</span></div></div></a>`).join('')}</div></div>`;
+    <div class="grid grid--3 stagger">${tools.map(([id, ic, t, d, meta]) => `<a class="card card--hover" href="#/${id}"><div class="lab-card"><span class="lab-card__icon">${icon(ic)}</span><h2>${t}</h2><p>${d}</p><div class="row row--between"><span class="lab-card__go">Open ${icon('arrow-r')}</span><span class="small muted">${meta}</span></div></div></a>`).join('')}</div></div>`;
   return { html, title: 'Practice Lab', nav: '', bottom: 'practice', crumbs: [['Practice Lab']] };
 }
 
@@ -6029,7 +6159,7 @@ function sessionStorageSet(k, v) { try { sessionStorage.setItem('mca.' + k, v); 
 /* ---------- Decision trees ---------- */
 function treeHTML(tree) {
   return `<div class="tree" data-tree="${tree.id}"><div data-tree-stage></div>
-    <aside class="card card--pad-sm" aria-label="Your path"><div class="row row--between"><h4>Your path</h4><button type="button" class="btn btn--ghost btn--sm" data-tree-restart>${icon('rotate')} Restart</button></div><ol class="tree-path mt-4" data-tree-path><li><strong>Start</strong><small>${esc(tree.intro)}</small></li></ol></aside></div>`;
+    <aside class="card card--pad-sm" aria-label="Your path"><div class="row row--between"><h2 style="font-size:var(--fs-md)">Your path</h2><button type="button" class="btn btn--ghost btn--sm" data-tree-restart>${icon('rotate')} Restart</button></div><ol class="tree-path mt-4" data-tree-path><li><strong>Start</strong><small>${esc(tree.intro)}</small></li></ol></aside></div>`;
 }
 function mountTree(el, tree) {
   let path = [];
@@ -6071,7 +6201,7 @@ function viewExercises() {
   const items = LESSONS.filter((x) => x.l.practical && x.l.practical.exercise && (filter === 'all' || x.t.id === filter));
   const html = `<div class="page page--narrow">${pageHead({ eyebrow: `${icon('clipboard', 'icon--sm')} Practice Lab`, title: 'Practical Exercises', text: 'Realistic maintenance information — you perform the coordinator task. These are the same exercises embedded in each lesson, collected in one place.' })}
     <div class="row row--wrap mb-6" role="group" aria-label="Filter by track">${[['all', 'All tracks'], ...TRACKS.map((t) => [t.id, t.level])].map(([id, l]) => `<button type="button" class="chip" data-f="${id}" aria-pressed="${id === filter}">${l}</button>`).join('')}</div>
-    <div class="accordion">${items.map((x) => { const pid = nextId('exacc'); const sc = state.exercises['ex:' + x.key]; return `<div class="acc-item" data-exkey="${x.key}"><h3><button type="button" class="acc-trigger" aria-expanded="false" aria-controls="${pid}"><span class="badge badge--track" style="--c:${x.t.color}">${x.t.level.slice(0, 3)}</span><span class="grow">${esc(x.l.practical.title || EX_META[x.l.practical.exercise.type][1])}<br><span class="small muted" style="font-weight:400">M${x.m.id.slice(1)} · ${esc(x.l.title)}</span></span>${sc != null ? scorePill(sc) : ''}${icon('chev-d')}</button></h3><div class="acc-panel" id="${pid}" role="region"><div><div class="acc-panel__inner" data-exslot></div></div></div></div>`; }).join('')}</div></div>`;
+    <div class="accordion">${items.map((x) => { const pid = nextId('exacc'); const sc = state.exercises['ex:' + x.key]; return `<div class="acc-item" data-exkey="${x.key}"><h2 class="acc-heading"><button type="button" class="acc-trigger" aria-expanded="false" aria-controls="${pid}"><span class="badge badge--track" style="--c:${x.t.color}">${x.t.level.slice(0, 3)}</span><span class="grow">${esc(x.l.practical.title || EX_META[x.l.practical.exercise.type][1])}<br><span class="small muted" style="font-weight:400">M${x.m.id.slice(1)} · ${esc(x.l.title)}</span></span>${sc != null ? scorePill(sc) : ''}${icon('chev-d')}</button></h2><div class="acc-panel" id="${pid}" role="region"><div><div class="acc-panel__inner" data-exslot></div></div></div></div>`; }).join('')}</div></div>`;
   return {
     html, title: 'Practical Exercises', nav: 'exercises', bottom: 'practice', crumbs: [['Practice Lab', '#/practice'], ['Exercises']],
     after: (v) => {
@@ -6171,7 +6301,7 @@ const CALCS = {
       const a = { inv: v.aRate * v.aHours + v.aParts + v.aTow, dt: v.aDays * v.dt }; a.total = a.inv + a.dt;
       const b = { inv: v.bRate * v.bHours + v.bParts + v.bTow, dt: v.bDays * v.dt }; b.total = b.inv + b.dt;
       const win = a.total <= b.total ? 'A' : 'B'; const diff = Math.abs(a.total - b.total);
-      const col = (n, x) => `<div class="vcol ${win === n ? 'is-winner' : ''}"><h5>Vendor ${n} ${win === n ? '<span class="badge badge--success">Lower total</span>' : ''}</h5><div class="calc__rows"><div><span>Invoice</span><strong>${fmtMoney(x.inv)}</strong></div><div><span>Downtime</span><strong>${fmtMoney(x.dt)}</strong></div><div class="total"><span>Total</span><strong>${fmtMoney(x.total)}</strong></div></div></div>`;
+      const col = (n, x) => `<div class="vcol ${win === n ? 'is-winner' : ''}"><h3>Vendor ${n} ${win === n ? '<span class="badge badge--success">Lower total</span>' : ''}</h3><div class="calc__rows"><div><span>Invoice</span><strong>${fmtMoney(x.inv)}</strong></div><div><span>Downtime</span><strong>${fmtMoney(x.dt)}</strong></div><div class="total"><span>Total</span><strong>${fmtMoney(x.total)}</strong></div></div></div>`;
       return { big: `${fmtMoney(diff)}<small>saved with ${win}</small>`, custom: `<div class="compare-cols">${col('A', a)}${col('B', b)}</div>`,
         verdict: [a.inv < b.inv !== (win === 'A') ? 'warn' : 'good', a.inv < b.inv !== (win === 'A') ? `The lower invoice is not the lower total — Vendor ${win} wins once downtime is included.` : `Vendor ${win} is cheaper on both invoice and total cost.`] };
     } },
@@ -6463,7 +6593,7 @@ function mountWorkflow(el) {
 }
 
 function downtimeStackHTML() {
-  return `<div class="card card--pad" data-dts><div class="row row--between row--wrap"><div><span class="eyebrow">Case study · T-108</span><h4 style="font-size:var(--fs-lg);margin-top:4px">Where did <span data-dt-total class="num">31</span> hours go?</h4></div>
+  return `<div class="card card--pad" data-dts><div class="row row--between row--wrap"><div><span class="eyebrow">Case study · T-108</span><h3 style="font-size:var(--fs-lg);margin-top:4px">Where did <span data-dt-total class="num">31</span> hours go?</h3></div>
     <label class="row small" style="cursor:pointer"><input type="checkbox" data-dt-fix style="width:18px;height:18px;accent-color:var(--primary)"> Apply coordinator fixes</label></div>
     <div class="stackbar mt-4" style="height:28px;border-radius:8px" data-dt-bar></div><div class="legend mt-3" data-dt-legend></div>
     <p class="small mt-4" data-dt-note></p></div>`;
@@ -6485,7 +6615,7 @@ function mountDowntimeStack(el) {
 }
 
 function lifecycleHTML() {
-  return `<div class="card card--pad" data-life><div class="row row--between row--wrap"><div><span class="eyebrow">Illustrative lifecycle</span><h4 style="font-size:var(--fs-lg);margin-top:4px">Annual maintenance cost vs. vehicle value</h4></div>
+  return `<div class="card card--pad" data-life><div class="row row--between row--wrap"><div><span class="eyebrow">Illustrative lifecycle</span><h3 style="font-size:var(--fs-lg);margin-top:4px">Annual maintenance cost vs. vehicle value</h3></div>
     <div class="legend"><span><i style="background:var(--critical)"></i>Maintenance cost / yr</span><span><i style="background:var(--primary)"></i>Estimated value</span></div></div>
     <svg viewBox="0 0 600 240" style="width:100%;height:auto;margin-top:12px" role="img" aria-label="Line chart: maintenance cost rises each year while vehicle value falls." data-life-svg></svg>
     <div class="field mt-4"><label for="lifeYear">Vehicle age: <strong data-life-year class="num">5</strong> years</label><input type="range" id="lifeYear" min="1" max="10" value="5" style="accent-color:var(--primary)"></div>
@@ -6614,9 +6744,9 @@ function viewGlossary(termParam) {
       const itemHTML = (g) => {
         const pid = 'gl-' + g.term.replace(/[^a-z0-9]/gi, '');
         const acronym = /^[A-Z][A-Z /]+$/.test(g.term);
-        return `<div class="gl-item" id="${pid}-item" data-term="${esc(g.term)}"><h3><button type="button" class="gl-item__head" aria-expanded="false" aria-controls="${pid}"><span class="gl-item__abbr" aria-hidden="true">${acronym ? esc(g.term) : icon(GL_CAT_ICON[g.cat] || 'book', 'icon--sm')}</span><span class="grow"><span class="gl-item__term">${hl(g.term)}</span><br><span class="gl-item__full">${hl(g.full)}</span></span><span class="badge badge--outline">${g.cat}</span>${icon('chev-d')}</button></h3>
+        return `<div class="gl-item" id="${pid}-item" data-term="${esc(g.term)}"><h2 class="acc-heading"><button type="button" class="gl-item__head" aria-expanded="false" aria-controls="${pid}"><span class="gl-item__abbr" aria-hidden="true">${acronym ? esc(g.term) : icon(GL_CAT_ICON[g.cat] || 'book', 'icon--sm')}</span><span class="grow"><span class="gl-item__term">${hl(g.term)}</span><br><span class="gl-item__full">${hl(g.full)}</span></span><span class="badge badge--outline">${g.cat}</span>${icon('chev-d')}</button></h2>
           <div class="acc-panel" id="${pid}" role="region"><div><div class="acc-panel__inner">
-            <div class="gl-detail"><div><h5>${icon('book')} Definition</h5><p>${hl(g.def)}</p></div><div><h5>${icon('bulb')} In plain terms</h5><p>${hl(g.simple)}</p></div><div><h5>${icon('truck')} Real-world example</h5><p>${hl(g.example)}</p></div></div>
+            <div class="gl-detail"><div><h3>${icon('book')} Definition</h3><p>${hl(g.def)}</p></div><div><h3>${icon('bulb')} In plain terms</h3><p>${hl(g.simple)}</p></div><div><h3>${icon('truck')} Real-world example</h3><p>${hl(g.example)}</p></div></div>
             <div class="gl-related"><span class="xs muted" style="font-weight:600;text-transform:uppercase;letter-spacing:.08em">Related</span>${g.related.map((r) => { const rg = findTerm(r); return rg ? `<button type="button" class="chip" data-goto="${esc(rg.term)}">${esc(rg.term)}</button>` : `<span class="chip" style="opacity:.6">${esc(r)}</span>`; }).join('')}</div>
           </div></div></div></div>`;
       };
@@ -6668,7 +6798,7 @@ function viewBookmarks() {
 function viewAchievements() {
   const earned = ACHIEVEMENTS.filter((a) => state.achievements[a.id]).length;
   const html = `<div class="page">${pageHead({ eyebrow: `${icon('award', 'icon--sm')} Progress`, title: 'Certificates & achievements', text: 'Certificates are awarded for passing each track\'s final assessment (75%+). Achievements mark milestones along the way.', right: ring(earned / ACHIEVEMENTS.length, { size: 96, stroke: 8, label: `${earned}/${ACHIEVEMENTS.length}`, fs: 18 }) })}
-    <div class="grid grid--3 stagger">${TRACKS.map((t) => { const f = state.finals[t.id]; const ok = f && f.passed; return `<div class="card cert-card ${ok ? 'is-earned' : ''}"><span class="cert-card__seal">${icon(ok ? 'award' : 'lock', 'icon--lg')}</span><div class="grow"><span class="eyebrow">${t.level} certificate</span><h3 style="font-size:var(--fs-md);margin:2px 0 4px">${esc(t.title)}</h3><p class="small">${ok ? `Earned · ${pct(f.score)}%` : f ? `Best ${pct(f.score)}% — 75% needed` : 'Not yet attempted'}</p></div>${ok ? `<button type="button" class="btn btn--sm" data-cert="${t.id}">View</button>` : `<a class="btn btn--sm" href="#/final/${t.id}">${f ? 'Retry' : 'Start'}</a>`}</div>`; }).join('')}</div>
+    <div class="grid grid--3 stagger">${TRACKS.map((t) => { const f = state.finals[t.id]; const ok = f && f.passed; return `<div class="card cert-card ${ok ? 'is-earned' : ''}"><span class="cert-card__seal">${icon(ok ? 'award' : 'lock', 'icon--lg')}</span><div class="grow"><span class="eyebrow">${t.level} certificate</span><h2 style="font-size:var(--fs-md);margin:2px 0 4px">${esc(t.title)}</h2><p class="small">${ok ? `Earned · ${pct(f.score)}%` : f ? `Best ${pct(f.score)}% — 75% needed` : 'Not yet attempted'}</p></div>${ok ? `<button type="button" class="btn btn--sm" data-cert="${t.id}">View</button>` : `<a class="btn btn--sm" href="#/final/${t.id}">${f ? 'Retry' : 'Start'}</a>`}</div>`; }).join('')}</div>
     <div class="section-head"><h2>Achievements</h2><span class="small muted">${earned} of ${ACHIEVEMENTS.length} earned</span></div>
     <div class="ach-grid stagger">${ACHIEVEMENTS.map(achHTML).join('')}</div>
     <div class="section-head"><h2>Data</h2></div>
