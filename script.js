@@ -2270,10 +2270,902 @@ addLesson('expert', 'm8', {
 });
 
 /* ---------------------------------------------------------------------------
+   CONTENT — Module 9 per track + "Deep dive" material
+   deep(key, tabs) attaches a tabbed Deep dive section to a lesson:
+   tabs = [{ title, blocks: [...] }]. addModule() appends a whole module.
+   --------------------------------------------------------------------------- */
+function deep(key, tabs) { lessonAt(key).deep = tabs; }
+function addModule(trackId, mod) { TRACKS.find((x) => x.id === trackId).modules.push(mod); }
+
+/* Extra reference graphics (also shown on the Quick Reference page) */
+Object.assign(REF, {
+  pinout: { ig: 'table', icon: 'zap', title: 'The 7-way trailer connector (SAE J560 color code)', head: ['Wire color', 'Typical circuit', 'If it fails'], rows: [
+    ['<span class="swatch" style="background:#f4f4f4"></span> White', 'Ground', 'Several or all trailer lights act up at once'],
+    ['<span class="swatch" style="background:#222"></span> Black', 'Clearance, marker & ID lamps', 'Marker lights out'],
+    ['<span class="swatch" style="background:#e0b400"></span> Yellow', 'Left turn signal', 'Left turn signal out'],
+    ['<span class="swatch" style="background:#c62828"></span> Red', 'Stop (brake) lamps', 'No brake lights — safety-critical'],
+    ['<span class="swatch" style="background:#2e7d32"></span> Green', 'Right turn signal', 'Right turn signal out'],
+    ['<span class="swatch" style="background:#6d4c41"></span> Brown', 'Tail, license & clearance lamps', 'Tail lights out — safety-critical at night'],
+    ['<span class="swatch" style="background:#1565c0"></span> Blue', 'Auxiliary — commonly trailer ABS power', 'Trailer ABS lamp may come on']
+  ], note: 'Common industry convention. Individual trailers can differ — technicians confirm with a tester.' },
+  fmi: { ig: 'table', icon: 'zap', title: 'Common J1939 FMI codes', head: ['FMI', 'Meaning', 'What it often points to'], rows: [
+    ['0', 'Data valid but above normal range — most severe', 'A real condition: pressure/temperature too high'], ['1', 'Data valid but below normal range — most severe', 'A real condition: pressure/level too low'],
+    ['2', 'Data erratic, intermittent or incorrect', 'Intermittent sensor, wiring or connector'], ['3', 'Voltage above normal, or shorted to high source', 'Wiring/sensor circuit problem'],
+    ['4', 'Voltage below normal, or shorted to low source', 'Wiring/sensor circuit problem'], ['5', 'Current below normal, or open circuit', 'Broken wire, unplugged connector'],
+    ['7', 'Mechanical system not responding or out of adjustment', 'A component isn\'t doing what it\'s told'], ['31', 'Condition exists', 'A reported state — read the SPN description']
+  ], note: 'SAE J1939 failure mode identifiers. FMIs 3–6 usually suggest an electrical circuit issue; 0 and 1 usually suggest the measured condition itself is out of range. A technician confirms either way.' },
+  cvsa: { ig: 'table', icon: 'shield', title: 'CVSA roadside inspection levels', head: ['Level', 'Name', 'What\'s checked'], rows: [
+    ['I', 'North American Standard Inspection', 'Driver documents and a full vehicle inspection, including under the vehicle'],
+    ['II', 'Walk-Around', 'Driver documents and vehicle items checkable without going under it'],
+    ['III', 'Driver-Only', 'Driver credentials, hours of service, documents'],
+    ['IV', 'Special Inspection', 'A one-time examination of a particular item'],
+    ['V', 'Vehicle-Only', 'Full vehicle inspection without the driver present'],
+    ['VI', 'Enhanced (radioactive shipments)', 'Select radiological shipments']
+  ], note: 'A vehicle that passes a Level I or V inspection with no critical violations may receive a CVSA decal, generally valid for up to three months.' },
+  dvir: { ig: 'process', icon: 'clipboard', title: 'The DVIR repair loop', items: [
+    { icon: 'clipboard', t: 'Driver inspects', d: 'Pre-trip / post-trip' }, { icon: 'file', t: 'Defect reported', d: 'On the DVIR' }, { icon: 'wrench', t: 'Repair', d: 'Before operating, if safety-related' },
+    { icon: 'check-circle', t: 'Certify', d: 'Repair (or no repair needed) certified' }, { icon: 'users', t: 'Next driver reviews', d: 'Signs off before driving' }
+  ], note: 'Based on FMCSA 49 CFR 396.11 and 396.13. Your safety department defines exactly how your company completes each step.' },
+  reorder: { ig: 'formulas', icon: 'layers', title: 'Parts stocking formulas', items: [
+    { t: 'Reorder point', f: 'daily usage × lead time days + safety stock', d: 'Order when stock hits this' },
+    { t: 'Safety stock', f: 'extra units for demand/lead-time swings', d: 'Buffer against stockouts' },
+    { t: 'Inventory turns', f: 'annual parts cost used ÷ avg inventory value', d: 'Higher = leaner' },
+    { t: 'Fill rate', f: 'requests filled from stock ÷ total requests', d: 'Higher = fewer delays' }
+  ] }
+});
+
+/* ===================== NEW MODULES (m9) ===================== */
+addModule('beginner', {
+  id: 'm9', title: 'Inspections, DVIRs and Compliance Records', summary: 'How inspections and maintenance records keep equipment legal — and what the coordinator\'s part is.',
+  lessons: [
+    {
+      id: 'l1', title: 'Driver Inspections and the DVIR Loop', minutes: 15,
+      objectives: ['Explain pre-trip and post-trip inspections', 'Follow a DVIR defect from report to certified repair', 'Know where the coordinator fits in the loop'],
+      body: [
+        `Every day, drivers inspect their equipment. When they find a defect, it goes on a Driver Vehicle Inspection Report ([[DVIR]]). Many of your cases start on that piece of paper — or its electronic version.`,
+        REF.dvir,
+        { h: 'What drivers check' },
+        { tiles: [
+          { icon: 'zap', title: 'Brakes & air system', text: 'Service and parking brakes, air lines, audible leaks.' },
+          { icon: 'route', title: 'Steering', text: 'Steering mechanism and play.' },
+          { icon: 'sun', title: 'Lighting & reflectors', text: 'Headlights, brake lights, turn signals, markers.' },
+          { icon: 'target', title: 'Tires, wheels & rims', text: 'Inflation, damage, lug nuts.' },
+          { icon: 'layers', title: 'Coupling devices', text: 'Fifth wheel, kingpin, safety devices.' },
+          { icon: 'alert', title: 'Emergency equipment', text: 'Warning devices, fire extinguisher, and wipers/mirrors among others.' }
+        ] },
+        { callout: { kind: 'info', title: 'The coordinator\'s part', text: 'Turn each DVIR defect into a case, get it repaired before the unit is dispatched when it affects safety, and make sure the repair is documented so the next driver can review and sign off.' } },
+        `U.S. rules require a written post-trip report of defects that would affect safe operation or cause a breakdown. Before driving, the next driver must review the last report and confirm that listed defects were repaired or that repair wasn\'t needed. Exact forms and electronic systems differ — your safety department owns the procedure.`
+      ],
+      example: { title: 'The marker light that stopped a dispatch', text: `A post-trip DVIR listed "left marker light out" on <span class="mono">TR-532</span>. The coordinator opened a case, a yard technician replaced the bulb that evening, and the repair was certified on the DVIR. The morning driver reviewed and signed it — the trailer left on time instead of being held at the gate.` },
+      practical: { title: 'Sort the DVIR defects', exercise: {
+        type: 'classify', prompt: 'How should each DVIR item be handled?', categories: ['Repair before dispatch', 'Schedule repair'],
+        items: [
+          { text: 'Right trailer brake light out', answer: 'Repair before dispatch', why: 'Lighting required for safe operation.' },
+          { text: 'Audible air leak at a glad hand', answer: 'Repair before dispatch', why: 'Brake-system air loss is safety-critical.' },
+          { text: 'Sleeper reading light flickers', answer: 'Schedule repair', why: 'Comfort item — doesn\'t affect safe operation.' },
+          { text: 'Cracked windshield in the driver\'s view', answer: 'Repair before dispatch', why: 'Driver visibility is safety-related; have safety confirm the rule.' },
+          { text: 'Cup holder broken', answer: 'Schedule repair', why: 'No effect on safe operation.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'What must the next driver do with the previous DVIR?', o: ['Nothing', 'Review it and confirm defects were repaired or not needing repair', 'Throw it away', 'Send it to the customer'], a: 1, e: 'Drivers review the last report before driving (49 CFR 396.13).' },
+        { t: 'tf', q: 'A DVIR defect that affects safe operation should be repaired before the vehicle is dispatched.', a: true, e: 'Safety-affecting defects are repaired (and certified) before the vehicle operates again.' }
+      ],
+      takeaways: ['DVIRs are a major source of maintenance cases.', 'Safety-affecting defects are fixed before dispatch.', 'Repairs are certified so the next driver can sign off.', 'Your safety department owns the exact procedure.'],
+      tips: ['Review new DVIRs at the start and end of each shift.', 'Close the loop with the yard so certified repairs are visible to the next driver.'],
+      mistakes: ['Treating DVIR comments as "just notes".', 'Fixing the defect but never documenting the repair on the DVIR.']
+    },
+    {
+      id: 'l2', title: 'Maintenance Records and Roadside Inspections', minutes: 16,
+      objectives: ['Describe what maintenance records must show', 'Understand roadside inspection levels and out-of-service outcomes', 'Explain how inspections affect the company\'s safety record'],
+      body: [
+        `Maintenance records prove equipment is maintained. Roadside inspections test that claim in the real world — and the results follow the company.`,
+        { ig: 'table', icon: 'file', title: 'Key U.S. record requirements (summary)', head: ['Record', 'What it shows', 'Kept for'], rows: [
+          ['Vehicle maintenance file', 'Unit ID, inspection & maintenance schedule, record of inspections, repairs and maintenance', 'Where the vehicle is housed for 1 year, and 6 months after it leaves the carrier\'s control'],
+          ['Annual (periodic) inspection report', 'That the unit passed its periodic inspection', '14 months'],
+          ['DVIR', 'Defects reported and repair certification', '3 months']
+        ], note: 'Summarized from 49 CFR 396.3, 396.11 and 396.21. Rules change and have exceptions — your safety department is the authority.' },
+        REF.cvsa,
+        { h: 'How inspections affect the company' },
+        `Roadside inspection results feed the FMCSA\'s Compliance, Safety, Accountability program ([[CSA]]). Vehicle violations count toward the <strong>Vehicle Maintenance</strong> category (one of seven "BASICs"). Poor scores can lead to more inspections and interventions. Every defect you fix before it reaches the road helps the company\'s record.`,
+        { ig: 'bars', icon: 'shield', title: 'Where vehicle violations commonly come from (example fleet, one year)', fmt: '', items: [['Lighting', 41, 'critical'], ['Brakes / adjustment', 33, 'critical'], ['Tires', 19, 'warning'], ['Air leaks', 11, 'warning'], ['Other', 9]], note: 'Illustrative distribution. Lighting and brakes are consistently among the most-cited vehicle violations — and among the easiest to prevent with good DVIR follow-up.' }
+      ],
+      example: { title: 'Cheap bulb, expensive violation', text: `A $4 bulb out on a trailer led to a Level II inspection and a violation on the company\'s record. After reviewing a quarter\'s inspections, the coordinator started a "lights and air" check at every trailer drop — lighting violations fell sharply the next quarter.` },
+      practical: { title: 'Match the inspection level', exercise: {
+        type: 'classify', prompt: 'Which CVSA level is described?', categories: ['Level I', 'Level II', 'Level III'],
+        items: [
+          { text: 'Inspector checks the driver\'s documents and walks around the truck without going underneath', answer: 'Level II', why: 'Walk-Around inspection.' },
+          { text: 'Full vehicle inspection including under the vehicle, plus driver documents', answer: 'Level I', why: 'North American Standard Inspection.' },
+          { text: 'Only the driver\'s license, medical card and hours of service are checked', answer: 'Level III', why: 'Driver-Only inspection.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'Which CSA category do vehicle defect violations mainly affect?', o: ['Unsafe Driving', 'Vehicle Maintenance', 'Driver Fitness', 'Crash Indicator'], a: 1, e: 'Vehicle defects count toward the Vehicle Maintenance BASIC.' },
+        { t: 'tf', q: 'Periodic (annual) inspection reports must be kept for 14 months under U.S. rules.', a: true, e: '49 CFR 396.21 requires retention for 14 months.' }
+      ],
+      takeaways: ['Maintenance records must show inspections, repairs and schedules.', 'CVSA levels range from full inspections to driver-only.', 'Violations affect the company\'s CSA record.', 'Lighting and brakes are common — and preventable — violations.'],
+      tips: ['Review roadside inspection reports weekly and open cases for every vehicle violation.', 'Track violations by unit and by category.'],
+      mistakes: ['Assuming a clean inspection means the unit is fine for months.', 'Losing inspection paperwork that proves repairs were made.']
+    }
+  ]
+});
+
+addModule('advanced', {
+  id: 'm9', title: 'Parts and Inventory Management', summary: 'Sourcing the right parts fast — and stocking the right ones before you need them.',
+  lessons: [
+    {
+      id: 'l1', title: 'Parts Sourcing: OEM, Aftermarket and Remanufactured', minutes: 16,
+      objectives: ['Compare OEM, aftermarket and remanufactured parts', 'Ask the right sourcing questions', 'Balance price, availability, quality and warranty'],
+      body: [
+        `Parts delays are one of the biggest sources of downtime. Knowing your options — and the trade-offs — lets you find a part today instead of next week.`,
+        { ig: 'ratings', icon: 'layers', title: 'Part types compared', cols: ['OEM', 'Aftermarket', 'Reman', 'Used'], rows: [
+          { l: 'Fit & spec certainty', v: [5, 3, 4, 3] }, { l: 'Price advantage', v: [1, 4, 3, 5] }, { l: 'Availability', v: [3, 4, 4, 2] },
+          { l: 'Warranty strength', v: [5, 3, 4, 1] }, { l: 'Warranty-claim friendly', v: [5, 2, 3, 1] }
+        ], hint: 'More dots = better for the fleet. General tendencies — quality varies by brand and supplier.' },
+        { accordion: [
+          { title: 'OEM (original equipment manufacturer)', text: 'Made by or for the vehicle/component manufacturer. Best fit certainty and often required for warranty repairs. Usually the highest price.' },
+          { title: 'Aftermarket', text: 'Made by other manufacturers to fit. Quality ranges from excellent to poor — stick with suppliers your fleet trusts.' },
+          { title: 'Remanufactured (reman)', text: 'Used cores rebuilt to specification, often with a warranty. Common for starters, alternators, turbos, injectors and ECMs. Usually involves a core charge.' },
+          { title: 'Used / salvage', text: 'Occasionally useful for hard-to-find items or older units. Limited or no warranty — confirm condition and get approval.' }
+        ] },
+        { h: 'Sourcing questions' },
+        { ig: 'card', icon: 'clipboard', title: 'Parts request checklist', form: 'Parts request', rows: [['VIN / unit', 'T-120 · VIN …31207'], ['Part / number', 'Turbo actuator · OEM # from dealer'], ['Engine serial', 'Needed for many engine parts'], ['Qty · needed by', '1 · today 16:00'], ['Deliver to', 'Lone Star Truck Center, Amarillo'], ['Ask about', 'Price · core charge · warranty · ETA · alternatives']] }
+      ],
+      example: { title: 'Reman saves a day', text: `The dealer quoted a new OEM turbo actuator in 3 days. A reman supplier had one in stock 40 miles away with a 12-month warranty and a core charge. With approval and a warranty check (the unit was out of engine warranty), the coordinator sourced the reman part — the truck was back the same evening.` },
+      practical: { title: 'Choose the part', exercise: {
+        type: 'choose', prompt: 'Tractor under engine warranty needs an EGR valve. OEM part: 2 days. Aftermarket: in stock today, 30% cheaper. What do you do?',
+        options: [
+          { text: 'Install the aftermarket part today to save time and money', correct: false, why: 'Non-OEM parts or non-authorized repairs can jeopardize a warranty claim — the fleet could pay for a covered repair.' },
+          { text: 'Check the warranty terms with an authorized dealer first; if covered, go OEM under warranty and plan around the 2-day wait (e.g., power swap)', correct: true, why: 'Protects the warranty and manages downtime separately.' },
+          { text: 'Buy a used part from salvage', correct: false, why: 'Worst option for a warranty unit.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'Which part type typically involves a core charge?', o: ['Used', 'Remanufactured', 'Aftermarket filters', 'Fluids'], a: 1, e: 'Reman parts are rebuilt from returned cores — hence the deposit.' },
+        { t: 'tf', q: 'Aftermarket parts are always lower quality than OEM.', a: false, e: 'Quality varies by supplier; many are excellent. Trust and warranty matter.' }
+      ],
+      takeaways: ['OEM: best fit and warranty-friendly, usually costliest.', 'Aftermarket: price and availability; quality varies.', 'Reman: rebuilt, warrantied, core charge.', 'Check vehicle warranty before choosing a non-OEM part.'],
+      tips: ['Keep 3–4 trusted parts suppliers per region with after-hours contacts.', 'Always ask "Is there an alternative in stock?"'],
+      mistakes: ['Choosing the cheapest part on a warranty unit.', 'Forgetting to return the core.']
+    },
+    {
+      id: 'l2', title: 'Inventory Basics: Stocking, Reorder Points and Cores', minutes: 16,
+      objectives: ['Decide which parts to stock', 'Calculate a reorder point', 'Track cores and prevent obsolete stock'],
+      body: [
+        `Fleets with their own shops or yards often keep parts on hand. The goal: the right parts available when needed, without tying up cash in shelves full of parts nobody uses.`,
+        { ig: 'bars', icon: 'bar', title: 'ABC analysis: a few parts drive most of the usage (example)', fmt: '', unit: '%', items: [['A items · 15% of part numbers', 72, 'info'], ['B items · 30% of part numbers', 20, 'neutral-strong'], ['C items · 55% of part numbers', 8, 'neutral']], note: 'Share of annual usage value. Stock A items carefully and review them often; C items may be ordered as needed.' },
+        REF.reorder,
+        { ig: 'waterfall', icon: 'layers', title: 'Reorder point: brake chambers at a terminal', fmt: '', items: [
+          { l: 'Daily usage 0.5 × lead time 4 days', v: 2, type: 'start' }, { l: 'Safety stock', v: 2, tone: 'info' }, { l: 'Reorder point', v: 4, type: 'total' }
+        ], note: 'When stock on the shelf drops to 4, reorder. Safety stock covers busy weeks and late deliveries.' },
+        { h: 'Common stocking candidates' },
+        { ul: ['PM kits: filters, belts, common fluids', 'High-failure safety items: brake chambers, slack adjusters, lamps, air fittings, glad-hand seals', 'Fast-moving tires for your common sizes', 'Batteries before winter'] },
+        { callout: { kind: 'warning', title: 'Cores are money on the shelf', text: 'Track every core from removal to return. An unreturned core means paying full price for a reman part.' } }
+      ],
+      example: { title: 'The out-of-stock chamber', text: `A terminal shop ran out of brake chambers during a busy week and a tractor waited a day for a delivery. After setting a reorder point of 4 with 2 units of safety stock, the shop didn\'t run out again that year.` },
+      practical: { title: 'Calculate', exercise: {
+        type: 'extract', sourceLabel: 'Air dryer cartridges — terminal shop',
+        source: 'Average usage: 3 per week (≈ 0.43 per day)\nSupplier lead time: 7 days\nSafety stock policy: 2 units',
+        fields: [
+          { label: 'Usage during lead time (round to whole units)', accept: ['3'] },
+          { label: 'Reorder point (units)', accept: ['5'] }
+        ] } },
+      check: [
+        { t: 'mc', q: 'Reorder point is:', o: ['Maximum shelf quantity', 'Daily usage × lead time + safety stock', 'Price × quantity', 'Lead time ÷ usage'], a: 1, e: 'Order when stock falls to the expected lead-time usage plus a buffer.' },
+        { t: 'tf', q: 'In ABC analysis, "A" items are a small share of part numbers that drive most usage value.', a: true, e: 'Focus attention where the value is.' }
+      ],
+      takeaways: ['Stock what fails often and what stops trucks.', 'Reorder point = usage × lead time + safety stock.', 'ABC analysis focuses attention on high-value items.', 'Track cores to recover deposits.'],
+      tips: ['Build PM kits per unit type — faster PMs, fewer missing parts.', 'Review slow-moving stock twice a year.'],
+      mistakes: ['Stocking parts for units the fleet no longer runs.', 'No safety stock on safety-critical items.']
+    }
+  ]
+});
+
+addModule('expert', {
+  id: 'm9', title: 'Telematics and Data-Driven Maintenance', summary: 'Use connected-vehicle data and maintenance systems to prevent failures, not just record them.',
+  lessons: [
+    {
+      id: 'l1', title: 'Telematics and Remote Diagnostics', minutes: 17,
+      objectives: ['Explain what telematics data a coordinator can use', 'Triage fault alerts without alert fatigue', 'Use remote diagnostics to route units to the right shop'],
+      body: [
+        `[[Telematics]] turns every truck into a data source: location, fault codes, fuel, idle time, and more. Used well, it lets you act before the driver calls. Used badly, it buries you in alerts.`,
+        { ig: 'process', icon: 'activity', title: 'From fault code to action', items: [
+          { icon: 'zap', t: 'Fault occurs', d: 'ECM logs SPN/FMI' }, { icon: 'activity', t: 'Telematics alert', d: 'Code + snapshot' }, { icon: 'filter', t: 'Tier it', d: 'Critical · soon · watch' },
+          { icon: 'phone', t: 'Contact driver', d: 'Confirm symptoms' }, { icon: 'wrench', t: 'Route to shop', d: 'With codes & history' }
+        ] },
+        { ig: 'pyramid', icon: 'filter', title: 'Alert tiering to prevent alert fatigue', levels: [
+          { t: 'Act now', d: 'Stop-engine, low oil pressure, high coolant temp, air/brake faults.', tone: 'critical' },
+          { t: 'Act today', d: 'Derate risk: aftertreatment, DEF, repeated active codes.', tone: 'warning' },
+          { t: 'Plan it', d: 'Codes that can be combined with the next PM or shop visit.', tone: 'info' },
+          { t: 'Watch', d: 'Inactive or one-time codes; trend them.', tone: 'success' }
+        ] },
+        { ig: 'heatmap', icon: 'activity', title: 'Active fault alerts by unit and week (example)', cols: ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4', 'Wk 5', 'Wk 6'], rows: [
+          { l: 'T-108', v: [0, 1, 0, 0, 1, 0] }, { l: 'T-114', v: [1, 0, 0, 1, 0, 0] }, { l: 'T-120', v: [2, 3, 4, 3, 5, 6] }, { l: 'T-126', v: [0, 0, 2, 1, 0, 0] }, { l: 'T-131', v: [1, 1, 0, 0, 0, 1] }
+        ], tone: 'critical', note: 'A rising row is a unit heading for a roadside failure. T-120\'s pattern justified a proactive dealer visit.' }
+      ],
+      example: { title: 'Fixed before the call', text: `At 04:10 telematics showed <span class="mono">T-131</span> with an active coolant-level code and a slowly rising temperature. The coordinator messaged the driver at the next stop, confirmed a small leak, and booked a shop 20 miles ahead. The hose was replaced at 07:30 — no roadside event, no tow.` },
+      practical: { title: 'Tier the alerts', exercise: {
+        type: 'classify', prompt: 'Assign each alert to a tier.', categories: ['Act now', 'Act today', 'Plan it'],
+        items: [
+          { text: 'Low oil pressure warning, active, truck at highway speed', answer: 'Act now', why: 'Engine damage risk — contact driver immediately.' },
+          { text: 'DPF soot load high, regen requested, no derate yet', answer: 'Act today', why: 'Derate risk if not addressed.' },
+          { text: 'Inactive cab HVAC code, occurred once', answer: 'Plan it', why: 'Combine with next shop visit.' },
+          { text: 'Air pressure dropping with low-air warning', answer: 'Act now', why: 'Brake-system — safety-critical.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'What is "alert fatigue"?', o: ['Drivers being tired', 'So many low-value alerts that important ones get missed', 'A battery fault', 'A telematics outage'], a: 1, e: 'Tiering prevents critical alerts from drowning in noise.' },
+        { t: 'tf', q: 'A telematics fault code alone is enough to order parts.', a: false, e: 'Codes guide diagnosis; technicians confirm.' }
+      ],
+      takeaways: ['Telematics lets you act before the driver calls.', 'Tier alerts: act now, act today, plan, watch.', 'Trends by unit reveal failures in progress.', 'Codes guide — technicians confirm.'],
+      tips: ['Agree on alert tiers with safety and dispatch.', 'Send the telematics snapshot to the shop with the unit.'],
+      mistakes: ['Turning on every alert and then ignoring them all.', 'Calling a driver while they\'re driving instead of at a safe stop.']
+    },
+    {
+      id: 'l2', title: 'Building a Data-Driven Maintenance Program', minutes: 17,
+      objectives: ['Describe the role of a maintenance management system (CMMS)', 'Protect data quality', 'Use leading indicators to drive decisions'],
+      body: [
+        `Data only helps if it\'s complete, consistent and used. A maintenance management system ([[CMMS]]) — or fleet maintenance software — is where cases, work orders, PM schedules, parts and costs come together.`,
+        { ig: 'hub', icon: 'grid', title: 'What feeds a maintenance system', center: { icon: 'grid', t: 'CMMS / fleet software' }, items: [
+          { icon: 'activity', t: 'Telematics', d: 'Codes, meters, idle' }, { icon: 'clipboard', t: 'DVIRs', d: 'Driver defects' }, { icon: 'file', t: 'Work orders', d: 'Complaint · cause · correction' },
+          { icon: 'layers', t: 'Parts', d: 'Usage, cores, stock' }, { icon: 'dollar', t: 'Invoices', d: 'Costs, POs' }, { icon: 'shield', t: 'Inspections', d: 'Annual & roadside' }
+        ] },
+        { ig: 'cycle', icon: 'rotate', title: 'The data-to-decision cycle', center: 'Better decisions', items: [{ icon: 'file', t: 'Capture', d: 'Complete records' }, { icon: 'check-circle', t: 'Clean', d: 'Consistent codes' }, { icon: 'bar', t: 'Analyze', d: 'Trends & KPIs' }, { icon: 'target', t: 'Act', d: 'Change the plan' }, { icon: 'activity', t: 'Measure', d: 'Did it work?' }] },
+        { ig: 'table', icon: 'check-circle', title: 'Data quality rules that pay off', head: ['Rule', 'Why'], rows: [
+          ['Standard repair/system codes on every work order', 'Makes trends by system possible'], ['Meter reading on every event', 'PM, warranty and MTBF depend on it'],
+          ['Complaint · cause · correction required', 'Enables RCA and repeat detection'], ['Vendor and invoice linked to the case', 'Cost per vendor and dispute resolution'], ['Time stamps for down and released', 'Downtime and availability KPIs']
+        ] },
+        { h: 'Leading vs lagging indicators' },
+        { compare: {
+          yes: { title: 'Leading (predict)', items: ['PM compliance', 'Open DVIR defects', 'Active fault-code trends', 'Overdue inspections'] },
+          no: { title: 'Lagging (report)', items: ['Road calls', 'Downtime', 'Cost per mile', 'Roadside violations'] }
+        } }
+      ],
+      example: { title: 'Codes made the trend visible', text: `A fleet had years of work orders with free-text notes like "fixed truck". After adding required system codes, one quarter of data showed that 38% of road calls were electrical — mostly corroded trailer connectors. A connector-sealing step at PM cut those road calls by more than half.` },
+      practical: { title: 'Leading or lagging?', exercise: {
+        type: 'classify', prompt: 'Classify each metric.', categories: ['Leading', 'Lagging'],
+        items: [
+          { text: 'Units with PM overdue this week', answer: 'Leading', why: 'Predicts future failures.' },
+          { text: 'Last month\'s road calls', answer: 'Lagging', why: 'Reports what already happened.' },
+          { text: 'Open safety defects from DVIRs', answer: 'Leading', why: 'Unresolved risks.' },
+          { text: 'Quarterly maintenance cost per mile', answer: 'Lagging', why: 'Outcome measure.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'Why require standard system codes on work orders?', o: ['To slow technicians down', 'To make trend analysis by system possible', 'For taxes', 'Because drivers ask'], a: 1, e: 'Consistent codes turn records into usable data.' },
+        { t: 'mc', q: 'Which is a leading indicator?', o: ['Road calls last month', 'PM compliance', 'Cost per mile last quarter', 'Roadside violations last year'], a: 1, e: 'PM compliance predicts future reliability.' }
+      ],
+      takeaways: ['A CMMS brings cases, work orders, parts and costs together.', 'Data quality rules make analysis possible.', 'Use leading indicators to act early.', 'Close the loop: capture, clean, analyze, act, measure.'],
+      tips: ['Start with 5 data rules and enforce them — not 50.', 'Review one leading indicator in every weekly meeting.'],
+      mistakes: ['Free-text-only work orders.', 'Reporting lagging metrics without acting on leading ones.']
+    }
+  ]
+});
+
+/* ===================== DEEP DIVES ===================== */
+deep('beginner.m1.l1', [
+  { title: 'Trailer types', blocks: [
+    { ig: 'ratings', icon: 'layers', title: 'Trailer types and their maintenance footprint', cols: ['Dry van', 'Reefer', 'Flatbed', 'Tanker'], rows: [
+      { l: 'Extra systems to maintain', v: [1, 5, 2, 4] }, { l: 'Time-critical when broken', v: [2, 5, 2, 3] }, { l: 'Special inspections / rules', v: [1, 2, 2, 5] }
+    ], hint: 'More dots = more. Reefers add a refrigeration unit with its own engine; tankers can require specific tests depending on cargo.' },
+    `Different trailer types bring different maintenance needs. A reefer failure can spoil a load; a tanker may carry products with special handling and inspection requirements; flatbeds depend on securement equipment the driver uses every day.`
+  ] },
+  { title: 'Where the money goes', blocks: [
+    { ig: 'donut', icon: 'dollar', title: 'Operating cost of a long-haul truck (illustrative)', fmt: '', pctOnly: true, center: '100%', centerSub: 'cost per mile', items: [['Driver wages & benefits', 43], ['Fuel', 28], ['Truck & trailer payments', 16], ['Repair & maintenance', 9], ['Insurance', 4]], note: 'Illustrative shares to show scale. Maintenance is a meaningful slice — and downtime affects every other slice because the costs continue while revenue stops.' }
+  ] }
+]);
+deep('beginner.m1.l2', [
+  { title: 'The information loop', blocks: [
+    { ig: 'cycle', icon: 'rotate', title: 'How information moves during a repair', center: 'Case', items: [{ icon: 'users', t: 'Driver', d: 'Reports' }, { icon: 'clipboard', t: 'Coordinator', d: 'Opens & decides' }, { icon: 'wrench', t: 'Vendor', d: 'Diagnoses' }, { icon: 'route', t: 'Dispatch', d: 'Plans the load' }, { icon: 'phone', t: 'Driver', d: 'Gets next steps' }] }
+  ] },
+  { title: 'Who does what (RACI)', blocks: [
+    { ig: 'table', icon: 'users', title: 'Responsibility on a typical roadside repair', head: ['Task', 'Driver', 'Coordinator', 'Dispatch', 'Fleet manager'], rows: [
+      ['Make the scene safe', '<b>R</b>', 'C', 'I', 'I'], ['Open & own the case', 'I', '<b>R / A</b>', 'I', 'I'], ['Choose vendor', 'C', '<b>R</b>', 'C', 'A (policy)'],
+      ['Approve above limit', '—', 'R (request)', 'I', '<b>A</b>'], ['Protect the load', 'C', 'C', '<b>R / A</b>', 'I'], ['Document & close', 'C', '<b>R / A</b>', 'I', 'I']
+    ], note: 'R = responsible (does it) · A = accountable (owns the outcome) · C = consulted · I = informed. Your company\'s version may differ.' }
+  ] }
+]);
+deep('beginner.m2.l1', [
+  { title: 'Tools of the trade', blocks: [
+    { tiles: [
+      { icon: 'grid', title: 'Maintenance software (CMMS)', text: 'Cases, work orders, PM schedules, unit history.' }, { icon: 'activity', title: 'Telematics portal', text: 'Location, fault codes, meters.' },
+      { icon: 'phone', title: 'Phone & messaging', text: 'Drivers, vendors, dispatch.' }, { icon: 'pin', title: 'Vendor directory', text: 'Shops, tire, tow and mobile services by lane.' },
+      { icon: 'dollar', title: 'PO / approval system', text: 'Approvals and spending records.' }, { icon: 'file', title: 'Document storage', text: 'ROs, invoices, inspection reports.' }
+    ] }
+  ] },
+  { title: '30-second triage', blocks: [
+    { ig: 'process', icon: 'filter', title: 'Four questions to place any new request', items: [{ icon: 'shield', t: 'Safe?', d: 'Driver & vehicle' }, { icon: 'truck', t: 'Can it move?', d: 'Safely' }, { icon: 'layers', t: 'Loaded?', d: 'Cargo at risk' }, { icon: 'clock', t: 'Deadline?', d: 'Appointment' }] },
+    `Answer these four before anything else. They decide whether the case jumps the queue, gets same-day service, or goes on the schedule.`
+  ] }
+]);
+deep('beginner.m2.l2', [
+  { title: 'Follow-up rhythm', blocks: [
+    { ig: 'gantt', icon: 'clock', title: 'Touchpoints on a same-day shop repair', from: '08:00', to: '17:00', ticks: ['08:00', '10:00', '12:00', '14:00', '16:00'], rows: [
+      { l: 'Unit at shop', s: '08:00', e: '08:00', tone: 'info', note: 'Confirm check-in' }, { l: 'Diagnosis promised', s: '10:00', e: '10:00', tone: 'warning', note: 'Call at 10:00' },
+      { l: 'Approval sent', s: '10:20', e: '10:20', tone: 'success', note: 'Same call' }, { l: 'Parts check', s: '12:00', e: '12:00', tone: 'info', note: 'Arrived?' },
+      { l: 'ETR check', s: '14:30', e: '14:30', tone: 'info', note: 'On track?' }, { l: 'Release & confirm', s: '16:30', e: '16:30', tone: 'success', note: 'Driver confirms' }
+    ] }
+  ] },
+  { title: 'Closing checklist', blocks: [
+    { ig: 'card', icon: 'check-circle', title: 'Before you close a case', form: 'Close-out checklist', rows: [['Driver confirms', 'Complaint resolved'], ['Repair order', 'Complaint · cause · correction'], ['Costs', 'Match approved estimate / PO'], ['Times', 'Down → released recorded'], ['Warranty / cores', 'Claim filed · core returned'], ['Follow-ups', 'Deferred items scheduled']] }
+  ] }
+]);
+deep('beginner.m3.l1', [
+  { title: 'How a diesel makes power', blocks: [
+    { ig: 'cycle', icon: 'rotate', title: 'The four-stroke diesel cycle', center: 'One cycle = two crank turns', items: [{ icon: 'arrow-r', t: 'Intake', d: 'Air drawn in' }, { icon: 'layers', t: 'Compression', d: 'Air heated by squeezing' }, { icon: 'zap', t: 'Power', d: 'Fuel injected, ignites' }, { icon: 'arrow-l', t: 'Exhaust', d: 'Gases pushed out' }] },
+    `Diesels ignite fuel with the heat of compressed air — no spark plugs. That is why injectors, turbochargers (which pack in more air) and fuel quality matter so much to performance and emissions.`
+  ] },
+  { title: 'Symptom → system', blocks: [
+    { ig: 'table', icon: 'search', title: 'Quick symptom guide', head: ['Driver says…', 'Likely system(s)', 'Typical urgency'], rows: [
+      ['"Losing power, DPF light"', 'Aftertreatment', 'Soon — derate risk'], ['"White smoke, sweet smell"', 'Cooling (coolant entering combustion)', 'Stop — engine risk'],
+      ['"Black smoke under load"', 'Fuel / air intake / turbo', 'Soon'], ['"Won\'t shift out of neutral"', 'Transmission / electrical', 'Can\'t move'],
+      ['"Whine from the rear, gets louder"', 'Differential / driveline', 'Soon — inspect'], ['"Temp gauge climbing"', 'Cooling', 'Stop if rising / steam']
+    ], note: 'Starting points for questions, not diagnoses.' }
+  ] }
+]);
+deep('beginner.m3.l2', [
+  { title: 'Trailer electrical', blocks: [REF.pinout] },
+  { title: 'Brake adjustment', blocks: [
+    `S-cam air brakes need to stay in adjustment: as linings wear, the brake chamber pushrod travels farther before the brakes apply. Automatic slack adjusters compensate, but they can fail — and brakes out of adjustment are among the most common roadside inspection findings.`,
+    { ig: 'stats', icon: 'zap', title: 'Why adjustment matters', items: [{ v: '#1', l: 'category of vehicle out-of-service violations is often brake-related in CVSA roadside data', tone: 'critical' }, { v: '0', l: 'times a coordinator should suggest "manually adjusting" automatic slack adjusters instead of diagnosing why they drifted', tone: 'warning' }] },
+    { callout: { kind: 'info', title: 'What to ask the shop', text: 'If brakes are found out of adjustment, ask why — worn components, a failing automatic slack adjuster, or an installation issue. Repeated adjustment on the same wheel is a repeat failure.' } }
+  ] }
+]);
+deep('beginner.m4.l1', [
+  { title: 'Question techniques', blocks: [
+    { compare: { yes: { title: 'Open questions — to explore', items: ['"Describe what you\'re hearing."', '"What happened right before it started?"', '"What does the message on the dash say?"'] }, no: { title: 'Closed questions — to confirm', items: ['"Is it the front left?"', '"Is the temperature gauge normal?"', '"Are you off the road?"'] } } },
+    `Start open to let the driver describe it; switch to closed questions to pin down facts. Avoid leading questions like "It\'s probably the brakes, right?" — they plant answers.`
+  ] },
+  { title: 'Active listening', blocks: [
+    { ig: 'process', icon: 'message', title: 'LISTEN on a driver call', items: [{ icon: 'users', t: 'Let them talk', d: 'Don\'t interrupt the first description' }, { icon: 'clipboard', t: 'Note key words', d: 'Location, timing, sounds' }, { icon: 'search', t: 'Probe', d: 'Fill the gaps' }, { icon: 'message', t: 'Summarize', d: 'Read it back' }, { icon: 'arrow-r', t: 'Next steps', d: 'And a call-back time' }] }
+  ] }
+]);
+deep('beginner.m4.l2', [
+  { title: 'Sensory clues', blocks: [
+    { ig: 'table', icon: 'search', title: 'Using the senses to narrow the problem', head: ['Sense', 'Clue', 'Often related to'], rows: [
+      ['Hear', 'Hissing', 'Air leak (brakes, suspension)'], ['Hear', 'Grinding when braking', 'Worn brake linings'], ['Hear', 'Knocking from engine', 'Serious engine issue — stop'],
+      ['Smell', 'Sweet', 'Coolant'], ['Smell', 'Burning rubber / hot metal', 'Dragging brake, tire rub, bearing'], ['See', 'Blue smoke', 'Oil burning'],
+      ['See', 'Puddle under engine', 'Oil, coolant or fuel leak'], ['Feel', 'Vibration at speed', 'Tires, wheels, driveline'], ['Feel', 'Pull when braking', 'Brake imbalance — safety-critical']
+    ] }
+  ] }
+]);
+deep('beginner.m5.l1', [
+  { title: 'The stop decision', blocks: [
+    { ig: 'process', icon: 'shield', title: 'Can this vehicle continue?', items: [{ icon: 'route', t: 'Control?', d: 'Steer & stop normally' }, { icon: 'alert', t: 'Hazard?', d: 'Smoke, fire, leak' }, { icon: 'zap', t: 'Red warning?', d: 'Stop-engine, low air' }, { icon: 'target', t: 'Tire failure?', d: 'Any position' }, { icon: 'check-circle', t: 'All clear', d: 'Continue & schedule' }], note: 'Any "yes" in the first four = stop safely and get a qualified technician.' }
+  ] },
+  { title: 'Out-of-service basics', blocks: [
+    `Roadside inspectors use the CVSA North American Standard Out-of-Service Criteria. An out-of-service ([[OOS]]) vehicle defect means the vehicle cannot be operated until it is repaired. Common OOS categories include brakes, tires, lighting, coupling devices and cargo securement.`,
+    { callout: { kind: 'tip', title: 'Think like an inspector', text: 'If a defect would put the truck out of service at a roadside inspection, it should never leave your yard with that defect.' } }
+  ] }
+]);
+deep('beginner.m5.l2', [
+  { title: 'Weather & night', blocks: [
+    { tiles: [
+      { icon: 'moon', title: 'Night', text: 'Lighting defects become critical; driver visibility on the shoulder is lower — safety instructions first.' },
+      { icon: 'thermo', title: 'Extreme cold', text: 'Fuel gelling, batteries, air dryer freeze-ups, DEF thawing. Driver welfare matters.' },
+      { icon: 'sun', title: 'Extreme heat', text: 'Overheating, tire failures, A/C for driver health, reefer strain.' },
+      { icon: 'alert', title: 'Storms', text: 'Vendors slower, tows delayed. Plan buffers and consider holding units.' }
+    ] }
+  ] },
+  { title: 'Reefer basics', blocks: [
+    { ig: 'stats', icon: 'thermo', title: 'Reefer calls — what to ask', items: [{ v: 'Set', l: 'point temperature', tone: 'info' }, { v: 'Box', l: 'current temperature', tone: 'warning' }, { v: 'Code', l: 'alarm code on the unit display', tone: 'info' }, { v: 'Fuel', l: 'reefer fuel level', tone: 'neutral' }] }
+  ] }
+]);
+deep('beginner.m6.l1', [
+  { title: 'Service targets', blocks: [
+    { ig: 'bars', icon: 'clock', title: 'Example internal response targets (minutes)', fmt: '', unit: ' min', items: [['Safety roadside: vendor dispatched', 15, 'critical'], ['Driver call-back after update promised', 30, 'warning'], ['Dispatch notified of new down unit', 15, 'warning'], ['Approval decision within limit', 30, 'info'], ['Routine DVIR case opened', 240, 'neutral']], note: 'Example targets — many fleets set internal service levels like these to keep cases moving.' }
+  ] }
+]);
+deep('beginner.m7.l1', [
+  { title: 'Choosing a channel', blocks: [
+    { ig: 'ratings', icon: 'message', title: 'Phone vs text vs email', cols: ['Phone', 'Text / chat', 'Email'], rows: [
+      { l: 'Speed', v: [5, 4, 2] }, { l: 'Urgent / safety', v: [5, 3, 1] }, { l: 'Written record', v: [1, 4, 5] }, { l: 'Detail / attachments', v: [2, 2, 5] }
+    ], hint: 'Rule of thumb: call for anything urgent or safety-related, then confirm in writing.' }
+  ] },
+  { title: 'Tone', blocks: [
+    { compare: { yes: { title: 'Sounds professional', items: ['"Here\'s what I know, and when I\'ll know more."', '"I understand — let\'s fix it."', '"Thanks for flagging that."'] }, no: { title: 'Sounds unprofessional', items: ['"Not my problem."', '"It\'ll be fine."', '"Why didn\'t you check that?" (in the moment)'] } } }
+  ] }
+]);
+deep('beginner.m8.l1', [
+  { title: 'Documentation gaps', blocks: [
+    { ig: 'stats', icon: 'file', title: 'The four gaps that cause the most trouble', items: [{ v: 'Meter', l: 'missing odometer or hours — breaks PM and warranty math', tone: 'critical' }, { v: 'Cause', l: 'no cause on the RO — blocks root-cause analysis', tone: 'warning' }, { v: 'Times', l: 'no down/release times — no downtime KPI', tone: 'warning' }, { v: 'Approval', l: 'no approver recorded — invoice disputes', tone: 'info' }] }
+  ] }
+]);
+deep('beginner.m8.l2', [
+  { title: 'Estimate → invoice bridge', blocks: [
+    { ig: 'waterfall', icon: 'dollar', title: 'How an approved $1,475 became a $2,210 invoice', fmt: '$', items: [
+      { l: 'Approved estimate', v: 1475, type: 'start' }, { l: 'Unapproved belt', v: 310 }, { l: 'Unapproved hoses', v: 380 }, { l: 'Shop supplies', v: 45 }, { l: 'Invoice', v: 2210, type: 'total' }
+    ], note: 'A waterfall shows exactly where the difference comes from. The $690 in unapproved items was disputed using the case notes.' }
+  ] }
+]);
+
+deep('advanced.m1.l1', [
+  { title: 'Seasonal PM', blocks: [
+    { ig: 'heatmap', icon: 'clock', title: 'Seasonal maintenance focus (example calendar)', cols: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], rows: [
+      { l: 'Batteries & charging', v: [3, 3, 1, 0, 0, 0, 0, 0, 1, 3, 3, 3] }, { l: 'Fuel / winter treatment', v: [3, 3, 1, 0, 0, 0, 0, 0, 0, 2, 3, 3] },
+      { l: 'Cooling & A/C', v: [0, 0, 0, 1, 3, 3, 3, 3, 1, 0, 0, 0] }, { l: 'Tires (heat)', v: [0, 0, 0, 1, 2, 3, 3, 3, 1, 0, 0, 0] }, { l: 'Air dryers', v: [2, 2, 1, 0, 0, 0, 0, 0, 1, 3, 3, 2] }
+    ], tone: 'info', legend: ['Low', 'Focus'], note: 'Illustrative for a fleet with cold winters and hot summers. Prepare before the season, not during it.' }
+  ] },
+  { title: 'What a PM covers', blocks: [
+    { ig: 'card', icon: 'list-check', title: 'Typical PM A checklist (example)', form: 'PM A · tractor', rows: [['Engine oil & filter', 'Replace per interval'], ['Chassis lube', 'All grease points'], ['Brakes', 'Lining, adjustment, air leaks'], ['Tires', 'Pressure, tread depth, damage'], ['Lights', 'All exterior lamps'], ['Fluids', 'Coolant, DEF, washer'], ['Belts & hoses', 'Cracks, leaks'], ['Codes', 'Read active/inactive faults']] }
+  ] }
+]);
+deep('advanced.m1.l2', [
+  { title: 'Planning the week', blocks: [
+    { ig: 'gantt', icon: 'clock', title: 'Fitting five PMs into one week of loads', from: 0, to: 7, ticks: [[0, 'Mon'], [1, 'Tue'], [2, 'Wed'], [3, 'Thu'], [4, 'Fri'], [5, 'Sat'], [6, 'Sun']], rows: [
+      { l: 'T-109 (overdue)', s: 0.6, e: 1, tone: 'critical', note: 'Mon eve' }, { l: 'T-131 (due)', s: 2.6, e: 3, tone: 'warning', note: 'Wed eve' },
+      { l: 'T-122 (due soon)', s: 5, e: 5.5, tone: 'info', note: 'Home time' }, { l: 'TR-532', s: 1.3, e: 1.6, tone: 'info', note: 'At drop' }, { l: 'TR-540 annual', s: 0, e: 0.4, tone: 'critical', note: 'First thing' }
+    ], note: 'Overdue and compliance items first; due-soon units matched to home time and planned stops.' }
+  ] }
+]);
+deep('advanced.m2.l1', [{ title: 'FMI cheat sheet', blocks: [REF.fmi] }]);
+deep('advanced.m2.l2', [
+  { title: 'Diagnostic tools', blocks: [
+    { ig: 'ratings', icon: 'wrench', title: 'Diagnostic tools compared', cols: ['Basic code reader', 'OEM software', 'Telematics (remote)'], rows: [
+      { l: 'Depth of data', v: [2, 5, 3] }, { l: 'Can run tests / regens', v: [1, 5, 1] }, { l: 'Available anywhere', v: [4, 2, 5] }, { l: 'Speed to first info', v: [4, 3, 5] }
+    ], hint: 'Ask shops which software they have for the engine make — it often decides who can diagnose an aftertreatment problem.' }
+  ] }
+]);
+deep('advanced.m2.l3', [
+  { title: 'Regen call script', blocks: [
+    { ig: 'card', icon: 'message', title: 'Questions for any DPF / DEF call', form: 'Aftertreatment call', rows: [['Lamps / messages', 'DPF, DEF, HEST, check engine?'], ['Speed limited?', 'How much?'], ['Last regen', 'Completed? Interrupted?'], ['Regen requested?', 'Parked regen prompt?'], ['DEF level', 'Gauge reading'], ['Duty cycle', 'Idling? Short hauls?']] }
+  ] }
+]);
+deep('advanced.m3.l1', [
+  { title: 'Labor rates', blocks: [
+    { ig: 'bars', icon: 'dollar', title: 'Example hourly labor rates by vendor type', fmt: '$', items: [['After-hours mobile / roadside', 225, 'warning'], ['Dealer', 195], ['Independent shop', 165], ['In-house (loaded cost)', 110, 'success']], note: 'Illustrative only — rates vary widely by region. Always compare total cost, not rate alone.' }
+  ] },
+  { title: 'Book vs actual', blocks: [
+    `Book time is the published standard. Actual time can be higher (seized bolts, extra damage) or the shop may bill book regardless. Ask shops how they bill — and ask for an explanation when actual hours exceed book by a wide margin.`,
+    { ig: 'stats', icon: 'clock', title: 'Reading a labor line', items: [{ v: '3.5', u: 'h', l: 'book time for the job', tone: 'info' }, { v: '6.0', u: 'h', l: 'billed — ask why', tone: 'warning' }, { v: '+71', u: '%', l: 'over book — needs an explanation', tone: 'critical' }] }
+  ] }
+]);
+deep('advanced.m3.l2', [
+  { title: 'Trimming an estimate', blocks: [
+    { ig: 'waterfall', icon: 'dollar', title: 'From $6,800 requested to $2,040 approved', fmt: '$', items: [
+      { l: 'Shop request', v: 6800, type: 'start' }, { l: 'Shocks (no evidence)', v: -1900 }, { l: 'Belts (within life)', v: -620 }, { l: 'Alternator (tested OK)', v: -1450 }, { l: 'Cables (tested OK)', v: -790 }, { l: 'Approved', v: 2040, type: 'total' }
+    ], downGood: true, note: 'Starter + batteries (which tested weak) approved. Deferred items documented for the next PM.' }
+  ] }
+]);
+deep('advanced.m4.l1', [
+  { title: 'Vendor types compared', blocks: [
+    { ig: 'ratings', icon: 'wrench', title: 'Choosing a vendor type', cols: ['Dealer', 'Independent', 'Mobile', 'In-house'], rows: [
+      { l: 'Cost advantage', v: [1, 3, 2, 5] }, { l: 'Speed to start', v: [2, 4, 5, 4] }, { l: 'Complex diagnostics', v: [5, 3, 2, 3] }, { l: 'Warranty work', v: [5, 1, 1, 2] }, { l: 'Coverage on the road', v: [3, 4, 4, 1] }
+    ], hint: 'General tendencies. Your best vendors may break the pattern — measure them.' }
+  ] }
+]);
+deep('advanced.m4.l2', [
+  { title: 'Tow types', blocks: [
+    { ig: 'table', icon: 'route', title: 'Match the wrecker to the job', head: ['Type', 'Typical use'], rows: [
+      ['Light-duty', 'Cars and light pickups — not for tractors'], ['Medium-duty', 'Box trucks and smaller commercial vehicles'], ['Heavy-duty wrecker', 'Tractors, buses, loaded combinations'],
+      ['Rotator', 'Recovery after rollovers or off-road incidents'], ['Landoll / lowboy', 'Hauling equipment that can\'t be towed on its wheels']
+    ] }
+  ] }
+]);
+deep('advanced.m6.l1', [
+  { title: 'Appointment types', blocks: [
+    { compare: { yes: { title: 'Drop & hook', items: ['Driver drops a trailer and picks up another', 'Less waiting at the dock', 'A down tractor can often be replaced easily'] }, no: { title: 'Live load / unload', items: ['Driver waits while freight moves', 'Tight appointment windows', 'Delays ripple into the driver\'s hours'] } } }
+  ] }
+]);
+deep('advanced.m6.l2', [
+  { title: 'Recovery options compared', blocks: [
+    { ig: 'ratings', icon: 'route', title: 'Recovery options', cols: ['Wait', 'Power swap', 'Trailer swap', 'Rental', 'Reschedule'], rows: [
+      { l: 'Low cost', v: [5, 3, 2, 1, 4] }, { l: 'Protects deadline', v: [1, 5, 4, 3, 1] }, { l: 'Simple to arrange', v: [5, 3, 2, 2, 4] }, { l: 'Customer impact (less = more dots)', v: [2, 5, 4, 4, 2] }
+    ] }
+  ] }
+]);
+deep('advanced.m7.l2', [
+  { title: 'Spotting repeats', blocks: [
+    { ig: 'heatmap', icon: 'activity', title: 'Road calls by unit and month', cols: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], rows: [
+      { l: 'T-101', v: [1, 0, 1, 1, 0, 1] }, { l: 'T-108', v: [0, 0, 0, 1, 0, 1] }, { l: 'T-114', v: [0, 1, 0, 0, 0, 0] }, { l: 'T-120', v: [0, 0, 0, 2, 1, 1] }, { l: 'T-126', v: [0, 0, 1, 0, 0, 1] }
+    ], tone: 'critical', note: 'Heatmaps make repeat offenders obvious at a glance. T-101 and T-120 deserve reviews.' }
+  ] }
+]);
+deep('advanced.m8.l1', [
+  { title: 'CPM bridge', blocks: [
+    { ig: 'waterfall', icon: 'dollar', title: 'Why CPM rose from $0.118 to $0.131 (cents per mile)', fmt: '', unit: '¢', items: [
+      { l: 'Q1 CPM', v: 11.8, type: 'start' }, { l: 'Aftertreatment repairs', v: 1.1 }, { l: 'Tires (price increase)', v: 0.4 }, { l: 'Better PM → fewer tows', v: -0.3 }, { l: 'Q2 CPM', v: 13.0, type: 'total' }
+    ], note: 'Rounded example. A CPM bridge turns "costs went up" into specific causes you can act on.' }
+  ] }
+]);
+
+deep('expert.m1.l1', [
+  { title: 'Continuous improvement', blocks: [
+    { ig: 'cycle', icon: 'rotate', title: 'Plan–Do–Check–Act for maintenance', center: 'PDCA', items: [{ icon: 'clipboard', t: 'Plan', d: 'Change a PM task or interval' }, { icon: 'wrench', t: 'Do', d: 'Pilot on a few units' }, { icon: 'bar', t: 'Check', d: 'Compare failures & cost' }, { icon: 'check-circle', t: 'Act', d: 'Roll out or adjust' }] },
+    `PDCA keeps a maintenance program honest: every change is a small experiment that's measured before it becomes the standard.`
+  ] }
+]);
+deep('expert.m1.l2', [
+  { title: 'Lifecycle phases', blocks: [
+    { ig: 'process', icon: 'trend', title: 'A vehicle\'s life in the fleet', items: [{ icon: 'check-circle', t: 'Acquire', d: 'Spec & warranty setup' }, { icon: 'truck', t: 'Early life', d: 'Warranty window' }, { icon: 'activity', t: 'Mid life', d: 'Peak productivity' }, { icon: 'wrench', t: 'Late life', d: 'Major repairs rise' }, { icon: 'dollar', t: 'Remarket', d: 'Resale value' }] }
+  ] }
+]);
+deep('expert.m2.l1', [
+  { title: 'PM compliance by terminal', blocks: [
+    { ig: 'heatmap', icon: 'list-check', title: 'PM compliance % by terminal and month', fmt: '%', cols: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], rows: [
+      { l: 'Dallas', v: [96, 95, 97, 94, 96, 95] }, { l: 'Memphis', v: [92, 90, 91, 88, 85, 82] }, { l: 'Atlanta', v: [94, 96, 95, 97, 96, 98] }, { l: 'Phoenix', v: [89, 91, 93, 94, 95, 96] }
+    ], tone: 'success', min: 80, max: 100, legend: ['80%', '100%'], note: 'Memphis is sliding while Phoenix improves — ask what changed at each terminal.' }
+  ] }
+]);
+deep('expert.m2.l2', [
+  { title: 'Leading vs lagging', blocks: [
+    { compare: { yes: { title: 'Leading — act on these', items: ['PM compliance', 'Open safety defects', 'Fault-code trends', 'Parts fill rate'] }, no: { title: 'Lagging — learn from these', items: ['MTBF', 'MTTR', 'Cost per mile', 'Road calls'] } } }
+  ] }
+]);
+deep('expert.m3.l2', [
+  { title: 'Pareto: focus on the vital few', blocks: [
+    { ig: 'bars', icon: 'bar', title: 'Road calls by cause — last 12 months', fmt: '', items: [['Aftertreatment', 46, 'critical'], ['Tires', 31, 'critical'], ['Electrical / lighting', 22, 'warning'], ['Cooling', 11], ['Brakes', 8], ['Other', 7]], note: 'The top three causes account for about 80% of road calls (99 of 125) — the classic Pareto (80/20) pattern. Start RCA there.' }
+  ] }
+]);
+deep('expert.m5.l2', [
+  { title: 'Vendor management cycle', blocks: [
+    { ig: 'cycle', icon: 'rotate', title: 'Managing vendor performance', center: 'Vendor partnership', items: [{ icon: 'file', t: 'Expect', d: 'Standards & SLAs' }, { icon: 'bar', t: 'Measure', d: 'Scorecard' }, { icon: 'message', t: 'Review', d: 'Share results' }, { icon: 'wrench', t: 'Improve', d: 'Corrective actions' }, { icon: 'check-circle', t: 'Decide', d: 'Tier the vendor' }] }
+  ] }
+]);
+deep('expert.m6.l2', [
+  { title: 'Claim workflow', blocks: [
+    { ig: 'process', icon: 'shield', title: 'Warranty claim from failure to recovery', items: [{ icon: 'search', t: 'Identify', d: 'Check coverage first' }, { icon: 'wrench', t: 'Authorized repair', d: 'Right facility' }, { icon: 'file', t: 'Document', d: 'RO, meters, photos' }, { icon: 'layers', t: 'Keep part', d: 'If required' }, { icon: 'dollar', t: 'Recover', d: 'Credit or no charge' }] }
+  ] }
+]);
+deep('expert.m7.l2', [
+  { title: 'The DESC script', blocks: [
+    { ig: 'process', icon: 'message', title: 'Structure for a difficult conversation', items: [{ icon: 'file', t: 'Describe', d: 'Facts, not labels' }, { icon: 'message', t: 'Express', d: 'Impact on the operation' }, { icon: 'target', t: 'Specify', d: 'What you need' }, { icon: 'check-circle', t: 'Consequences', d: 'Positive outcome' }] },
+    { msg: { kind: 'message', title: 'DESC example — to a dispatcher', text: 'D: Twice this week units were released from the shop and sat 3+ hours waiting for a driver.\nE: That adds downtime and our availability KPI suffers for work that\'s already done.\nS: Can we agree that I send you the ETR 2 hours ahead and you assign pickup then?\nC: Trucks roll sooner — and you get more capacity back each day.' } }
+  ] }
+]);
+deep('expert.m8.l2', [
+  { title: 'Disruption curve', blocks: [
+    { ig: 'heatmap', icon: 'activity', title: 'Units down by hour — cold snap morning', cols: ['05', '06', '07', '08', '09', '10', '11', '12', '13'], rows: [
+      { l: 'Roadside', v: [0, 2, 2, 1, 1, 0, 0, 0, 0] }, { l: 'Yard no-starts', v: [1, 4, 4, 3, 2, 1, 0, 0, 0] }, { l: 'In shop', v: [1, 1, 2, 3, 3, 3, 2, 2, 1] }
+    ], tone: 'critical', note: 'The peak was 07:00. Knowing the curve helps plan overflow vendors and leadership updates.' }
+  ] }
+]);
+
+/* ---------------------------------------------------------------------------
+   CONTENT — Industry examples
+   Real companies referenced in context. Descriptions only restate what each
+   company's official website says; they are examples, not endorsements.
+   Rendered by the { industry: {...} } block.
+   --------------------------------------------------------------------------- */
+const COMPANIES = {
+  fleetio: { name: 'Fleetio', cat: 'Fleet maintenance software', url: 'https://www.fleetio.com/',
+    text: 'Fleetio is fleet management software. Its website describes it as "one place to run fleet maintenance," aimed at reducing downtime and controlling costs, for fleets in industries including trucking and freight.' },
+  samsara: { name: 'Samsara', cat: 'Telematics & fleet technology', url: 'https://www.samsara.com/',
+    text: 'Samsara offers a connected operations platform. Its website lists fleet capabilities including live GPS tracking, vehicle diagnostics, fuel analytics and compliance reporting, plus AI-powered dash cams and in-cab alerts for driver safety.' },
+  protransport: { name: 'Pro Transport USA', cat: 'Trucking & transportation carrier', url: 'https://protransportusa.com/',
+    text: 'Pro Transport, Inc. describes itself as a trucking and transportation provider founded in 1998, with its corporate office in Medley, Florida and terminals in Florida, Georgia and South Carolina. It serves local, regional and national customers with employees and owner-operators.' },
+  thermoking: { name: 'Thermo King', cat: 'Transport refrigeration', url: 'https://www.thermoking.com/',
+    text: 'Thermo King makes transport temperature-control systems, including refrigeration units for trailers and trucks. Its website also describes telematics temperature monitoring for reefers and a dealer network providing service across North America.' }
+};
+function industry(key, relevance) { return { industry: Object.assign({}, COMPANIES[key], { relevance }) }; }
+function addToDeepTab(lessonKey, tabTitle, block) {
+  const tab = (lessonAt(lessonKey).deep || []).find((t) => t.title === tabTitle);
+  if (tab) tab.blocks.push(block);
+}
+
+// Pro Transport USA — what a trucking company looks like in practice
+enrich('beginner.m1.l1', { add: [industry('protransport', 'A carrier like this is the structure this lesson describes: terminals, tractors, trailers and drivers moving freight for customers. Every unit in a fleet like this needs the maintenance coordination you\'re learning here.')] });
+
+// Fleetio — fleet maintenance software
+addToDeepTab('beginner.m2.l1', 'Tools of the trade', industry('fleetio', 'Much of a coordinator\'s day happens inside fleet maintenance software: opening cases, logging work orders, tracking PM schedules and reviewing unit history.'));
+enrich('advanced.m7.l2', { add: [industry('fleetio', 'Fleet maintenance software is where a fleet board like the one above usually lives in real operations — unit status, PM due dates and repair history in one place.')] });
+enrich('expert.m9.l2', { add: [industry('fleetio', 'This is the category of system this lesson calls a CMMS. The data-quality rules above apply no matter which product a fleet uses.')] });
+
+// Samsara — telematics, tracking, driver safety
+enrich('advanced.m7.l1', { add: [industry('samsara', 'Telematics platforms supply several data points on this list — location, diagnostics and fault codes — so coordinators can track units without waiting for a phone call.')] });
+enrich('expert.m9.l1', { add: [industry('samsara', 'Fault alerts, location and diagnostic data from a telematics platform are the inputs to the alert-tiering process in this lesson. Dash cams and in-cab alerts are part of the driver-safety side of the same technology.')] });
+
+// Thermo King — refrigerated transport
+enrich('beginner.m3.l2', { add: [industry('thermoking', 'The "reefer unit" in the trailer components table is a transport refrigeration unit like these. It has its own maintenance needs, separate from the trailer it\'s mounted on.')] });
+addToDeepTab('beginner.m5.l2', 'Reefer basics', industry('thermoking', 'When a reefer alarms, the unit\'s manufacturer dealer network is often the fastest route to a qualified technician — and the alarm code tells them where to start.'));
+
+/* ---------------------------------------------------------------------------
+   CONTENT — Trucking Invoicing module (Beginner m10)
+   All companies in these scenarios are fictional. Practices described are
+   common industry conventions; each carrier/broker sets its own terms.
+   --------------------------------------------------------------------------- */
+const RATECON = {
+  source: 'RATE CONFIRMATION — Northgate Freight Brokerage (fictional)\n'
+    + 'Carrier: Crestline Freight Lines LLC · MC# 000000 (fictional)\n'
+    + 'Load #: NFB-448213\n'
+    + 'Pickup: Dallas, TX · 06/12 08:00  |  Delivery: Atlanta, GA · 06/13 07:00\n'
+    + 'Equipment: 53\' dry van · Miles: 781\n'
+    + 'Linehaul rate: $1,900.00   Fuel surcharge: $250.00 flat\n'
+    + 'Detention: $50/hr after 2 hours free · in/out times required on BOL\n'
+    + 'Lumper: reimbursed with receipt   Layover: $250/day   TONU: $150\n'
+    + 'Payment terms: Net 30 from receipt of invoice with signed POD',
+  delivery: 'DELIVERY — Atlanta, GA · 06/13\nArrived 06:40 · Departed 11:10 (in/out times written and signed on BOL)\nLumper service paid by driver: $185.00 (receipt #L-7731)\nPOD: BOL signed by receiver, no exceptions noted',
+  answer: { broker: 'northgate', load: 'NFB-448213', linehaul: 1900, fsc: 250, detention: 125, lumper: 185, total: 2460 }
+};
+
+const INV_PARTIES = { ig: 'hub', icon: 'users', title: 'Who\'s who on a brokered load', center: { icon: 'file', t: 'The invoice' }, items: [
+  { icon: 'layers', t: 'Shipper', d: 'Owns & sends the freight' }, { icon: 'users', t: 'Broker', d: 'Arranges the carrier; often pays it' },
+  { icon: 'truck', t: 'Carrier', d: 'Hauls it; issues the invoice' }, { icon: 'route', t: 'Driver', d: 'Collects the documents' },
+  { icon: 'pin', t: 'Receiver', d: 'Signs for delivery (POD)' }, { icon: 'dollar', t: 'Factoring co.', d: 'May buy the invoice' }
+] };
+
+addModule('beginner', {
+  id: 'm10', title: 'Trucking Invoicing: From Load to Payment', summary: 'What goes on a trucking invoice, the documents behind it, and how carriers get paid.',
+  lessons: [
+    /* ---------- L1 ---------- */
+    {
+      id: 'l1', title: 'What Is a Trucking Invoice?', minutes: 16,
+      objectives: ['Explain what a trucking invoice is and why carriers issue one', 'Tell the shipper, broker, carrier, driver, receiver, factoring company and customer apart', 'Read the fields on a trucking invoice'],
+      body: [
+        `An <strong>invoice</strong> is a bill: a document asking to be paid for work done. In trucking, the <strong>carrier</strong> — the company whose truck hauled the freight — sends an invoice after a load is delivered. No invoice, no payment. Even a perfect delivery earns nothing until it\'s invoiced correctly.`,
+        INV_PARTIES,
+        { table: { head: ['Party', 'What they do', 'Role in the invoice'], rows: [
+          ['Shipper', 'The business sending the freight (e.g., a manufacturer)', 'Pays for transportation — directly to the carrier, or to a broker'],
+          ['Broker', 'A licensed intermediary that arranges transportation between shippers and carriers. Brokers don\'t haul freight themselves.', 'On brokered loads, the broker is usually who the carrier invoices'],
+          ['Carrier', 'The trucking company that hauls the freight', '<strong>Creates and sends the invoice</strong>'],
+          ['Driver', 'Operates the truck', 'Collects signed paperwork that proves the work was done'],
+          ['Receiver (consignee)', 'Where the freight is delivered', 'Signs the delivery paperwork — the proof of delivery'],
+          ['Factoring company', 'A finance company that buys carrier invoices', 'Pays the carrier early, then collects from the customer'],
+          ['Customer', 'Whoever the carrier bills', 'The broker on a brokered load, or the shipper on a direct load']
+        ] } },
+        { callout: { kind: 'info', title: 'Customer = whoever you bill', text: 'On a brokered load the carrier\'s customer is the broker, not the shipper. On a direct load (no broker) the shipper is the customer.' } },
+        { h: 'What goes on the invoice' },
+        { ig: 'annotated', icon: 'file', title: 'Anatomy of a trucking invoice', lines: [
+          ['Crestline Freight Lines LLC · 100 Main St, Dallas TX · MC# 000000', 1], ['Bill to: Northgate Freight Brokerage, Accounts Payable', 2], ['Invoice # CFL-1045 · Date 06/14 · Terms: Net 30', 3],
+          ['Load # NFB-448213 · Dallas TX 06/12 → Atlanta GA 06/13 · 781 mi', 4], ['Linehaul $1,900.00 · Fuel surcharge $250.00', 5], ['Detention 2.5 h × $50 = $125.00 · Lumper $185.00', 6], ['TOTAL DUE $2,460.00', 7]
+        ], notes: [
+          { n: 1, t: 'Carrier information', d: 'Legal name, address and authority number (MC or USDOT number) of the company being paid.' },
+          { n: 2, t: 'Customer / broker information', d: 'Exactly who is being billed — use their billing name and address.' },
+          { n: 3, t: 'Invoice number, date & terms', d: 'A unique number, the invoice date and the payment terms (e.g., Net 30).' },
+          { n: 4, t: 'Load details', d: 'The customer\'s load/shipment number, pickup and delivery points and dates, and miles.' },
+          { n: 5, t: 'Rate & fuel', d: 'The agreed linehaul rate and any fuel surcharge.' },
+          { n: 6, t: 'Accessorial charges', d: 'Approved extras such as detention, layover, lumper and tolls — each with support.' },
+          { n: 7, t: 'Total amount due', d: 'The sum of all lines.' }
+        ] },
+        { tiles: [
+          { icon: 'dollar', title: 'Linehaul rate', text: 'The base price agreed for moving the load from pickup to delivery.' },
+          { icon: 'activity', title: 'Fuel surcharge (FSC)', text: 'An amount that adjusts for diesel prices — a flat amount, per-mile, or included in an "all-in" rate, depending on the agreement.' },
+          { icon: 'plus', title: 'Accessorial charges', text: 'Extra services beyond the basic move: detention, layover, lumper, tolls, extra stops and more.' },
+          { icon: 'route', title: 'Miles', text: 'Distance of the move — used to check rate per mile and some charges.' }
+        ] }
+      ],
+      example: { title: 'A simple invoice, start to finish', text: `Crestline hauled load NFB-448213 for Northgate Freight Brokerage. The rate confirmation said $1,900 linehaul plus $250 fuel surcharge. At delivery, the truck waited past the free time and the driver paid a lumper. Crestline\'s invoice to Northgate listed all four amounts with the supporting paperwork: <strong>$2,460.00</strong> due under Net 30 terms.` },
+      practical: { title: 'Read the rate confirmation', exercise: {
+        type: 'extract', sourceLabel: 'Rate confirmation', source: RATECON.source,
+        fields: [
+          { label: 'Who is the carrier\'s customer (bill-to)?', accept: ['northgate'] },
+          { label: 'Load number', accept: ['nfb-448213', 'nfb448213'] },
+          { label: 'Agreed linehaul rate ($)', accept: ['1900', '1,900', '1900.00'] },
+          { label: 'Payment terms', accept: ['net 30', 'net30', '30'] }
+        ] } },
+      check: [
+        { t: 'mc', q: 'Who creates and sends the invoice for a brokered load?', o: ['The shipper', 'The broker', 'The carrier', 'The receiver'], a: 2, e: 'The carrier that hauled the freight invoices its customer — usually the broker on a brokered load.' },
+        { t: 'tf', q: 'A freight broker hauls freight with its own trucks.', a: false, e: 'Brokers arrange transportation; carriers haul it.' },
+        { t: 'mc', q: 'On a direct load with no broker, who is the carrier\'s customer?', o: ['The factoring company', 'The shipper', 'The driver', 'The receiver'], a: 1, e: 'Without a broker, the carrier bills the shipper directly.' }
+      ],
+      takeaways: ['An invoice is the carrier\'s bill for a completed load.', 'Customer = whoever the carrier bills (broker or shipper).', 'Key fields: carrier & customer info, invoice #, date, terms, load #, route, rate, fuel, accessorials, total.', 'Every line must match what was agreed and what can be proven.'],
+      tips: ['Copy the customer\'s load number exactly from the rate confirmation.', 'Use one invoice-number sequence and never reuse a number.'],
+      mistakes: ['Billing the shipper when the broker is the customer.', 'Leaving off the load/reference number the customer uses to match payment.']
+    },
+    /* ---------- L2 ---------- */
+    {
+      id: 'l2', title: 'The Documents Behind Every Invoice', minutes: 16,
+      objectives: ['Explain the purpose of the rate confirmation, BOL and POD', 'Match supporting documents to each charge', 'Spot missing paperwork before it delays payment'],
+      body: [
+        `An invoice is a claim; documents are the evidence. Customers compare your invoice to the paperwork line by line. If a charge isn\'t supported, it\'s usually delayed or refused.`,
+        { ig: 'table', icon: 'file', title: 'Documents and why they matter', head: ['Document', 'What it is', 'What it proves for payment'], rows: [
+          ['Rate confirmation ("rate con")', 'The broker\'s written agreement with the carrier for this load: rate, stops, dates, accessorial terms', 'What the customer agreed to pay — every amount on the invoice should trace back to it'],
+          ['Bill of Lading (BOL)', 'The shipping document issued at pickup describing the freight; a receipt for the goods and a contract for their transport', 'What was picked up, from whom, and where it was going'],
+          ['Proof of Delivery (POD)', 'Delivery paperwork — often the BOL — signed by the receiver, with any shortages or damage noted', 'That the load was delivered. Most customers won\'t pay without it'],
+          ['Delivery receipt', 'A receiver\'s own receipt, when used', 'Delivery date/time and condition'],
+          ['Lumper receipt', 'Receipt from a third-party unloading service', 'The lumper amount the carrier paid and wants reimbursed'],
+          ['Detention documentation', 'In/out times at the facility — on the BOL, a signed time sheet, or electronic records', 'How long the truck waited beyond free time'],
+          ['Other support', 'Toll receipts, scale tickets, TONU confirmation, layover approval', 'Any other charge being billed']
+        ] },
+        { ig: 'process', icon: 'file', title: 'The paper trail of one load', items: [
+          { icon: 'file', t: 'Rate con', d: 'Before pickup' }, { icon: 'layers', t: 'BOL', d: 'At pickup' }, { icon: 'clock', t: 'Times recorded', d: 'In/out at each stop' },
+          { icon: 'check-circle', t: 'POD signed', d: 'At delivery' }, { icon: 'dollar', t: 'Receipts', d: 'Lumper, tolls' }, { icon: 'clipboard', t: 'Invoice packet', d: 'All of it together' }
+        ] },
+        { callout: { kind: 'warning', title: 'Read the POD before you bill', text: 'If the receiver wrote "2 cartons short" or "damaged" on the POD, the customer may reduce payment or open a claim. Know about exceptions before you submit — don\'t be surprised later.' } },
+        { h: 'Common exception notes' },
+        `Receivers often note <strong>OS&D</strong> — overage, shortage and damage — on the POD. A clean POD ("no exceptions") is the simplest to get paid on.`,
+        { exercise: { type: 'multi', prompt: 'You\'re preparing the invoice for load NFB-448213 (linehaul, fuel, 2.5 h detention, $185 lumper). You have the rate confirmation and the signed POD. Which documents are still needed? (Select all that apply)', options: [
+          { text: 'Lumper receipt', correct: true, why: 'Supports the $185 lumper reimbursement.' },
+          { text: 'Detention support showing in/out times', correct: true, why: 'Supports the 2.5 billable hours — the rate con requires in/out times.' },
+          { text: 'The driver\'s fuel receipts', correct: false, why: 'Fuel surcharge is set by the rate con, not by the driver\'s fuel purchases.' },
+          { text: 'A second copy of the rate confirmation', correct: false, why: 'You already have it.' }
+        ] }, key: 'inv-docs' }
+      ],
+      example: { title: 'The missing lumper receipt', text: `A carrier billed $210 for a lumper but the driver lost the receipt. The broker paid the linehaul and held the lumper line. The carrier eventually got a copy from the receiving facility — two weeks later. Now its drivers photograph every receipt before leaving the dock.` },
+      practical: { title: 'Match each charge to its support', exercise: {
+        type: 'classify', prompt: 'Which document mainly supports each item?', categories: ['Rate confirmation', 'Signed POD', 'Lumper receipt', 'In/out times'],
+        items: [
+          { text: 'Linehaul $1,900', answer: 'Rate confirmation', why: 'The agreed rate comes from the rate con.' },
+          { text: 'Load was delivered complete', answer: 'Signed POD', why: 'The receiver\'s signature proves delivery.' },
+          { text: 'Lumper $185', answer: 'Lumper receipt', why: 'Shows the amount paid.' },
+          { text: 'Detention 2.5 hours', answer: 'In/out times', why: 'Proves how long the truck waited.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'What is a POD?', o: ['Proof of Delivery — signed delivery paperwork', 'Payment on Demand', 'Point of Dispatch', 'Price of Diesel'], a: 0, e: 'Proof of Delivery, usually the BOL signed by the receiver.' },
+        { t: 'tf', q: 'A charge on the invoice that isn\'t on the rate confirmation or otherwise approved will often be disputed.', a: true, e: 'Customers pay what they agreed to and what\'s supported.' }
+      ],
+      takeaways: ['Rate con = what was agreed. BOL = what was shipped. POD = that it was delivered.', 'Every accessorial needs its own support.', 'Read the POD for exceptions before billing.', 'Missing paperwork is the #1 cause of slow payment.'],
+      tips: ['Ask drivers to photograph BOLs, PODs and receipts at the dock.', 'Build the invoice packet in the same order every time.'],
+      mistakes: ['Submitting an unsigned BOL as the POD.', 'Billing detention without in/out times.']
+    },
+    /* ---------- L3 ---------- */
+    {
+      id: 'l3', title: 'The Invoicing Workflow and How to Submit', minutes: 17,
+      objectives: ['Follow the invoicing workflow from load assignment to payment', 'Know what can go wrong at each step', 'Choose a submission method and run a pre-submission check'],
+      body: [
+        { ig: 'pipeline', icon: 'route', title: 'From load to payment', items: [
+          { t: 'Load assigned', tone: 'info' }, { t: 'Rate con received', tone: 'info' }, { t: 'Picked up', tone: 'info' }, { t: 'BOL collected', tone: 'info' }, { t: 'Delivered', tone: 'warning' },
+          { t: 'POD signed', tone: 'warning' }, { t: 'Docs collected', tone: 'warning' }, { t: 'Invoice prepared', tone: 'warning' }, { t: 'Docs attached', tone: 'warning' },
+          { t: 'Submitted', tone: 'success' }, { t: 'Reviewed', tone: 'success' }, { t: 'Approved', tone: 'success' }, { t: 'Paid', tone: 'success' }
+        ] },
+        { timeline: [
+          { title: 'Load assigned', text: 'Dispatch books the load. Can go wrong: details agreed by phone never get confirmed in writing.' },
+          { title: 'Rate confirmation received', text: 'Check rate, stops, dates and accessorial terms, then sign/return it per the broker\'s process. Can go wrong: wrong rate or missing detention terms nobody catches.' },
+          { title: 'Load picked up', text: 'Driver checks the freight against the paperwork. Can go wrong: piece count differs from the BOL.' },
+          { title: 'BOL collected', text: 'Driver keeps a clear copy. Can go wrong: illegible or lost BOL.' },
+          { title: 'Delivery completed', text: 'In/out times recorded. Can go wrong: no times written — detention can\'t be proven.' },
+          { title: 'POD signed', text: 'Receiver signs, prints name, notes exceptions. Can go wrong: no signature, or damage notes the office doesn\'t know about.' },
+          { title: 'Supporting documents collected', text: 'Lumper and toll receipts, detention support. Can go wrong: receipts left in the truck for a week.' },
+          { title: 'Invoice prepared', text: 'Every line traced to the rate con or approved extras. Can go wrong: typos in the load number or rate.' },
+          { title: 'Documents attached', text: 'Rate con, POD and all supports in one packet. Can go wrong: one document missing = invoice on hold.' },
+          { title: 'Invoice submitted', text: 'By the customer\'s required method. Can go wrong: sent to the wrong email or portal.' },
+          { title: 'Broker/customer reviews', text: 'They match invoice to rate con and POD. Can go wrong: questions nobody answers.' },
+          { title: 'Invoice approved', text: 'Scheduled for payment per terms. Can go wrong: short-paid with no explanation.' },
+          { title: 'Payment processed', text: 'Payment received and applied. Can go wrong: payment can\'t be matched because the invoice number or load number was wrong.' }
+        ] },
+        { h: 'How invoices are submitted' },
+        { ig: 'ratings', icon: 'message', title: 'Common submission methods', cols: ['Email', 'Customer portal', 'TMS', 'Factoring co.'], rows: [
+          { l: 'Tracks status', v: [1, 5, 4, 4] }, { l: 'Easy to attach documents', v: [4, 4, 4, 4] }, { l: 'Fewest data-entry steps', v: [3, 2, 5, 3] }, { l: 'Customer-controlled format', v: [2, 5, 2, 3] }
+        ], hint: 'A TMS (transportation management system) is software carriers use to manage loads, dispatch and billing. Which method you use is set by the customer or your factoring agreement.' },
+        { ig: 'card', icon: 'check-circle', title: 'Pre-submission checklist', form: 'Before you hit submit', rows: [
+          ['Bill-to', 'Matches the customer on the rate con'], ['Load / reference #', 'Exactly as on the rate con'], ['Invoice #', 'Unique — never used before'], ['Rate', 'Matches the rate con'],
+          ['Accessorials', 'Each one allowed + supported'], ['POD', 'Signed, legible, exceptions noted'], ['Attachments', 'Rate con, POD, receipts, time support'], ['Total', 'Adds up; terms stated']
+        ] }
+      ],
+      example: { title: 'Portal vs email', text: `A broker asked all carriers to use its online portal. One carrier kept emailing invoices to a general inbox — they sat unprocessed for three weeks. Once the carrier used the portal with the required fields, the next invoice was approved in four days.` },
+      practical: { title: 'Is it ready to submit?', exercise: {
+        type: 'choose', prompt: 'Invoice CFL-1045 for NFB-448213: rate and load number match the rate con, total is $2,460, lumper receipt and detention times attached — but the POD photo is blurry and the receiver\'s signature can\'t be read. What do you do?',
+        options: [
+          { text: 'Submit now; they can ask if they need more', correct: false, why: 'An unreadable POD is a common reason invoices are held or rejected.' },
+          { text: 'Hold it, get a clear POD copy (from the driver or the receiver), then submit the complete packet', correct: true, why: 'A complete, legible packet gets processed fastest.' },
+          { text: 'Remove the detention and lumper to make it simpler', correct: false, why: 'Those charges are valid and supported — don\'t give up earned money.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'What is a TMS?', o: ['Truck Maintenance Schedule', 'Transportation Management System — software for loads, dispatch and billing', 'Total Miles Summary', 'Toll Management Service'], a: 1, e: 'TMS stands for transportation management system.' },
+        { t: 'wwyd', q: 'The broker requires invoices through its portal. You:', o: ['Email them anyway', 'Submit through the portal with required fields and attachments', 'Mail a paper copy', 'Wait for the broker to ask'], a: 1, e: 'Use the method the customer requires.' }
+      ],
+      takeaways: ['Thirteen steps from load assignment to payment — each can fail.', 'Most problems start with missing or unclear paperwork.', 'Submit the way the customer requires.', 'Run the pre-submission checklist every time.'],
+      tips: ['Invoice the same day the POD arrives.', 'Keep a log of submission dates to track payment due dates.'],
+      mistakes: ['Waiting to batch invoices at month-end.', 'Submitting before all documents are in.']
+    },
+    /* ---------- L4 ---------- */
+    {
+      id: 'l4', title: 'Accessorials, Payment Terms and Factoring', minutes: 18,
+      objectives: ['Identify common accessorial charges and their required support', 'Calculate payment due dates under Net terms', 'Explain freight factoring in neutral terms'],
+      body: [
+        { h: 'Accessorial charges' },
+        `An <strong>accessorial</strong> is a charge for a service beyond the basic pickup-to-delivery move. Whether and how much you can bill depends on the rate confirmation or a later written approval.`,
+        { ig: 'table', icon: 'plus', title: 'Common accessorials and their support', head: ['Charge', 'When it appears', 'Support usually needed'], rows: [
+          ['Detention', 'Truck held at pickup or delivery beyond the free time (often 2 hours) in the agreement', 'In/out times on BOL or signed time sheet; timely notice to the broker if required'],
+          ['Layover', 'Driver held overnight or for a day because a load can\'t be loaded or delivered as scheduled', 'Broker/customer approval; dates and reason'],
+          ['TONU (Truck Ordered Not Used)', 'Load cancelled after the truck was dispatched or arrived', 'Cancellation confirmation; proof of dispatch/arrival'],
+          ['Lumper', 'A third-party crew unloads (or loads) the freight; carrier pays and is reimbursed', 'Lumper receipt'],
+          ['Tolls', 'Toll roads on the route, if the agreement allows billing them', 'Toll receipts or statement'],
+          ['Extra stop', 'An additional pickup or delivery location', 'Rate con or amendment listing the stop; signed paperwork at the stop'],
+          ['Driver assist', 'Driver helps load or unload', 'Approval and signed confirmation from the facility'],
+          ['Re-delivery', 'Delivery attempt failed (e.g., receiver closed or refused) and the load is delivered again', 'Documentation of the failed attempt and approval']
+        ], note: 'Terms vary by customer. If it isn\'t in the rate con, get written approval before (or when) the event happens.' },
+        { h: 'Payment terms' },
+        { ig: 'gantt', icon: 'clock', title: 'When payment is due (invoice dated day 0)', from: 0, to: 62, ticks: [[0, 'Day 0'], [15, '15'], [30, '30'], [45, '45'], [60, '60']], rows: [
+          { l: 'Net 15', s: 0, e: 15, tone: 'success', note: 'Due day 15' }, { l: 'Net 30', s: 0, e: 30, tone: 'info', note: 'Due day 30' },
+          { l: 'Net 45', s: 0, e: 45, tone: 'warning', note: 'Due day 45' }, { l: 'Net 60', s: 0, e: 60, tone: 'critical', note: 'Due day 60' }
+        ], note: '"Net 30" means the full amount is due 30 days after the date the terms are measured from — often the invoice date or the date the complete invoice was received. Check the agreement.' },
+        `Why terms matter: a carrier pays fuel, drivers and repairs every week. Waiting 30–60 days to be paid ties up cash. Late payments make it worse — so track due dates and follow up politely when an invoice passes its due date.`,
+        { h: 'Freight factoring' },
+        `<strong>Factoring</strong> is when a carrier sells its invoices to a factoring company. The factoring company pays the carrier an advance quickly — often within a day or two — and then collects the full amount from the broker or shipper. In return it charges a fee, usually a percentage of the invoice. Terms such as advance rate, fees and "recourse" (whether the carrier must buy back an invoice the customer never pays) differ by agreement.`,
+        { ig: 'waterfall', icon: 'dollar', title: 'Example: factoring a $2,460 invoice (3% fee, 90% advance)', fmt: '$', items: [
+          { l: 'Invoice', v: 2460, type: 'start' }, { l: 'Held as reserve (10%)', v: -246, tone: 'warning' }, { l: 'Advance paid now', v: 2214, type: 'total', tone: 'success' }
+        ], note: 'Later, after the customer pays the factoring company, the reserve ($246) minus the fee ($73.80) — $172.20 — is released. The carrier receives $2,386.20 in total. Numbers are illustrative; every agreement differs.' },
+        { compare: {
+          yes: { title: 'Waiting for the customer', items: ['Receive 100% of the invoice', 'Paid on the customer\'s terms (e.g., Net 30)', 'Carrier handles collections'] },
+          no: { title: 'Factoring', items: ['Receive an advance within days', 'Pay a fee (a percentage of the invoice)', 'Factoring company handles collection; customer is told to pay the factor'] }
+        } }
+      ],
+      example: { title: 'The detention that almost wasn\'t', text: `A driver waited 4 hours at a receiver. The rate con allowed detention after 2 free hours, but required notice to the broker when detention started. The dispatcher emailed the broker at the 2-hour mark with the arrival time — so the 2 billable hours were approved without argument.` },
+      practical: { title: 'Payment due dates', exercise: {
+        type: 'extract', sourceLabel: 'Invoice details', source: 'Invoice CFL-1045 dated 06/14 (terms measured from invoice date)\nCustomer A terms: Net 30\nCustomer B terms: Net 45\nFactoring: 3% fee on a $2,460 invoice',
+        fields: [
+          { label: 'Net 30 due date (MM/DD)', accept: ['07/14', '7/14'] },
+          { label: 'Net 45 due date (MM/DD)', accept: ['07/29', '7/29'] },
+          { label: 'Factoring fee ($)', accept: ['73.80', '73.8', '$73.80'] }
+        ] } },
+      check: [
+        { t: 'mc', q: 'What does TONU stand for?', o: ['Truck Ordered Not Used', 'Total Order Net Units', 'Transport Of Non-Urgent freight', 'Time Off Not Used'], a: 0, e: 'Truck Ordered Not Used — a charge when a load is cancelled after the truck was dispatched.' },
+        { t: 'mc', q: 'Arrived 06:40, departed 11:10, 2 hours free, $50/hour. Detention due?', o: ['$225', '$125', '$100', '$50'], a: 1, e: '4.5 hours on site − 2 free hours = 2.5 billable × $50 = $125.' },
+        { t: 'tf', q: 'With factoring, the carrier usually receives payment sooner but pays a fee.', a: true, e: 'That\'s the core trade-off.' }
+      ],
+      takeaways: ['Accessorials must be agreed (rate con or written approval) and supported.', 'Detention = time on site − free time, at the agreed rate.', 'Net 30/45/60 = days until payment is due.', 'Factoring trades a fee for faster cash.'],
+      tips: ['Notify the broker as soon as detention or layover begins, if the agreement requires it.', 'Keep a due-date list and follow up the day an invoice goes past due.'],
+      mistakes: ['Counting free time as billable detention.', 'Billing accessorials that were never approved.']
+    },
+    /* ---------- L5 ---------- */
+    {
+      id: 'l5', title: 'Invoice Errors, Rejections and Building an Invoice', minutes: 20,
+      objectives: ['Recognize the most common invoice errors', 'Correct and resubmit a rejected invoice', 'Build and check a complete trucking invoice'],
+      body: [
+        { ig: 'table', icon: 'alert', title: 'Common errors and how to fix them', head: ['Error', 'Example', 'How to correct & resubmit'], rows: [
+          ['Wrong rate', 'Billed $2,100; rate con says $1,900', 'Correct to the rate con amount (or attach an approved rate change); resubmit with a note'],
+          ['Missing POD', 'Packet has rate con and BOL, no signed POD', 'Get the signed POD from the driver or receiver; resubmit the full packet'],
+          ['Incorrect invoice number', 'Invoice # skips or repeats your sequence', 'Void/correct per your accounting process; issue a proper unique number'],
+          ['Missing supporting documents', 'Lumper billed, no receipt', 'Attach the receipt, or remove the line until it can be supported'],
+          ['Incorrect accessorial', 'Detention billed 4.5 h (free time not deducted)', 'Recalculate (2.5 h × $50 = $125); resubmit'],
+          ['Wrong customer/broker info', 'Billed to the shipper instead of the broker', 'Re-issue to the correct bill-to name and address'],
+          ['Duplicate invoice', 'Same load invoiced twice', 'Withdraw the duplicate; confirm only one is open'],
+          ['Mismatched load number', 'NFB-448231 instead of NFB-448213', 'Correct the reference exactly as on the rate con'],
+          ['Missing signatures', 'Receiver didn\'t sign the BOL', 'Obtain a signed POD or the receiver\'s delivery confirmation']
+        ], note: 'When resubmitting, say what changed ("Corrected load # per rate con") and follow the customer\'s process for revised invoices.' },
+        { ig: 'bars', icon: 'bar', title: 'Why invoices were held (example carrier, one quarter)', fmt: '', items: [['Missing / unreadable POD', 34, 'critical'], ['Accessorial not supported', 21, 'warning'], ['Load # mismatch', 14, 'warning'], ['Rate mismatch', 9], ['Wrong bill-to', 6], ['Duplicate', 3]], note: 'Illustrative numbers. Paperwork problems — not disputes — cause most payment delays.' },
+        { h: 'Check an invoice for errors' },
+        { msg: { kind: 'note', title: 'Draft invoice — CFL-1046', text: 'Bill to: Northgate Freight Brokerage\nLoad #: NFB-448231\nLinehaul: $2,100.00\nFuel surcharge: $250.00\nDetention: 4.5 h × $50 = $225.00\nLumper: $185.00 (receipt not attached)\nTOTAL: $2,760.00' } },
+        { exercise: { type: 'multi', prompt: 'Compare the draft to the rate confirmation and delivery details (load NFB-448213, $1,900 linehaul, $250 FSC, 2 h free time, arrived 06:40 / departed 11:10). Which errors are present? (Select all that apply)', options: [
+          { text: 'Load number is transposed (…231 instead of …213)', correct: true, why: 'The reference must match the rate con exactly.' },
+          { text: 'Linehaul should be $1,900, not $2,100', correct: true, why: 'Rate con says $1,900.' },
+          { text: 'Detention should be 2.5 billable hours ($125)', correct: true, why: 'Free time wasn\'t deducted.' },
+          { text: 'Lumper receipt is missing', correct: true, why: 'Supporting document required.' },
+          { text: 'Fuel surcharge is wrong', correct: false, why: '$250 flat matches the rate con.' },
+          { text: 'Bill-to is wrong', correct: false, why: 'Northgate is the broker/customer — correct.' }
+        ] }, key: 'inv-errors' },
+        { h: 'Build the invoice' },
+        `Now build the correct invoice for load NFB-448213 from the rate confirmation and delivery details. The preview updates as you type.`,
+        { widget: 'invoice' }
+      ],
+      example: { title: 'Rejected, fixed, paid', text: `A broker rejected an invoice with the note "POD missing receiver signature." The carrier asked the receiving facility for its signed copy, attached it, added "Resubmitted with signed POD" to the note field, and resubmitted through the portal the same day. It was approved on the next review cycle.` },
+      practical: { title: 'Why was it rejected?', exercise: {
+        type: 'classify', prompt: 'Match each rejection message to its reason.', categories: ['Missing / unsupported documents', 'Amount does not match', 'Reference / identity error', 'Duplicate'],
+        items: [
+          { text: '"No signed POD attached."', answer: 'Missing / unsupported documents', why: 'Proof of delivery is required.' },
+          { text: '"Linehaul exceeds the rate confirmation."', answer: 'Amount does not match', why: 'Rate mismatch.' },
+          { text: '"Load # not found in our system."', answer: 'Reference / identity error', why: 'Load number is wrong or mistyped.' },
+          { text: '"This load has already been invoiced under #CFL-1045."', answer: 'Duplicate', why: 'Same load billed twice.' },
+          { text: '"Lumper charge — no receipt."', answer: 'Missing / unsupported documents', why: 'Accessorial without support.' }
+        ] } },
+      check: [
+        { t: 'mc', q: 'An invoice is rejected for a mismatched load number. Best fix?', o: ['Resubmit unchanged', 'Correct the load number exactly as on the rate con and resubmit with a note', 'Create a new load', 'Call the shipper'], a: 1, e: 'Fix the reference and explain the correction.' },
+        { t: 'tf', q: 'Sending the same invoice twice "just in case" helps you get paid faster.', a: false, e: 'Duplicates cause confusion and holds.' }
+      ],
+      takeaways: ['Most rejections are paperwork and reference errors.', 'Correct the specific problem and say what changed.', 'Build every invoice from the rate con and delivery documents.', 'Check before you submit — it\'s faster than fixing after.'],
+      tips: ['Keep a rejection log — patterns show what to fix in your process.', 'Double-check digits in load numbers; transpositions are common.'],
+      mistakes: ['Resubmitting without fixing the root problem.', 'Issuing a new invoice number for a correction without voiding the old one.']
+    }
+  ]
+});
+
+// Contextual industry example: a carrier is the party that issues invoices.
+enrich('beginner.m10.l1', { add: [industry('protransport', 'This is an example of a carrier — the party that hauls freight and issues invoices for it. Each carrier sets its own billing process; this lesson teaches the common fundamentals.')] });
+
+/* ---------------------------------------------------------------------------
    2. PRACTICE DATA — Glossary
    --------------------------------------------------------------------------- */
 const GLOSSARY = [
   { term: 'ABS', full: 'Anti-lock Braking System', cat: 'Components', def: 'An electronic system that monitors wheel speed and modulates brake pressure to prevent wheels from locking during hard braking.', simple: 'Keeps the wheels from locking up so the driver can keep steering while braking hard.', example: 'A driver reports the trailer ABS warning lamp stays on after coupling — the coordinator opens a case on the trailer and arranges an inspection.', related: ['Air brakes', 'DTC', 'Glad hands'] },
+  { term: 'CMMS', full: 'Computerized Maintenance Management System', cat: 'Documentation', def: 'Software used to manage maintenance activities — work orders, PM schedules, asset histories, parts and costs. Fleets often call it fleet maintenance software.', simple: 'The system where all maintenance records live.', example: 'Requiring system codes on every CMMS work order made repeat electrical failures visible.', related: ['Work order', 'PM', 'Telematics'] },
+  { term: 'CSA', full: 'Compliance, Safety, Accountability', cat: 'Regulatory', def: 'The FMCSA program that uses inspection, crash and investigation data to identify carriers for intervention. Data is organized into seven BASICs, including Vehicle Maintenance.', simple: 'The government’s safety scorecard for carriers.', example: 'Lighting violations from roadside inspections count toward the Vehicle Maintenance BASIC.', related: ['CVSA', 'FMCSA', 'OOS'] },
+  { term: 'CVSA', full: 'Commercial Vehicle Safety Alliance', cat: 'Regulatory', def: 'A nonprofit association of enforcement officials and industry that publishes the North American Standard inspection procedures, inspection levels and Out-of-Service Criteria.', simple: 'The group that defines how roadside inspections are done.', example: 'A Level II Walk-Around inspection follows the CVSA procedure.', related: ['OOS', 'CSA', 'DOT'] },
+  { term: 'OEM', full: 'Original Equipment Manufacturer', cat: 'Finance', def: 'The manufacturer of a vehicle or component, or parts made by or for them to original specification.', simple: 'Factory parts.', example: 'Warranty repairs usually require OEM parts installed at an authorized facility.', related: ['Remanufactured', 'Warranty', 'Parts'] },
+  { term: 'Remanufactured', full: 'Remanufactured (reman) parts', cat: 'Finance', def: 'Used components (cores) disassembled, cleaned, rebuilt and tested to specification, typically sold with a warranty and a core charge.', simple: 'Rebuilt parts with a warranty.', example: 'A reman turbo actuator in stock locally saved a day of downtime.', related: ['Core', 'OEM', 'Parts'] },
+  { term: 'Reorder point', full: 'Reorder point', cat: 'Finance', def: 'The stock level at which a part should be reordered: expected usage during the supplier lead time plus safety stock.', simple: 'When the shelf gets down to this number, order more.', example: 'Usage 0.5/day × 4 days lead time + 2 safety stock = reorder at 4.', related: ['Parts', 'Remanufactured'] },
+  { term: 'Pareto analysis', full: 'Pareto (80/20) analysis', cat: 'Diagnostics', def: 'Ranking causes by frequency or cost to find the "vital few" that account for most of the effect — often roughly 80% from 20% of causes.', simple: 'Find the few problems causing most of the pain.', example: 'Three causes produced about 80% of road calls, so RCA started there.', related: ['Root cause', 'MTBF'] },
+  { term: 'Accessorial', full: 'Accessorial charge', cat: 'Finance', def: 'A charge for a service beyond the basic pickup-to-delivery move, such as detention, layover, lumper, extra stops or tolls, billed under the terms of the rate confirmation or a written approval.', simple: 'An extra charge for extra work or waiting.', example: 'Detention of 2.5 hours at $50/hour was billed as a $125 accessorial.', related: ['Detention', 'Lumper', 'Rate confirmation'] },
+  { term: 'BOL', full: 'Bill of Lading', cat: 'Documentation', def: 'The shipping document issued at pickup that describes the freight, the shipper and consignee. It serves as a receipt for the goods and as a contract for their transportation.', simple: 'The paperwork that travels with the freight.', example: 'The driver checks the piece count against the BOL before leaving the shipper.', related: ['POD', 'Rate confirmation'] },
+  { term: 'Consignee', full: 'Consignee (receiver)', cat: 'Operations', def: 'The party to whom freight is delivered.', simple: 'Whoever receives the load.', example: 'The consignee signs the BOL at delivery, creating the proof of delivery.', related: ['Shipper', 'POD'] },
+  { term: 'Detention', full: 'Detention', cat: 'Finance', def: 'An accessorial charge for time a truck is held at a pickup or delivery beyond the agreed free time, billed at an agreed rate and supported by in/out times.', simple: 'Getting paid for waiting too long at a dock.', example: 'On site 4.5 h with 2 h free = 2.5 h billable.', related: ['Accessorial', 'Layover'] },
+  { term: 'Freight broker', full: 'Freight broker', cat: 'Operations', def: 'A licensed intermediary that arranges transportation of freight between shippers and motor carriers. Brokers do not haul the freight themselves.', simple: 'The middleman who matches loads with trucks.', example: 'On a brokered load, the carrier invoices the broker, not the shipper.', related: ['Shipper', 'Rate confirmation'] },
+  { term: 'Freight factoring', full: 'Freight factoring', cat: 'Finance', def: 'A financing arrangement in which a carrier sells its invoices to a factoring company for an advance, and the factoring company collects payment from the customer, charging a fee.', simple: 'Getting paid early on an invoice, for a fee.', example: 'A 3% fee on a $2,460 invoice is $73.80.', related: ['Net terms', 'Accessorial'] },
+  { term: 'Fuel surcharge', full: 'Fuel surcharge (FSC)', cat: 'Finance', def: 'A charge that adjusts freight rates for the cost of diesel fuel, expressed as a flat amount, a per-mile amount, or included in an all-in rate, as agreed.', simple: 'Extra pay to cover fuel prices.', example: 'The rate con listed a $250 flat fuel surcharge.', related: ['Rate confirmation', 'Accessorial'] },
+  { term: 'Layover', full: 'Layover', cat: 'Finance', def: 'An accessorial charge when a driver is held overnight or for a day because a load cannot be loaded or delivered as scheduled.', simple: 'Paid for a lost day waiting.', example: 'The receiver pushed the appointment a day; layover of $250 was approved.', related: ['Detention', 'Accessorial'] },
+  { term: 'Lumper', full: 'Lumper service', cat: 'Operations', def: 'A third-party crew that loads or unloads freight at a facility. Carriers often pay the lumper and bill the amount back with the receipt.', simple: 'Paid help to unload the truck.', example: 'The driver paid a $185 lumper and kept receipt #L-7731.', related: ['Accessorial', 'POD'] },
+  { term: 'Net terms', full: 'Net 15 / 30 / 45 / 60', cat: 'Finance', def: 'Payment terms stating the number of days until the full invoice amount is due, measured from the date specified in the agreement (often the invoice date or receipt of a complete invoice).', simple: 'How many days the customer has to pay.', example: 'An invoice dated 06/14 on Net 30 is due 07/14.', related: ['Freight factoring'] },
+  { term: 'OS&D', full: 'Overage, Shortage and Damage', cat: 'Documentation', def: 'Exceptions noted on delivery paperwork when freight received differs from the BOL or arrives damaged.', simple: 'Notes about missing, extra or damaged freight.', example: 'A POD noting "2 cartons short" may reduce payment or lead to a claim.', related: ['POD', 'BOL'] },
+  { term: 'POD', full: 'Proof of Delivery', cat: 'Documentation', def: 'Delivery documentation — typically the BOL signed by the receiver — showing that freight was delivered, with any exceptions noted.', simple: 'The signed paper that proves you delivered.', example: 'Most brokers will not pay an invoice without a signed POD.', related: ['BOL', 'OS&D'] },
+  { term: 'Rate confirmation', full: 'Rate confirmation (rate con)', cat: 'Documentation', def: 'A written agreement, usually from a broker to a carrier, confirming the rate, load details, stops, dates and accessorial terms for a specific load.', simple: 'The written deal for one load.', example: 'Every amount on the invoice should trace back to the rate con.', related: ['BOL', 'Accessorial', 'Freight broker'] },
+  { term: 'Shipper', full: 'Shipper', cat: 'Operations', def: 'The party that tenders freight for transportation — typically the owner or seller of the goods.', simple: 'The business sending the freight.', example: 'On a direct load, the carrier invoices the shipper.', related: ['Consignee', 'Freight broker'] },
+  { term: 'TMS', full: 'Transportation Management System', cat: 'Operations', def: 'Software used to plan, dispatch, track and bill freight shipments.', simple: 'The software that runs loads and billing.', example: 'The invoice was generated from the load record in the TMS.', related: ['CMMS', 'Rate confirmation'] },
+  { term: 'TONU', full: 'Truck Ordered Not Used', cat: 'Finance', def: 'An accessorial charge billed when a load is cancelled after the carrier has dispatched a truck for it.', simple: 'Paid something when a load is cancelled last-minute.', example: 'The shipper cancelled after the truck arrived; a $150 TONU per the rate con was billed.', related: ['Accessorial'] },
   { term: 'After-action review', full: 'After-action review (AAR)', cat: 'Operations', def: 'A structured, blame-free debrief held after an event to compare what was planned with what happened, understand why, and assign specific improvements.', simple: 'A short meeting to learn from what just happened.', example: 'After a cold-snap disruption, the AAR produced a winter-prep tracker with an owner and due date.', related: ['Root cause', 'Downtime'] },
   { term: 'ASC', full: 'Ammonia Slip Catalyst', cat: 'Emissions', def: 'A catalyst downstream of (or combined with) the SCR catalyst that oxidizes excess ammonia so it is not released from the exhaust.', simple: 'Cleans up leftover ammonia after the SCR.', example: 'A technician mentions the SCR/ASC module when discussing a NOx efficiency code.', related: ['SCR', 'DEF', 'Aftertreatment'] },
   { term: 'Budget variance', full: 'Budget variance', cat: 'Finance', def: 'The difference between actual spending and budgeted spending for a period, often also expressed as a percentage of budget.', simple: 'How far over or under budget you are — and why.', example: 'February ran 14% over budget due to two unplanned engine repairs.', related: ['CPM', 'Estimate'] },
@@ -2358,6 +3250,22 @@ const FLASHCARDS = [
   { deck: 'Processes', front: 'The four AAR questions', back: 'What was planned? What happened? Why the difference? What will we change (owner + date)?' },
   { deck: 'Processes', front: 'Warning devices after a highway stop (U.S.)', back: 'Hazard flashers immediately; warning devices within 10 minutes.' },
   { deck: 'Terminology', front: 'Budget vs forecast', back: 'Budget = the plan. Forecast = the plan updated with actuals and known upcoming events.' },
+  { deck: 'Processes', front: 'DVIR repair loop', back: 'Driver reports defect → repaired before operating (if safety-related) → repair certified → next driver reviews and signs.' },
+  { deck: 'Terminology', front: 'CVSA Level I vs II vs III', back: 'I: full inspection incl. under vehicle + driver. II: walk-around. III: driver-only.' },
+  { deck: 'Diagnostics', front: 'FMI 3–6 usually suggest…', back: 'An electrical circuit issue (voltage/current out of range, open or shorted circuit).' },
+  { deck: 'Components', front: '7-way connector: red wire', back: 'Stop (brake) lamps — a failure means no trailer brake lights.' },
+  { deck: 'Terminology', front: 'OEM vs aftermarket vs reman', back: 'OEM: factory spec. Aftermarket: third-party. Reman: rebuilt core with warranty + core charge.' },
+  { deck: 'Processes', front: 'Reorder point formula', back: 'Daily usage × lead time (days) + safety stock.' },
+  { deck: 'Processes', front: 'Alert tiers', back: 'Act now · act today · plan it · watch.' },
+  { deck: 'Terminology', front: 'Leading vs lagging indicator', back: 'Leading predicts (PM compliance, open defects). Lagging reports (road calls, CPM).' },
+  { deck: 'Terminology', front: 'Shipper vs broker vs carrier', back: 'Shipper sends the freight. Broker arranges transport (doesn’t haul). Carrier hauls it and issues the invoice.' },
+  { deck: 'Abbreviations', front: 'BOL / POD', back: 'Bill of Lading / Proof of Delivery.' },
+  { deck: 'Abbreviations', front: 'TONU', back: 'Truck Ordered Not Used — charge when a load is cancelled after dispatch.' },
+  { deck: 'Abbreviations', front: 'FSC', back: 'Fuel surcharge.' },
+  { deck: 'Processes', front: 'Detention calculation', back: '(Time on site − free time) × hourly rate. E.g., 4.5 h − 2 h = 2.5 h × $50 = $125.' },
+  { deck: 'Processes', front: 'Invoice packet', back: 'Invoice + rate confirmation + signed POD + support for every accessorial (receipts, in/out times).' },
+  { deck: 'Terminology', front: 'Net 30', back: 'Full payment due 30 days after the date the terms are measured from (often the invoice date).' },
+  { deck: 'Terminology', front: 'Freight factoring', back: 'Selling an invoice to a factoring company for a fast advance, minus a fee.' },
   // Terminology
   { deck: 'Terminology', front: 'Downtime', back: 'Time a unit is unavailable for work — from going down to returning to service.' },
   { deck: 'Terminology', front: 'Deadhead', back: 'Miles driven without a revenue load.' },
@@ -2903,7 +3811,7 @@ function infographicHTML(b) {
       const total = b.items.reduce((a, r) => a + r[1], 0); const R = 60; const C = 2 * Math.PI * R; let acc = 0;
       const segs = b.items.map((r, i) => { const len = (r[1] / total) * C; const s = `<circle class="ig-donut__seg" cx="80" cy="80" r="${R}" style="--len:${len.toFixed(2)};--c:${C.toFixed(2)};--i:${i};stroke:var(--ig-${(i % 6) + 1});stroke-dashoffset:${(-acc).toFixed(2)}"/>`; acc += len; return s; }).join('');
       inner = `<div class="ig-donut"><div class="ig-donut__chart"><svg viewBox="0 0 160 160" aria-hidden="true"><circle cx="80" cy="80" r="${R}" class="ig-donut__track"/>${segs}</svg><div class="ig-donut__center"><strong class="num">${esc(b.center || igFmt(total, b.fmt))}</strong><span>${esc(b.centerSub || 'total')}</span></div></div>
-        <ul class="ig-legend">${b.items.map((r, i) => `<li><i style="background:var(--ig-${(i % 6) + 1})"></i><span class="grow">${esc(r[0])}</span><strong class="num">${igFmt(r[1], b.fmt)}</strong><span class="muted num">${Math.round((r[1] / total) * 100)}%</span></li>`).join('')}</ul></div>`;
+        <ul class="ig-legend">${b.items.map((r, i) => `<li><i style="background:var(--ig-${(i % 6) + 1})"></i><span class="grow">${esc(r[0])}</span>${b.pctOnly ? '' : `<strong class="num">${igFmt(r[1], b.fmt, b.unit)}</strong>`}<span class="muted num">${Math.round((r[1] / total) * 100)}%</span></li>`).join('')}</ul></div>`;
       break;
     }
     case 'process':
@@ -2970,6 +3878,45 @@ function infographicHTML(b) {
     case 'formulas':
       inner = `<div class="ig-formulas">${b.items.map((f, i) => `<div class="ig-formula" style="--i:${i}"><span class="ig-formula__t">${esc(f.t)}</span><code class="ig-formula__f">${esc(f.f)}</code><span class="ig-formula__d">${esc(f.d)}</span></div>`).join('')}</div>`;
       break;
+    case 'cycle': {
+      const n = b.items.length; const R = 36; const step = 360 / n; const gap = step * 0.3; const mid = nextId('arr');
+      const pt = (deg) => { const a = (deg * Math.PI) / 180; return [50 + R * Math.cos(a), 50 + R * Math.sin(a)]; };
+      const arcs = b.items.map((_, i) => { const [x1, y1] = pt(-90 + i * step + gap); const [x2, y2] = pt(-90 + (i + 1) * step - gap); return `<path d="M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${R} ${R} 0 0 1 ${x2.toFixed(2)} ${y2.toFixed(2)}" marker-end="url(#${mid})"/>`; }).join('');
+      inner = `<div class="ig-hub ig-cycle"><svg class="ig-cycle__ring" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="${mid}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z"/></marker></defs>${arcs}</svg>
+        <div class="ig-hub__center"><span class="ig-hub__icon">${icon('rotate')}</span><strong>${esc(b.center || '')}</strong></div>
+        ${b.items.map((s, i) => { const [x, y] = pt(-90 + i * step); return `<div class="ig-hub__node" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;--i:${i}"><span class="ig-hub__icon">${icon(s.icon || 'check')}</span><strong>${esc(s.t)}</strong>${s.d ? `<span>${esc(s.d)}</span>` : ''}</div>`; }).join('')}</div>`;
+      break;
+    }
+    case 'waterfall': {
+      let run = 0;
+      const bars = b.items.map((it) => {
+        let lo, hi, tone, label;
+        if (it.type === 'start' || it.type === 'total') { lo = 0; hi = it.v; run = it.v; tone = it.tone || 'neutral-strong'; label = igFmt(it.v, b.fmt, b.unit); }
+        else { lo = Math.min(run, run + it.v); hi = Math.max(run, run + it.v); run += it.v; tone = it.tone || (it.v >= 0 ? 'critical' : 'success'); label = (it.v >= 0 ? '+' : '−') + igFmt(Math.abs(it.v), b.fmt, b.unit); }
+        return { lo, hi, tone, label, l: it.l, total: it.type === 'total' };
+      });
+      const max = Math.max(...bars.map((x) => x.hi)) * 1.12;
+      inner = `<div class="ig-wf" style="--n:${bars.length}">${bars.map((x, i) => `<div class="ig-wf__col ${x.total ? 'is-total' : ''}"><div class="ig-wf__area"><span class="ig-wf__bar ${toneCls(x.tone)}" style="bottom:${((x.lo / max) * 100).toFixed(2)}%;height:${Math.max(0.8, ((x.hi - x.lo) / max) * 100).toFixed(2)}%;--i:${i}"><em class="num">${esc(x.label)}</em></span></div><span class="ig-wf__l">${esc(x.l)}</span></div>`).join('')}</div>`;
+      break;
+    }
+    case 'heatmap': {
+      const vals = b.rows.flatMap((r) => r.v); const lo = b.min != null ? b.min : 0; const hi = b.max != null ? b.max : Math.max(...vals);
+      const cell = (v) => { const t = clamp((v - lo) / (hi - lo || 1), 0, 1); return `<td class="${t > 0.55 ? 'is-hot' : ''}" style="--t:${(t * 88).toFixed(0)}%">${esc(v)}</td>`; };
+      const lg = b.legend || ['Low', 'High'];
+      inner = `<div class="ig-heat-wrap"><table class="ig-heat ${toneCls(b.tone || 'info')}"><thead><tr><th></th>${b.cols.map((c) => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${b.rows.map((r, i) => `<tr style="--i:${i}"><th scope="row">${esc(r.l)}</th>${r.v.map(cell).join('')}</tr>`).join('')}</tbody></table></div>
+        <div class="ig-heat__legend ${toneCls(b.tone || 'info')}"><span>${esc(lg[0])}</span><i></i><span>${esc(lg[1])}</span></div>`;
+      break;
+    }
+    case 'ratings': {
+      const scale = b.scale || 5;
+      inner = `<div class="table-wrap ig-ratings"><table class="table"><thead><tr><th scope="col"><span class="sr-only">Criterion</span></th>${b.cols.map((c) => `<th scope="col" class="center">${esc(c)}</th>`).join('')}</tr></thead><tbody>${b.rows.map((r) => `<tr><th scope="row">${esc(r.l)}</th>${r.v.map((v) => `<td class="center"><span class="ig-dots" role="img" aria-label="${v} of ${scale}">${Array.from({ length: scale }, (_, k) => `<i class="${k < v ? 'on' : ''}"></i>`).join('')}</span></td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      if (!b.note && b.hint) b = Object.assign({}, b, { note: b.hint });
+      break;
+    }
+    case 'table':
+      inner = `<div class="table-wrap ig-table"><table class="table"><thead><tr>${b.head.map((h) => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${b.rows.map((r) => `<tr>${r.map((c, i) => (i === 0 ? `<td><strong>${inline(c)}</strong></td>` : `<td>${inline(c)}</td>`)).join('')}</tr>`).join('')}</tbody></table></div>`;
+      break;
+
     default: return '';
   }
   return `<figure class="ig ${cls}"><figcaption class="ig__head"><span class="ig__tag">${icon(b.icon || 'bar', 'icon--sm')} Infographic</span><span class="ig__title">${esc(b.title)}</span></figcaption>${inner}${b.note ? `<p class="ig__note">${icon('info', 'icon--sm')}<span>${inline(b.note)}</span></p>` : ''}</figure>`;
@@ -3092,18 +4039,96 @@ function viewReference() {
   const sections = [
     ['Triage & urgency', [REF.urgency, REF.lamps, REF.triage]],
     ['Calls & communication', [REF.intake, REF.update, REF.roadside, REF.ladder]],
-    ['Documentation & numbers', [REF.workorder, REF.kpis, REF.tireRules]]
+    ['Documentation & numbers', [REF.workorder, REF.kpis, REF.tireRules]],
+    ['Compliance, parts & diagnostics', [REF.dvir, REF.cvsa, REF.fmi, REF.pinout, REF.reorder]]
   ];
   const html = `<div class="page page--narrow ref-page">${pageHead({ eyebrow: `${icon('file', 'icon--sm')} Reference`, title: 'Quick Reference', text: 'The academy\'s most-used frameworks on one page — keep it open on your second screen or print it for your desk.', right: `<button type="button" class="btn" data-print>${icon('print')} Print cheat sheet</button>` })}
     <nav class="row row--wrap mb-6" aria-label="Jump to section">${sections.map(([t], i) => `<a class="chip" href="#ref-${i}" data-jump="ref-${i}">${esc(t)}</a>`).join('')}</nav>
-    ${sections.map(([t, blocks], i) => `<section class="ref-section" id="ref-${i}"><div class="section-head"><h2>${esc(t)}</h2></div><div class="stack">${blocks.map(infographicHTML).join('')}</div></section>`).join('')}</div>`;
+    ${sections.map(([t, blocks], i) => `<section class="ref-section" id="ref-${i}"><div class="section-head"><h2>${esc(t)}</h2></div><div class="stack">${blocks.map(renderBlock).join('')}</div></section>`).join('')}</div>`;
   return {
     html, title: 'Quick Reference', nav: 'reference', crumbs: [['Quick Reference']],
     after: (v) => {
       $$('[data-jump]', v).forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); document.getElementById(a.dataset.jump).scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth' }); }));
-      $('[data-print]', v).addEventListener('click', () => { $('#printRoot').innerHTML = `<div class="print-sheet"><h1>Maintenance Coordinator — Quick Reference</h1>${sections.map(([t, b]) => `<h2>${esc(t)}</h2>${b.map(infographicHTML).join('')}`).join('')}</div>`; window.print(); });
+      $('[data-print]', v).addEventListener('click', () => { $('#printRoot').innerHTML = `<div class="print-sheet"><h1>Maintenance Coordinator — Quick Reference</h1>${sections.map(([t, b]) => `<h2>${esc(t)}</h2>${b.map(renderBlock).join('')}`).join('')}</div>`; window.print(); });
     }
   };
+}
+
+/* ---------- Widget: trucking invoice builder ---------- */
+const INV_DOCS = [['ratecon', 'Rate confirmation', true], ['pod', 'Signed POD (BOL signed by receiver)', true], ['lumper', 'Lumper receipt #L-7731', true], ['times', 'Detention in/out times (on BOL)', true], ['fuel', 'Driver fuel receipts', false]];
+const INV_FIELDS = [['num', 'Invoice number', 'e.g., CFL-1047', 'text'], ['billto', 'Bill to (customer)', 'Who pays this invoice?', 'text'], ['load', 'Load / reference #', 'As shown on the rate con', 'text'],
+  ['linehaul', 'Linehaul ($)', '', 'number'], ['fsc', 'Fuel surcharge ($)', '', 'number'], ['detention', 'Detention ($)', 'Billable hours × rate', 'number'], ['lumper', 'Lumper ($)', '', 'number']];
+function invoiceWidgetHTML() {
+  return `<div class="card invb"><div class="card__head"><h3>${icon('file')} Invoice builder</h3><span class="small muted">Load NFB-448213</span></div>
+    <div class="card__body">
+      <div class="grid grid--2" style="gap:var(--sp-4)">
+        <div class="source-doc"><span class="source-doc__label">Rate confirmation</span>${esc(RATECON.source)}</div>
+        <div class="source-doc"><span class="source-doc__label">Delivery details</span>${esc(RATECON.delivery)}</div>
+      </div>
+      <div class="invb__grid mt-6">
+        <form class="invb__form" onsubmit="return false" aria-label="Invoice fields">
+          <div class="fields" style="margin-top:0">${INV_FIELDS.map(([k, l, ph, t]) => `<div class="field ${k === 'billto' ? 'field--full' : ''}"><label for="invb-${k}">${esc(l)}</label><div class="input-affix">${t === 'number' ? '<span class="pre">$</span>' : ''}<input class="input ${t === 'number' ? 'has-pre num' : ''}" id="invb-${k}" data-f="${k}" type="${t === 'number' ? 'number' : 'text'}" ${t === 'number' ? 'min="0" step="0.01" inputmode="decimal"' : ''} placeholder="${esc(ph)}" autocomplete="off"></div><span class="field__result" data-r="${k}" aria-live="polite"></span></div>`).join('')}</div>
+          <fieldset class="mt-4"><legend class="label mb-2">Attach supporting documents</legend><div class="opts">${INV_DOCS.map(([k, l]) => `<label class="opt" data-doc="${k}"><input type="checkbox" value="${k}"><span class="opt__box"><span class="opt__key" aria-hidden="true">${icon('check', 'icon--sm')}</span><span>${esc(l)}<span class="opt__why" hidden></span></span></span></label>`).join('')}</div></fieldset>
+          <div class="q__actions"><button type="button" class="btn btn--primary" data-invb-check>${icon('check')} Check invoice</button><button type="button" class="btn btn--ghost" data-invb-reset>${icon('rotate')} Start over</button></div>
+          <div data-invb-fb aria-live="polite"></div>
+        </form>
+        <div class="invb__preview" aria-label="Invoice preview" data-invb-preview></div>
+      </div>
+    </div></div>`;
+}
+function mountInvoiceWidget(el) {
+  const val = (k) => ($(`[data-f="${k}"]`, el).value || '').trim();
+  const num = (k) => Math.max(0, parseFloat(val(k)) || 0);
+  const preview = () => {
+    const lines = [['Linehaul', num('linehaul')], ['Fuel surcharge', num('fsc')], ['Detention', num('detention')], ['Lumper', num('lumper')]];
+    const total = lines.reduce((a, r) => a + r[1], 0);
+    const docs = $$('[data-doc] input:checked', el).map((i) => INV_DOCS.find((d) => d[0] === i.value)[1]);
+    $('[data-invb-preview]', el).innerHTML = `<div class="invb__doc">
+      <div class="invb__top"><div><strong>Crestline Freight Lines LLC</strong><span>100 Main St · Dallas, TX</span></div><div class="invb__title">INVOICE</div></div>
+      <dl class="invb__meta"><div><dt>Invoice #</dt><dd>${esc(val('num') || '—')}</dd></div><div><dt>Date</dt><dd>06/14</dd></div><div><dt>Terms</dt><dd>Net 30</dd></div><div><dt>Load #</dt><dd>${esc(val('load') || '—')}</dd></div></dl>
+      <p class="invb__bill"><span>Bill to</span>${esc(val('billto') || '—')}</p>
+      <p class="invb__route">Dallas, TX 06/12 → Atlanta, GA 06/13 · 781 mi</p>
+      <table class="invb__lines"><tbody>${lines.map(([l, v]) => `<tr><td>${l}</td><td class="num">${fmtMoney(v, 2)}</td></tr>`).join('')}</tbody><tfoot><tr><td>Total due</td><td class="num">${fmtMoney(total, 2)}</td></tr></tfoot></table>
+      <p class="invb__att"><span>Attachments</span>${docs.length ? docs.map(esc).join(' · ') : 'None yet'}</p></div>`;
+    return total;
+  };
+  el.addEventListener('input', preview);
+  el.addEventListener('change', preview);
+  $('[data-invb-check]', el).addEventListener('click', () => {
+    const a = RATECON.answer; const total = preview(); const issues = [];
+    const checks = {
+      num: [!!val('num'), 'Give the invoice a unique number.'],
+      billto: [val('billto').toLowerCase().includes(a.broker), 'Bill the broker (Northgate Freight Brokerage) — it\'s the customer on this load.'],
+      load: [val('load').toUpperCase().replace(/\s/g, '') === a.load, `Load # must match the rate con exactly: ${a.load}.`],
+      linehaul: [num('linehaul') === a.linehaul, 'Linehaul must match the rate con: $1,900.00.'],
+      fsc: [num('fsc') === a.fsc, 'Fuel surcharge per rate con: $250.00 flat.'],
+      detention: [num('detention') === a.detention, 'Detention: 06:40–11:10 = 4.5 h on site − 2 h free = 2.5 h × $50 = $125.00.'],
+      lumper: [num('lumper') === a.lumper, 'Lumper: $185.00 per the receipt.']
+    };
+    let ok = 0;
+    Object.entries(checks).forEach(([k, [pass, msg]]) => {
+      const inp = $(`[data-f="${k}"]`, el); const r = $(`[data-r="${k}"]`, el);
+      inp.classList.toggle('is-valid', pass); inp.classList.toggle('is-invalid', !pass);
+      r.className = `field__result ${pass ? 'ok' : 'no'}`; r.innerHTML = pass ? `${icon('check')} Correct` : `${icon('x')} ${esc(msg)}`;
+      if (pass) ok++; else issues.push(msg);
+    });
+    let docOk = 0;
+    $$('[data-doc]', el).forEach((lab) => {
+      const [, , need] = INV_DOCS.find((d) => d[0] === lab.dataset.doc); const on = $('input', lab).checked; const good = on === need;
+      lab.classList.remove('is-correct', 'is-wrong', 'is-missed');
+      if (on && need) lab.classList.add('is-correct'); else if (on && !need) lab.classList.add('is-wrong'); else if (!on && need) lab.classList.add('is-missed');
+      const w = $('.opt__why', lab); w.hidden = good; w.textContent = need ? 'Required to support this invoice.' : 'Not needed — fuel surcharge comes from the rate con.';
+      if (good) docOk++; else issues.push(need ? `Attach: ${lab.textContent.trim()}` : 'Remove the fuel receipts — not needed.');
+    });
+    const score = (ok + docOk) / (Object.keys(checks).length + INV_DOCS.length);
+    const ready = issues.length === 0 && Math.abs(total - a.total) < 0.005;
+    if (ready) { state.exercises['inv-builder'] = 1; save(); }
+    $('[data-invb-fb]', el).innerHTML = ready
+      ? `<div class="feedback feedback--correct">${icon('check-circle')}<div><strong>Ready to submit — $2,460.00</strong><p>Every line traces to the rate con or a supporting document, the reference numbers match, and the packet is complete.</p></div></div>`
+      : `<div class="feedback feedback--${score >= 0.5 ? 'partial' : 'wrong'}">${icon('info')}<div><strong>Not ready yet — ${issues.length} issue${issues.length === 1 ? '' : 's'} to fix</strong><p>Correct the highlighted items and check again. Expected total: $2,460.00; yours: ${fmtMoney(total, 2)}.</p></div></div>`;
+  });
+  $('[data-invb-reset]', el).addEventListener('click', () => { el.innerHTML = invoiceWidgetHTML(); mountInvoiceWidget(el); });
+  preview();
 }
 
 /* ===========================================================================
@@ -3407,6 +4432,12 @@ function renderBlock(b) {
       ${b.tabs.map((t, i) => `<div class="tabpanel prose" role="tabpanel" id="${id}-p${i}" aria-labelledby="${id}-t${i}" ${i ? 'hidden' : ''}>${renderBlocks(t.body)}</div>`).join('')}</div>`;
   }
   if (b.ig) return infographicHTML(b);
+  if (b.industry) {
+    const x = b.industry;
+    return `<aside class="industry" aria-label="Industry example: ${esc(x.name)}"><div class="industry__head"><span class="industry__tag">${icon('pin', 'icon--sm')} Industry example</span><span class="badge badge--outline">${esc(x.cat)}</span></div>`
+      + `<h4>${esc(x.name)}</h4><p>${inline(x.text)}</p>${x.relevance ? `<p class="industry__why"><strong>Why it matters here:</strong> ${inline(x.relevance)}</p>` : ''}`
+      + `<div class="industry__foot"><a class="industry__link" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">Official website ${icon('external', 'icon--sm')}<span class="sr-only"> (opens in a new tab)</span></a><span class="industry__note">Referenced as an example — not an endorsement or affiliation.</span></div></aside>`;
+  }
   if (b.widget) return `<div class="widget" data-widget="${esc(b.widget)}"></div>`;
   if (b.exercise) return exerciseHTML(b.exercise, { key: b.key });
   return '';
@@ -3909,8 +4940,9 @@ function viewLesson(tid, mid, lid) {
   const pr = l.practical || {};
   const exBlock = pr.exercise ? exerciseHTML(pr.exercise, { key: 'ex:' + key, title: pr.title }) : '';
   const hasNotes = !!(l.tips || l.mistakes);
+  const deepHTML = l.deep ? `<section class="lesson-section" id="sec-deep"><h2><span class="sec-ico">${icon('layers')}</span>Deep dive</h2><p class="muted mb-4">Go further — optional in-depth material for this lesson.</p>${renderBlock({ tabs: l.deep.map((d) => ({ label: d.title, body: d.blocks })) })}</section>` : '';
   const sections = [
-    ['objectives', 'Objectives'], ['explanation', 'Explanation'], ['example', 'Real-world example'], ['practical', 'Practical example'], ...(hasNotes ? [['notes', 'Field notes']] : []), ['check', 'Knowledge check'], ['takeaways', 'Key takeaways']
+    ['objectives', 'Objectives'], ['explanation', 'Explanation'], ...(l.deep ? [['deep', 'Deep dive']] : []), ['example', 'Real-world example'], ['practical', 'Practical example'], ...(hasNotes ? [['notes', 'Field notes']] : []), ['check', 'Knowledge check'], ['takeaways', 'Key takeaways']
   ];
   const notesHTML = hasNotes ? `<section class="lesson-section" id="sec-notes"><h2><span class="sec-ico">${icon('bulb')}</span>Field notes</h2><div class="compare">${l.tips ? `<div class="compare__col compare__col--yes"><h4>${icon('bulb')} Pro tips</h4><ul>${l.tips.map((i) => `<li>${icon('check')}<span>${inline(i)}</span></li>`).join('')}</ul></div>` : ''}${l.mistakes ? `<div class="compare__col compare__col--no"><h4>${icon('alert')} Common mistakes</h4><ul>${l.mistakes.map((i) => `<li>${icon('x')}<span>${inline(i)}</span></li>`).join('')}</ul></div>` : ''}</div></section>` : '';
   const nextHref = nextIsQuiz ? `#/quiz/${t.id}/${m.id}` : lessonHref(next);
@@ -3938,6 +4970,7 @@ function viewLesson(tid, mid, lid) {
 
       <section class="lesson-section" id="sec-explanation"><h2><span class="sec-ico">${icon('book')}</span>Explanation</h2><div class="prose">${renderBlocks(l.body)}</div></section>
 
+      ${deepHTML}
       <section class="lesson-section" id="sec-example"><h2><span class="sec-ico">${icon('truck')}</span>Real-world example</h2>
         <div class="example-card"><span class="example-card__tag">${icon('pin')} In the field</span><h3>${esc(l.example.title)}</h3><p>${inline(l.example.text)}</p></div></section>
 
@@ -4881,6 +5914,7 @@ function mountWidgets(root) {
       else if (w === 'downtimeStack') { el.innerHTML = downtimeStackHTML(); mountDowntimeStack(el); }
       else if (w === 'lifecycle') { el.innerHTML = lifecycleHTML(); mountLifecycle(el); }
       else if (w === 'kpi') { el.innerHTML = kpiHTML(); mountKpi(el); }
+      else if (w === 'invoice') { el.innerHTML = invoiceWidgetHTML(); mountInvoiceWidget(el); }
       else if (w === 'gauges') { el.innerHTML = gaugesHTML(); mountGauges(el); }
       else if (w === 'tires') { el.innerHTML = tiresHTML(); mountTires(el); }
       else if (w === 'exhaust') { el.innerHTML = exhaustHTML(); mountExhaust(el); }
