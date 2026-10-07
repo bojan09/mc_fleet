@@ -3555,6 +3555,875 @@ const LESSON_MOVES = {
   'advanced.m6.l3': 'operations.m1.l2',
   'beginner.m10': 'operations.m2'
 };
+/* Photo sources for the Visual Library — all from Wikimedia Commons under free licenses.
+   Each entry keeps the author, license and file page for attribution. */
+const LIB_PHOTOS = {
+ "dryvan": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/2008-08-02_UPS_long_trailer_1.jpg/960px-2008-08-02_UPS_long_trailer_1.jpg",
+  "w": 960,
+  "h": 640,
+  "page": "https://commons.wikimedia.org/wiki/File:2008-08-02_UPS_long_trailer_1.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "Ildar Sagdejev (Specious)"
+ },
+ "daycab": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/2024_Mack_Anthem_6x4_tractor_%28Day_Cab%29_in_Light_Blue%2C_front_right.jpg/960px-2024_Mack_Anthem_6x4_tractor_%28Day_Cab%29_in_Light_Blue%2C_front_right.jpg",
+  "w": 960,
+  "h": 765,
+  "page": "https://commons.wikimedia.org/wiki/File:2024_Mack_Anthem_6x4_tractor_(Day_Cab)_in_Light_Blue,_front_right.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Mr.choppers"
+ },
+ "yard": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Capacity_Yard_Truck.jpg",
+  "w": 960,
+  "h": 641,
+  "page": "https://commons.wikimedia.org/wiki/File:Capacity_Yard_Truck.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "REV Group"
+ },
+ "clutch": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Clutchdisc.jpg",
+  "w": 960,
+  "h": 1067,
+  "page": "https://commons.wikimedia.org/wiki/File:Clutchdisc.jpg",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Sonett72"
+ },
+ "container": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/d/df/Container_01_KMJ.jpg",
+  "w": 960,
+  "h": 735,
+  "page": "https://commons.wikimedia.org/wiki/File:Container_01_KMJ.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "KMJ at German Wikipedia"
+ },
+ "chassis": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Container_chassis_8.webp/960px-Container_chassis_8.webp",
+  "w": 960,
+  "h": 693,
+  "page": "https://commons.wikimedia.org/wiki/File:Container_chassis_8.webp",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "author": "Wikideas1"
+ },
+ "engine": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Cummins_ISX_600_engine.jpg/960px-Cummins_ISX_600_engine.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Cummins_ISX_600_engine.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Panoha"
+ },
+ "dolly": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Dolly_trailer.jpg/960px-Dolly_trailer.jpg",
+  "w": 960,
+  "h": 465,
+  "page": "https://commons.wikimedia.org/wiki/File:Dolly_trailer.jpg",
+  "license": "CC BY-SA 2.5",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+  "author": "Teppo Lainio"
+ },
+ "transmission": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Eaton_Autoshift.jpg/960px-Eaton_Autoshift.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Eaton_Autoshift.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Panoha"
+ },
+ "tow": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Exercise-_Aw-R-Go%2C_Heavy_Wrecker_%288411431%29.jpg/960px-Exercise-_Aw-R-Go%2C_Heavy_Wrecker_%288411431%29.jpg",
+  "w": 960,
+  "h": 640,
+  "page": "https://commons.wikimedia.org/wiki/File:Exercise-_Aw-R-Go,_Heavy_Wrecker_(8411431).jpg",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "U.S. Air Force"
+ },
+ "reefer": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/G-3_Resources_LLC_Truck.jpg/960px-G-3_Resources_LLC_Truck.jpg",
+  "w": 960,
+  "h": 540,
+  "page": "https://commons.wikimedia.org/wiki/File:G-3_Resources_LLC_Truck.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "JardonB"
+ },
+ "rgn": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Globe_Trailers_detachable_gooseneck_trailer.jpg/960px-Globe_Trailers_detachable_gooseneck_trailer.jpg",
+  "w": 960,
+  "h": 443,
+  "page": "https://commons.wikimedia.org/wiki/File:Globe_Trailers_detachable_gooseneck_trailer.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Leighketchum"
+ },
+ "straight": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/ISUZU_ELF%2C_6th_Gen%2C_Hi-cab_White_Box_truck.jpg/960px-ISUZU_ELF%2C_6th_Gen%2C_Hi-cab_White_Box_truck.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:ISUZU_ELF,_6th_Gen,_Hi-cab_White_Box_truck.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Mj-bird"
+ },
+ "liftgate": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Lastbil_med_lift.JPG/960px-Lastbil_med_lift.JPG",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Lastbil_med_lift.JPG",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Unknown author"
+ },
+ "tanker": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Loves_Freightliner_tanker_truck%2C_southern_Oklahoma.jpg/960px-Loves_Freightliner_tanker_truck%2C_southern_Oklahoma.jpg",
+  "w": 960,
+  "h": 562,
+  "page": "https://commons.wikimedia.org/wiki/File:Loves_Freightliner_tanker_truck,_southern_Oklahoma.jpg",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "author": "Greg Goebel from Loveland CO, USA"
+ },
+ "sleeper": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Mack_Vision_427_sleeper_cab_truck.jpg/960px-Mack_Vision_427_sleeper_cab_truck.jpg",
+  "w": 960,
+  "h": 609,
+  "page": "https://commons.wikimedia.org/wiki/File:Mack_Vision_427_sleeper_cab_truck.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Mr.choppers"
+ },
+ "dock": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Modern_loading_dock.jpg/960px-Modern_loading_dock.jpg",
+  "w": 960,
+  "h": 776,
+  "page": "https://commons.wikimedia.org/wiki/File:Modern_loading_dock.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "Mark LS"
+ },
+ "tractor": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Peterbilt_truck_6.jpg/960px-Peterbilt_truck_6.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Peterbilt_truck_6.jpg",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "author": "Mahanga"
+ },
+ "eld": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/Qualcomm_EOBR_model_MCP110_September_2011.png/960px-Qualcomm_EOBR_model_MCP110_September_2011.png",
+  "w": 960,
+  "h": 541,
+  "page": "https://commons.wikimedia.org/wiki/File:Qualcomm_EOBR_model_MCP110_September_2011.png",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Semi Sam"
+ },
+ "reeferunit": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Thermo_King_semi-trailer_refrigeration_unit.jpg/960px-Thermo_King_semi-trailer_refrigeration_unit.jpg",
+  "w": 960,
+  "h": 1551,
+  "page": "https://commons.wikimedia.org/wiki/File:Thermo_King_semi-trailer_refrigeration_unit.jpg",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "author": "Greg Goebel from Loveland CO, USA"
+ },
+ "flatbed": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Tire_Transport_Truck_%2846038169192%29.jpg/960px-Tire_Transport_Truck_%2846038169192%29.jpg",
+  "w": 960,
+  "h": 639,
+  "page": "https://commons.wikimedia.org/wiki/File:Tire_Transport_Truck_(46038169192).jpg",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "author": "Chris Hunkeler from Carlsbad, California, USA"
+ },
+ "apu": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/0/05/TriPacAPU.jpg",
+  "w": 960,
+  "h": 960,
+  "page": "https://commons.wikimedia.org/wiki/File:TriPacAPU.jpg",
+  "license": "GFDL",
+  "licenseUrl": "http://www.gnu.org/copyleft/fdl.html",
+  "author": "Lpimlott at English Wikipedia"
+ },
+ "triangle": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Triangle_de_pr%C3%A9signalisation.JPG/960px-Triangle_de_pr%C3%A9signalisation.JPG",
+  "w": 960,
+  "h": 639,
+  "page": "https://commons.wikimedia.org/wiki/File:Triangle_de_pr%C3%A9signalisation.JPG",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Roulex 45"
+ },
+ "turbo": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Turbocharger_Animation_by_Tyroola.gif/500px-Turbocharger_Animation_by_Tyroola.gif",
+  "w": 960,
+  "h": 905,
+  "page": "https://commons.wikimedia.org/wiki/File:Turbocharger_Animation_by_Tyroola.gif",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "PatriciaWrites"
+ },
+ "dpf": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/412_DSP_Transportation_233_-_DPLA_-_f9cee0a0b307aa1e63acc0e67b6a339c.jpg/960px-412_DSP_Transportation_233_-_DPLA_-_f9cee0a0b307aa1e63acc0e67b6a339c.jpg",
+  "w": 960,
+  "h": 638,
+  "page": "https://commons.wikimedia.org/wiki/File:412_DSP_Transportation_233_-_DPLA_-_f9cee0a0b307aa1e63acc0e67b6a339c.jpg",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "U.S. Environmental Protection Agency"
+ },
+ "airtanks": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/A_truck_chassis_section.jpg/960px-A_truck_chassis_section.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:A_truck_chassis_section.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Panoha"
+ },
+ "airdisc": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Air_disc_brake.jpg/960px-Air_disc_brake.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Air_disc_brake.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "Panoha"
+ },
+ "ecm": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/An_ECM_from_a_1996_Chevrolet_Beretta-_2013-10-24_23-13.jpg/960px-An_ECM_from_a_1996_Chevrolet_Beretta-_2013-10-24_23-13.jpg",
+  "w": 960,
+  "h": 540,
+  "page": "https://commons.wikimedia.org/wiki/File:An_ECM_from_a_1996_Chevrolet_Beretta-_2013-10-24_23-13.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Mgiardina09"
+ },
+ "radiator": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Automobile_radiator.jpg",
+  "w": 960,
+  "h": 1089,
+  "page": "https://commons.wikimedia.org/wiki/File:Automobile_radiator.jpg",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Unknown author"
+ },
+ "starter": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Automobile_starter.JPG/960px-Automobile_starter.JPG",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Automobile_starter.JPG",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "Willdre"
+ },
+ "alternator": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Automotive_alternator.jpg/960px-Automotive_alternator.jpg",
+  "w": 960,
+  "h": 726,
+  "page": "https://commons.wikimedia.org/wiki/File:Automotive_alternator.jpg",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Pentti Immonen"
+ },
+ "differential": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/BAUMA_2004_ZF_Differentialgetriebe.jpg/960px-BAUMA_2004_ZF_Differentialgetriebe.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:BAUMA_2004_ZF_Differentialgetriebe.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Aconcagua (talk)"
+ },
+ "gladhands": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Back_of_FMV2Mk2_cabin.JPG/960px-Back_of_FMV2Mk2_cabin.JPG",
+  "w": 960,
+  "h": 1280,
+  "page": "https://commons.wikimedia.org/wiki/File:Back_of_FMV2Mk2_cabin.JPG",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Panoha"
+ },
+ "belt": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Belt_drive_systen_01.JPG/960px-Belt_drive_systen_01.JPG",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Belt_drive_systen_01.JPG",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Miya.m"
+ },
+ "driveshaft": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Cardan_Shaft.jpg/960px-Cardan_Shaft.jpg",
+  "w": 960,
+  "h": 798,
+  "page": "https://commons.wikimedia.org/wiki/File:Cardan_Shaft.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "IP83"
+ },
+ "airdryer": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Electronic_air_dryer.jpg/960px-Electronic_air_dryer.jpg",
+  "w": 960,
+  "h": 1280,
+  "page": "https://commons.wikimedia.org/wiki/File:Electronic_air_dryer.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "Panoha"
+ },
+ "wheel": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Estados_Unidos%2C_camiones_1989_17.jpg",
+  "w": 960,
+  "h": 1452,
+  "page": "https://commons.wikimedia.org/wiki/File:Estados_Unidos,_camiones_1989_17.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "LBM1948"
+ },
+ "leafspring": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/6/63/Leafs1.jpg",
+  "w": 960,
+  "h": 678,
+  "page": "https://commons.wikimedia.org/wiki/File:Leafs1.jpg",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Jim Gill"
+ },
+ "tire": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/Lkw_Reifenprofil_nachschneiden.jpg/960px-Lkw_Reifenprofil_nachschneiden.jpg",
+  "w": 960,
+  "h": 733,
+  "page": "https://commons.wikimedia.org/wiki/File:Lkw_Reifenprofil_nachschneiden.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "TireWorld"
+ },
+ "battery": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Photo-CarBattery.jpg/960px-Photo-CarBattery.jpg",
+  "w": 960,
+  "h": 918,
+  "page": "https://commons.wikimedia.org/wiki/File:Photo-CarBattery.jpg",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Unknown author"
+ },
+ "airspring": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Pneumatic_spring.JPG/960px-Pneumatic_spring.JPG",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Pneumatic_spring.JPG",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "author": "Bongoman"
+ },
+ "steering": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/0/0c/RecirculatingBall.png",
+  "w": 960,
+  "h": 1156,
+  "page": "https://commons.wikimedia.org/wiki/File:RecirculatingBall.png",
+  "license": "Public domain",
+  "licenseUrl": "",
+  "author": "Kivaan"
+ },
+ "fifthwheel": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/6/65/Sattelkupplung.JPG",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Sattelkupplung.JPG",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "Unknown author"
+ },
+ "chamber": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Spring_brake_air_cylinder.jpg/960px-Spring_brake_air_cylinder.jpg",
+  "w": 960,
+  "h": 1280,
+  "page": "https://commons.wikimedia.org/wiki/File:Spring_brake_air_cylinder.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "Panoha"
+ },
+ "def": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Truck_AdBlue_tank.jpg/960px-Truck_AdBlue_tank.jpg",
+  "w": 960,
+  "h": 1440,
+  "page": "https://commons.wikimedia.org/wiki/File:Truck_AdBlue_tank.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "KaiBorgeest"
+ },
+ "compressor": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Truck_air_compressor.jpg/960px-Truck_air_compressor.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Truck_air_compressor.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "Panoha"
+ },
+ "injector": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Unit_injector_early.jpg/960px-Unit_injector_early.jpg",
+  "w": 960,
+  "h": 1280,
+  "page": "https://commons.wikimedia.org/wiki/File:Unit_injector_early.jpg",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "author": "Panoha"
+ },
+ "doubles": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/UPS_Freight_truck%2C_Motor_Cargo_%26_Overnite_trailers.jpg/960px-UPS_Freight_truck%2C_Motor_Cargo_%26_Overnite_trailers.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:UPS_Freight_truck,_Motor_Cargo_%26_Overnite_trailers.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "Xnatedawgx"
+ },
+ "tandem": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Semi-trailer_Groenewegen%2C_twin_tires%2C_suspension_IMG_20211110_153847.jpg/960px-Semi-trailer_Groenewegen%2C_twin_tires%2C_suspension_IMG_20211110_153847.jpg",
+  "w": 960,
+  "h": 720,
+  "page": "https://commons.wikimedia.org/wiki/File:Semi-trailer_Groenewegen,_twin_tires,_suspension_IMG_20211110_153847.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "author": "Bertux"
+ }
+};
+
+/* ---------------------------------------------------------------------------
+   CONTENT — Vehicles & Parts Visual Library
+   One entry per vehicle, trailer, piece of equipment or part the curriculum
+   discusses. `photo` keys LIB_PHOTOS (real photographs, Wikimedia Commons);
+   `art` keys the academy's own schematic illustrations (ART), with an
+   optional `pin` marking the part. `terms` are glossary terms that open this
+   entry's picture when tapped in a lesson. `lessons` are lesson keys.
+   Specs are kept general on purpose — makes and models differ.
+   --------------------------------------------------------------------------- */
+const LIB_CATS = [
+  ['vehicles', 'Vehicles', 'truck'],
+  ['trailers', 'Trailers', 'layers'],
+  ['equipment', 'Equipment', 'clipboard'],
+  ['parts', 'Parts & components', 'wrench']
+];
+const LIB_GROUPS = ['Engine & drivetrain', 'Brakes & air system', 'Tires, wheels & suspension', 'Fuel, exhaust & aftertreatment', 'Electrical & cooling', 'Coupling & trailer parts'];
+
+const LIBRARY = [
+  /* ---------------- Vehicles ---------------- */
+  { id: 'tractor', name: 'Tractor (semi truck)', cat: 'vehicles', photo: 'tractor', art: 'sleeper', alt: 'A conventional semi tractor with a sleeper cab',
+    short: 'The power unit that pulls a separate trailer.',
+    what: 'A tractor — often called a semi truck or power unit — has the engine, cab, steering and drive axles, but no cargo space of its own. It pulls a semi-trailer that rests on its fifth wheel.',
+    does: 'Provides the power, steering and braking control for the whole combination. Its air system also feeds the trailer\'s brakes, and its electrical system powers the trailer\'s lights.',
+    where: 'Tractors are the center of most fleets. Because the tractor and trailer are separate units, a broken tractor can sometimes be replaced by another tractor (a power swap) so the loaded trailer keeps moving.',
+    keys: ['A tractor and its trailer have separate unit numbers and separate repair histories.', 'Configurations are written like 6x4: wheel positions × driven positions.', 'Comes as a day cab (no bed) or a sleeper (with a bed).'],
+    lessons: ['beginner.m1.l1', 'beginner.m3.l4', 'beginner.m3.l1'], related: ['daycab', 'sleeper', 'fifthwheel', 'dryvan'], terms: [] },
+  { id: 'daycab', name: 'Day cab tractor', cat: 'vehicles', photo: 'daycab', art: 'daycab', alt: 'A day cab tractor with no sleeper compartment behind the cab',
+    short: 'A tractor with no sleeping compartment.',
+    what: 'A day cab is a tractor whose cab ends right behind the seats — there\'s no sleeper berth.',
+    does: 'Pulls trailers on work where the driver gets home at the end of the shift. The shorter cab is lighter and easier to maneuver.',
+    where: 'Local and regional delivery, LTL pickup and delivery, port and rail drayage.',
+    keys: ['Lots of stops means more wear on brakes, clutch or transmission and starters.', 'Frequent coupling and uncoupling wears the fifth wheel and glad hands.'],
+    lessons: ['beginner.m3.l4', 'beginner.m1.l1'], related: ['tractor', 'sleeper', 'yard'], terms: ['Day cab'] },
+  { id: 'sleeper', name: 'Sleeper tractor', cat: 'vehicles', photo: 'sleeper', art: 'sleeper', alt: 'A tractor with a sleeper compartment behind the cab',
+    short: 'A tractor with a bed behind the seats.',
+    what: 'A sleeper tractor has a sleeper berth — a compartment with a bed — built behind the driver\'s seats.',
+    does: 'Lets drivers take their required rest on the truck during multi-day trips.',
+    where: 'Long-haul, over-the-road (OTR) freight.',
+    keys: ['The cab is the driver\'s living space, so heating, A/C and sleeper comfort items matter for the trip.', 'Many sleepers carry an APU or other idle-reduction system.', 'Long highway miles mean mileage-based PM schedules.'],
+    lessons: ['beginner.m3.l4', 'beginner.m1.l1'], related: ['tractor', 'daycab', 'apu'], terms: ['Sleeper cab'] },
+  { id: 'straight', name: 'Straight truck (box truck)', cat: 'vehicles', photo: 'straight', art: 'straight', alt: 'A box truck with the cargo body mounted on the same chassis as the cab',
+    short: 'Cab and cargo body on one chassis.',
+    what: 'A straight truck has the cab and the cargo body mounted on the same frame. There is no separate trailer to unhook.',
+    does: 'Carries freight on its own chassis — often with a liftgate for deliveries where there is no loading dock.',
+    where: 'Local delivery, moving, rental fleets and last-mile work.',
+    keys: ['A Class B CDL is required when the GVWR is 26,001 lb or more.', 'If it breaks down, the cargo can\'t be moved by swapping tractors — it has to be transloaded or wait for the repair.'],
+    lessons: ['beginner.m3.l4'], related: ['liftgate', 'tractor', 'dock'], terms: ['Straight truck'] },
+  { id: 'yard', name: 'Yard tractor (spotter)', cat: 'vehicles', photo: 'yard', art: 'yard', alt: 'A yard tractor with a single-person cab and a lifting fifth wheel',
+    short: 'A short tractor that moves trailers around a yard.',
+    what: 'A yard tractor — also called a terminal tractor, spotter or yard dog — is a small tractor built only for moving trailers short distances.',
+    does: 'Its hydraulic fifth wheel lifts the trailer\'s front, so the driver can move a trailer without cranking up the landing gear.',
+    where: 'Distribution centers, ports, rail yards and carrier terminals.',
+    keys: ['Often used only on private property.', 'Runs many engine hours but few miles — PMs are usually based on hours.'],
+    lessons: ['beginner.m3.l4'], related: ['tractor', 'fifthwheel', 'landinggear'], terms: [] },
+  { id: 'tow', name: 'Heavy-duty tow truck (wrecker)', cat: 'vehicles', photo: 'tow', alt: 'A heavy wrecker towing a tractor',
+    short: 'Recovers and tows disabled heavy trucks.',
+    what: 'A heavy-duty wrecker is a tow truck built to lift and tow tractors, trailers and other heavy vehicles. Light-duty tow trucks can\'t do this safely.',
+    does: 'Moves a disabled truck to a shop, or recovers a vehicle that has left the road.',
+    where: 'Used when a repair can\'t be done roadside or the vehicle isn\'t safe to drive.',
+    keys: ['Tow cost depends on distance, equipment size and recovery work.', 'Towing a loaded trailer is very different from towing a bobtail tractor — tell the tow company exactly what\'s being moved.'],
+    lessons: ['advanced.m4.l2', 'beginner.m5.l2'], related: ['tractor', 'dryvan'], terms: ['Towing'] },
+
+  /* ---------------- Trailers ---------------- */
+  { id: 'dryvan', name: 'Dry van trailer', cat: 'trailers', photo: 'dryvan', art: 'dryvan', alt: 'A 53-foot dry van semi-trailer parked at a facility',
+    short: 'An enclosed box trailer with no temperature control.',
+    what: 'The most common trailer in U.S. truckload freight: an enclosed box, commonly 53 ft long and 102 in wide.',
+    does: 'Protects palletized and boxed freight from weather and theft.',
+    where: 'Retail, packaged goods, paper and general freight — truckload and LTL.',
+    keys: ['Common lengths: 53 ft, 48 ft and 28 ft "pups".', 'Watch doors and seals, floor and roof damage, lights, tires, brakes and tandem slider pins.'],
+    lessons: ['beginner.m3.l4', 'beginner.m3.l2', 'beginner.m1.l3'], related: ['reefer', 'tractor', 'landinggear', 'kingpin', 'tandem'], terms: ['Dry van'] },
+  { id: 'reefer', name: 'Reefer trailer', cat: 'trailers', photo: 'reefer', art: 'reefer', alt: 'A tractor pulling a refrigerated trailer with a refrigeration unit on the front wall',
+    short: 'An insulated trailer with its own refrigeration unit.',
+    what: 'A refrigerated ("reefer") trailer is an insulated box with a refrigeration unit mounted on the front wall.',
+    does: 'Keeps cargo at the temperature the shipper sets — cold, frozen or heated.',
+    where: 'Food, pharmaceuticals, flowers and other temperature-sensitive freight.',
+    keys: ['Tracked by trailer miles and by the reefer unit\'s own engine hours.', 'A reefer failure with cargo aboard is time-critical.', 'Unit repairs often need a refrigeration technician, not a trailer shop.'],
+    lessons: ['beginner.m3.l4', 'beginner.m1.l3', 'beginner.m5.l2'], related: ['reeferunit', 'dryvan', 'tractor'], terms: ['Reefer'] },
+  { id: 'flatbed', name: 'Flatbed trailer', cat: 'trailers', photo: 'flatbed', art: 'flatbed', alt: 'A tractor pulling a flatbed trailer loaded with large tires',
+    short: 'An open deck loaded from the sides or top.',
+    what: 'A flatbed is an open trailer deck with no walls or roof, commonly 48 or 53 ft long.',
+    does: 'Carries cargo that is loaded by forklift or crane from the sides or top, secured with straps, chains and tarps.',
+    where: 'Lumber, steel, pipe, building materials and machinery.',
+    keys: ['Cargo securement rules are in 49 CFR 393 Subpart I.', 'Watch deck boards, winches, stake pockets and worn straps.'],
+    lessons: ['beginner.m3.l4', 'beginner.m1.l3'], related: ['stepdeck', 'rgn', 'tractor'], terms: ['Flatbed'] },
+  { id: 'stepdeck', name: 'Step deck trailer', cat: 'trailers', art: 'stepdeck', alt: 'Illustration of a step deck trailer with a short upper deck and a lower main deck',
+    short: 'A flatbed with a lower main deck for taller cargo.',
+    what: 'A step deck (drop deck) has a short upper deck over the kingpin and a lower main deck behind it.',
+    does: 'The lower deck lets taller cargo fit under the height limit than a standard flatbed allows.',
+    where: 'Machinery and tall loads that would be over height on a flatbed.',
+    keys: ['Often runs smaller low-profile tires — get the exact tire size on every tire call.'],
+    lessons: ['beginner.m3.l4'], related: ['flatbed', 'rgn', 'tire'], terms: ['Step deck'] },
+  { id: 'rgn', name: 'RGN / lowboy trailer', cat: 'trailers', photo: 'rgn', art: 'rgn', alt: 'A detachable gooseneck lowboy trailer carrying an excavator',
+    short: 'A very low trailer for heavy equipment.',
+    what: 'A lowboy has a deck that sits very low between the gooseneck and the rear axles. On a removable gooseneck (RGN) trailer the front detaches so equipment can drive on.',
+    does: 'Carries the tallest and heaviest equipment while staying as low as possible.',
+    where: 'Construction and mining equipment, cranes and large industrial loads.',
+    keys: ['Loads are often oversize or overweight and move under state permits with route and time conditions.'],
+    lessons: ['beginner.m3.l4', 'beginner.m1.l3'], related: ['stepdeck', 'flatbed'], terms: ['RGN', 'Oversize load'] },
+  { id: 'tanker', name: 'Tanker trailer', cat: 'trailers', photo: 'tanker', art: 'tanker', alt: 'A tractor pulling a tank trailer',
+    short: 'A tank that carries liquids, gases or dry bulk.',
+    what: 'A tank trailer is a cylindrical tank on a trailer chassis.',
+    does: 'Carries liquids (fuel, chemicals, food products), gases or dry bulk.',
+    where: 'Fuel delivery, chemical and food-grade bulk transport.',
+    keys: ['Drivers need the CDL tank vehicle (N) endorsement; hazmat (H) too when the load is placarded.', 'Liquid surge affects handling; many tanks have baffles or compartments.', 'Hazmat cargo tanks have periodic tests and inspections (49 CFR Part 180).'],
+    lessons: ['beginner.m3.l4', 'beginner.m1.l3'], related: ['tractor', 'dryvan'], terms: [] },
+  { id: 'chassis', name: 'Intermodal chassis', cat: 'trailers', photo: 'chassis', art: 'intermodal', alt: 'Empty intermodal container chassis frames parked in a row',
+    short: 'A trailer frame that carries a shipping container.',
+    what: 'An intermodal chassis is a skeleton trailer frame with locking points for a shipping container.',
+    does: 'Carries a container between ports, rail ramps and customers. The container locks on at its corners with twist locks.',
+    where: 'Port and rail drayage.',
+    keys: ['Chassis are often supplied by a pool or provider rather than owned by the carrier — confirm who owns it before arranging a repair.'],
+    lessons: ['beginner.m3.l4'], related: ['container', 'tractor'], terms: ['Intermodal chassis'] },
+  { id: 'container', name: 'Shipping container', cat: 'trailers', photo: 'container', alt: 'A standard steel shipping container',
+    short: 'A standard steel box moved by ship, rail and truck.',
+    what: 'An intermodal container is a standardized steel box that moves between ships, trains and trucks without unloading the cargo.',
+    does: 'Protects the freight through the whole trip; the truck carries it on an intermodal chassis.',
+    where: 'International and domestic intermodal freight.',
+    keys: ['Common lengths are 20, 40, 45 and 53 ft.', 'The container and the chassis are separate units, often owned by different companies.'],
+    lessons: ['beginner.m3.l4'], related: ['chassis'], terms: [] },
+  { id: 'doubles', name: 'Doubles (pup trailers)', cat: 'trailers', photo: 'doubles', art: 'doubles', alt: 'A tractor pulling two short trailers connected by a dolly',
+    short: 'Two short trailers pulled by one tractor.',
+    what: 'A doubles combination is one tractor pulling two short trailers (about 28 ft, called pups), joined by a converter dolly.',
+    does: 'Moves more freight per driver and lets terminals split trailers for different destinations.',
+    where: 'Common in LTL networks.',
+    keys: ['Drivers need the CDL doubles/triples (T) endorsement.', 'Three units to track: lead trailer, dolly and rear trailer.'],
+    lessons: ['beginner.m3.l4'], related: ['dolly', 'dryvan', 'tractor'], terms: [] },
+  { id: 'dolly', name: 'Converter dolly', cat: 'trailers', photo: 'dolly', alt: 'A converter dolly with an axle, a fifth wheel and a drawbar',
+    short: 'The axle unit that links two trailers.',
+    what: 'A converter dolly is a short axle assembly with its own fifth wheel and a drawbar.',
+    does: 'Supports the front of the second trailer in a doubles combination and connects it to the first trailer.',
+    where: 'Doubles and triples operations.',
+    keys: ['It has its own tires, brakes, lights and safety chains — track and inspect it as its own unit.'],
+    lessons: ['beginner.m3.l4'], related: ['doubles', 'fifthwheel'], terms: ['Converter dolly'] },
+
+  /* ---------------- Equipment ---------------- */
+  { id: 'reeferunit', name: 'Reefer unit (transport refrigeration unit)', cat: 'equipment', photo: 'reeferunit', alt: 'A refrigeration unit mounted on the front wall of a semi-trailer',
+    short: 'The refrigeration machine on a reefer trailer.',
+    what: 'The reefer unit is the refrigeration system mounted on the front of a refrigerated trailer, commonly powered by its own small diesel engine with its own fuel tank.',
+    does: 'Cools (or heats) the trailer to the setpoint and records temperatures.',
+    where: 'Every reefer trailer. Repairs usually go to refrigeration dealers or technicians.',
+    keys: ['Has its own engine hours and PM schedule, separate from the trailer.', 'Alarm codes tell the technician where to start — ask the driver to read them exactly.'],
+    lessons: ['beginner.m3.l2', 'beginner.m5.l2', 'beginner.m3.l4'], related: ['reefer'], terms: [] },
+  { id: 'liftgate', name: 'Liftgate', cat: 'equipment', photo: 'liftgate', alt: 'A truck with a liftgate platform at the rear',
+    short: 'A powered platform at the back of a truck.',
+    what: 'A liftgate (tail lift) is a powered platform mounted at the rear of a truck or trailer.',
+    does: 'Raises and lowers freight between the ground and the cargo floor where there is no loading dock.',
+    where: 'Mostly on straight trucks doing local and residential delivery.',
+    keys: ['A broken liftgate can stop deliveries even when the truck runs fine.'],
+    lessons: ['beginner.m3.l4'], related: ['straight', 'dock'], terms: [] },
+  { id: 'dock', name: 'Loading dock', cat: 'equipment', photo: 'dock', art: 'live', alt: 'A building with several loading dock doors',
+    short: 'Where trailers are loaded and unloaded.',
+    what: 'A loading dock is a raised door at a warehouse or distribution center where a trailer backs in so freight can be moved straight into the building.',
+    does: 'Lets forklifts move freight between the building floor and the trailer floor.',
+    where: 'Shippers, receivers and carrier terminals — the site of live loads and drop-and-hook moves.',
+    keys: ['A tractor that won\'t start at a live-unload dock blocks the customer\'s door.', 'Time at the dock beyond the free time can become detention.'],
+    lessons: ['beginner.m1.l3', 'operations.m2.l4'], related: ['dryvan', 'liftgate'], terms: ['Drop and hook'] },
+  { id: 'apu', name: 'APU (auxiliary power unit)', cat: 'equipment', photo: 'apu', alt: 'An auxiliary power unit mounted on the side of a truck frame',
+    short: 'Powers cab heat, A/C and electrics while the engine is off.',
+    what: 'A truck APU is a small separate power unit — often a small diesel engine or a battery system — mounted on the frame.',
+    does: 'Heats, cools and powers the cab during rest breaks so the main engine doesn\'t have to idle.',
+    where: 'Sleeper tractors on long-haul work.',
+    keys: ['An APU failure can make a rest break unbearable in extreme heat or cold — it affects driver care, not just fuel use.', 'High idle time on a unit with an APU is a reason to check whether the APU works.'],
+    lessons: ['operations.m1.l2', 'beginner.m3.l4'], related: ['sleeper'], terms: [] },
+  { id: 'eld', name: 'ELD / onboard recorder', cat: 'equipment', photo: 'eld', alt: 'An in-cab screen showing a driver\'s hours of service graph',
+    short: 'Records driving time for Hours of Service.',
+    what: 'An electronic logging device (ELD) connects to the truck\'s engine and records driving time for Hours of Service. The photo shows an earlier electronic onboard recorder screen with an HOS graph.',
+    does: 'Automatically records driving status, location and engine data so drivers and carriers can follow HOS rules.',
+    where: 'Required in most U.S. commercial trucks that need records of duty status.',
+    keys: ['Many ELDs are part of a telematics system that also reports fault codes.', 'ELD malfunctions have their own procedures — involve the safety department.'],
+    lessons: ['operations.m1.l2', 'expert.m9.l1'], related: ['ecm'], terms: ['ELD'] },
+  { id: 'triangle', name: 'Warning triangles', cat: 'equipment', photo: 'triangle', alt: 'A red reflective warning triangle on a road',
+    short: 'Reflective triangles placed behind a stopped truck.',
+    what: 'Bidirectional reflective warning triangles are the warning devices trucks carry for roadside stops.',
+    does: 'Warn approaching traffic that a truck is stopped on or near the road.',
+    where: 'Every commercial truck. U.S. rules require hazard flashers immediately and warning devices within 10 minutes (49 CFR 392.22).',
+    keys: ['Confirm the driver has placed them during the first minutes of any roadside event.'],
+    lessons: ['beginner.m5.l3', 'beginner.m5.l2'], related: ['tow'], terms: ['Warning devices'] },
+
+  /* ---------------- Parts: engine & drivetrain ---------------- */
+  { id: 'engine', name: 'Diesel engine', cat: 'parts', group: 'Engine & drivetrain', photo: 'engine', alt: 'A heavy-duty diesel truck engine on display',
+    short: 'The engine that powers a heavy truck.',
+    what: 'Heavy trucks use large diesel engines that ignite fuel with the heat of compressed air — no spark plugs.',
+    does: 'Turns fuel into the power that drives the truck, and runs the air compressor, alternator and other accessories.',
+    where: 'In every tractor and straight truck; engine faults commonly show up as warning lamps, power loss, smoke, noise or leaks.',
+    keys: ['Engine work is usually tracked by miles and engine hours.', 'Oil pressure and coolant temperature warnings mean "stop safely."'],
+    lessons: ['beginner.m3.l1', 'beginner.m3.l3', 'advanced.m2.l1'], related: ['turbo', 'injector', 'radiator', 'ecm', 'transmission'], terms: [] },
+  { id: 'turbo', name: 'Turbocharger', cat: 'parts', group: 'Engine & drivetrain', photo: 'turbo', alt: 'Animated cutaway of a turbocharger showing exhaust and intake air flow',
+    short: 'Uses exhaust flow to pack more air into the engine.',
+    what: 'A turbocharger has a turbine spun by exhaust gas, connected to a compressor that pushes more air into the engine.',
+    does: 'More air lets the engine burn more fuel efficiently and make more power.',
+    where: 'Nearly every modern truck diesel.',
+    keys: ['Symptoms drivers report: loss of power, whistling or whining under acceleration, black smoke, oil leaks.'],
+    lessons: ['beginner.m3.l1', 'beginner.m4.l1'], related: ['engine'], terms: [] },
+  { id: 'transmission', name: 'Transmission', cat: 'parts', group: 'Engine & drivetrain', photo: 'transmission', alt: 'A heavy truck automated manual transmission',
+    short: 'Transfers engine power through gears.',
+    what: 'The transmission is the gearbox behind the engine. Many newer trucks use automated manual transmissions (AMTs), which shift by themselves.',
+    does: 'Selects gears so the engine can move heavy loads from a stop and cruise efficiently on the highway.',
+    where: 'Every truck; issues include failure to shift, grinding, stuck in gear or warning messages.',
+    keys: ['Transmission repairs are often among the longest and most expensive — check warranty before approving.'],
+    lessons: ['beginner.m3.l1', 'expert.m6.l1'], related: ['clutch', 'driveshaft', 'engine'], terms: [] },
+  { id: 'clutch', name: 'Clutch', cat: 'parts', group: 'Engine & drivetrain', photo: 'clutch', alt: 'A clutch disc',
+    short: 'Connects and disconnects the engine from the transmission.',
+    what: 'The clutch sits between the engine and the transmission. The photo shows a clutch disc, the part that wears.',
+    does: 'Lets the engine turn without moving the truck, and engages smoothly to start moving.',
+    where: 'Manual and automated manual transmissions.',
+    keys: ['Slipping, chattering or hard engagement are common complaints; stop-start work wears clutches faster.'],
+    lessons: ['beginner.m3.l1', 'advanced.m3.l1'], related: ['transmission', 'engine'], terms: [] },
+  { id: 'driveshaft', name: 'Driveshaft', cat: 'parts', group: 'Engine & drivetrain', photo: 'driveshaft', alt: 'A driveshaft with universal joints',
+    short: 'Carries power from the transmission to the rear axles.',
+    what: 'A driveshaft is a rotating shaft with universal joints at its ends.',
+    does: 'Delivers power from the transmission back to the drive axles while the suspension moves.',
+    where: 'Between the transmission and the differential(s).',
+    keys: ['Vibration that changes with speed or a clunk when taking off can point to driveline problems.'],
+    lessons: ['beginner.m3.l1'], related: ['transmission', 'differential'], terms: [] },
+  { id: 'differential', name: 'Differential', cat: 'parts', group: 'Engine & drivetrain', photo: 'differential', alt: 'A cutaway differential gearbox showing its gears',
+    short: 'Lets wheels on the same axle turn at different speeds.',
+    what: 'The differential is the gear set inside each drive axle housing.',
+    does: 'Sends power to both wheels while letting the outside wheel turn faster than the inside wheel in a turn.',
+    where: 'In each drive axle; tandem drive tractors have two.',
+    keys: ['Whining that gets louder, clunking or leaks from the axle housing are typical complaints.'],
+    lessons: ['beginner.m3.l1', 'beginner.m4.l1'], related: ['driveshaft', 'tandem'], terms: [] },
+
+  /* ---------------- Parts: brakes & air system ---------------- */
+  { id: 'drumbrake', name: 'S-cam drum brake', cat: 'parts', group: 'Brakes & air system', art: 'drum', alt: 'Illustration of an S-cam drum brake with chamber and slack adjuster',
+    short: 'Brake shoes pressed against the inside of a drum.',
+    what: 'The S-cam drum brake has been the most common brake on North American heavy trucks and trailers. An S-shaped cam pushes the brake shoes outward against a drum.',
+    does: 'Air pressure in the brake chamber pushes a rod, which turns the slack adjuster and the S-cam, which applies the shoes.',
+    where: 'At the wheels of most trailers and many tractors.',
+    keys: ['Brakes out of adjustment are among the most common roadside inspection findings.', 'A grinding noise when braking can mean linings worn to metal — a safety-critical defect.'],
+    lessons: ['beginner.m3.l2', 'beginner.m9.l2'], related: ['slack', 'chamber', 'airdisc'], terms: ['Air brakes'] },
+  { id: 'airdisc', name: 'Air disc brake', cat: 'parts', group: 'Brakes & air system', photo: 'airdisc', art: 'disc', alt: 'An air-actuated disc brake on a truck axle',
+    short: 'A caliper squeezes pads against a rotor.',
+    what: 'An air disc brake uses an air-operated caliper to clamp brake pads onto a rotor.',
+    does: 'Stops the wheel like a drum brake, but with a different design and different parts.',
+    where: 'Increasingly common on trucks, especially on steer axles.',
+    keys: ['Pads and rotors are different parts from drum shoes — confirm brake type before ordering parts or sending a vendor.'],
+    lessons: ['beginner.m3.l2'], related: ['drumbrake', 'chamber'], terms: ['Air disc brake'] },
+  { id: 'chamber', name: 'Brake chamber (spring brake)', cat: 'parts', group: 'Brakes & air system', photo: 'chamber', alt: 'A dual brake chamber with a spring brake section',
+    short: 'Turns air pressure into braking force.',
+    what: 'A brake chamber is the round canister at each wheel. A dual "spring brake" chamber has a service section and a powerful spring section for parking and emergency braking.',
+    does: 'Air pushes a diaphragm and pushrod to apply the brake. The spring section applies the brake when air is released — or lost.',
+    where: 'At each braked wheel position.',
+    keys: ['Air leaks at chambers are brake-system defects.', 'Spring brakes are held off by air pressure; if pressure falls too low, they apply.'],
+    lessons: ['beginner.m3.l2', 'beginner.m3.l3'], related: ['slack', 'drumbrake', 'airtanks'], terms: [] },
+  { id: 'slack', name: 'Slack adjuster', cat: 'parts', group: 'Brakes & air system', art: 'drum', pin: { x: 56, y: 17.5 }, alt: 'Illustration of a drum brake with the slack adjuster arm marked',
+    short: 'The lever that turns the S-cam and keeps brakes adjusted.',
+    what: 'The slack adjuster is the arm that connects the brake chamber pushrod to the S-cam shaft. (Marked on the illustration.)',
+    does: 'Turns the cam when the brakes apply. Automatic slack adjusters take up slack as the linings wear.',
+    where: 'On drum brakes at each wheel.',
+    keys: ['Automatic slack adjusters shouldn\'t need routine manual adjustment — repeated adjustment on the same wheel needs diagnosis.'],
+    lessons: ['beginner.m3.l2'], related: ['drumbrake', 'chamber'], terms: ['Slack adjuster'] },
+  { id: 'compressor', name: 'Air compressor', cat: 'parts', group: 'Brakes & air system', photo: 'compressor', alt: 'A truck air brake compressor',
+    short: 'Builds the air pressure for the brakes.',
+    what: 'The air compressor is driven by the engine.',
+    does: 'Pumps air into the reservoirs that supply the brakes, suspension and other air systems.',
+    where: 'Mounted on the engine of every air-braked truck.',
+    keys: ['Slow air build-up or a compressor that can\'t keep up are signs to report.'],
+    lessons: ['beginner.m3.l2'], related: ['airdryer', 'airtanks', 'chamber'], terms: [] },
+  { id: 'airdryer', name: 'Air dryer', cat: 'parts', group: 'Brakes & air system', photo: 'airdryer', alt: 'A truck air dryer with a spin-on cartridge',
+    short: 'Removes moisture from the brake air.',
+    what: 'The air dryer is a canister with a replaceable desiccant cartridge between the compressor and the reservoirs.',
+    does: 'Removes water and oil from the compressed air so valves don\'t corrode or freeze.',
+    where: 'In the air system of air-braked trucks.',
+    keys: ['Cartridges are commonly replaced on a PM schedule.'],
+    lessons: ['beginner.m3.l2'], related: ['compressor', 'airtanks'], terms: [] },
+  { id: 'airtanks', name: 'Air tanks (reservoirs)', cat: 'parts', group: 'Brakes & air system', photo: 'airtanks', alt: 'A truck chassis section showing a compressed-air reservoir',
+    short: 'Store compressed air for the brakes.',
+    what: 'Air reservoirs are steel or aluminum tanks mounted on the frame.',
+    does: 'Store compressed air so it\'s ready for braking. The primary and secondary circuits have their own tanks and gauges.',
+    where: 'On the frame of the tractor (and on air-braked trailers).',
+    keys: ['Drain valves let water out; a low-air warning means stop safely.'],
+    lessons: ['beginner.m3.l2', 'beginner.m3.l3'], related: ['compressor', 'airdryer', 'gladhands'], terms: [] },
+  { id: 'gladhands', name: 'Glad hands & air lines', cat: 'parts', group: 'Coupling & trailer parts', photo: 'gladhands', art: 'dryvan', pin: { x: 93, y: 35 }, alt: 'Red and blue coiled air lines mounted behind a tractor cab, ready to connect to a trailer',
+    short: 'Couplers that connect the tractor\'s air to the trailer.',
+    what: 'Glad hands are the couplers at the ends of the tractor\'s air lines. They lock onto matching couplers on the trailer nose. The photo shows the red and blue air lines coiled behind a tractor cab; the marker on the diagram shows where they connect on the trailer.',
+    does: 'Carry air to the trailer\'s brakes: the red line is emergency/supply, the blue line is service (brake application).',
+    where: 'Between the back of the tractor cab and the front of the trailer.',
+    keys: ['Leaking glad-hand seals are a common, cheap fix — but an air leak is still a brake-system defect.', 'The 7-way electrical cord runs alongside them.'],
+    lessons: ['beginner.m3.l2', 'beginner.m1.l1'], related: ['fifthwheel', 'kingpin', 'sevenway', 'airtanks'], terms: ['Glad hands'] },
+
+  /* ---------------- Parts: tires, wheels & suspension ---------------- */
+  { id: 'tire', name: 'Truck tire', cat: 'parts', group: 'Tires, wheels & suspension', photo: 'tire', art: 'tire-section', alt: 'A truck tire showing its tread grooves',
+    short: 'Steer, drive and trailer tires — each built for its job.',
+    what: 'Heavy truck tires are radial tires built for high loads. Steer tires use rib treads, drive tires use lug treads for traction, and trailer tires are free-rolling.',
+    does: 'Carry the load, provide grip for steering, driving and braking, and absorb road shock.',
+    where: 'A typical five-axle tractor-trailer runs 18 tires.',
+    keys: ['U.S. minimum tread depth: 4/32 in on steer tires, 2/32 in on other positions (49 CFR 393.75).', 'Always record the exact position and the full size from the sidewall.'],
+    lessons: ['beginner.m3.l5', 'advanced.m4.l3', 'beginner.m3.l2'], related: ['wheel', 'tandem', 'steering'], terms: ['Tread depth', 'Duals', 'Wide-base single', 'Retread'] },
+  { id: 'wheel', name: 'Wheel & lug nuts', cat: 'parts', group: 'Tires, wheels & suspension', photo: 'wheel', alt: 'A polished aluminum truck wheel with lug nuts',
+    short: 'The rim the tire mounts on, bolted to the hub.',
+    what: 'Truck wheels are steel or aluminum rims bolted to the hub with lug nuts. Common diameters include 22.5 and 24.5 in.',
+    does: 'Holds the tire and transfers the load to the axle.',
+    where: 'Every wheel position; duals mount two wheels per wheel end.',
+    keys: ['Loose or missing lug nuts and cracked wheels are serious safety defects.', 'Tire and wheel sizes must match exactly.'],
+    lessons: ['beginner.m3.l5', 'advanced.m4.l3'], related: ['tire', 'tandem'], terms: [] },
+  { id: 'tandem', name: 'Axles & trailer tandem', cat: 'parts', group: 'Tires, wheels & suspension', photo: 'tandem', alt: 'The tandem axles of a semi-trailer with dual tires and suspension',
+    short: 'The axle groups that carry the trailer\'s weight.',
+    what: 'Most semi-trailers ride on a tandem — two axles close together — often on a slider that can move along the trailer frame.',
+    does: 'Carries the load. Sliding the tandem shifts weight between the trailer axles and the tractor\'s drive axles.',
+    where: 'Under the rear of the trailer; tractors have their own steer and drive axles.',
+    keys: ['U.S. federal Interstate limit: 34,000 lb per tandem group and 80,000 lb gross (23 CFR 658.17).', 'Slider locking pins must engage before the trailer moves.'],
+    lessons: ['beginner.m1.l3', 'beginner.m3.l4'], related: ['tire', 'airspring', 'leafspring', 'dryvan'], terms: ['Axle configuration'] },
+  { id: 'airspring', name: 'Air spring (air bag)', cat: 'parts', group: 'Tires, wheels & suspension', photo: 'airspring', alt: 'A rubber air spring in a vehicle suspension',
+    short: 'A rubber bellows that supports the load on air.',
+    what: 'An air spring — often called an air bag — is a rubber bellows filled with compressed air in an air-ride suspension.',
+    does: 'Supports the vehicle and load and smooths the ride; the system keeps ride height level.',
+    where: 'Air-ride suspensions on tractors and trailers.',
+    keys: ['A leaning trailer or audible air leak can mean a failed air spring — arrange an inspection rather than guessing.'],
+    lessons: ['beginner.m3.l2'], related: ['leafspring', 'tandem'], terms: [] },
+  { id: 'leafspring', name: 'Leaf spring', cat: 'parts', group: 'Tires, wheels & suspension', photo: 'leafspring', alt: 'A leaf spring suspension on a vehicle axle',
+    short: 'Stacked steel strips that act as a spring.',
+    what: 'A leaf spring is a stack of curved steel strips ("leaves") clamped to the axle.',
+    does: 'Supports the load and absorbs road shock.',
+    where: 'Steer axles and many spring-ride trailers and trucks.',
+    keys: ['Broken leaves or a shifted axle are safety issues — they can affect handling and alignment.'],
+    lessons: ['beginner.m3.l2'], related: ['airspring', 'tandem'], terms: [] },
+  { id: 'steering', name: 'Steering gear', cat: 'parts', group: 'Tires, wheels & suspension', photo: 'steering', alt: 'Diagram of a recirculating-ball steering gear',
+    short: 'Turns the steering wheel into wheel movement.',
+    what: 'Most heavy trucks use a recirculating-ball steering gear (shown in the diagram), connected to the wheels through linkage and tie rods.',
+    does: 'Multiplies the driver\'s steering effort — usually with power assist.',
+    where: 'At the front of the frame, linked to the steer axle.',
+    keys: ['Loose steering, pulling, hard steering or vibration are always safety-critical complaints.'],
+    lessons: ['beginner.m3.l2', 'beginner.m5.l1'], related: ['tire'], terms: [] },
+
+  /* ---------------- Parts: fuel, exhaust & aftertreatment ---------------- */
+  { id: 'injector', name: 'Fuel injector', cat: 'parts', group: 'Fuel, exhaust & aftertreatment', photo: 'injector', alt: 'A diesel unit injector',
+    short: 'Sprays fuel into each cylinder.',
+    what: 'Fuel injectors deliver precisely timed, high-pressure fuel into each cylinder. The photo shows a unit injector used in some heavy diesels.',
+    does: 'Controls how much fuel burns, which affects power, fuel economy and emissions.',
+    where: 'In the cylinder head, one per cylinder.',
+    keys: ['Misfire, rough running, smoke or poor fuel economy can involve injectors — a technician confirms.'],
+    lessons: ['beginner.m3.l1'], related: ['engine', 'ecm'], terms: [] },
+  { id: 'dpf', name: 'Diesel particulate filter (DPF)', cat: 'parts', group: 'Fuel, exhaust & aftertreatment', photo: 'dpf', alt: 'A diesel particulate filter installed in a vehicle exhaust system',
+    short: 'Traps soot from the exhaust.',
+    what: 'The DPF is a filter in the exhaust system that captures soot (particulate matter).',
+    does: 'Holds soot and periodically burns it off in a process called regeneration.',
+    where: 'In the aftertreatment system of modern diesel trucks, along with the DOC and SCR.',
+    keys: ['DPF and regen warnings, then a derate, are among the most common aftertreatment calls.', 'EGR, DOC and SCR work alongside the DPF to meet emissions rules.'],
+    lessons: ['advanced.m2.l3', 'beginner.m3.l1'], related: ['def', 'engine'], terms: ['DPF', 'Aftertreatment', 'Regeneration', 'DOC', 'EGR'] },
+  { id: 'def', name: 'DEF tank & SCR system', cat: 'parts', group: 'Fuel, exhaust & aftertreatment', photo: 'def', alt: 'The diesel exhaust fluid tank filler on a truck',
+    short: 'Holds the fluid the SCR system uses.',
+    what: 'Diesel exhaust fluid (DEF) is a urea solution stored in its own tank — usually with a blue cap. The selective catalytic reduction (SCR) system injects it into the exhaust.',
+    does: 'Converts nitrogen oxides (NOx) in the exhaust into nitrogen and water.',
+    where: 'On modern diesel trucks; the DEF tank is filled separately from the fuel tanks.',
+    keys: ['Engines progressively limit power if DEF runs low or out.', 'DEF freezes around 12 °F (−11 °C); systems have heaters.'],
+    lessons: ['advanced.m2.l3', 'beginner.m3.l1', 'beginner.m3.l3'], related: ['dpf'], terms: ['DEF', 'SCR'] },
+
+  /* ---------------- Parts: electrical & cooling ---------------- */
+  { id: 'battery', name: 'Batteries', cat: 'parts', group: 'Electrical & cooling', photo: 'battery', alt: 'A lead-acid vehicle battery',
+    short: 'Store electrical energy to start the engine.',
+    what: 'Heavy trucks usually carry a bank of several 12-volt lead-acid batteries. The photo shows a single battery.',
+    does: 'Crank the starter and power electrical loads when the engine is off.',
+    where: 'In a battery box on the frame or under a step.',
+    keys: ['Cold weather and long idle-off periods are hard on batteries.', 'No-start calls: ask if the lights come on and if the engine cranks.'],
+    lessons: ['beginner.m3.l2', 'beginner.m3.l3'], related: ['alternator', 'starter'], terms: [] },
+  { id: 'alternator', name: 'Alternator', cat: 'parts', group: 'Electrical & cooling', photo: 'alternator', alt: 'Cutaway illustration of an automotive alternator',
+    short: 'Charges the batteries while the engine runs.',
+    what: 'The alternator is a belt-driven generator on the engine. The cutaway shows its internal parts (labels in Finnish).',
+    does: 'Produces electricity to charge the batteries and power the truck while running.',
+    where: 'On the front of the engine, driven by the accessory belt.',
+    keys: ['Low voltmeter reading or a battery/charging lamp while running: the truck may not restart — plan before the driver shuts down.'],
+    lessons: ['beginner.m3.l3', 'beginner.m3.l2'], related: ['battery', 'belt', 'starter'], terms: [] },
+  { id: 'starter', name: 'Starter motor', cat: 'parts', group: 'Electrical & cooling', photo: 'starter', alt: 'A starter motor',
+    short: 'Cranks the engine to start it.',
+    what: 'The starter is an electric motor that engages the engine flywheel.',
+    does: 'Turns the engine over until it starts on its own.',
+    where: 'Mounted at the flywheel housing.',
+    keys: ['A click but no crank can be the starter, the batteries or the connections — a technician tests which.'],
+    lessons: ['beginner.m3.l2', 'operations.m1.l2'], related: ['battery', 'alternator'], terms: [] },
+  { id: 'belt', name: 'Accessory drive belt', cat: 'parts', group: 'Electrical & cooling', photo: 'belt', alt: 'An engine accessory belt drive with pulleys',
+    short: 'Drives the alternator, fan and other accessories.',
+    what: 'A drive belt runs around pulleys at the front of the engine.',
+    does: 'Turns accessories such as the alternator, water pump and A/C compressor.',
+    where: 'Front of the engine.',
+    keys: ['A broken belt can stop charging and cooling at the same time.'],
+    lessons: ['beginner.m3.l1'], related: ['alternator', 'radiator'], terms: [] },
+  { id: 'radiator', name: 'Radiator & cooling system', cat: 'parts', group: 'Electrical & cooling', photo: 'radiator', alt: 'A vehicle radiator',
+    short: 'Keeps the engine at operating temperature.',
+    what: 'The cooling system — radiator, coolant, water pump, thermostat, fan and hoses — removes heat from the engine. The photo shows a radiator.',
+    does: 'Coolant carries heat from the engine to the radiator, where airflow removes it.',
+    where: 'At the front of the truck behind the grille.',
+    keys: ['A climbing temperature gauge or steam means stop safely — and never open a hot radiator cap.', 'Sweet smell or white smoke can mean coolant entering the engine.'],
+    lessons: ['beginner.m3.l1', 'beginner.m3.l3'], related: ['engine', 'belt'], terms: [] },
+  { id: 'ecm', name: 'ECM (engine control module)', cat: 'parts', group: 'Electrical & cooling', photo: 'ecm', alt: 'An engine control module unit',
+    short: 'The engine\'s computer.',
+    what: 'The ECM is the electronic control unit that runs the engine. The photo shows an ECM from a passenger car; truck ECMs look similar and are usually mounted on the engine.',
+    does: 'Controls fueling and emissions systems and stores fault codes (DTCs) that technicians and telematics read.',
+    where: 'On or near the engine.',
+    keys: ['Fault codes are reported as SPN/FMI — the coordinator records them, a technician diagnoses.'],
+    lessons: ['advanced.m2.l1', 'expert.m9.l1'], related: ['engine', 'eld'], terms: ['ECM', 'DTC'] },
+
+  /* ---------------- Parts: coupling & trailer parts ---------------- */
+  { id: 'fifthwheel', name: 'Fifth wheel', cat: 'parts', group: 'Coupling & trailer parts', photo: 'fifthwheel', art: 'rig', pin: { x: 76.7, y: 63 }, alt: 'A fifth-wheel coupling plate on the back of a tractor',
+    short: 'The coupling plate on the tractor.',
+    what: 'The fifth wheel is the horseshoe-shaped coupling plate mounted over the tractor\'s drive axles.',
+    does: 'Locks onto the trailer\'s kingpin and carries the front of the trailer while letting it pivot in turns.',
+    where: 'On the back of every tractor; many slide to adjust weight between the steer and drive axles.',
+    keys: ['A coupling that isn\'t fully locked is a serious safety risk — drivers check it on every hook-up.', 'Needs regular lubrication and inspection.'],
+    lessons: ['beginner.m1.l1', 'beginner.m3.l2', 'beginner.m3.l4'], related: ['kingpin', 'gladhands', 'tractor'], terms: ['Fifth wheel'] },
+  { id: 'kingpin', name: 'Kingpin (trailer)', cat: 'parts', group: 'Coupling & trailer parts', art: 'dryvan', pin: { x: 89.5, y: 66 }, alt: 'Illustration of a dry van trailer with the kingpin marked under the front',
+    short: 'The steel pin under the trailer\'s front.',
+    what: 'The trailer kingpin is a steel pin that hangs down from the plate under the front of the trailer. (Marked on the illustration.) Not to be confused with the steering kingpin on a truck\'s front axle.',
+    does: 'Slides into the fifth wheel, where the locking jaws close around it.',
+    where: 'Under the nose of every semi-trailer.',
+    keys: ['Wear or damage is a coupling safety issue — report it on the trailer, not the tractor.'],
+    lessons: ['beginner.m1.l1', 'beginner.m3.l2', 'beginner.m3.l4'], related: ['fifthwheel', 'landinggear', 'dryvan'], terms: ['Kingpin'] },
+  { id: 'landinggear', name: 'Landing gear', cat: 'parts', group: 'Coupling & trailer parts', art: 'dryvan', pin: { x: 78.5, y: 79 }, alt: 'Illustration of a dry van trailer with the landing gear marked',
+    short: 'The legs that hold up a parked trailer.',
+    what: 'Landing gear is the pair of crank-operated legs near the front of a semi-trailer. (Marked on the illustration.)',
+    does: 'Supports the front of the trailer when it isn\'t coupled to a tractor.',
+    where: 'Every semi-trailer; cranked down before uncoupling and up before driving.',
+    keys: ['"Won\'t crank" and bent legs are common yard calls.', 'Yard tractors lift the trailer with a hydraulic fifth wheel instead of cranking.'],
+    lessons: ['beginner.m3.l2', 'beginner.m3.l4'], related: ['kingpin', 'dryvan', 'yard'], terms: [] },
+  { id: 'sevenway', name: '7-way trailer connector', cat: 'parts', group: 'Coupling & trailer parts', art: 'sevenway', alt: 'Illustration of the face of a 7-way trailer electrical socket',
+    short: 'The electrical plug between tractor and trailer.',
+    what: 'The 7-way connector (SAE J560) is the round electrical plug and socket that links the tractor to the trailer.',
+    does: 'Carries power for the trailer\'s stop, turn, tail and marker lights, plus an auxiliary circuit commonly used for trailer ABS.',
+    where: 'At the back of the cab and on the trailer nose, next to the glad hands.',
+    keys: ['Corroded connectors are a common cause of trailer lighting and ABS faults.', 'See the wire color chart in Quick Reference.'],
+    lessons: ['beginner.m3.l2'], related: ['gladhands', 'fifthwheel'], terms: [] }
+];
+const LIB_MAP = new Map(LIBRARY.map((x) => [x.id, x]));
+const LIB_TERM = new Map(LIBRARY.flatMap((x) => (x.terms || []).map((t) => [t.toLowerCase(), x])));
 
 /* ---------------------------------------------------------------------------
    2. PRACTICE DATA — Glossary
@@ -4388,7 +5257,12 @@ const ART = {
     `<circle class="art-dark" cx="70" cy="60" r="5"/>` +
     `<path class="art-caliper" d="M96 20 Q118 24 124 44 V76 Q118 96 96 100 L92 88 Q108 80 110 60 Q108 40 92 32 Z"/>` +
     `<rect class="art-steel" x="128" y="46" width="34" height="28" rx="8"/><path class="art-line" d="M124 60 H128"/>` +
-    aLabel(145, 86, 'chamber') + aLabel(70, 116, 'caliper squeezes pads on rotor') })
+    aLabel(145, 86, 'chamber') + aLabel(70, 116, 'caliper squeezes pads on rotor') }),
+  /* ---- Connectors ---- */
+  sevenway: () => ({ vb: '0 0 160 120', svg:
+    `<circle class="art-steel" cx="80" cy="60" r="50"/><circle class="art-inner" cx="80" cy="60" r="40"/><rect class="art-dark" x="76" y="8" width="8" height="10" rx="2"/>` +
+    Array.from({ length: 6 }, (_, i) => { const a = ((-60 + i * 60) * Math.PI) / 180; return `<circle class="art-pin" cx="${(80 + 25 * Math.cos(a)).toFixed(1)}" cy="${(60 + 25 * Math.sin(a)).toFixed(1)}" r="6"/>`; }).join('') +
+    `<circle class="art-pin" cx="80" cy="60" r="6"/>` + aLabel(80, 117, 'socket face: 6 outer contacts + center contact') })
 };
 
 function loadArt(slots, partial) {
@@ -4898,6 +5772,115 @@ EXAMS.operations = {
 };
 
 /* ===========================================================================
+   VISUAL LIBRARY — #/library (browse) and #/library/:id (detail view)
+   Photos are Wikimedia Commons thumbnails with attribution; diagrams come
+   from the academy's own illustration set (ART).
+   =========================================================================== */
+const libSize = (src, w) => src.replace(/\/\d+px-/, `/${w}px-`);
+function libPhotoImg(x, w, cls = '') {
+  const p = LIB_PHOTOS[x.photo]; if (!p) return '';
+  const src = /\/\d+px-/.test(p.src) ? libSize(p.src, w) : p.src;
+  return `<img class="${cls}" src="${esc(src)}" alt="${esc(x.alt || x.name)}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer">`;
+}
+function libArt(x) {
+  if (!x.art) return '';
+  return `<div class="lib-art">${artSVG(x.art, x.alt || x.name)}${x.pin ? `<span class="lib-pin" style="left:${x.pin.x}%;top:${x.pin.y}%" aria-hidden="true"></span>` : ''}</div>`;
+}
+function libCredit(x) {
+  const p = LIB_PHOTOS[x.photo]; if (!p) return '';
+  const author = p.author && p.author !== 'Unknown author' ? esc(p.author) : 'see file page';
+  return `<p class="lib-credit">Photo: ${author} · ${p.licenseUrl ? `<a href="${esc(p.licenseUrl)}" target="_blank" rel="noopener noreferrer">${esc(p.license)}</a>` : esc(p.license)} · <a href="${esc(p.page)}" target="_blank" rel="noopener noreferrer">Wikimedia Commons<span class="sr-only"> (opens in a new tab)</span></a></p>`;
+}
+/* Thumbnail used on cards: photo if there is one, otherwise the illustration. */
+function libThumb(x) {
+  return x.photo ? libPhotoImg(x, 500, 'lib-thumb__img') : `<div class="lib-thumb__art">${libArt(x)}</div>`;
+}
+function libCard(x) {
+  return `<a class="lib-card" href="#/library/${x.id}"><div class="lib-thumb">${libThumb(x)}${x.photo ? '' : '<span class="lib-badge">Illustration</span>'}</div>
+    <div class="lib-card__body"><strong>${esc(x.name)}</strong><span>${esc(x.short)}</span></div></a>`;
+}
+function libItemsForLesson(key) { return LIBRARY.filter((x) => x.lessons.includes(key)); }
+/* Strip shown in lessons: "See it in the Visual Library". */
+function libLessonStrip(key) {
+  const items = libItemsForLesson(key); if (!items.length) return '';
+  return `<aside class="lib-strip" aria-label="Visual Library items for this lesson"><div class="lib-strip__head">${icon('search', 'icon--sm')}<span><strong>Study these visually</strong> — see what they look like in the Visual Library</span></div>
+    <div class="lib-strip__row">${items.map((x) => `<a class="lib-chip" href="#/library/${x.id}"><span class="lib-chip__img">${libThumb(x)}</span><span>${esc(x.name)}</span></a>`).join('')}</div></aside>`;
+}
+
+function viewLibrary(id) {
+  if (id) return viewLibraryItem(id);
+  const counts = Object.fromEntries(LIB_CATS.map(([k]) => [k, LIBRARY.filter((x) => x.cat === k).length]));
+  const html = `<div class="page lib-page">${pageHead({ eyebrow: `${icon('search', 'icon--sm')} Reference`, title: 'Vehicles & Parts Visual Library', text: `${LIBRARY.length} vehicles, trailers, equipment and parts from the academy — with real photos or labeled illustrations, what each one does, and the lessons where it comes up.` })}
+    <div class="lib-tools">
+      <div class="input-group lib-search"><label class="sr-only" for="libQ">Search the Visual Library</label>${icon('search')}<input class="input" id="libQ" type="search" placeholder="Search vehicles, trailers or parts…" autocomplete="off"></div>
+      <div class="row row--wrap" role="group" aria-label="Filter by category"><button type="button" class="chip" data-libcat="all" aria-pressed="true">All <span class="muted">${LIBRARY.length}</span></button>${LIB_CATS.map(([k, t]) => `<button type="button" class="chip" data-libcat="${k}" aria-pressed="false">${esc(t)} <span class="muted">${counts[k]}</span></button>`).join('')}</div>
+    </div>
+    <p class="small muted mb-4" id="libCount" aria-live="polite"></p>
+    <div id="libResults"></div>
+    <p class="scope-note">${icon('info', 'icon--sm')}<span>Photos come from Wikimedia Commons under free licenses; each item credits its photographer. Makes and models differ — the photos show typical examples. Where no accurate free photo was available, the academy's labeled illustration is shown instead.</span></p></div>`;
+  return {
+    html, title: 'Visual Library', nav: 'library', crumbs: [['Visual Library']],
+    after: (v) => {
+      let cat = 'all';
+      const q = $('#libQ', v); const out = $('#libResults', v);
+      const section = (title, list) => (list.length ? `<section class="lib-section"><h2>${esc(title)}</h2><div class="lib-grid">${list.map(libCard).join('')}</div></section>` : '');
+      const draw = () => {
+        const s = q.value.trim().toLowerCase();
+        const hit = (x) => !s || `${x.name} ${x.short} ${x.what} ${(x.terms || []).join(' ')} ${x.group || ''}`.toLowerCase().includes(s);
+        const list = LIBRARY.filter((x) => (cat === 'all' || x.cat === cat) && hit(x));
+        let html2 = '';
+        LIB_CATS.forEach(([k, t]) => {
+          if (k !== 'parts') { html2 += section(t, list.filter((x) => x.cat === k)); return; }
+          LIB_GROUPS.forEach((g) => { html2 += section(`Parts · ${g}`, list.filter((x) => x.cat === 'parts' && x.group === g)); });
+        });
+        out.innerHTML = html2 || stateBlock({ ic: 'search', title: 'No matches', text: 'Try another word, such as "brake", "trailer" or "tire".' });
+        $('#libCount', v).textContent = `${list.length} item${list.length === 1 ? '' : 's'}`;
+      };
+      q.addEventListener('input', draw);
+      $$('[data-libcat]', v).forEach((b) => b.addEventListener('click', () => { cat = b.dataset.libcat; $$('[data-libcat]', v).forEach((c) => c.setAttribute('aria-pressed', c === b)); draw(); }));
+      draw();
+    }
+  };
+}
+
+function viewLibraryItem(id) {
+  const x = LIB_MAP.get(id);
+  if (!x) return viewNotFound();
+  const catName = (LIB_CATS.find(([k]) => k === x.cat) || [])[1];
+  const lessons = x.lessons.map((k) => LESSON_MAP.get(k)).filter(Boolean);
+  const related = (x.related || []).map((r) => LIB_MAP.get(r)).filter(Boolean);
+  const visual = x.photo
+    ? `<figure class="lib-figure">${libPhotoImg(x, 960, 'lib-photo')}<figcaption>${libCredit(x)}</figcaption></figure>${x.art ? `<figure class="lib-figure lib-figure--art"><span class="lib-label">${icon('layers', 'icon--sm')} Diagram</span>${libArt(x)}<figcaption class="lib-credit">Schematic illustration — simplified, not to scale.</figcaption></figure>` : ''}`
+    : `<figure class="lib-figure lib-figure--art"><span class="lib-label">${icon('layers', 'icon--sm')} Illustration</span>${libArt(x)}<figcaption class="lib-credit">Schematic illustration — simplified, not to scale.${x.pin ? ' The orange marker shows where the part is.' : ''}</figcaption></figure>`;
+  const html = `<div class="page lib-item">
+    ${pageHead({ eyebrow: `${icon('search', 'icon--sm')} Visual Library · ${esc(catName)}${x.group ? ` · ${esc(x.group)}` : ''}`, title: esc(x.name), text: esc(x.short) })}
+    <div class="lib-item__grid">
+      <div class="lib-item__visual">${visual}</div>
+      <div class="lib-item__text prose">
+        <h2>What is it?</h2><p>${inline(x.what)}</p>
+        <h2>What does it do?</h2><p>${inline(x.does)}</p>
+        <h2>Where is it used?</h2><p>${inline(x.where)}</p>
+        <div class="card lib-keys"><div class="card__head"><h2>${icon('check-circle')} Key things to know</h2></div><div class="card__body"><ul>${x.keys.map((k) => `<li>${inline(k)}</li>`).join('')}</ul></div></div>
+      </div>
+    </div>
+    ${lessons.length ? `<section class="lib-section"><h2>Where the academy covers it</h2><div class="lib-lessons">${lessons.map((L) => `<a class="lib-lesson" href="${lessonHref(L)}">${icon('book')}<span><strong>${esc(L.l.title)}</strong><span class="small muted">${esc(L.t.level)} · Module ${L.m.id.slice(1)}: ${esc(L.m.title)}</span></span>${icon('chev-r', 'icon--sm')}</a>`).join('')}</div></section>` : ''}
+    ${related.length ? `<section class="lib-section"><h2>Related items</h2><div class="lib-grid lib-grid--sm">${related.map(libCard).join('')}</div></section>` : ''}
+    <div class="row row--between mt-8"><a class="btn" href="#/library">${icon('arrow-l')} All items</a></div>
+  </div>`;
+  return { html, title: x.name, nav: 'library', crumbs: [['Visual Library', '#/library'], [x.name]] };
+}
+
+/* Tapping a term that has a picture opens a quick visual card instead of jumping away. */
+function openTermVisual(g, x) {
+  openModal({
+    title: esc(x.name), size: 'modal--lib',
+    body: `<div class="lib-pop">${x.photo ? `<figure class="lib-figure">${libPhotoImg(x, 960, 'lib-photo')}<figcaption>${libCredit(x)}</figcaption></figure>` : `<figure class="lib-figure lib-figure--art">${libArt(x)}<figcaption class="lib-credit">Schematic illustration.${x.pin ? ' The orange marker shows where the part is.' : ''}</figcaption></figure>`}
+      <p><strong>${esc(g ? g.full : x.name)}</strong> — ${esc(g ? g.simple : x.short)}</p><p class="small">${esc(x.does)}</p></div>`,
+    foot: `${g ? `<a class="btn btn--ghost" href="#/glossary/${encodeURIComponent(g.term)}" data-close>${icon('book')} Glossary entry</a>` : ''}<a class="btn btn--primary" href="#/library/${x.id}" data-close>Study it in the Visual Library ${icon('arrow-r')}</a>`
+  });
+}
+
+/* ===========================================================================
    4. ENGINE
    =========================================================================== */
 
@@ -5156,7 +6139,8 @@ function inline(s) {
     const g = findTerm(term);
     const text = label || term;
     if (!g) return `<strong>${text}</strong>`;
-    return `<button type="button" class="term" data-term="${esc(g.term)}" data-tip="${esc(g.full + ' — ' + g.simple)}">${text}</button>`;
+    const vis = LIB_TERM.has(g.term.toLowerCase());
+    return `<button type="button" class="term${vis ? ' term--visual' : ''}" data-term="${esc(g.term)}" data-tip="${esc(g.full + ' — ' + g.simple)}${vis ? ' (tap to see it)' : ''}">${text}${vis ? icon('image', 'term__ico') : ''}</button>`;
   });
 }
 
@@ -5441,6 +6425,7 @@ const ROUTES = [
   [/^\/glossary(?:\/(.+))?$/, viewGlossary],
   [/^\/bookmarks$/, viewBookmarks],
   [/^\/reference$/, viewReference],
+  [/^\/library(?:\/([\w-]+))?$/, viewLibrary],
   [/^\/achievements$/, viewAchievements]
 ];
 function router() {
@@ -5758,7 +6743,7 @@ function viewLesson(tid, mid, lid) {
       <section class="lesson-section" id="sec-objectives" style="margin-top:0"><div class="objectives"><span class="eyebrow">${icon('target', 'icon--sm')} Learning objectives</span>
         <ul>${l.objectives.map((o) => `<li>${icon('check-circle')}<span>${esc(o)}</span></li>`).join('')}</ul></div></section>
 
-      <section class="lesson-section" id="sec-explanation"><h2><span class="sec-ico">${icon('book')}</span>Explanation</h2><div class="prose">${renderBlocks(l.body)}</div></section>
+      <section class="lesson-section" id="sec-explanation"><h2><span class="sec-ico">${icon('book')}</span>Explanation</h2><div class="prose">${renderBlocks(l.body)}</div>${libLessonStrip(key)}</section>
 
       ${deepHTML}
       <section class="lesson-section" id="sec-example"><h2><span class="sec-ico">${icon('truck')}</span>Real-world example</h2>
@@ -6746,6 +7731,7 @@ function viewGlossary(termParam) {
         const acronym = /^[A-Z][A-Z /]+$/.test(g.term);
         return `<div class="gl-item" id="${pid}-item" data-term="${esc(g.term)}"><h2 class="acc-heading"><button type="button" class="gl-item__head" aria-expanded="false" aria-controls="${pid}"><span class="gl-item__abbr" aria-hidden="true">${acronym ? esc(g.term) : icon(GL_CAT_ICON[g.cat] || 'book', 'icon--sm')}</span><span class="grow"><span class="gl-item__term">${hl(g.term)}</span><br><span class="gl-item__full">${hl(g.full)}</span></span><span class="badge badge--outline">${g.cat}</span>${icon('chev-d')}</button></h2>
           <div class="acc-panel" id="${pid}" role="region"><div><div class="acc-panel__inner">
+            ${LIB_TERM.has(g.term.toLowerCase()) ? (() => { const vx = LIB_TERM.get(g.term.toLowerCase()); return `<a class="gl-visual" href="#/library/${vx.id}"><span class="gl-visual__img">${libThumb(vx)}</span><span><strong>See what it looks like</strong><span class="small muted">${esc(vx.name)} in the Visual Library</span></span>${icon('chev-r', 'icon--sm')}</a>`; })() : ''}
             <div class="gl-detail"><div><h3>${icon('book')} Definition</h3><p>${hl(g.def)}</p></div><div><h3>${icon('bulb')} In plain terms</h3><p>${hl(g.simple)}</p></div><div><h3>${icon('truck')} Real-world example</h3><p>${hl(g.example)}</p></div></div>
             <div class="gl-related"><span class="xs muted" style="font-weight:600;text-transform:uppercase;letter-spacing:.08em">Related</span>${g.related.map((r) => { const rg = findTerm(r); return rg ? `<button type="button" class="chip" data-goto="${esc(rg.term)}">${esc(rg.term)}</button>` : `<span class="chip" style="opacity:.6">${esc(r)}</span>`; }).join('')}</div>
           </div></div></div></div>`;
@@ -6823,7 +7809,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({
@@ -6839,7 +7825,8 @@ function openSearch() {
         const L = (q ? lessons.sort((a, b) => b.s - a.s) : lessons.filter((r) => !isDone(r.x.key))).slice(0, q ? 7 : 4).map((r) => ({ href: lessonHref(r.x), ic: 'book', t: r.x.l.title, s: `${r.x.t.level} · M${r.x.m.id.slice(1)} ${r.x.m.title}`, b: isDone(r.x.key) ? 'Done' : '' }));
         const G = GLOSSARY.filter((g) => q && (`${g.term} ${g.full}`.toLowerCase().includes(q) || g.def.toLowerCase().includes(q))).sort((a, b) => (b.term.toLowerCase().startsWith(q) ? 1 : 0) - (a.term.toLowerCase().startsWith(q) ? 1 : 0)).slice(0, 6).map((g) => ({ href: `#/glossary/${encodeURIComponent(g.term)}`, ic: 'book', t: g.term, s: g.full, b: 'Term' }));
         const P = SEARCH_PAGES.filter(([t]) => !q || t.toLowerCase().includes(q)).slice(0, q ? 5 : 6).map(([t, href, ic]) => ({ href, ic, t, s: 'Go to page' }));
-        const groups = [['Lessons', L], ['Glossary', G], ['Pages & tools', P]].filter(([, a]) => a.length);
+        const V = LIBRARY.filter((x) => q && `${x.name} ${(x.terms || []).join(' ')}`.toLowerCase().includes(q)).slice(0, 5).map((x) => ({ href: `#/library/${x.id}`, ic: 'image', t: x.name, s: x.short, b: 'Visual' }));
+        const groups = [['Lessons', L], ['Visual Library', V], ['Glossary', G], ['Pages & tools', P]].filter(([, a]) => a.length);
         flat = groups.flatMap(([, a]) => a); active = clamp(active, 0, Math.max(0, flat.length - 1));
         let n = -1;
         res.innerHTML = flat.length ? groups.map(([label, a]) => `<div class="palette-group" role="presentation">${label}</div>${a.map((r) => { n++; return `<a class="palette-item ${n === active ? 'is-active' : ''}" role="option" id="pal-${n}" aria-selected="${n === active}" href="${r.href}" data-n="${n}">${icon(r.ic)}<span class="grow"><span class="palette-item__title">${esc(r.t)}</span><br><span class="palette-item__sub">${esc(r.s)}</span></span>${r.b ? `<span class="badge badge--outline">${r.b}</span>` : ''}</a>`; }).join('')}`).join('')
@@ -6871,7 +7858,7 @@ function onDocClick(e) {
   const tab = e.target.closest('.tabs .tab');
   if (tab) selectTab(tab);
   const term = e.target.closest('.term[data-term]');
-  if (term) go(`#/glossary/${encodeURIComponent(term.dataset.term)}`);
+  if (term) { const vx = LIB_TERM.get(term.dataset.term.toLowerCase()); if (vx) openTermVisual(findTerm(term.dataset.term), vx); else go(`#/glossary/${encodeURIComponent(term.dataset.term)}`); }
   const cp = e.target.closest('[data-copy]');
   if (cp) {
     const text = cp.closest('.msg').querySelector('.msg__body').textContent;
