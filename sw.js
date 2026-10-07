@@ -7,7 +7,7 @@
    - Google Fonts: cache-first (fonts are immutable per URL).
    - Visual Library thumbnails: precached; full photos cached once viewed (stale-while-revalidate).
    Bump VERSION on every deploy so old caches are cleared. */
-const VERSION = 'mca-v7';
+const VERSION = 'mca-v8';
 const APP_CACHE = `${VERSION}-app`;
 const FONT_CACHE = `${VERSION}-fonts`;
 const APP_SHELL = [
@@ -126,6 +126,7 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.origin === self.location.origin) {
+    if (url.pathname.startsWith('/_vercel/')) return; // analytics: never cache
     if (request.mode === 'navigate') event.respondWith(networkFirst(request));
     else event.respondWith(staleWhileRevalidate(event));
   } else if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {

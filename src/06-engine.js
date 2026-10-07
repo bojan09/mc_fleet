@@ -550,6 +550,7 @@ const ROUTES = [
   [/^\/reference$/, viewReference],
   [/^\/library(?:\/([\w-]+))?$/, viewLibrary],
   [/^\/(?:academy\/)?software(?:\/([\w-]+))?$/, viewSoftware],
+  [/^\/privacy$/, viewPrivacy],
   [/^\/achievements$/, viewAchievements]
 ];
 function router() {
@@ -1915,12 +1916,13 @@ function viewAchievements() {
     <div class="section-head"><h2>Achievements</h2><span class="small muted">${earned} of ${ACHIEVEMENTS.length} earned</span></div>
     <div class="ach-grid stagger">${ACHIEVEMENTS.map(achHTML).join('')}</div>
     <div class="section-head"><h2>Data</h2></div>
-    <div class="card card--pad row row--between row--wrap"><div>${CLOUD.user ? `<strong>Your progress syncs to ${esc(CLOUD.user.email || 'your account')}.</strong><p class="small">It's saved on this device and in your account, so you can continue on any device where you sign in.</p>` : `<strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it. <button type="button" class="link-btn" data-cloud="in">Sign in with Google</button> to keep it in sync across devices.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p>`}</div><button type="button" class="btn btn--danger" data-reset>${icon('rotate')} Reset all progress</button></div>
+    <div class="card card--pad row row--between row--wrap"><div>${CLOUD.user ? `<strong>Your progress syncs to ${esc(CLOUD.user.email || 'your account')}.</strong><p class="small">It's saved on this device and in your account, so you can continue on any device where you sign in. <a href="#/privacy">How your data is handled</a>.</p>` : `<strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it. <button type="button" class="link-btn" data-cloud="in">Sign in with Google</button> to keep it in sync across devices. <a href="#/privacy">Privacy</a>.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p>`}</div><div class="row row--wrap">${CLOUD.user ? `<button type="button" class="btn btn--ghost" data-delete-account>${icon('x-circle')} Delete my account</button>` : ''}<button type="button" class="btn btn--danger" data-reset>${icon('rotate')} Reset all progress</button></div></div>
   </div>`;
   return {
     html, title: 'Achievements', nav: 'achievements', crumbs: [['Achievements']],
     after: (v) => {
       $$('[data-cert]', v).forEach((b) => b.addEventListener('click', () => showCertificate(TRACK_BY_ID[b.dataset.cert])));
+      $$('[data-delete-account]', v).forEach((b) => b.addEventListener('click', confirmDeleteAccount));
       $('[data-reset]', v).addEventListener('click', () => openModal({
         title: 'Reset all progress?', body: '<p>This permanently clears completed lessons, quiz scores, certificates, bookmarks and achievements stored in this browser. This cannot be undone.</p>',
         foot: '<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--danger" id="doReset">Reset everything</button>',
@@ -1936,7 +1938,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({
@@ -2048,6 +2050,7 @@ function boot() {
   window.addEventListener('hashchange', router);
   setupPWA();
   setupCloud();
+  setupAnalytics();
   markActiveDay();
   if (!storageOk) setTimeout(() => toast({ kind: 'warning', title: 'Progress won\'t be saved', text: 'Local storage is unavailable in this browser session.' }), 600);
   router();

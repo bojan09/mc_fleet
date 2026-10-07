@@ -7115,6 +7115,18 @@ async function cloudSignOut() {
   toast({ kind: 'success', title: 'Signed out', text: 'Your progress stays on this device.' });
 }
 
+/* Deletes the signed-in user's account (and, by cascade, their synced
+   progress) through the delete_my_account() database function. */
+async function cloudDeleteAccount() {
+  if (!CLOUD.user || !CLOUD.client) return false;
+  clearTimeout(CLOUD.timer);
+  const { error } = await CLOUD.client.rpc('delete_my_account');
+  if (error) { console.warn('Account deletion failed:', error.message); return false; }
+  await CLOUD.client.auth.signOut({ scope: 'local' }).catch(() => {});
+  CLOUD.user = null; cloudSetStatus('off'); refreshChrome();
+  return true;
+}
+
 async function cloudInit() {
   if (CLOUD.ready || !/^https?:$/.test(location.protocol)) return;
   await cloudLoadSdk();
@@ -7154,9 +7166,9 @@ function setupCloud() {
 function cloudAccountHTML() {
   if (CLOUD.user) {
     const email = CLOUD.user.email || 'Signed in';
-    return `<div class="side-account"><div class="side-account__row"><span class="side-account__status" id="cloudStatus" aria-live="polite">${cloudStatusHTML()}</span><button type="button" class="btn btn--ghost btn--sm" data-cloud="out">Sign out</button></div><small class="side-account__email" title="${esc(email)}">${esc(email)}</small></div>`;
+    return `<div class="side-account"><div class="side-account__row"><span class="side-account__status" id="cloudStatus" aria-live="polite">${cloudStatusHTML()}</span><button type="button" class="btn btn--ghost btn--sm" data-cloud="out">Sign out</button></div><small class="side-account__email" title="${esc(email)}">${esc(email)}</small><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
   }
-  return `<div class="side-account"><button type="button" class="btn btn--soft btn--sm side-account__in" data-cloud="in">${googleMark()} Sign in to sync progress</button></div>`;
+  return `<div class="side-account"><button type="button" class="btn btn--soft btn--sm side-account__in" data-cloud="in">${googleMark()} Sign in to sync progress</button><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
 }
 function googleMark() {
   return '<svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>';
@@ -7464,6 +7476,84 @@ function moduleGuideHTML(t, m) {
   if (!tag) return '';
   const text = g ? `Path step ${g.step}: ${g.stage}` : tag === 'adv' ? 'After the Beginner track' : tag === 'exp' ? 'After the Advanced track' : 'Optional · alongside or after Beginner';
   return `<span class="module__guide">${pathTag(tag)}<span>${esc(text)}</span>${MODULE_WITH[key] ? `<span class="module__with">${icon('layers', 'icon--sm')} Learn together: ${esc(MODULE_WITH[key].join(' · '))}</span>` : ''}</span>`;
+}
+
+/* ===========================================================================
+   PRIVACY — what the academy stores, where, and how to delete it; account
+   deletion for signed-in users; cookie-free usage statistics.
+   =========================================================================== */
+const PRIVACY_UPDATED = 'October 2026';
+
+function viewPrivacy() {
+  const row = (ic, t, d) => `<div class="pv-row"><span class="pv-row__ic">${icon(ic)}</span><div><h3>${t}</h3><p>${d}</p></div></div>`;
+  const html = `<div class="page page--narrow pv">
+    ${pageHead({ eyebrow: `${icon('shield', 'icon--sm')} Privacy`, title: 'Your data and privacy', text: `What MC Academy stores, where it is kept, and how to delete it. Last updated ${PRIVACY_UPDATED}.` })}
+    <div class="callout callout--info" role="note"><span class="callout__icon">${icon('info')}</span><div><h2 class="pv-short">The short version</h2><p>You can use the whole academy without an account. Your progress stays in your own browser. If you sign in with Google, a copy of your progress is kept in your account so it syncs across devices. There are no ads, no tracking cookies, and your data is never sold.</p></div></div>
+
+    <section class="pv-sec"><h2>Without an account</h2>
+      ${row('grid', 'Stored in your browser only', 'Completed lessons, quiz and exam scores, bookmarks, achievements, the name you type in, the days you studied, and your theme. It is kept in your browser\'s local storage and never leaves your device.')}
+      ${row('rotate', 'How to delete it', 'Use <strong>Reset all progress</strong> on the <a href="#/achievements">Achievements</a> page, or clear this site\'s data in your browser settings.')}
+    </section>
+
+    <section class="pv-sec"><h2>If you sign in with Google</h2>
+      ${row('users', 'Your account', 'Google shares your name, email address, profile picture link and a Google account ID with our sign-in provider, Supabase. We use them only to identify your account and show your name.')}
+      ${row('activity', 'Your synced progress', 'The same progress listed above (except your theme) is stored with your account so it can follow you to other devices. Each account can only read and change its own progress.')}
+      ${row('pin', 'Where it is kept', 'In a Supabase database in the European Union (Ireland, region eu-west-1).')}
+      ${row('lock', 'Sign-in session', 'While you are signed in, your browser keeps a sign-in token in local storage. Signing out removes it.')}
+      ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on the Achievements page. Your account and its synced progress are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete my account</strong> on the Achievements page or here. Your account and its synced progress are deleted permanently.')}
+    </section>
+
+    <section class="pv-sec"><h2>Services the site uses</h2>
+      ${infographicHTML({ ig: 'table', icon: 'layers', title: 'Who handles what', head: ['Service', 'What for', 'What it receives'], rows: [
+        ['Vercel', 'Hosts the website', 'Standard technical request data, such as your IP address and browser type, in its server logs.'],
+        ['Vercel Web Analytics', 'Counts page views to improve the academy', 'Anonymous, aggregated page views. No cookies and no personal profile.'],
+        ['Google Fonts', 'Loads the typefaces', 'Your IP address and browser type when the fonts are downloaded.'],
+        ['Google', 'Sign-in (optional)', 'Only if you choose to sign in with Google.'],
+        ['Supabase', 'Accounts and progress sync (optional)', 'Your account details and synced progress, as described above.'],
+        ['jsDelivr', 'Delivers the sign-in library', 'Only when you sign in. Your IP address and browser type.']
+      ] })}
+      <p class="small muted">Photos in the Visual Library are stored on this site and credited to their authors. Links to official company websites open those sites, which have their own privacy policies.</p>
+    </section>
+
+    <section class="pv-sec"><h2>What we don't do</h2>
+      <ul class="pv-list">${['No advertising and no advertising trackers', 'No tracking cookies', 'No selling or sharing of your data for marketing', 'No access to your Google contacts, files or email beyond your address'].map((t) => `<li>${icon('check-circle', 'icon--sm')}<span>${t}</span></li>`).join('')}</ul>
+    </section>
+  </div>`;
+  return {
+    html, title: 'Privacy', nav: 'privacy', crumbs: [['Privacy']],
+    after: (v) => $$('[data-delete-account]', v).forEach((b) => b.addEventListener('click', confirmDeleteAccount))
+  };
+}
+
+function confirmDeleteAccount() {
+  if (!CLOUD.user) return;
+  openModal({
+    title: 'Delete your account?',
+    body: `<p>This permanently deletes the account <strong>${esc(CLOUD.user.email || '')}</strong> and the progress synced to it. It cannot be undone.</p><p class="small muted">The copy of your progress in this browser is not deleted. Use <strong>Reset all progress</strong> afterwards if you want to clear it too.</p>`,
+    foot: '<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--danger" id="doDeleteAccount">Delete my account</button>',
+    onOpen: (m, close) => $('#doDeleteAccount', m).addEventListener('click', async (e) => {
+      e.currentTarget.disabled = true;
+      const ok = await cloudDeleteAccount();
+      close();
+      if (ok) { toast({ kind: 'success', title: 'Account deleted', text: 'Your account and synced progress were removed.' }); router(); }
+      else toast({ kind: 'warning', title: 'Couldn\'t delete the account', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet and try again.' });
+    })
+  });
+}
+
+/* Vercel Web Analytics: cookie-free page-view counts, loaded only on the
+   deployed site (enable "Analytics" for the project in Vercel). The app uses
+   hash routes, so each route change is reported as a page view. */
+function setupAnalytics() {
+  if (!/\.vercel\.app$/.test(location.hostname)) return;
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  const s = document.createElement('script');
+  s.src = '/_vercel/insights/script.js'; s.defer = true;
+  s.dataset.disableAutoTrack = '1';
+  document.head.appendChild(s);
+  const track = () => { const route = (location.hash || '#/dashboard').replace(/^#/, '').split('?')[0]; window.va('pageview', { route, path: route }); };
+  track();
+  window.addEventListener('hashchange', track);
 }
 
 /* ===========================================================================
@@ -8017,6 +8107,7 @@ const ROUTES = [
   [/^\/reference$/, viewReference],
   [/^\/library(?:\/([\w-]+))?$/, viewLibrary],
   [/^\/(?:academy\/)?software(?:\/([\w-]+))?$/, viewSoftware],
+  [/^\/privacy$/, viewPrivacy],
   [/^\/achievements$/, viewAchievements]
 ];
 function router() {
@@ -9382,12 +9473,13 @@ function viewAchievements() {
     <div class="section-head"><h2>Achievements</h2><span class="small muted">${earned} of ${ACHIEVEMENTS.length} earned</span></div>
     <div class="ach-grid stagger">${ACHIEVEMENTS.map(achHTML).join('')}</div>
     <div class="section-head"><h2>Data</h2></div>
-    <div class="card card--pad row row--between row--wrap"><div>${CLOUD.user ? `<strong>Your progress syncs to ${esc(CLOUD.user.email || 'your account')}.</strong><p class="small">It's saved on this device and in your account, so you can continue on any device where you sign in.</p>` : `<strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it. <button type="button" class="link-btn" data-cloud="in">Sign in with Google</button> to keep it in sync across devices.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p>`}</div><button type="button" class="btn btn--danger" data-reset>${icon('rotate')} Reset all progress</button></div>
+    <div class="card card--pad row row--between row--wrap"><div>${CLOUD.user ? `<strong>Your progress syncs to ${esc(CLOUD.user.email || 'your account')}.</strong><p class="small">It's saved on this device and in your account, so you can continue on any device where you sign in. <a href="#/privacy">How your data is handled</a>.</p>` : `<strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it. <button type="button" class="link-btn" data-cloud="in">Sign in with Google</button> to keep it in sync across devices. <a href="#/privacy">Privacy</a>.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p>`}</div><div class="row row--wrap">${CLOUD.user ? `<button type="button" class="btn btn--ghost" data-delete-account>${icon('x-circle')} Delete my account</button>` : ''}<button type="button" class="btn btn--danger" data-reset>${icon('rotate')} Reset all progress</button></div></div>
   </div>`;
   return {
     html, title: 'Achievements', nav: 'achievements', crumbs: [['Achievements']],
     after: (v) => {
       $$('[data-cert]', v).forEach((b) => b.addEventListener('click', () => showCertificate(TRACK_BY_ID[b.dataset.cert])));
+      $$('[data-delete-account]', v).forEach((b) => b.addEventListener('click', confirmDeleteAccount));
       $('[data-reset]', v).addEventListener('click', () => openModal({
         title: 'Reset all progress?', body: '<p>This permanently clears completed lessons, quiz scores, certificates, bookmarks and achievements stored in this browser. This cannot be undone.</p>',
         foot: '<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--danger" id="doReset">Reset everything</button>',
@@ -9403,7 +9495,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({
@@ -9515,6 +9607,7 @@ function boot() {
   window.addEventListener('hashchange', router);
   setupPWA();
   setupCloud();
+  setupAnalytics();
   markActiveDay();
   if (!storageOk) setTimeout(() => toast({ kind: 'warning', title: 'Progress won\'t be saved', text: 'Local storage is unavailable in this browser session.' }), 600);
   router();
