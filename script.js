@@ -3560,444 +3560,542 @@ const LESSON_MOVES = {
 const LIB_PHOTOS = {
  "dryvan": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/2008-08-02_UPS_long_trailer_1.jpg/960px-2008-08-02_UPS_long_trailer_1.jpg",
-  "w": 960,
-  "h": 640,
+  "w": 900,
+  "h": 600,
   "page": "https://commons.wikimedia.org/wiki/File:2008-08-02_UPS_long_trailer_1.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "Ildar Sagdejev (Specious)"
+  "author": "Ildar Sagdejev (Specious)",
+  "local": "img/library/dryvan.webp",
+  "localSm": "img/library/dryvan-sm.webp"
  },
  "daycab": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/2024_Mack_Anthem_6x4_tractor_%28Day_Cab%29_in_Light_Blue%2C_front_right.jpg/960px-2024_Mack_Anthem_6x4_tractor_%28Day_Cab%29_in_Light_Blue%2C_front_right.jpg",
-  "w": 960,
-  "h": 765,
+  "w": 900,
+  "h": 717,
   "page": "https://commons.wikimedia.org/wiki/File:2024_Mack_Anthem_6x4_tractor_(Day_Cab)_in_Light_Blue,_front_right.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Mr.choppers"
+  "author": "Mr.choppers",
+  "local": "img/library/daycab.webp",
+  "localSm": "img/library/daycab-sm.webp"
  },
  "yard": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Capacity_Yard_Truck.jpg",
-  "w": 960,
-  "h": 641,
+  "w": 640,
+  "h": 427,
   "page": "https://commons.wikimedia.org/wiki/File:Capacity_Yard_Truck.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "REV Group"
+  "author": "REV Group",
+  "local": "img/library/yard.webp",
+  "localSm": "img/library/yard-sm.webp"
  },
  "clutch": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Clutchdisc.jpg",
-  "w": 960,
-  "h": 1067,
+  "w": 450,
+  "h": 500,
   "page": "https://commons.wikimedia.org/wiki/File:Clutchdisc.jpg",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Sonett72"
+  "author": "Sonett72",
+  "local": "img/library/clutch.webp",
+  "localSm": "img/library/clutch-sm.webp"
  },
  "container": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/d/df/Container_01_KMJ.jpg",
-  "w": 960,
-  "h": 735,
+  "w": 854,
+  "h": 654,
   "page": "https://commons.wikimedia.org/wiki/File:Container_01_KMJ.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "KMJ at German Wikipedia"
+  "author": "KMJ at German Wikipedia",
+  "local": "img/library/container.webp",
+  "localSm": "img/library/container-sm.webp"
  },
  "chassis": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Container_chassis_8.webp/960px-Container_chassis_8.webp",
-  "w": 960,
-  "h": 693,
+  "w": 900,
+  "h": 650,
   "page": "https://commons.wikimedia.org/wiki/File:Container_chassis_8.webp",
   "license": "CC0",
   "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-  "author": "Wikideas1"
+  "author": "Wikideas1",
+  "local": "img/library/chassis.webp",
+  "localSm": "img/library/chassis-sm.webp"
  },
  "engine": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/Cummins_ISX_600_engine.jpg/960px-Cummins_ISX_600_engine.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Cummins_ISX_600_engine.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/engine.webp",
+  "localSm": "img/library/engine-sm.webp"
  },
  "dolly": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Dolly_trailer.jpg/960px-Dolly_trailer.jpg",
-  "w": 960,
-  "h": 465,
+  "w": 900,
+  "h": 436,
   "page": "https://commons.wikimedia.org/wiki/File:Dolly_trailer.jpg",
   "license": "CC BY-SA 2.5",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
-  "author": "Teppo Lainio"
+  "author": "Teppo Lainio",
+  "local": "img/library/dolly.webp",
+  "localSm": "img/library/dolly-sm.webp"
  },
  "transmission": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Eaton_Autoshift.jpg/960px-Eaton_Autoshift.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Eaton_Autoshift.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/transmission.webp",
+  "localSm": "img/library/transmission-sm.webp"
  },
  "tow": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Exercise-_Aw-R-Go%2C_Heavy_Wrecker_%288411431%29.jpg/960px-Exercise-_Aw-R-Go%2C_Heavy_Wrecker_%288411431%29.jpg",
-  "w": 960,
-  "h": 640,
+  "w": 900,
+  "h": 600,
   "page": "https://commons.wikimedia.org/wiki/File:Exercise-_Aw-R-Go,_Heavy_Wrecker_(8411431).jpg",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "U.S. Air Force"
+  "author": "U.S. Air Force",
+  "local": "img/library/tow.webp",
+  "localSm": "img/library/tow-sm.webp"
  },
  "reefer": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/G-3_Resources_LLC_Truck.jpg/960px-G-3_Resources_LLC_Truck.jpg",
-  "w": 960,
-  "h": 540,
+  "w": 900,
+  "h": 506,
   "page": "https://commons.wikimedia.org/wiki/File:G-3_Resources_LLC_Truck.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "JardonB"
+  "author": "JardonB",
+  "local": "img/library/reefer.webp",
+  "localSm": "img/library/reefer-sm.webp"
  },
  "rgn": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Globe_Trailers_detachable_gooseneck_trailer.jpg/960px-Globe_Trailers_detachable_gooseneck_trailer.jpg",
-  "w": 960,
-  "h": 443,
+  "w": 900,
+  "h": 415,
   "page": "https://commons.wikimedia.org/wiki/File:Globe_Trailers_detachable_gooseneck_trailer.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Leighketchum"
+  "author": "Leighketchum",
+  "local": "img/library/rgn.webp",
+  "localSm": "img/library/rgn-sm.webp"
  },
  "straight": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/ISUZU_ELF%2C_6th_Gen%2C_Hi-cab_White_Box_truck.jpg/960px-ISUZU_ELF%2C_6th_Gen%2C_Hi-cab_White_Box_truck.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:ISUZU_ELF,_6th_Gen,_Hi-cab_White_Box_truck.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Mj-bird"
+  "author": "Mj-bird",
+  "local": "img/library/straight.webp",
+  "localSm": "img/library/straight-sm.webp"
  },
  "liftgate": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Lastbil_med_lift.JPG/960px-Lastbil_med_lift.JPG",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Lastbil_med_lift.JPG",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Unknown author"
+  "author": "Unknown author",
+  "local": "img/library/liftgate.webp",
+  "localSm": "img/library/liftgate-sm.webp"
  },
  "tanker": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Loves_Freightliner_tanker_truck%2C_southern_Oklahoma.jpg/960px-Loves_Freightliner_tanker_truck%2C_southern_Oklahoma.jpg",
-  "w": 960,
-  "h": 562,
+  "w": 900,
+  "h": 527,
   "page": "https://commons.wikimedia.org/wiki/File:Loves_Freightliner_tanker_truck,_southern_Oklahoma.jpg",
   "license": "CC BY-SA 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "author": "Greg Goebel from Loveland CO, USA"
+  "author": "Greg Goebel from Loveland CO, USA",
+  "local": "img/library/tanker.webp",
+  "localSm": "img/library/tanker-sm.webp"
  },
  "sleeper": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Mack_Vision_427_sleeper_cab_truck.jpg/960px-Mack_Vision_427_sleeper_cab_truck.jpg",
-  "w": 960,
-  "h": 609,
+  "w": 900,
+  "h": 571,
   "page": "https://commons.wikimedia.org/wiki/File:Mack_Vision_427_sleeper_cab_truck.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Mr.choppers"
+  "author": "Mr.choppers",
+  "local": "img/library/sleeper.webp",
+  "localSm": "img/library/sleeper-sm.webp"
  },
  "dock": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Modern_loading_dock.jpg/960px-Modern_loading_dock.jpg",
-  "w": 960,
-  "h": 776,
+  "w": 900,
+  "h": 728,
   "page": "https://commons.wikimedia.org/wiki/File:Modern_loading_dock.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "Mark LS"
+  "author": "Mark LS",
+  "local": "img/library/dock.webp",
+  "localSm": "img/library/dock-sm.webp"
  },
  "tractor": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Peterbilt_truck_6.jpg/960px-Peterbilt_truck_6.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Peterbilt_truck_6.jpg",
   "license": "CC BY 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-  "author": "Mahanga"
+  "author": "Mahanga",
+  "local": "img/library/tractor.webp",
+  "localSm": "img/library/tractor-sm.webp"
  },
  "eld": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/Qualcomm_EOBR_model_MCP110_September_2011.png/960px-Qualcomm_EOBR_model_MCP110_September_2011.png",
-  "w": 960,
-  "h": 541,
+  "w": 900,
+  "h": 507,
   "page": "https://commons.wikimedia.org/wiki/File:Qualcomm_EOBR_model_MCP110_September_2011.png",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Semi Sam"
+  "author": "Semi Sam",
+  "local": "img/library/eld.webp",
+  "localSm": "img/library/eld-sm.webp"
  },
  "reeferunit": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Thermo_King_semi-trailer_refrigeration_unit.jpg/960px-Thermo_King_semi-trailer_refrigeration_unit.jpg",
-  "w": 960,
-  "h": 1551,
+  "w": 900,
+  "h": 1454,
   "page": "https://commons.wikimedia.org/wiki/File:Thermo_King_semi-trailer_refrigeration_unit.jpg",
   "license": "CC BY-SA 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "author": "Greg Goebel from Loveland CO, USA"
+  "author": "Greg Goebel from Loveland CO, USA",
+  "local": "img/library/reeferunit.webp",
+  "localSm": "img/library/reeferunit-sm.webp"
  },
  "flatbed": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Tire_Transport_Truck_%2846038169192%29.jpg/960px-Tire_Transport_Truck_%2846038169192%29.jpg",
-  "w": 960,
-  "h": 639,
+  "w": 900,
+  "h": 599,
   "page": "https://commons.wikimedia.org/wiki/File:Tire_Transport_Truck_(46038169192).jpg",
   "license": "CC BY-SA 2.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "author": "Chris Hunkeler from Carlsbad, California, USA"
+  "author": "Chris Hunkeler from Carlsbad, California, USA",
+  "local": "img/library/flatbed.webp",
+  "localSm": "img/library/flatbed-sm.webp"
  },
  "apu": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/0/05/TriPacAPU.jpg",
-  "w": 960,
-  "h": 960,
+  "w": 800,
+  "h": 800,
   "page": "https://commons.wikimedia.org/wiki/File:TriPacAPU.jpg",
   "license": "GFDL",
   "licenseUrl": "http://www.gnu.org/copyleft/fdl.html",
-  "author": "Lpimlott at English Wikipedia"
+  "author": "Lpimlott at English Wikipedia",
+  "local": "img/library/apu.webp",
+  "localSm": "img/library/apu-sm.webp"
  },
  "triangle": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0b/Triangle_de_pr%C3%A9signalisation.JPG/960px-Triangle_de_pr%C3%A9signalisation.JPG",
-  "w": 960,
-  "h": 639,
+  "w": 900,
+  "h": 599,
   "page": "https://commons.wikimedia.org/wiki/File:Triangle_de_pr%C3%A9signalisation.JPG",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Roulex 45"
+  "author": "Roulex 45",
+  "local": "img/library/triangle.webp",
+  "localSm": "img/library/triangle-sm.webp"
  },
  "turbo": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Turbocharger_Animation_by_Tyroola.gif/500px-Turbocharger_Animation_by_Tyroola.gif",
-  "w": 960,
-  "h": 905,
+  "w": 500,
+  "h": 471,
   "page": "https://commons.wikimedia.org/wiki/File:Turbocharger_Animation_by_Tyroola.gif",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "PatriciaWrites"
+  "author": "PatriciaWrites",
+  "local": "img/library/turbo.webp",
+  "localSm": "img/library/turbo-sm.webp"
  },
  "dpf": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/412_DSP_Transportation_233_-_DPLA_-_f9cee0a0b307aa1e63acc0e67b6a339c.jpg/960px-412_DSP_Transportation_233_-_DPLA_-_f9cee0a0b307aa1e63acc0e67b6a339c.jpg",
-  "w": 960,
-  "h": 638,
+  "w": 900,
+  "h": 598,
   "page": "https://commons.wikimedia.org/wiki/File:412_DSP_Transportation_233_-_DPLA_-_f9cee0a0b307aa1e63acc0e67b6a339c.jpg",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "U.S. Environmental Protection Agency"
+  "author": "U.S. Environmental Protection Agency",
+  "local": "img/library/dpf.webp",
+  "localSm": "img/library/dpf-sm.webp"
  },
  "airtanks": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/A_truck_chassis_section.jpg/960px-A_truck_chassis_section.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:A_truck_chassis_section.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/airtanks.webp",
+  "localSm": "img/library/airtanks-sm.webp"
  },
  "airdisc": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/Air_disc_brake.jpg/960px-Air_disc_brake.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Air_disc_brake.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/airdisc.webp",
+  "localSm": "img/library/airdisc-sm.webp"
  },
  "ecm": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/An_ECM_from_a_1996_Chevrolet_Beretta-_2013-10-24_23-13.jpg/960px-An_ECM_from_a_1996_Chevrolet_Beretta-_2013-10-24_23-13.jpg",
-  "w": 960,
-  "h": 540,
+  "w": 900,
+  "h": 506,
   "page": "https://commons.wikimedia.org/wiki/File:An_ECM_from_a_1996_Chevrolet_Beretta-_2013-10-24_23-13.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Mgiardina09"
+  "author": "Mgiardina09",
+  "local": "img/library/ecm.webp",
+  "localSm": "img/library/ecm-sm.webp"
  },
  "radiator": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Automobile_radiator.jpg",
-  "w": 960,
-  "h": 1089,
+  "w": 529,
+  "h": 600,
   "page": "https://commons.wikimedia.org/wiki/File:Automobile_radiator.jpg",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Unknown author"
+  "author": "Unknown author",
+  "local": "img/library/radiator.webp",
+  "localSm": "img/library/radiator-sm.webp"
  },
  "starter": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Automobile_starter.JPG/960px-Automobile_starter.JPG",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Automobile_starter.JPG",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "Willdre"
+  "author": "Willdre",
+  "local": "img/library/starter.webp",
+  "localSm": "img/library/starter-sm.webp"
  },
  "alternator": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/Automotive_alternator.jpg/960px-Automotive_alternator.jpg",
-  "w": 960,
-  "h": 726,
+  "w": 900,
+  "h": 681,
   "page": "https://commons.wikimedia.org/wiki/File:Automotive_alternator.jpg",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Pentti Immonen"
+  "author": "Pentti Immonen",
+  "local": "img/library/alternator.webp",
+  "localSm": "img/library/alternator-sm.webp"
  },
  "differential": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/BAUMA_2004_ZF_Differentialgetriebe.jpg/960px-BAUMA_2004_ZF_Differentialgetriebe.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:BAUMA_2004_ZF_Differentialgetriebe.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Aconcagua (talk)"
+  "author": "Aconcagua (talk)",
+  "local": "img/library/differential.webp",
+  "localSm": "img/library/differential-sm.webp"
  },
  "gladhands": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Back_of_FMV2Mk2_cabin.JPG/960px-Back_of_FMV2Mk2_cabin.JPG",
-  "w": 960,
-  "h": 1280,
+  "w": 900,
+  "h": 1200,
   "page": "https://commons.wikimedia.org/wiki/File:Back_of_FMV2Mk2_cabin.JPG",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/gladhands.webp",
+  "localSm": "img/library/gladhands-sm.webp"
  },
  "belt": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/70/Belt_drive_systen_01.JPG/960px-Belt_drive_systen_01.JPG",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Belt_drive_systen_01.JPG",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Miya.m"
+  "author": "Miya.m",
+  "local": "img/library/belt.webp",
+  "localSm": "img/library/belt-sm.webp"
  },
  "driveshaft": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Cardan_Shaft.jpg/960px-Cardan_Shaft.jpg",
-  "w": 960,
-  "h": 798,
+  "w": 900,
+  "h": 748,
   "page": "https://commons.wikimedia.org/wiki/File:Cardan_Shaft.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "IP83"
+  "author": "IP83",
+  "local": "img/library/driveshaft.webp",
+  "localSm": "img/library/driveshaft-sm.webp"
  },
  "airdryer": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Electronic_air_dryer.jpg/960px-Electronic_air_dryer.jpg",
-  "w": 960,
-  "h": 1280,
+  "w": 900,
+  "h": 1200,
   "page": "https://commons.wikimedia.org/wiki/File:Electronic_air_dryer.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/airdryer.webp",
+  "localSm": "img/library/airdryer-sm.webp"
  },
  "wheel": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Estados_Unidos%2C_camiones_1989_17.jpg",
-  "w": 960,
-  "h": 1452,
+  "w": 702,
+  "h": 1062,
   "page": "https://commons.wikimedia.org/wiki/File:Estados_Unidos,_camiones_1989_17.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "LBM1948"
+  "author": "LBM1948",
+  "local": "img/library/wheel.webp",
+  "localSm": "img/library/wheel-sm.webp"
  },
  "leafspring": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/6/63/Leafs1.jpg",
-  "w": 960,
-  "h": 678,
+  "w": 600,
+  "h": 424,
   "page": "https://commons.wikimedia.org/wiki/File:Leafs1.jpg",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Jim Gill"
+  "author": "Jim Gill",
+  "local": "img/library/leafspring.webp",
+  "localSm": "img/library/leafspring-sm.webp"
  },
  "tire": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/Lkw_Reifenprofil_nachschneiden.jpg/960px-Lkw_Reifenprofil_nachschneiden.jpg",
-  "w": 960,
-  "h": 733,
+  "w": 900,
+  "h": 687,
   "page": "https://commons.wikimedia.org/wiki/File:Lkw_Reifenprofil_nachschneiden.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "TireWorld"
+  "author": "TireWorld",
+  "local": "img/library/tire.webp",
+  "localSm": "img/library/tire-sm.webp"
  },
  "battery": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Photo-CarBattery.jpg/960px-Photo-CarBattery.jpg",
-  "w": 960,
-  "h": 918,
+  "w": 900,
+  "h": 861,
   "page": "https://commons.wikimedia.org/wiki/File:Photo-CarBattery.jpg",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Unknown author"
+  "author": "Unknown author",
+  "local": "img/library/battery.webp",
+  "localSm": "img/library/battery-sm.webp"
  },
  "airspring": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Pneumatic_spring.JPG/960px-Pneumatic_spring.JPG",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Pneumatic_spring.JPG",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-  "author": "Bongoman"
+  "author": "Bongoman",
+  "local": "img/library/airspring.webp",
+  "localSm": "img/library/airspring-sm.webp"
  },
  "steering": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/0/0c/RecirculatingBall.png",
-  "w": 960,
-  "h": 1156,
+  "w": 426,
+  "h": 513,
   "page": "https://commons.wikimedia.org/wiki/File:RecirculatingBall.png",
   "license": "Public domain",
   "licenseUrl": "",
-  "author": "Kivaan"
+  "author": "Kivaan",
+  "local": "img/library/steering.webp",
+  "localSm": "img/library/steering-sm.webp"
  },
  "fifthwheel": {
   "src": "https://upload.wikimedia.org/wikipedia/commons/6/65/Sattelkupplung.JPG",
-  "w": 960,
-  "h": 720,
+  "w": 480,
+  "h": 360,
   "page": "https://commons.wikimedia.org/wiki/File:Sattelkupplung.JPG",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "Unknown author"
+  "author": "Unknown author",
+  "local": "img/library/fifthwheel.webp",
+  "localSm": "img/library/fifthwheel-sm.webp"
  },
  "chamber": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/Spring_brake_air_cylinder.jpg/960px-Spring_brake_air_cylinder.jpg",
-  "w": 960,
-  "h": 1280,
+  "w": 900,
+  "h": 1200,
   "page": "https://commons.wikimedia.org/wiki/File:Spring_brake_air_cylinder.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/chamber.webp",
+  "localSm": "img/library/chamber-sm.webp"
  },
  "def": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Truck_AdBlue_tank.jpg/960px-Truck_AdBlue_tank.jpg",
-  "w": 960,
-  "h": 1440,
+  "w": 900,
+  "h": 1350,
   "page": "https://commons.wikimedia.org/wiki/File:Truck_AdBlue_tank.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "KaiBorgeest"
+  "author": "KaiBorgeest",
+  "local": "img/library/def.webp",
+  "localSm": "img/library/def-sm.webp"
  },
  "compressor": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Truck_air_compressor.jpg/960px-Truck_air_compressor.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 675,
   "page": "https://commons.wikimedia.org/wiki/File:Truck_air_compressor.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/compressor.webp",
+  "localSm": "img/library/compressor-sm.webp"
  },
  "injector": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Unit_injector_early.jpg/960px-Unit_injector_early.jpg",
-  "w": 960,
-  "h": 1280,
+  "w": 900,
+  "h": 1200,
   "page": "https://commons.wikimedia.org/wiki/File:Unit_injector_early.jpg",
   "license": "CC BY-SA 3.0",
   "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "author": "Panoha"
+  "author": "Panoha",
+  "local": "img/library/injector.webp",
+  "localSm": "img/library/injector-sm.webp"
  },
  "doubles": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/UPS_Freight_truck%2C_Motor_Cargo_%26_Overnite_trailers.jpg/960px-UPS_Freight_truck%2C_Motor_Cargo_%26_Overnite_trailers.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 356,
   "page": "https://commons.wikimedia.org/wiki/File:UPS_Freight_truck,_Motor_Cargo_%26_Overnite_trailers.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "Xnatedawgx"
+  "author": "Xnatedawgx",
+  "local": "img/library/doubles.webp",
+  "localSm": "img/library/doubles-sm.webp"
  },
  "tandem": {
   "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Semi-trailer_Groenewegen%2C_twin_tires%2C_suspension_IMG_20211110_153847.jpg/960px-Semi-trailer_Groenewegen%2C_twin_tires%2C_suspension_IMG_20211110_153847.jpg",
-  "w": 960,
-  "h": 720,
+  "w": 900,
+  "h": 450,
   "page": "https://commons.wikimedia.org/wiki/File:Semi-trailer_Groenewegen,_twin_tires,_suspension_IMG_20211110_153847.jpg",
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "author": "Bertux"
+  "author": "Bertux",
+  "local": "img/library/tandem.webp",
+  "localSm": "img/library/tandem-sm.webp"
  }
 };
 
@@ -4424,6 +4522,194 @@ const LIBRARY = [
 ];
 const LIB_MAP = new Map(LIBRARY.map((x) => [x.id, x]));
 const LIB_TERM = new Map(LIBRARY.flatMap((x) => (x.terms || []).map((t) => [t.toLowerCase(), x])));
+
+/* ---------------------------------------------------------------------------
+   CONTENT — Process visuals for the workflow, communication and management
+   lessons. Example numbers are illustrative and labeled as such.
+   --------------------------------------------------------------------------- */
+
+// Beginner M6 L2 — one case, start to finish
+enrich('beginner.m6.l2', { add: [
+  { ig: 'process', icon: 'branch', title: 'The decision points in one case', items: [
+    { icon: 'shield', t: 'Is everyone safe?', d: 'Location, hazards, warning devices' }, { icon: 'truck', t: 'Which unit?', d: 'Tractor or trailer — opens the right case' },
+    { icon: 'alert', t: 'Can it move?', d: 'Safety-critical → it stays put' }, { icon: 'wrench', t: 'Who fixes it?', d: 'Mobile, shop or tow' },
+    { icon: 'dollar', t: 'Approve the work?', d: 'Within your limit or escalate' }, { icon: 'check-circle', t: 'Is it really fixed?', d: 'Driver confirms before closing' }
+  ], note: 'Each decision is also a documentation point: write down what you decided, when, and why.' }
+] });
+
+// Beginner M7 L2 — shops, vendors and management
+enrich('beginner.m7.l2', { add: [
+  { ig: 'hub', icon: 'users', title: 'Everyone you talk to on one repair', center: { icon: 'clipboard', t: 'You (the case)' }, items: [
+    { icon: 'wrench', t: 'Shop', d: 'Complaint, unit, authorization' }, { icon: 'layers', t: 'Parts vendor', d: 'Part number, VIN, urgency' },
+    { icon: 'route', t: 'Dispatch', d: 'Status and ETR' }, { icon: 'users', t: 'Driver', d: 'Plan and next update' },
+    { icon: 'bar', t: 'Fleet manager', d: 'Cost, approvals, repeats' }, { icon: 'award', t: 'Leadership', d: 'Impact in one line' }
+  ] },
+  { ig: 'card', icon: 'message', title: 'A complete hand-off to a shop', form: 'Shop hand-off · example', rows: [
+    ['Unit / VIN', 'T-114 · last 8 of VIN'], ['Complaint', 'Grinding front left when braking, started this morning'], ['Driver notes', 'Pulls slightly left; no warning lamps'],
+    ['Odometer', '412,880 mi'], ['Authorization', 'Diagnose only — call before any repair'], ['PO / reference', 'PO 48213'],
+    ['Warranty?', 'Check — brake job here 3 months ago'], ['Contact', 'Your name, direct line, update by 11:00']
+  ], note: 'A shop that gets this up front doesn\'t need to call you back with questions — and doesn\'t start unapproved work.' }
+] });
+
+// Beginner M9 L1 — inspections and the DVIR loop
+enrich('beginner.m9.l1', { add: [
+  { ig: 'versus', icon: 'clipboard', title: 'Pre-trip vs post-trip inspection', items: [
+    { t: 'Pre-trip inspection', sub: 'Before the vehicle is driven.', facts: [['Who', 'The driver'], ['Rule of thumb', 'Driver must be satisfied the vehicle is in safe condition and review the last DVIR (49 CFR 396.13)']], watch: 'Defects found here can stop a dispatch — the earlier you hear, the more options you have.' },
+    { t: 'Post-trip inspection', sub: 'At the end of the day\'s work.', facts: [['Who', 'The driver'], ['Report', 'A written DVIR is required when a defect is found or reported (49 CFR 396.11, property carriers)']], watch: 'Post-trip defects are your overnight work list — schedule them before the unit\'s next dispatch.' }
+  ], key: 'Pre-trip protects today\'s trip; post-trip feeds tonight\'s repairs. Both land on the coordinator\'s desk.' },
+  { ig: 'scale', icon: 'alert', title: 'How a reported defect is handled', stops: [
+    { t: 'Not safety-related', d: 'Record it and schedule the repair.', tone: 'success' },
+    { t: 'Affects safe operation', d: 'Repair (and certify) before the vehicle operates again.', tone: 'warning' },
+    { t: 'Out-of-service condition', d: 'The vehicle may not move until repaired.', tone: 'critical' }
+  ], note: 'Your safety department decides how defects are classified. The coordinator\'s job is to get each one repaired and certified on time.' }
+] });
+
+// Advanced M5 L1 — components of downtime
+enrich('advanced.m5.l1', { add: [
+  { ig: 'pipeline', icon: 'clock', title: 'The timestamps that measure downtime', items: [
+    { t: 'Unit down', tone: 'critical' }, { t: 'Vendor contacted', tone: 'warning' }, { t: 'Vendor arrives / unit at shop', tone: 'warning' },
+    { t: 'Diagnosed', tone: 'info' }, { t: 'Work approved', tone: 'info' }, { t: 'Parts in hand', tone: 'info' },
+    { t: 'Repair complete', tone: 'success' }, { t: 'Back in service', tone: 'success' }
+  ], note: 'Record every timestamp on every case. The gap between any two of them is a stage you can measure — and compare across vendors, terminals and months.' }
+] });
+
+// Advanced M5 L2 — return-to-service ETAs
+enrich('advanced.m5.l2', { add: [
+  { ig: 'scale', icon: 'clock', title: 'How confident is this ETR?', stops: [
+    { t: 'Rough', d: 'Before diagnosis — a range, not a time.', tone: 'critical' },
+    { t: 'Likely', d: 'Diagnosed; parts identified but not in hand.', tone: 'warning' },
+    { t: 'Firm', d: 'Parts on site, repair underway.', tone: 'info' },
+    { t: 'Confirmed', d: 'Repair done, unit released.', tone: 'success' }
+  ], note: 'Say the confidence level with every ETR: "Likely 16:00 — parts arrive at 13:00." Dispatch plans differently for each level.' }
+] });
+
+// Advanced M6 L1 — maintenance and loads
+enrich('advanced.m6.l1', { add: [
+  { ig: 'table', icon: 'route', title: 'Recovery options when a loaded unit goes down', head: ['Option', 'When it fits', 'Trade-off'], rows: [
+    ['Wait for the repair', 'Short, reliable ETR; delivery window still reachable', 'All risk sits on one ETR'],
+    ['Power swap', 'Tractor is down, trailer is fine, another tractor is nearby', 'Deadhead miles and a second driver\'s time'],
+    ['Relay driver', 'Truck will be fixed, but the driver is out of hours', 'Needs a rested driver near the shop'],
+    ['Reschedule the appointment', 'Customer can accept a later time', 'Customer impact; may cost fees'],
+    ['Transload to another trailer', 'Trailer itself can\'t move (or a straight truck is down)', 'Labor, equipment and handling risk']
+  ], note: 'Dispatch chooses — your job is to give a realistic ETR early enough that every option is still open.' }
+] });
+
+// Advanced M7 L1 — fleet tracking
+enrich('advanced.m7.l1', { add: [
+  { ig: 'cycle', icon: 'rotate', title: 'Turning tracking data into decisions', center: 'Weekly review', items: [
+    { icon: 'list-check', t: 'Collect', d: 'Every case, coded' }, { icon: 'search', t: 'Review', d: 'Same time each week' },
+    { icon: 'trend', t: 'Spot patterns', d: 'Repeats, slow vendors' }, { icon: 'wrench', t: 'Act', d: 'PM change, vendor talk' },
+    { icon: 'bar', t: 'Measure', d: 'Did it improve?' }
+  ] },
+  { ig: 'table', icon: 'alert', title: 'Early warning signs in fleet data', head: ['What you see', 'What it can mean'], rows: [
+    ['Same unit, same system, twice in 90 days', 'Repeat failure — the root cause wasn\'t fixed'],
+    ['PMs slipping past due on one terminal', 'Capacity or scheduling problem at that location'],
+    ['One vendor\'s repairs keep coming back', 'Quality issue — review comebacks with the vendor'],
+    ['Fuel economy dropping on one unit', 'Tires, brakes or engine issue worth inspecting'],
+    ['Downtime rising while repair costs stay flat', 'Time is lost waiting — approvals, parts or pickup']
+  ] }
+] });
+
+// Expert M3 L1 — symptom, failure, root cause
+enrich('expert.m3.l1', { add: [
+  { ig: 'pipeline', icon: 'search', title: 'Symptom → failure → root cause (example)', items: [
+    { t: 'Symptom: battery lamp, no-start', tone: 'warning' }, { t: 'Failure: alternator not charging', tone: 'critical' },
+    { t: 'Cause: belt slipping', tone: 'info' }, { t: 'Root cause: worn tensioner never checked at PM', tone: 'success' }
+  ], note: 'Replacing the alternator fixes the failure. Adding the tensioner to the PM checklist fixes the root cause — and stops the repeat.' },
+  { ig: 'process', icon: 'search', title: 'The 5 Whys on the same case', items: [
+    { icon: 'alert', t: 'Why no start?', d: 'Batteries were dead' }, { icon: 'zap', t: 'Why dead?', d: 'Alternator wasn\'t charging' },
+    { icon: 'rotate', t: 'Why not charging?', d: 'Belt was slipping' }, { icon: 'wrench', t: 'Why slipping?', d: 'Tensioner was worn' },
+    { icon: 'clipboard', t: 'Why not caught?', d: 'Not on the PM checklist' }
+  ], note: 'Illustrative chain. Stop asking "why" when you reach something you can change in a process — not when you reach a part.' }
+] });
+
+// Expert M4 L1 — parallel workstreams
+enrich('expert.m4.l1', { add: [
+  { ig: 'gantt', icon: 'clock', title: 'Workstreams run at the same time (first 3 hours)', from: 0, to: 180, ticks: [[0, '0'], [30, '30 min'], [60, '1 h'], [90, '1.5 h'], [120, '2 h'], [150, '2.5 h'], [180, '3 h']], rows: [
+    { l: 'Safety & driver', s: 0, e: 20, tone: 'critical', note: 'First' }, { l: 'Vendor & diagnosis', s: 10, e: 150, tone: 'info' },
+    { l: 'Parts search', s: 70, e: 160, tone: 'warning' }, { l: 'Dispatch & customer', s: 15, e: 180, tone: 'info', note: 'Updates every 30–60 min' },
+    { l: 'Recovery plan B', s: 40, e: 120, tone: 'warning' }, { l: 'Documentation', s: 0, e: 180, tone: 'success', note: 'Continuous' }
+  ], note: 'Illustrative timing. Safety comes first; after that, nothing waits for anything else unless it has to.' }
+] });
+
+// Expert M4 L2 — simulation
+enrich('expert.m4.l2', { add: [
+  { ig: 'process', icon: 'activity', title: 'How a complex breakdown unfolds', items: [
+    { icon: 'phone', t: 'The call', d: 'Safety, unit, location, load' }, { icon: 'search', t: 'Diagnosis', d: 'Mobile tech or tow to a shop' },
+    { icon: 'layers', t: 'Parts problem', d: 'Not in stock nearby' }, { icon: 'route', t: 'Plan B', d: 'Swap, relay or reschedule' },
+    { icon: 'message', t: 'Pressure', d: 'Dispatch and customer push' }, { icon: 'check-circle', t: 'Resolution', d: 'Safe repair, documented' }
+  ], note: 'Expect each stage to change your plan. Re-check safety and the ETR every time it does.' }
+] });
+
+// Expert M5 L1 — vendor scorecard
+enrich('expert.m5.l1', { add: [
+  { ig: 'formulas', icon: 'calc', title: 'Scorecard math', items: [
+    { t: 'Weighted score', f: 'Σ (rating × weight)', d: 'Weights add up to 100%' },
+    { t: 'Comeback rate', f: 'repeat repairs ÷ repairs × 100', d: 'Lower is better' },
+    { t: 'Avg response', f: 'total response hours ÷ calls', d: 'Lower is better' }
+  ] }
+] });
+
+// Expert M5 L2 — managing vendor relationships
+enrich('expert.m5.l2', { add: [
+  { ig: 'ladder', icon: 'trend', title: 'Addressing vendor performance, step by step', levels: [
+    { t: 'Direct feedback', d: 'Specific case, specific issue, same week.' },
+    { t: 'Documented review', d: 'Share the data: comebacks, response time, cost.' },
+    { t: 'Improvement plan', d: 'Agreed actions and a review date.' },
+    { t: 'Reduced volume', d: 'Fewer referrals until results improve.' },
+    { t: 'Removal', d: 'Last step — with management approval.' }
+  ], note: 'Climb only as far as you need. Most issues are fixed at the first or second step when the data is clear.' },
+  { ig: 'cycle', icon: 'rotate', title: 'The quarterly vendor review', center: 'Every quarter', items: [
+    { icon: 'bar', t: 'Pull data', d: 'Scorecard by vendor' }, { icon: 'message', t: 'Meet', d: 'Share results' },
+    { icon: 'list-check', t: 'Agree actions', d: 'Both sides' }, { icon: 'clock', t: 'Follow up', d: 'Check progress' }
+  ] }
+] });
+
+// Expert M6 L1 — warranty opportunities
+enrich('expert.m6.l1', { add: [
+  { ig: 'process', icon: 'shield', title: 'Is this repair a warranty claim?', items: [
+    { icon: 'alert', t: 'Failure reported', d: 'Before approving work' }, { icon: 'clock', t: 'Age & miles', d: 'Unit and component' },
+    { icon: 'file', t: 'Repair history', d: 'Was this part replaced recently?' }, { icon: 'shield', t: 'Coverage', d: 'Base, extended, parts or repair warranty' },
+    { icon: 'phone', t: 'Pre-authorize', d: 'With the dealer or warranty provider' }, { icon: 'wrench', t: 'Repair', d: 'At a facility that can file the claim' }
+  ], note: 'Checking before work starts is the step that matters — many claims can\'t be recovered after a non-authorized shop does the repair.' },
+  { ig: 'table', icon: 'file', title: 'Common types of coverage', head: ['Type', 'What it usually covers', 'Where to check'], rows: [
+    ['Base vehicle warranty', 'Components of a new vehicle for a set time or mileage', 'Purchase documents, dealer'],
+    ['Extended / engine coverage', 'Specific systems beyond the base warranty', 'Coverage contract'],
+    ['Parts warranty', 'A replacement part that fails early', 'Repair invoice, parts supplier'],
+    ['Repair (workmanship) warranty', 'The labor on a previous repair', 'Shop\'s invoice terms']
+  ], note: 'Terms vary by manufacturer and contract — always read the actual coverage documents.' }
+] });
+
+// Expert M6 L2 — warranty communication
+enrich('expert.m6.l2', { add: [
+  { ig: 'card', icon: 'file', title: 'What a warranty claim packet contains', form: 'Warranty claim · checklist', rows: [
+    ['Unit & VIN', 'Full VIN, in-service date'], ['Odometer / hours', 'At failure'], ['Failure description', 'Factual complaint and when it started'],
+    ['Diagnosis', 'Technician findings, fault codes'], ['Prior repair', 'Invoice for the earlier part or repair, if any'], ['Authorization', 'Who approved, reference number'],
+    ['Photos / parts', 'Failed part retained if requested'], ['Costs', 'Parts, labor, towing — itemized']
+  ], note: 'Missing items are the most common reason claims stall. Build the packet as the repair happens, not after.' }
+] });
+
+// Expert M7 L1 — escalation
+enrich('expert.m7.l1', { add: [
+  { ig: 'process', icon: 'message', title: 'SBAR — escalate in four parts', items: [
+    { icon: 'alert', t: 'Situation', d: 'What is happening now' }, { icon: 'file', t: 'Background', d: 'Context they need' },
+    { icon: 'search', t: 'Assessment', d: 'What you think it means' }, { icon: 'check-circle', t: 'Recommendation', d: 'What you need from them' }
+  ], note: 'Example: "T-127 is down loaded in Amarillo (S). Brake repair needs a part arriving tomorrow (B). We\'ll miss the 13:00 delivery (A). I recommend a power swap from T-140 — approve the deadhead? (R)"' }
+] });
+
+// Expert M8 L1 — operating under disruption
+enrich('expert.m8.l1', { add: [
+  { ig: 'table', icon: 'activity', title: 'Disruption board at 07:00 (illustrative)', head: ['Unit', 'Situation', 'Priority', 'Next action'], rows: [
+    ['T-118', 'Shoulder of I-40, no-start, driver in cab', '1 — life safety', 'Driver safety check; warning devices; mobile tech'],
+    ['TR-551', 'Reefer alarm, pharma load, temp rising slowly', '2 — time-critical cargo', 'Reefer technician; backup trailer on standby'],
+    ['T-140', 'Amber lamp, loaded, driving normally', '3 — revenue impact', 'Diagnose at next planned stop'],
+    ['Yard (4 units)', 'Won\'t start after cold night', '4 — capacity', 'Yard service in order of next dispatch']
+  ], note: 'Order follows the triage pyramid: people, safety defects, time-critical cargo, revenue, then routine work.' },
+  { ig: 'process', icon: 'message', title: 'Communication rhythm during a disruption', items: [
+    { icon: 'phone', t: 'First 15 min', d: 'Safety confirmed for every driver' }, { icon: 'users', t: 'Within 30 min', d: 'Board shared with dispatch and leadership' },
+    { icon: 'clock', t: 'Every hour', d: 'Short status update, same format' }, { icon: 'file', t: 'End of day', d: 'Summary and open items handed over' }
+  ], note: 'A predictable rhythm cuts interruptions — people stop calling when they know when the next update comes.' }
+] });
 
 /* ---------------------------------------------------------------------------
    2. PRACTICE DATA — Glossary
@@ -5776,11 +6062,11 @@ EXAMS.operations = {
    Photos are Wikimedia Commons thumbnails with attribution; diagrams come
    from the academy's own illustration set (ART).
    =========================================================================== */
-const libSize = (src, w) => src.replace(/\/\d+px-/, `/${w}px-`);
 function libPhotoImg(x, w, cls = '') {
   const p = LIB_PHOTOS[x.photo]; if (!p) return '';
-  const src = /\/\d+px-/.test(p.src) ? libSize(p.src, w) : p.src;
-  return `<img class="${cls}" src="${esc(src)}" alt="${esc(x.alt || x.name)}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async" crossorigin="anonymous" referrerpolicy="no-referrer">`;
+  // Local copies (resized WebP) ship with the app so the library works offline.
+  const src = w <= 500 ? p.localSm : p.local;
+  return `<img class="${cls}" src="${esc(src)}" alt="${esc(x.alt || x.name)}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async">`;
 }
 function libArt(x) {
   if (!x.art) return '';
@@ -5789,7 +6075,7 @@ function libArt(x) {
 function libCredit(x) {
   const p = LIB_PHOTOS[x.photo]; if (!p) return '';
   const author = p.author && p.author !== 'Unknown author' ? esc(p.author) : 'see file page';
-  return `<p class="lib-credit">Photo: ${author} · ${p.licenseUrl ? `<a href="${esc(p.licenseUrl)}" target="_blank" rel="noopener noreferrer">${esc(p.license)}</a>` : esc(p.license)} · <a href="${esc(p.page)}" target="_blank" rel="noopener noreferrer">Wikimedia Commons<span class="sr-only"> (opens in a new tab)</span></a></p>`;
+  return `<p class="lib-credit">Photo: ${author} · ${p.licenseUrl ? `<a href="${esc(p.licenseUrl)}" target="_blank" rel="noopener noreferrer">${esc(p.license)}</a>` : esc(p.license)} · <a href="${esc(p.page)}" target="_blank" rel="noopener noreferrer">Wikimedia Commons<span class="sr-only"> (opens in a new tab)</span></a> · resized</p>`;
 }
 /* Thumbnail used on cards: photo if there is one, otherwise the illustration. */
 function libThumb(x) {
@@ -5881,6 +6167,160 @@ function openTermVisual(g, x) {
 }
 
 /* ===========================================================================
+   CLOUD SYNC — optional Google sign-in (Supabase) that keeps progress in sync
+   across devices. The academy stays fully usable signed out and offline:
+   localStorage remains the working copy, and the cloud row is a mirror.
+   Table: public.progress (user_id, state jsonb, updated_at) with row-level
+   security so each user can only read and write their own row.
+   =========================================================================== */
+const CLOUD = {
+  url: 'https://lqlewiyuhifvnodkpiul.supabase.co',
+  key: 'sb_publishable_HOxayhHD0PfFFvm0nC45JQ_8JgHf56_', // publishable key — safe in the browser; RLS protects the data
+  sdk: 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js',
+  client: null, user: null, status: 'off', timer: null, ready: false
+};
+const CLOUD_LOCAL_ONLY = ['theme']; // per-device preferences that never sync
+
+function cloudLoadSdk() {
+  if (window.supabase) return Promise.resolve();
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = CLOUD.sdk; s.async = true; s.crossOrigin = 'anonymous';
+    s.onload = res; s.onerror = () => rej(new Error('Could not load the sign-in library'));
+    document.head.appendChild(s);
+  });
+}
+
+/* Merge two progress snapshots without ever losing work: completion and
+   visits are unions, scores keep the best result. */
+function mergeProgress(a, b) {
+  const out = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  const union = (x, y) => Object.assign({}, y || {}, x || {});
+  const best = (x = {}, y = {}, field) => { const r = Object.assign({}, y, x); Object.keys(y).forEach((k) => { if (x[k] && y[k]) r[k] = (y[k][field] || 0) > (x[k][field] || 0) ? y[k] : x[k]; }); return r; };
+  out.completed = union(a.completed, b.completed);
+  out.checks = best(a.checks, b.checks, 'score');
+  out.quizzes = best(a.quizzes, b.quizzes, 'best');
+  out.finals = best(a.finals, b.finals, 'score');
+  Object.keys(out.finals).forEach((k) => { if ((a.finals[k] || {}).passed || (b.finals[k] || {}).passed) out.finals[k] = Object.assign({}, out.finals[k], { passed: true }); });
+  out.exercises = Object.assign({}, b.exercises, a.exercises); Object.keys(b.exercises || {}).forEach((k) => { out.exercises[k] = Math.max(a.exercises[k] || 0, b.exercises[k] || 0); });
+  ['scen', 'trees', 'glossaryViewed', 'calcUsed', 'achievements'].forEach((k) => { out[k] = union(a[k], b[k]); });
+  out.flash = { known: union((a.flash || {}).known, (b.flash || {}).known) };
+  out.bookmarks = [...new Set([...(a.bookmarks || []), ...(b.bookmarks || [])])];
+  out.days = [...new Set([...(a.days || []), ...(b.days || [])])].sort().slice(-120);
+  out.last = a.last || b.last;
+  out.name = a.name || b.name || '';
+  out.theme = a.theme;
+  return out;
+}
+function cloudSnapshot() {
+  const s = JSON.parse(JSON.stringify(state));
+  CLOUD_LOCAL_ONLY.forEach((k) => delete s[k]);
+  return s;
+}
+function cloudSetStatus(s) { CLOUD.status = s; const el = $('#cloudStatus'); if (el) el.innerHTML = cloudStatusHTML(); }
+function cloudStatusHTML() {
+  const map = { syncing: ['rotate', 'Syncing…'], synced: ['check-circle', 'Progress synced'], error: ['alert', 'Sync paused'], offline: ['info', 'Offline — will sync later'], off: ['info', 'Saved on this device'] };
+  const [ic, t] = map[CLOUD.status] || map.off;
+  return `${icon(ic, 'icon--sm')}<span>${t}</span>`;
+}
+
+async function cloudPush() {
+  if (!CLOUD.user || !CLOUD.client) return;
+  if (!navigator.onLine) { cloudSetStatus('offline'); return; }
+  cloudSetStatus('syncing');
+  const { error } = await CLOUD.client.from('progress').upsert({ user_id: CLOUD.user.id, state: cloudSnapshot(), updated_at: new Date().toISOString() });
+  cloudSetStatus(error ? 'error' : 'synced');
+  if (error) console.warn('Progress sync failed:', error.message);
+}
+/* Called by save(): batch rapid changes into one upload. */
+function cloudQueue() {
+  if (!CLOUD.user) return;
+  clearTimeout(CLOUD.timer);
+  CLOUD.timer = setTimeout(cloudPush, 1500);
+}
+async function cloudPull() {
+  cloudSetStatus('syncing');
+  const { data, error } = await CLOUD.client.from('progress').select('state').eq('user_id', CLOUD.user.id).maybeSingle();
+  if (error) {
+    cloudSetStatus('error');
+    toast({ kind: 'warning', title: 'Cloud sync isn\'t available', text: 'You\'re signed in, but progress couldn\'t sync. It\'s still saved on this device.' });
+    console.warn('Progress sync failed:', error.message);
+    return;
+  }
+  if (data && data.state) {
+    state = mergeProgress(state, Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), data.state));
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+    router();
+  }
+  await cloudPush();
+}
+
+async function cloudSignIn() {
+  try {
+    await cloudInit();
+    try { sessionStorage.setItem('mca.return', location.hash || '#/dashboard'); } catch (e) {}
+    const { error } = await CLOUD.client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
+    if (error) throw error;
+  } catch (e) {
+    toast({ kind: 'warning', title: 'Sign-in unavailable', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to sign in.' });
+  }
+}
+async function cloudSignOut() {
+  if (!CLOUD.client) return;
+  clearTimeout(CLOUD.timer);
+  await cloudPush();
+  await CLOUD.client.auth.signOut();
+  toast({ kind: 'success', title: 'Signed out', text: 'Your progress stays on this device.' });
+}
+
+async function cloudInit() {
+  if (CLOUD.ready || !/^https?:$/.test(location.protocol)) return;
+  await cloudLoadSdk();
+  if (CLOUD.ready) return;
+  CLOUD.client = window.supabase.createClient(CLOUD.url, CLOUD.key, { auth: { flowType: 'pkce', persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+  CLOUD.ready = true;
+  CLOUD.client.auth.onAuthStateChange((event, session) => {
+    const was = CLOUD.user && CLOUD.user.id;
+    CLOUD.user = session ? session.user : null;
+    if (CLOUD.user && CLOUD.user.id !== was) {
+      if (!state.name && CLOUD.user.user_metadata && CLOUD.user.user_metadata.full_name) { state.name = CLOUD.user.user_metadata.full_name; }
+      setTimeout(cloudPull, 0);
+    }
+    if (!CLOUD.user) cloudSetStatus('off');
+    refreshChrome();
+  });
+  // Returning from Google: the SDK exchanges ?code=…; tidy the address bar afterwards.
+  await CLOUD.client.auth.getSession();
+  if (/[?&]code=/.test(location.search)) {
+    let back = '#/dashboard'; try { back = sessionStorage.getItem('mca.return') || back; sessionStorage.removeItem('mca.return'); } catch (e) {}
+    history.replaceState(null, '', location.pathname + back);
+    router();
+  }
+}
+
+/* Start quietly after the first paint; only a returning signed-in user (or
+   someone coming back from Google) needs the SDK right away. */
+function setupCloud() {
+  const hasSession = (() => { try { return Object.keys(localStorage).some((k) => k.startsWith('sb-') && k.endsWith('-auth-token')); } catch (e) { return false; } })();
+  if (hasSession || /[?&]code=/.test(location.search)) cloudInit().catch(() => cloudSetStatus('off'));
+  window.addEventListener('online', () => { if (CLOUD.user) cloudPush(); });
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-cloud="in"]')) cloudSignIn();
+    if (e.target.closest('[data-cloud="out"]')) cloudSignOut();
+  });
+}
+function cloudAccountHTML() {
+  if (CLOUD.user) {
+    const email = CLOUD.user.email || 'Signed in';
+    return `<div class="side-account"><div class="side-account__row"><span class="side-account__status" id="cloudStatus" aria-live="polite">${cloudStatusHTML()}</span><button type="button" class="btn btn--ghost btn--sm" data-cloud="out">Sign out</button></div><small class="side-account__email" title="${esc(email)}">${esc(email)}</small></div>`;
+  }
+  return `<div class="side-account"><button type="button" class="btn btn--soft btn--sm side-account__in" data-cloud="in">${googleMark()} Sign in to sync progress</button></div>`;
+}
+function googleMark() {
+  return '<svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>';
+}
+
+/* ===========================================================================
    4. ENGINE
    =========================================================================== */
 
@@ -5946,6 +6386,7 @@ function loadState() {
 }
 let saveWarned = false;
 function save() {
+  cloudQueue();
   try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
   catch (e) {
     storageOk = false;
@@ -6480,6 +6921,7 @@ function refreshChrome() {
   const initials = name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
   const ctx = currentContext();
   $('#sidebarFoot').innerHTML = `<button type="button" class="side-profile" id="profileBtn" style="width:100%;text-align:left" aria-label="Edit your name"><span class="side-avatar">${esc(initials)}</span><span class="grow"><strong>${esc(name)}</strong><small>${ctx.t.level} track · ${pct(p)}% overall</small></span>${icon('chev-r', 'icon--sm')}</button>`;
+  $('#sidebarFoot').insertAdjacentHTML('beforeend', cloudAccountHTML());
   $('#profileBtn').addEventListener('click', editName);
 }
 
@@ -7788,7 +8230,7 @@ function viewAchievements() {
     <div class="section-head"><h2>Achievements</h2><span class="small muted">${earned} of ${ACHIEVEMENTS.length} earned</span></div>
     <div class="ach-grid stagger">${ACHIEVEMENTS.map(achHTML).join('')}</div>
     <div class="section-head"><h2>Data</h2></div>
-    <div class="card card--pad row row--between row--wrap"><div><strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p></div><button type="button" class="btn btn--danger" data-reset>${icon('rotate')} Reset all progress</button></div>
+    <div class="card card--pad row row--between row--wrap"><div>${CLOUD.user ? `<strong>Your progress syncs to ${esc(CLOUD.user.email || 'your account')}.</strong><p class="small">It's saved on this device and in your account, so you can continue on any device where you sign in.</p>` : `<strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it. <button type="button" class="link-btn" data-cloud="in">Sign in with Google</button> to keep it in sync across devices.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p>`}</div><button type="button" class="btn btn--danger" data-reset>${icon('rotate')} Reset all progress</button></div>
   </div>`;
   return {
     html, title: 'Achievements', nav: 'achievements', crumbs: [['Achievements']],
@@ -7920,6 +8362,7 @@ function boot() {
   document.addEventListener('keydown', onDocKey);
   window.addEventListener('hashchange', router);
   setupPWA();
+  setupCloud();
   markActiveDay();
   if (!storageOk) setTimeout(() => toast({ kind: 'warning', title: 'Progress won\'t be saved', text: 'Local storage is unavailable in this browser session.' }), 600);
   router();
