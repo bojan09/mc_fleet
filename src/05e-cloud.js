@@ -36,7 +36,7 @@ function mergeProgress(a, b) {
   out.finals = best(a.finals, b.finals, 'score');
   Object.keys(out.finals).forEach((k) => { if ((a.finals[k] || {}).passed || (b.finals[k] || {}).passed) out.finals[k] = Object.assign({}, out.finals[k], { passed: true }); });
   out.exercises = Object.assign({}, b.exercises, a.exercises); Object.keys(b.exercises || {}).forEach((k) => { out.exercises[k] = Math.max(a.exercises[k] || 0, b.exercises[k] || 0); });
-  ['scen', 'trees', 'glossaryViewed', 'calcUsed', 'achievements'].forEach((k) => { out[k] = union(a[k], b[k]); });
+  ['scen', 'trees', 'glossaryViewed', 'calcUsed', 'achievements', 'missed'].forEach((k) => { out[k] = union(a[k], b[k]); });
   out.flash = { known: union((a.flash || {}).known, (b.flash || {}).known) };
   out.bookmarks = [...new Set([...(a.bookmarks || []), ...(b.bookmarks || [])])];
   out.days = [...new Set([...(a.days || []), ...(b.days || [])])].sort().slice(-120);

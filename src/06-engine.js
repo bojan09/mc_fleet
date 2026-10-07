@@ -37,7 +37,7 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 
 /* ---------- State (localStorage) ---------- */
 const STORE_KEY = 'mca.v1';
-const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [] };
+const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {} };
 let storageOk = true;
 let state = migrateState(loadState());
 /* Lessons that moved between tracks keep their saved progress (LESSON_MOVES). */
@@ -359,6 +359,7 @@ function gradeQuestion(el, q) {
     else if (oi === chosen) o.classList.add('is-wrong');
   });
   $('.opts', el).classList.add('is-locked');
+  noteAnswer(q, ok);
   return { ok, html: `<div class="feedback feedback--${ok ? 'correct' : 'wrong'}" role="status">${icon(ok ? 'check-circle' : 'x-circle')}<div><strong>${ok ? 'Correct' : 'Not quite'}</strong><p>${inline(q.e)}</p></div></div>` };
 }
 
@@ -551,6 +552,8 @@ const ROUTES = [
   [/^\/library(?:\/([\w-]+))?$/, viewLibrary],
   [/^\/(?:academy\/)?software(?:\/([\w-]+))?$/, viewSoftware],
   [/^\/privacy$/, viewPrivacy],
+  [/^\/review$/, viewReview],
+  [/^\/cheatsheet\/(\w+)\/(\w+)$/, viewCheatSheet],
   [/^\/achievements$/, viewAchievements]
 ];
 function router() {
@@ -598,6 +601,7 @@ function refreshChrome() {
   }).join('');
   const navId = document.body.dataset.nav;
   if (navId) $$('#navTracks [data-nav]').forEach((a) => { if (a.dataset.nav === navId) a.setAttribute('aria-current', 'page'); });
+  updateMissedBadge();
   const p = overallProgress();
   $('#topProgress').innerHTML = `${ring(p, { size: 30, stroke: 4, label: ' ', fs: 1 })}<span>${pct(p)}%</span>`;
   $('#topProgress').setAttribute('aria-label', `Overall progress ${pct(p)}% — open dashboard`);
@@ -825,6 +829,7 @@ function moduleHTML(t, m, i, open) {
         <span class="lesson-row__state">${icon('check')}</span><span class="lesson-row__title">${esc(l.title)}</span>
         <span class="lesson-row__meta">${state.bookmarks.includes(key) ? icon('bookmark', 'icon--sm') : ''}<span class="hide-sm">${icon('clock', 'icon--sm')}</span> ${l.minutes} min</span></a>`; }).join('')}
       <a class="lesson-row lesson-row--quiz ${q && q.best >= 0.8 ? 'is-done' : ''}" href="#/quiz/${t.id}/${m.id}"><span class="lesson-row__state">${icon(q && q.best >= 0.8 ? 'check' : 'target')}</span><span class="lesson-row__title">Module quiz</span><span class="lesson-row__meta">${q ? scorePill(q.best) : `${m.lessons.reduce((a, l) => a + (l.check || []).length, 0)} questions`}</span></a>
+      <a class="lesson-row lesson-row--sheet" href="#/cheatsheet/${t.id}/${m.id}"><span class="lesson-row__state">${icon('file')}</span><span class="lesson-row__title">Cheat sheet</span><span class="lesson-row__meta">Printable summary</span></a>
     </div></div></div>
   </div>`;
 }
@@ -1196,6 +1201,7 @@ function showCertificate(t) {
 /* ---------- Practice hub ---------- */
 function viewPractice() {
   const tools = [
+    ['review', 'rotate', 'Review my mistakes', 'Retry every question you answered wrong until it sticks. Correct answers clear it from the list.', `${missedCount()} to review`],
     ['scenarios', 'message', 'Scenario Simulator', 'Respond to realistic messages from drivers, dispatch, shops and management — and see the reasoning.', `${Object.keys(state.scen).length}/${SCENARIOS.length} attempted`],
     ['trees', 'branch', 'Decision Trees', 'Work step by step through maintenance situations where each choice changes the outcome.', `${Object.keys(state.trees).length}/${Object.keys(TREES).length} explored`],
     ['exercises', 'clipboard', 'Practical Exercises', 'Extract case data, classify urgency, order workflows and review estimates.', `${Object.keys(state.exercises).length} completed`],
@@ -1938,7 +1944,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({

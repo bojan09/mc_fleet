@@ -2426,6 +2426,50 @@ dd { margin: 0; }
 .pv-list li { display: flex; gap: 10px; align-items: flex-start; }
 .pv-list .icon { color: var(--success); flex: none; margin-top: 3px; }
 
+/* 24. REVIEW + CHEAT SHEETS ================================================ */
+.nav-count { margin-left: auto; min-width: 20px; padding: 1px 6px; border-radius: var(--r-full); background: var(--warning); color: #1b1b1b; font-size: 11px; font-weight: 700; text-align: center; }
+.rv-start { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; margin-bottom: var(--sp-4); }
+.rv-start > div { display: flex; align-items: baseline; gap: 8px; }
+.rv-start__n { font-size: 2.2rem; font-weight: 700; color: var(--warning-strong); line-height: 1; }
+.rv-weak { display: grid; gap: 8px; }
+.rv-weak__row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
+.rv-weak__row a.grow { color: var(--text); text-decoration: none; }
+.rv-weak__n { display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--warning-soft); color: var(--warning-strong); font-weight: 700; font-size: 13px; }
+.rv-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rv-list li { display: grid; gap: 4px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
+.rv-list__q { color: var(--text); font-weight: 500; }
+.lesson-row--sheet .lesson-row__state { color: var(--muted); }
+.cs-wrap { border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); padding: var(--sp-6); }
+.cs__head { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 14px; }
+.cs__brand { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--primary); }
+.cs__head h1 { font-size: var(--fs-2xl, 1.6rem); margin: 4px 0; }
+.cs__head p { color: var(--text-2); font-size: var(--fs-sm); }
+.cs__lessons { columns: 2 300px; column-gap: 28px; }
+.cs__lesson { break-inside: avoid; margin-bottom: 14px; }
+.cs__lesson h2 { font-size: var(--fs-md); margin-bottom: 4px; }
+.cs__keys { margin: 0 0 6px; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--text-2); }
+.cs__keys li { margin-bottom: 3px; }
+.cs__watch { font-size: 12.5px; color: var(--critical); line-height: 1.45; }
+.cs__watch strong { color: var(--critical); }
+.cs__terms { border-top: 1px solid var(--border); margin-top: 6px; padding-top: 12px; }
+.cs__terms h2 { font-size: var(--fs-md); margin-bottom: 8px; }
+.cs__terms dl { margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 6px 18px; font-size: 12.5px; }
+.cs__terms dt { font-weight: 700; display: inline; }
+.cs__terms dt::after { content: " — "; font-weight: 400; color: var(--muted); }
+.cs__terms dd { display: inline; margin: 0; color: var(--text-2); }
+.cs__foot { margin-top: 12px; font-size: 11px; color: var(--muted); }
+.cs .term { all: unset; font-weight: 600; }
+.cs .term__ico { display: none !important; }
+@page cheatsheet { size: A4 portrait; margin: 12mm; }
+@media print {
+  .print-root .cs { page: cheatsheet; color: #111; background: #fff; }
+  .print-root .cs__terms, .print-root .cs__head { border-color: #c8d0da; }
+  .print-root .cs * { color: #111 !important; }
+  .print-root .cs__watch, .print-root .cs__watch strong { color: #8a1f1f !important; }
+  .print-root .cs__head { border-color: #173255; }
+  .print-root .cs__lessons { columns: 2; }
+}
+
 /* Accordion headings keep their previous visual size at any level */
 .acc-heading { font-size: var(--fs-lg); }
 .acc-item > h3, .acc-item > h4 { font-size: var(--fs-md); }
@@ -2460,6 +2504,7 @@ dd { margin: 0; }
 
 /* PRINT (certificate) ====================================================== */
 @media print {
+  html, body { background: #fff !important; color: #111 !important; color-scheme: light !important; }
   body > *:not(.print-root) { display: none !important; }
   .print-root { display: block !important; }
   .print-root .certificate { box-shadow: none; border: 2px solid #c9b98f; margin: 0; }
