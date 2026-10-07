@@ -185,6 +185,7 @@ const SOFTWARE = [
         } }
       ],
       scenario: [
+        { widget: 'sim:workorder' },
         { exercise: { type: 'choose', prompt: "Trailer V-5502's driver fails the inspection item \"Tires: right rear outer, sidewall bulge\". The trailer is loaded and due out in 40 minutes. What do you do first in Fleetio and with the team?", options: [
           { text: 'Log a service entry saying the tire was replaced, so the record is complete before the trailer leaves', correct: false, why: 'Never record work that hasn\'t happened. Records must reflect reality.' },
           { text: 'Treat it as safety-critical: hold the trailer and tell dispatch. Turn the failed item into a work order on V-5502 (the trailer, not the tractor) and arrange a tire replacement', correct: true, why: 'A sidewall bulge can mean the tire is about to fail. Hold the unit, record the work on the correct unit, and arrange the repair.' },
@@ -363,6 +364,7 @@ const SOFTWARE = [
         } }
       ],
       scenario: [
+        { widget: 'sim:alerts' },
         { exercise: { type: 'classify', prompt: 'Who should act first on each Samsara signal?', categories: ['Maintenance coordinator', 'Safety', 'Dispatch'], items: [
           { text: 'Engine fault code active on T-311 with a check-engine lamp', answer: 'Maintenance coordinator', why: 'Faults are maintenance triage.' },
           { text: 'AI dash cam detected tailgating', answer: 'Safety', why: 'Driver behavior is coached by safety.' },
@@ -531,6 +533,7 @@ const SOFTWARE = [
         } }
       ],
       scenario: [
+        { widget: 'sim:board' },
         { exercise: { type: 'choose', prompt: 'T-122 needs a 4-hour repair that isn\'t safety-critical. In the TMS you see it\'s dispatched on a load delivering tomorrow at 07:00, 300 miles away. What do you do?', options: [
           { text: 'Pull it into the shop now; maintenance comes first', correct: false, why: 'If it\'s not safety-critical, don\'t blow up a load. Plan the repair with dispatch.' },
           { text: 'Agree a service window with dispatch after delivery, near the delivery point if possible, and record the planned work', correct: true, why: 'This protects the load and still gets the repair done promptly.' },
@@ -726,6 +729,7 @@ const SOFTWARE = [
         { callout: { kind: 'safety', text: 'Refrigerant circuits are under pressure and refrigerants are regulated. Only qualified, certified technicians should open the refrigerant system.' } }
       ],
       scenario: [
+        { widget: 'sim:reefer' },
         { exercise: { type: 'extract', prompt: 'Read the driver\'s message and pull out what you need for the case.', sourceLabel: 'Driver text · 03:05', source: 'Trailer R-8841, reefer showing alarm 03. Setpoint 34F, return air 35, discharge 30. Unit fuel about half. Load is produce for Columbus, delivery 09:00.', fields: [
           { label: 'Trailer / unit', accept: ['R-8841', 'r8841'] },
           { label: 'Alarm code', accept: ['03', '3'] },

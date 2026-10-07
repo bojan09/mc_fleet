@@ -56,7 +56,7 @@ const evaluate = async (expression) => {
 /* Runs inside the page: collects routes from the live app and checks each. */
 const SWEEP = `(async () => {
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-  const routes = ['#/dashboard', '#/curriculum', '#/practice', '#/scenarios', '#/trees', '#/exercises', '#/flashcards', '#/calculators', '#/fleet', '#/glossary', '#/library', '#/reference', '#/bookmarks', '#/achievements', '#/software', '#/privacy', '#/review'];
+  const routes = ['#/dashboard', '#/curriculum', '#/practice', '#/scenarios', '#/trees', '#/exercises', '#/flashcards', '#/calculators', '#/fleet', '#/glossary', '#/library', '#/reference', '#/bookmarks', '#/achievements', '#/software', '#/privacy', '#/review', '#/simulations'];
   ${'$'}{EXTRA}
   for (const t of TRACKS_IDS) { location.hash = '#/track/' + t; await wait(40); routes.push('#/track/' + t, '#/final/' + t); document.querySelectorAll('#view a[href^="#/lesson"], #view a[href^="#/quiz"], #view a[href^="#/cheatsheet"]').forEach((a) => routes.push(a.getAttribute('href'))); }
   for (const r of ['#/software', '#/library']) { location.hash = r; await wait(40); document.querySelectorAll('#view a[href^="#/software/"], #view a[href^="#/library/"]').forEach((a) => routes.push(a.getAttribute('href'))); }
