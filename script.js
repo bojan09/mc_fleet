@@ -7484,7 +7484,7 @@ function moduleGuideHTML(t, m) {
 
 /* ===========================================================================
    PRIVACY — what the academy stores, where, and how to delete it; account
-   deletion for signed-in users; cookie-free usage statistics.
+   deletion for signed-in users; contact.
    =========================================================================== */
 const PRIVACY_UPDATED = 'October 2026';
 
@@ -7512,7 +7512,6 @@ function viewPrivacy() {
     <section class="pv-sec"><h2>Services the site uses</h2>
       ${infographicHTML({ ig: 'table', icon: 'layers', title: 'Who handles what', head: ['Service', 'What for', 'What it receives'], rows: [
         ['Vercel', 'Hosts the website', 'Standard technical request data, such as your IP address and browser type, in its server logs.'],
-        ['Vercel Web Analytics', 'Counts page views to improve the academy', 'Anonymous, aggregated page views. No cookies and no personal profile.'],
         ['Google', 'Sign-in (optional)', 'Only if you choose to sign in with Google.'],
         ['Supabase', 'Accounts and progress sync (optional)', 'Your account details and synced progress, as described above.'],
         ['jsDelivr', 'Delivers the sign-in library', 'Only when you sign in. Your IP address and browser type.']
@@ -7521,7 +7520,11 @@ function viewPrivacy() {
     </section>
 
     <section class="pv-sec"><h2>What we don't do</h2>
-      <ul class="pv-list">${['No advertising and no advertising trackers', 'No tracking cookies', 'No selling or sharing of your data for marketing', 'No access to your Google contacts, files or email beyond your address'].map((t) => `<li>${icon('check-circle', 'icon--sm')}<span>${t}</span></li>`).join('')}</ul>
+      <ul class="pv-list">${['No advertising and no advertising trackers', 'No tracking cookies and no usage analytics', 'No selling or sharing of your data for marketing', 'No access to your Google contacts, files or email beyond your address'].map((t) => `<li>${icon('check-circle', 'icon--sm')}<span>${t}</span></li>`).join('')}</ul>
+    </section>
+
+    <section class="pv-sec"><h2>Contact</h2>
+      ${row('message', 'Questions or requests', 'For questions about your data, or if you can\'t delete it yourself, email <a href="mailto:stanbdev@gmail.com">stanbdev@gmail.com</a>.')}
     </section>
   </div>`;
   return {
@@ -7544,21 +7547,6 @@ function confirmDeleteAccount() {
       else toast({ kind: 'warning', title: 'Couldn\'t delete the account', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet and try again.' });
     })
   });
-}
-
-/* Vercel Web Analytics: cookie-free page-view counts, loaded only on the
-   deployed site (enable "Analytics" for the project in Vercel). The app uses
-   hash routes, so each route change is reported as a page view. */
-function setupAnalytics() {
-  if (!/\.vercel\.app$/.test(location.hostname)) return;
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  const s = document.createElement('script');
-  s.src = '/_vercel/insights/script.js'; s.defer = true;
-  s.dataset.disableAutoTrack = '1';
-  document.head.appendChild(s);
-  const track = () => { const route = (location.hash || '#/dashboard').replace(/^#/, '').split('?')[0]; window.va('pageview', { route, path: route }); };
-  track();
-  window.addEventListener('hashchange', track);
 }
 
 /* ===========================================================================
@@ -10103,7 +10091,6 @@ function boot() {
   window.addEventListener('hashchange', router);
   setupPWA();
   setupCloud();
-  setupAnalytics();
   markActiveDay();
   if (!storageOk) setTimeout(() => toast({ kind: 'warning', title: 'Progress won\'t be saved', text: 'Local storage is unavailable in this browser session.' }), 600);
   router();

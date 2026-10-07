@@ -2069,7 +2069,6 @@ function boot() {
   window.addEventListener('hashchange', router);
   setupPWA();
   setupCloud();
-  setupAnalytics();
   markActiveDay();
   if (!storageOk) setTimeout(() => toast({ kind: 'warning', title: 'Progress won\'t be saved', text: 'Local storage is unavailable in this browser session.' }), 600);
   router();
