@@ -30,12 +30,11 @@ function viewPrivacy() {
       ${infographicHTML({ ig: 'table', icon: 'layers', title: 'Who handles what', head: ['Service', 'What for', 'What it receives'], rows: [
         ['Vercel', 'Hosts the website', 'Standard technical request data, such as your IP address and browser type, in its server logs.'],
         ['Vercel Web Analytics', 'Counts page views to improve the academy', 'Anonymous, aggregated page views. No cookies and no personal profile.'],
-        ['Google Fonts', 'Loads the typefaces', 'Your IP address and browser type when the fonts are downloaded.'],
         ['Google', 'Sign-in (optional)', 'Only if you choose to sign in with Google.'],
         ['Supabase', 'Accounts and progress sync (optional)', 'Your account details and synced progress, as described above.'],
         ['jsDelivr', 'Delivers the sign-in library', 'Only when you sign in. Your IP address and browser type.']
       ] })}
-      <p class="small muted">Photos in the Visual Library are stored on this site and credited to their authors. Links to official company websites open those sites, which have their own privacy policies.</p>
+      <p class="small muted">Fonts and the photos in the Visual Library are stored on this site (photos are credited to their authors). Links to official company websites open those sites, which have their own privacy policies.</p>
     </section>
 
     <section class="pv-sec"><h2>What we don't do</h2>

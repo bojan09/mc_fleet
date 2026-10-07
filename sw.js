@@ -7,7 +7,7 @@
    - Google Fonts: cache-first (fonts are immutable per URL).
    - Visual Library thumbnails: precached; full photos cached once viewed (stale-while-revalidate).
    Bump VERSION on every deploy so old caches are cleared. */
-const VERSION = 'mca-v11';
+const VERSION = 'mca-v12';
 const APP_CACHE = `${VERSION}-app`;
 const FONT_CACHE = `${VERSION}-fonts`;
 const APP_SHELL = [
@@ -16,6 +16,10 @@ const APP_SHELL = [
   'styles.css',
   'script.js',
   'manifest.webmanifest',
+  'fonts/plex-sans-latin.woff2',
+  'fonts/plex-mono-400-latin.woff2',
+  'fonts/plex-mono-500-latin.woff2',
+  'fonts/plex-mono-600-latin.woff2',
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/icon-maskable-512.png',

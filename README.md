@@ -12,6 +12,7 @@ Supabase to sync progress. Hosted on Vercel: https://mcfleet-three.vercel.app
 | `script.js` | **Built file — do not edit.** Generated from `src/` |
 | `src/` | Source modules, concatenated in file-name order (content first, engine last) |
 | `img/library/` | Locally stored Visual Library photos (Wikimedia Commons, credited in the app) |
+| `fonts/` | IBM Plex (SIL Open Font License, `fonts/OFL.txt`), Latin subset, self-hosted |
 | `supabase/` | SQL migrations for the cloud-sync database |
 | `tools/` | Build and check scripts (no dependencies, Node 22+) |
 
@@ -21,6 +22,7 @@ Supabase to sync progress. Hosted on Vercel: https://mcfleet-three.vercel.app
 node tools/build.mjs    # build script.js from src/ and syntax-check it
 node tools/check.mjs    # content checks: answers, exercises, links, images, references
 node tools/sweep.mjs    # browser sweep of every route at 375/768/1366 px (needs Edge or Chrome)
+node tools/perf.mjs     # first-visit timing on a throttled phone (slow 4G, 4x CPU)
 ```
 
 Run all three before pushing. When you change cached files, bump `VERSION` in
