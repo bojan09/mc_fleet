@@ -4732,7 +4732,7 @@ const SOFTWARE = [
   /* ------------------------------------------------------------------ FLEETIO */
   {
     id: 'fleetio', name: 'Fleetio', maker: 'Fleetio', kind: 'Fleet maintenance software', icon: 'wrench', tone: 'info',
-    url: 'https://www.fleetio.com',
+    url: 'https://www.fleetio.com', checked: 'October 2026',
     tagline: 'Fleet management software for vehicle records and maintenance: inspections, issues, work orders, service reminders, parts and fuel.',
     card: {
       what: 'Fleet management software, used in a web browser and through the Fleetio Go mobile app.',
@@ -4934,7 +4934,7 @@ const SOFTWARE = [
   /* ------------------------------------------------------------------ SAMSARA */
   {
     id: 'samsara', name: 'Samsara', maker: 'Samsara', kind: 'Telematics & connected operations', icon: 'activity', tone: 'success',
-    url: 'https://www.samsara.com',
+    url: 'https://www.samsara.com', checked: 'October 2026',
     tagline: 'A telematics platform: in-vehicle devices send location, engine and safety data to a cloud dashboard that raises alerts and reports.',
     card: {
       what: 'A telematics platform: hardware in the truck (the Vehicle Gateway and AI dash cams) plus a cloud dashboard and driver app.',
@@ -5117,7 +5117,7 @@ const SOFTWARE = [
   /* ------------------------------------------------------------ PROTRANSPORT */
   {
     id: 'pro-transport', name: 'ProTransport', maker: 'RTS', kind: 'Trucking software (TMS)', icon: 'route', tone: 'warning',
-    url: 'https://www.rtsinc.com/product/pro-transport',
+    url: 'https://www.rtsinc.com/product/pro-transport', checked: 'October 2026',
     tagline: 'Trucking management software from RTS for loads, dispatch, drivers, documents, accounting and reporting.',
     card: {
       what: 'A transportation management system (TMS) made by RTS, a trucking services company.',
@@ -5277,7 +5277,7 @@ const SOFTWARE = [
   /* ------------------------------------------------------------- THERMO KING */
   {
     id: 'thermo-king', name: 'Thermo King', maker: 'Trane Technologies', kind: 'Transport refrigeration (equipment)', icon: 'thermo', tone: 'critical',
-    url: 'https://www.thermoking.com',
+    url: 'https://www.thermoking.com', checked: 'October 2026',
     tagline: 'Transport temperature control: refrigeration units (TRUs) that keep reefer trailers and trucks at the right temperature, plus their controllers and telematics.',
     card: {
       what: 'A transport temperature-control brand of Trane Technologies. It makes refrigeration units (TRUs) for trailers, trucks, rail and containers.',
@@ -7260,7 +7260,7 @@ function viewSoftwarePage(id) {
     <header class="page-head sw-head">
       <div><span class="eyebrow">${icon('activity', 'icon--sm')} Software & Platforms · ${i + 1} of ${SOFTWARE.length}</span>
         <h1>${esc(s.name)}</h1><p>${esc(s.tagline)}</p>
-        <div class="sw-head__meta"><span class="badge badge--outline">${esc(s.kind)}</span><span class="small muted">Made by ${esc(s.maker)}</span>
+        <div class="sw-head__meta"><span class="badge badge--outline">${esc(s.kind)}</span><span class="small muted">Made by ${esc(s.maker)}</span><span class="small muted">${icon('check-circle', 'icon--sm')} Facts checked ${esc(s.checked)}</span>
           <a class="industry__link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Official website ${icon('external', 'icon--sm')}<span class="sr-only"> (opens in a new tab)</span></a></div>
       </div>
       ${swBrand(s, 'sw-brand--lg')}
@@ -7274,7 +7274,7 @@ function viewSoftwarePage(id) {
       </nav>
       <article class="sw-body">
         ${SW_SECTIONS.map(([k, t, ic], n) => `<section class="sw-sec prose" id="sw-${k}" data-sec="${k}" aria-labelledby="sw-h-${k}"><h2 id="sw-h-${k}"><span class="sw-sec__n" aria-hidden="true">${n + 1}</span>${icon(ic)} ${esc(t)}</h2>${body(k)}</section>`).join('')}
-        <section class="sw-sources"><h2>${icon('file')} Sources</h2><p class="small muted">Facts on this page come from these official pages. Features and plans change, so check your company's setup.</p>
+        <section class="sw-sources"><h2>${icon('file')} Sources</h2><p class="small muted">Facts on this page come from these official pages and were last checked in ${esc(s.checked)}. Features and plans change, so check your company's setup.</p>
           <ul>${s.sources.map(([t, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(t)} ${icon('external', 'icon--sm')}<span class="sr-only"> (opens in a new tab)</span></a></li>`).join('')}</ul>
           <p class="small muted">${esc(s.name)} is a trademark of its owner. MC Academy is not affiliated with or endorsed by ${esc(s.maker)}. Fleets, units and people in the examples are fictional.</p></section>
       </article>

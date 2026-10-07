@@ -1,0 +1,9 @@
+
+/* Glossary terms the platform pages lean on. */
+GLOSSARY.push(
+  { term: 'TRU', full: 'Transport refrigeration unit', cat: 'Equipment', def: 'A self-contained refrigeration and heating unit mounted on a trailer (usually the front wall) or a truck body, often powered by its own diesel engine, sometimes also by shore power.', simple: 'The "reefer unit" that keeps the box cold or warm.', example: 'Reefer unit PMs are scheduled by the TRU\'s engine hours, not trailer miles.', related: ['Reefer', 'Setpoint'] },
+  { term: 'Setpoint', full: 'Setpoint (reefer)', cat: 'Equipment', def: 'The temperature a refrigeration unit is set to hold, taken from the shipper\'s load instructions.', simple: 'The target temperature.', example: 'A produce load at setpoint 34°F should not be changed to "cool faster".', related: ['TRU', 'Return air', 'Discharge air'] },
+  { term: 'Return air', full: 'Return air temperature', cat: 'Equipment', def: 'The temperature of the air coming back from the cargo area into the refrigeration unit.', simple: 'Air coming back from the load.', example: 'Return air close to setpoint means the box is holding temperature.', related: ['Discharge air', 'Setpoint'] },
+  { term: 'Discharge air', full: 'Discharge (supply) air temperature', cat: 'Equipment', def: 'The temperature of the air leaving the refrigeration unit after passing over the evaporator coil.', simple: 'Air the unit is blowing out.', example: 'Discharge air colder than return air while cooling is normal.', related: ['Return air', 'Defrost'] },
+  { term: 'Defrost', full: 'Defrost cycle (reefer)', cat: 'Equipment', def: 'A cycle that warms the evaporator coil to melt ice that blocks airflow. Started on a timer, on demand by the controller, or manually.', simple: 'Melting ice off the cooling coil.', example: 'A unit that can\'t finish defrost may show a "defrost terminated by time" alarm.', related: ['TRU', 'Discharge air'] }
+);
