@@ -37,7 +37,7 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 
 /* ---------- State (localStorage) ---------- */
 const STORE_KEY = 'mca.v1';
-const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {} };
+const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {} };
 let storageOk = true;
 let state = migrateState(loadState());
 /* Lessons that moved between tracks keep their saved progress (LESSON_MOVES). */
@@ -554,6 +554,8 @@ const ROUTES = [
   [/^\/privacy$/, viewPrivacy],
   [/^\/review$/, viewReview],
   [/^\/simulations$/, viewSimulations],
+  [/^\/trainer$/, viewTrainer],
+  [/^\/verify(?:\/([\w-]+))?$/, viewVerify],
   [/^\/cheatsheet\/(\w+)\/(\w+)$/, viewCheatSheet],
   [/^\/achievements$/, viewAchievements]
 ];
@@ -637,7 +639,7 @@ function applyTheme(t) {
 function editName() {
   openModal({
     title: 'Your profile',
-    body: `<div class="field"><label for="nameInput">Name shown on your dashboard and certificates</label><input class="input" id="nameInput" maxlength="60" value="${esc(state.name)}" placeholder="e.g., Jordan Taylor" autofocus><span class="hint">Stored only in this browser.</span></div>`,
+    body: `<div class="field"><label for="nameInput">Name shown on your dashboard and certificates</label><input class="input" id="nameInput" maxlength="60" value="${esc(state.name)}" placeholder="e.g., Jordan Taylor" autofocus><span class="hint">${CLOUD.user ? 'Synced with your account.' : 'Stored in this browser.'}</span></div>`,
     foot: `<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--primary" id="nameSave">Save</button>`,
     onOpen: (m, close) => {
       const saveName = () => { state.name = $('#nameInput', m).value.trim().slice(0, 60); save(); refreshChrome(); close(); toast({ kind: 'success', title: 'Profile updated' }); if ((location.hash || '').match(/dashboard|^$|^#\/?$/)) router(); };
@@ -1183,16 +1185,24 @@ function certificateHTML(t) {
     <p>This certifies that</p>
     <div class="cert-name">${esc(state.name || 'Your Name')}</div>
     <p>has completed the ${t.level} curriculum and passed the final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'}<br>with a score of <strong style="color:#0b1a2e">${f ? pct(f.score) : 0}%</strong>.</p>
-    <div class="cert-meta"><div><strong>${date}</strong>Date awarded</div><div><strong>${t.modules.length} modules · ${t.modules.reduce((a, m) => a + m.lessons.length, 0)} lessons</strong>Curriculum</div><div><strong>MCA-${t.id.slice(0, 3).toUpperCase()}-${(f && f.at ? f.at : 0).toString(36).toUpperCase().slice(-6)}</strong>Record ID</div></div>
+    <div class="cert-meta"><div><strong>${date}</strong>Date awarded</div><div><strong>${t.modules.length} modules · ${t.modules.reduce((a, m) => a + m.lessons.length, 0)} lessons</strong>Curriculum</div>${(state.certIds || {})[t.id] ? `<div><strong>${esc(state.certIds[t.id])}</strong>Verification code</div>` : `<div><strong>MCA-${t.id.slice(0, 3).toUpperCase()}-${(f && f.at ? f.at : 0).toString(36).toUpperCase().slice(-6)}</strong>Record ID</div>`}</div>
+    ${(state.certIds || {})[t.id] ? `<p class="cert-verify">Verify at ${esc(VERIFY_BASE.replace(/^https:\/\//, ''))}${esc(state.certIds[t.id])}</p>` : ''}
     <p class="cert-note">A self-paced training record from MC Academy. It is not a CDL, government license or third-party industry certification.</p>
   </div>`;
 }
 function showCertificate(t) {
   openModal({
     title: `${t.level} certificate`, size: 'modal--lg',
-    body: `${!state.name ? `<div class="callout callout--info mb-4">${icon('info')}<div><p>Add your name so it appears on the certificate.</p></div></div>` : ''}<div id="certWrap">${certificateHTML(t)}</div>`,
-    foot: `<button class="btn" id="certName">${icon('users')} ${state.name ? 'Edit name' : 'Add name'}</button><button class="btn btn--primary" id="certPrint">${icon('print')} Print / Save PDF</button>`,
+    body: `${!state.name ? `<div class="callout callout--info mb-4">${icon('info')}<div><p>Add your name so it appears on the certificate.</p></div></div>` : ''}${(state.certIds || {})[t.id] ? '' : `<div class="callout callout--tip mb-4">${icon('bulb')}<div><p>${CLOUD.user ? 'Get a verification code so an employer can confirm this certificate online.' : '<button type="button" class="link-btn" data-cloud="in">Sign in</button> to get a verification code an employer can check online.'}</p></div></div>`}<div id="certWrap">${certificateHTML(t)}</div>`,
+    foot: `<button class="btn" id="certName">${icon('users')} ${state.name ? 'Edit name' : 'Add name'}</button>${CLOUD.user && !(state.certIds || {})[t.id] ? `<button class="btn" id="certIssue">${icon('award')} Get verification code</button>` : ''}<button class="btn btn--primary" id="certPrint">${icon('print')} Print / Save PDF</button>`,
     onOpen: (m, close) => {
+      const issue = $('#certIssue', m);
+      if (issue) issue.addEventListener('click', async () => {
+        if (!state.name && !(CLOUD.user.user_metadata || {}).full_name) { toast({ kind: 'warning', title: 'Add your name first' }); return; }
+        issue.disabled = true;
+        try { const code = await issueCertificate(t); $('#certWrap', m).innerHTML = certificateHTML(t); issue.remove(); toast({ kind: 'success', title: 'Verification code issued', text: code }); }
+        catch (e) { issue.disabled = false; console.warn(e && e.message); toast({ kind: 'warning', title: 'Couldn\'t issue the code', text: /not passed/.test((e && e.message) || '') ? 'Your synced progress doesn\'t show this final as passed yet.' : 'Please try again in a moment.' }); }
+      });
       $('#certPrint', m).addEventListener('click', () => { $('#printRoot').innerHTML = certificateHTML(t); window.print(); });
       $('#certName', m).addEventListener('click', () => { close(); setTimeout(editName, 250); });
     }
@@ -1947,7 +1957,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Software simulations', '#/simulations', 'activity']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Software simulations', '#/simulations', 'activity'], ['Trainer groups', '#/trainer', 'users'], ['Check a certificate', '#/verify', 'award']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({

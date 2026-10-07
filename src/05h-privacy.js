@@ -20,8 +20,10 @@ function viewPrivacy() {
       ${row('users', 'Your account', 'Google shares your name, email address, profile picture link and a Google account ID with our sign-in provider, Supabase. We use them only to identify your account and show your name.')}
       ${row('activity', 'Your synced progress', 'The same progress listed above (except your theme) is stored with your account so it can follow you to other devices. Each account can only read and change its own progress.')}
       ${row('pin', 'Where it is kept', 'In a Supabase database in the European Union (Ireland, region eu-west-1).')}
+      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, academy progress, quiz scores and certificates. You can leave a group at any time; trainers can also remove members.')}
+      ${row('award', 'Certificate verification (optional)', 'If you ask for a verification code, your name, the track, your final score and the date are stored with that code. Anyone who has the code can check those details on the certificate check page.')}
       ${row('lock', 'Sign-in session', 'While you are signed in, your browser keeps a sign-in token in local storage. Signing out removes it.')}
-      ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on the Achievements page. Your account and its synced progress are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete my account</strong> on the Achievements page or here. Your account and its synced progress are deleted permanently.')}
+      ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on the Achievements page. Your account, its synced progress, group memberships and certificates are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete my account</strong> on the Achievements page or here. Your account, its synced progress, group memberships and certificates are deleted permanently.')}
     </section>
 
     <section class="pv-sec"><h2>Services the site uses</h2>
