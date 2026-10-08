@@ -13,7 +13,7 @@ Supabase to sync progress. Hosted on Vercel: https://mcfleet-three.vercel.app
 | `src/` | Source modules, concatenated in file-name order (content first, engine last) |
 | `img/library/` | Locally stored Visual Library photos (Wikimedia Commons, credited in the app) |
 | `fonts/` | IBM Plex (SIL Open Font License, `fonts/OFL.txt`), Latin subset, self-hosted |
-| `supabase/` | SQL migrations for the cloud-sync database |
+| `supabase/` | SQL migrations for the cloud-sync database, run in number order; `supabase/tests/access.sql` tests the access rules |
 | `tools/` | Build and check scripts (no dependencies, Node 22+) |
 
 ## Commands
@@ -21,7 +21,7 @@ Supabase to sync progress. Hosted on Vercel: https://mcfleet-three.vercel.app
 ```bash
 node tools/build.mjs    # build script.js from src/ and syntax-check it
 node tools/check.mjs    # content checks: answers, exercises, links, images, references
-node tools/sweep.mjs    # browser sweep of every route at 375/768/1366 px (needs Edge or Chrome)
+node tools/sweep.mjs    # every route at 375/768/1366 px: layout, headings, accessibility, contrast (needs Edge or Chrome)
 node tools/perf.mjs     # first-visit timing on a throttled phone (slow 4G, 4x CPU)
 node tools/update-test.mjs  # new release: open page offers a reload, new cache used
 node tools/trainer-test.mjs # signed-in screens (groups, assignments, CSV) with a fake Supabase
@@ -32,3 +32,8 @@ Run the build, check and sweep before pushing. The build stamps content hashes
 into `index.html` (`script.js?v=…`, `styles.css?v=…`) and `sw.js` (`VERSION`, a
 hash of every file it precaches), so each release gets its own offline cache and
 open pages offer a reload. No manual version bump is needed.
+
+After changing the database (`supabase/`), run `supabase/tests/access.sql` in the
+Supabase SQL editor. It acts as a pretend trainer, trainee and outsider, then
+rolls everything back; the error message it ends with is the result
+(`ACCESS TEST PASSED: <n> checks` or `ACCESS TEST FAILED: …`).
