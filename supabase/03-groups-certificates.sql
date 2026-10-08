@@ -74,9 +74,10 @@ begin
   if not found then raise exception 'No group with that code'; end if;
   select coalesce(nullif(p.state->>'name', ''), u.raw_user_meta_data->>'full_name', u.email)
     into nm from auth.users u left join public.progress p on p.user_id = u.id where u.id = auth.uid();
-  insert into public.group_members (group_id, user_id, display_name)
+  -- Name the constraint: the output column group_id would make (group_id, ...) ambiguous.
+  insert into public.group_members as gm (group_id, user_id, display_name)
     values (g.id, auth.uid(), left(nm, 80))
-    on conflict (group_id, user_id) do update set display_name = excluded.display_name;
+    on conflict on constraint group_members_pkey do update set display_name = excluded.display_name;
   return query select g.id, g.name;
 end;
 $$;
