@@ -725,6 +725,7 @@ th[aria-sort="descending"] .icon { opacity: 1; }
 .toast p { color: #a9bbd1; font-size: 13px; line-height: 1.45; margin-top: 2px; }
 .toast .btn-icon { width: 28px; height: 28px; margin-left: auto; color: #8196b0; }
 .toast .btn-icon:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.toast__action { margin-top: 10px; }
 
 /* 7. PAGES + HEADERS ===================================================== */
 .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-6); margin-bottom: var(--sp-8); flex-wrap: wrap; }

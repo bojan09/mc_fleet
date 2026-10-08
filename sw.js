@@ -1,20 +1,21 @@
 /* Maintenance Coordinator Academy — service worker
    - App shell precached so the academy works offline.
    - Page navigations: network-first (fresh HTML when online), cached copy offline.
-   - Other same-origin files (CSS, JS, icons): stale-while-revalidate — served
-     instantly from cache and refreshed in the background, so an update shows
-     on the next visit.
-   - Google Fonts: cache-first (fonts are immutable per URL).
+   - script.js / styles.css are requested with a content hash (?v=…) that
+     tools/build.mjs stamps into index.html, so they are cache-first: a given
+     URL never changes, and new HTML always loads the code it was built with.
+   - Other same-origin files (icons, images): stale-while-revalidate — served
+     instantly from cache and refreshed in the background.
    - Visual Library thumbnails: precached; full photos cached once viewed (stale-while-revalidate).
-   Bump VERSION on every deploy so old caches are cleared. */
-const VERSION = 'mca-v13';
+   VERSION is stamped by tools/build.mjs; a new release gets a new cache and
+   the old one is cleared on activate. */
+const VERSION = 'mca-3f3027e50c';
 const APP_CACHE = `${VERSION}-app`;
-const FONT_CACHE = `${VERSION}-fonts`;
 const APP_SHELL = [
   './',
   'index.html',
-  'styles.css',
-  'script.js',
+  'styles.css?v=5eacadf5a0',
+  'script.js?v=88ab7d408f',
   'manifest.webmanifest',
   'fonts/plex-sans-latin.woff2',
   'fonts/plex-mono-400-latin.woff2',
@@ -116,8 +117,8 @@ async function staleWhileRevalidate(event) {
   return refresh;
 }
 
-async function cacheFirst(request, name = FONT_CACHE) {
-  const cache = await caches.open(name);
+async function cacheFirst(request) {
+  const cache = await caches.open(APP_CACHE);
   const cached = await cache.match(request);
   if (cached) return cached;
   const response = await fetch(request);
@@ -130,10 +131,8 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.origin === self.location.origin) {
-    if (url.pathname.startsWith('/_vercel/')) return; // analytics: never cache
     if (request.mode === 'navigate') event.respondWith(networkFirst(request));
+    else if (url.searchParams.has('v')) event.respondWith(cacheFirst(request));
     else event.respondWith(staleWhileRevalidate(event));
-  } else if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
-    event.respondWith(cacheFirst(request));
   }
 });

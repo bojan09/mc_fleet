@@ -23,7 +23,10 @@ node tools/build.mjs    # build script.js from src/ and syntax-check it
 node tools/check.mjs    # content checks: answers, exercises, links, images, references
 node tools/sweep.mjs    # browser sweep of every route at 375/768/1366 px (needs Edge or Chrome)
 node tools/perf.mjs     # first-visit timing on a throttled phone (slow 4G, 4x CPU)
+node tools/update-test.mjs  # new release: open page offers a reload, new cache used
 ```
 
-Run all three before pushing. When you change cached files, bump `VERSION` in
-`sw.js` so returning visitors get the update.
+Run the build, check and sweep before pushing. The build stamps content hashes
+into `index.html` (`script.js?v=…`, `styles.css?v=…`) and `sw.js` (`VERSION`, a
+hash of every file it precaches), so each release gets its own offline cache and
+open pages offer a reload. No manual version bump is needed.

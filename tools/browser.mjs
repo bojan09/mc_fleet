@@ -13,15 +13,17 @@ import { root } from './load.mjs';
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.woff2': 'font/woff2' };
 const COMPRESSIBLE = /\.(html|js|css|json|webmanifest|svg)$/;
 
-/* Serves the project folder. compress: true answers like a CDN (brotli/gzip). */
-export async function startServer({ compress = false } = {}) {
+/* Serves the project folder. compress: true answers like a CDN (brotli/gzip).
+   override(path) may return replacement text for a file (tests). */
+export async function startServer({ compress = false, override } = {}) {
   const packed = new Map(); // compressed bodies are cached, like a CDN
   const server = createServer(async (req, res) => {
     const path = normalize(decodeURIComponent(new URL(req.url, 'http://x').pathname)).replace(/^([/\\])+/, '');
     const file = join(root, path || 'index.html');
     if (!file.startsWith(root)) { res.writeHead(403).end(); return; }
     try {
-      let body = await readFile(file); const headers = { 'Content-Type': TYPES[extname(file)] || 'application/octet-stream' };
+      const swap = override && override(path.replace(/\\/g, '/'));
+      let body = swap != null ? Buffer.from(swap) : await readFile(file); const headers = { 'Content-Type': TYPES[extname(file)] || 'application/octet-stream' };
       const ae = String(req.headers['accept-encoding'] || '');
       if (compress && COMPRESSIBLE.test(file)) {
         const enc = ae.includes('br') ? 'br' : ae.includes('gzip') ? 'gzip' : '';

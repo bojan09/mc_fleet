@@ -165,12 +165,12 @@ function checkAchievements() {
 }
 
 /* ---------- Toasts ---------- */
-function toast({ title, text = '', kind = 'info', icon: ic, timeout = 4500 }) {
+function toast({ title, text = '', kind = 'info', icon: ic, timeout = 4500, action }) {
   const region = $('#toasts');
   const ico = ic || { success: 'check-circle', warning: 'alert', award: 'award', info: 'info' }[kind] || 'info';
   const el = document.createElement('div');
   el.className = `toast toast--${kind}`;
-  el.innerHTML = `<span class="toast__icon">${icon(ico)}</span><div class="grow"><strong>${esc(title)}</strong>${text ? `<p>${esc(text)}</p>` : ''}</div><button class="btn-icon" aria-label="Dismiss notification">${icon('x', 'icon--sm')}</button>`;
+  el.innerHTML = `<span class="toast__icon">${icon(ico)}</span><div class="grow"><strong>${esc(title)}</strong>${text ? `<p>${esc(text)}</p>` : ''}${action ? `<button type="button" class="btn btn--sm btn--primary toast__action">${esc(action.label)}</button>` : ''}</div><button class="btn-icon" aria-label="Dismiss notification">${icon('x', 'icon--sm')}</button>`;
   region.appendChild(el);
   while (region.children.length > 4) region.firstElementChild.remove();
   const close = () => {
@@ -179,8 +179,9 @@ function toast({ title, text = '', kind = 'info', icon: ic, timeout = 4500 }) {
     const done = () => el.remove();
     if (reduceMotion()) done(); else { el.addEventListener('animationend', done, { once: true }); setTimeout(done, 400); }
   };
-  el.querySelector('button').addEventListener('click', close);
-  setTimeout(close, timeout);
+  el.querySelector('.btn-icon').addEventListener('click', close);
+  if (action) el.querySelector('.toast__action').addEventListener('click', () => { close(); action.onClick(); });
+  if (timeout) setTimeout(close, timeout);
 }
 
 /* ---------- Modal ---------- */
@@ -2035,6 +2036,21 @@ let deferredInstall = null;
 function setupPWA() {
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
     window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch((err) => console.warn('Service worker registration failed:', err)); });
+    // A new release took over this page (sw.js skips waiting): offer a reload
+    // so the open page isn't left running the previous version.
+    // (The very first install also fires controllerchange; there was no
+    // previous worker then, so nothing is offered.)
+    let previous = navigator.serviceWorker.controller, offered = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      const replaced = previous; previous = navigator.serviceWorker.controller;
+      if (!replaced || offered) return;
+      offered = true;
+      toast({ kind: 'info', icon: 'rotate', title: 'A new version is ready', text: 'Reload to get the latest lessons and fixes. Your progress is kept.', timeout: 0, action: { label: 'Reload', onClick: () => location.reload() } });
+    });
+    // Look for a new release when the student comes back to the tab.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') navigator.serviceWorker.getRegistration().then((r) => r && r.update()).catch(() => {});
+    });
   }
   const btn = $('#installBtn');
   window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredInstall = e; btn.hidden = false; });
