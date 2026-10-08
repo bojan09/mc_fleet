@@ -24,6 +24,7 @@ node tools/check.mjs    # content checks: answers, exercises, links, images, ref
 node tools/sweep.mjs    # browser sweep of every route at 375/768/1366 px (needs Edge or Chrome)
 node tools/perf.mjs     # first-visit timing on a throttled phone (slow 4G, 4x CPU)
 node tools/update-test.mjs  # new release: open page offers a reload, new cache used
+node tools/trainer-test.mjs # signed-in screens (groups, assignments, CSV) with a fake Supabase
 ```
 
 Run the build, check and sweep before pushing. The build stamps content hashes

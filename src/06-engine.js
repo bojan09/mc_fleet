@@ -700,6 +700,7 @@ function viewDashboard() {
 
     <div class="dash-cols mt-6">
       <div class="stack">
+        <div id="dashAssigned" class="dash-assigned-slot"></div>
         <section class="card" aria-labelledby="tpTitle">
           <div class="card__head"><h2 id="tpTitle">Curriculum progress</h2><a class="btn btn--ghost btn--sm" href="#/curriculum">All tracks ${icon('chev-r', 'icon--sm')}</a></div>
           <div class="card__body track-progress">
@@ -738,7 +739,7 @@ function viewDashboard() {
     </div>
     <p class="scope-note">${icon('info', 'icon--sm')}<span>Educational training focused on U.S. trucking practice. Not legal or regulatory advice — company procedures and current official rules come first. <a href="#/reference">Sources &amp; scope</a></span></p>
   </div>`;
-  return { html, title: 'Dashboard', nav: 'dashboard' };
+  return { html, title: 'Dashboard', nav: 'dashboard', after: (v) => dashAssigned($('#dashAssigned', v)) };
 }
 function statCard(ic, v, unit, label) {
   return `<div class="card stat"><div class="stat__top"><span class="stat__icon">${icon(ic)}</span></div><div class="stat__value">${v}${unit ? ` <small>${unit}</small>` : ''}</div><div class="stat__label">${label}</div></div>`;

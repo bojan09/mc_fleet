@@ -145,9 +145,11 @@ async function cloudInit() {
 
 /* Start quietly after the first paint; only a returning signed-in user (or
    someone coming back from Google) needs the SDK right away. */
+function cloudHasSession() {
+  try { return Object.keys(localStorage).some((k) => k.startsWith('sb-') && k.endsWith('-auth-token')); } catch (e) { return false; }
+}
 function setupCloud() {
-  const hasSession = (() => { try { return Object.keys(localStorage).some((k) => k.startsWith('sb-') && k.endsWith('-auth-token')); } catch (e) { return false; } })();
-  if (hasSession || /[?&]code=/.test(location.search)) cloudInit().catch(() => cloudSetStatus('off'));
+  if (cloudHasSession() || /[?&]code=/.test(location.search)) cloudInit().catch(() => cloudSetStatus('off'));
   window.addEventListener('online', () => { if (CLOUD.user) cloudPush(); });
   document.addEventListener('click', (e) => {
     if (e.target.closest('[data-cloud="in"]')) cloudSignIn();
