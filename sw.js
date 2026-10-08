@@ -9,13 +9,13 @@
    - Visual Library thumbnails: precached; full photos cached once viewed (stale-while-revalidate).
    VERSION is stamped by tools/build.mjs; a new release gets a new cache and
    the old one is cleared on activate. */
-const VERSION = 'mca-efa8de794e';
+const VERSION = 'mca-3df38a57fd';
 const APP_CACHE = `${VERSION}-app`;
 const APP_SHELL = [
   './',
   'index.html',
   'styles.css?v=9371ca4a37',
-  'script.js?v=3310418ddc',
+  'script.js?v=cdb8273917',
   'manifest.webmanifest',
   'fonts/plex-sans-latin.woff2',
   'fonts/plex-mono-400-latin.woff2',
