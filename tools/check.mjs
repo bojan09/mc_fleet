@@ -95,6 +95,15 @@ A.LEARN_PATH.forEach((st) => (st.items || []).forEach((it) => pathItem(it, `path
 A.LEARN_TOGETHER.forEach((g) => g.items.forEach((it) => pathItem(it, `together/${g.t}`)));
 A.NOT_YET.forEach(([, t, key]) => pathItem({ m: key }, `not-yet/${t}`));
 
+/* Platform facts age: reminder to re-check the official sources quarterly. */
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+A.SOFTWARE.forEach((s) => {
+  const m = String(s.checked || '').toLowerCase().match(/^(\w+) (\d{4})$/); const mi = m ? MONTHS.indexOf(m[1]) : -1;
+  if (mi < 0) { err(`software/${s.id}`, `"checked" should be like "October 2026", got "${s.checked}"`); return; }
+  const now = new Date(); const age = (now.getFullYear() - +m[2]) * 12 + now.getMonth() - mi;
+  if (age >= 3) warn(`software/${s.id}`, `facts last checked ${s.checked} (${age} months ago): re-check the official sources and update "checked"`);
+});
+
 const lessons = A.TRACKS.reduce((n, t) => n + t.modules.reduce((a, m) => a + m.lessons.length, 0), 0);
 console.log(`Checked ${A.TRACKS.length} tracks, ${lessons} lessons, ${A.GLOSSARY.length} glossary terms, ${A.LIBRARY.length} library items, ${A.SOFTWARE.length} platforms.`);
 console.log(`Validated ${count.questions} questions, ${count.exercises} exercises, ${count.links} glossary links.`);
