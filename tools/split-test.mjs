@@ -38,6 +38,8 @@ async function render(serveFull, routes) {
     await new Promise((res) => setTimeout(res, 40));
     const html = await b.evaluate(`document.title + '\\n' + document.querySelector('#view').innerHTML`);
     pages[r] = html.replace(/ class="[^"]*is-entering[^"]*"/g, '')
+      // each pass runs on its own local port (it appears in Report a problem links)
+      .replace(/127\.0\.0\.1(%3A|:)\d+/g, 'HOST')
       // ids from nextId() (prefix-<counter>) depend on render order
       .replace(/\b(acc|arr|exacc|ex|flc|flh|modal|mod|ply|rq|tabs|tl)-\d+/g, '$1-N');
   }

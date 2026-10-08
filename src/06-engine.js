@@ -923,6 +923,7 @@ function viewLesson(tid, mid, lid) {
         <span class="spacer"></span>
         <button type="button" class="btn btn--primary btn--lg" data-continue>${done ? nextLabel : 'Complete & continue'} ${icon('arrow-r', 'icon--nudge')}</button>
       </nav>
+      ${reportHTML(`${t.level} · M${m.id.slice(1)} · ${l.title}`)}
     </article>
 
     <aside class="lesson-rail" aria-label="Lesson navigation">

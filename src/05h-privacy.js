@@ -4,6 +4,15 @@
    deletion for signed-in users; contact.
    =========================================================================== */
 const PRIVACY_UPDATED = 'October 2026';
+const CONTACT_EMAIL = 'stanbdev@gmail.com';
+
+/* "Report a problem": an email with the page name and link filled in. */
+function reportHref(what) {
+  const link = location.origin + location.pathname + location.hash;
+  const body = `Page: ${what}\nLink: ${link}\n\nWhat's wrong or unclear:\n\n`;
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`MC Academy: problem on "${what}"`)}&body=${encodeURIComponent(body)}`;
+}
+const reportHTML = (what) => `<p class="report-line">${icon('flag', 'icon--sm')}<span>Spot a mistake or something out of date? <a href="${esc(reportHref(what))}">Report a problem</a></span></p>`;
 
 function viewPrivacy() {
   const row = (ic, t, d) => `<div class="pv-row"><span class="pv-row__ic">${icon(ic)}</span><div><h3>${t}</h3><p>${d}</p></div></div>`;
@@ -41,7 +50,7 @@ function viewPrivacy() {
     </section>
 
     <section class="pv-sec"><h2>Contact</h2>
-      ${row('message', 'Questions or requests', 'For questions about your data, or if you can\'t delete it yourself, email <a href="mailto:stanbdev@gmail.com">stanbdev@gmail.com</a>.')}
+      ${row('message', 'Questions or requests', `For questions about your data, or if you can't delete it yourself, email <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>.`)}
     </section>
   </div>`;
   return {

@@ -3588,7 +3588,8 @@ function viewSoftwarePage(id) {
         ${SW_SECTIONS.map(([k, t, ic], n) => `<section class="sw-sec prose" id="sw-${k}" data-sec="${k}" aria-labelledby="sw-h-${k}"><h2 id="sw-h-${k}"><span class="sw-sec__n" aria-hidden="true">${n + 1}</span>${icon(ic)} ${esc(t)}</h2>${body(k)}</section>`).join('')}
         <section class="sw-sources"><h2>${icon('file')} Sources</h2><p class="small muted">Facts on this page come from these official pages and were last checked in ${esc(s.checked)}. Features and plans change, so check your company's setup.</p>
           <ul>${s.sources.map(([t, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(t)} ${icon('external', 'icon--sm')}<span class="sr-only"> (opens in a new tab)</span></a></li>`).join('')}</ul>
-          <p class="small muted">${esc(s.name)} is a trademark of its owner. MC Academy is not affiliated with or endorsed by ${esc(s.maker)}. Fleets, units and people in the examples are fictional.</p></section>
+          <p class="small muted">${esc(s.name)} is a trademark of its owner. MC Academy is not affiliated with or endorsed by ${esc(s.maker)}. Fleets, units and people in the examples are fictional.</p>
+          ${reportHTML(`Software & Platforms · ${s.name}`)}</section>
       </article>
     </div>
     <nav class="sw-nav" aria-label="Platform pages">
@@ -3783,6 +3784,15 @@ function moduleGuideHTML(t, m) {
    deletion for signed-in users; contact.
    =========================================================================== */
 const PRIVACY_UPDATED = 'October 2026';
+const CONTACT_EMAIL = 'stanbdev@gmail.com';
+
+/* "Report a problem": an email with the page name and link filled in. */
+function reportHref(what) {
+  const link = location.origin + location.pathname + location.hash;
+  const body = `Page: ${what}\nLink: ${link}\n\nWhat's wrong or unclear:\n\n`;
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`MC Academy: problem on "${what}"`)}&body=${encodeURIComponent(body)}`;
+}
+const reportHTML = (what) => `<p class="report-line">${icon('flag', 'icon--sm')}<span>Spot a mistake or something out of date? <a href="${esc(reportHref(what))}">Report a problem</a></span></p>`;
 
 function viewPrivacy() {
   const row = (ic, t, d) => `<div class="pv-row"><span class="pv-row__ic">${icon(ic)}</span><div><h3>${t}</h3><p>${d}</p></div></div>`;
@@ -3820,7 +3830,7 @@ function viewPrivacy() {
     </section>
 
     <section class="pv-sec"><h2>Contact</h2>
-      ${row('message', 'Questions or requests', 'For questions about your data, or if you can\'t delete it yourself, email <a href="mailto:stanbdev@gmail.com">stanbdev@gmail.com</a>.')}
+      ${row('message', 'Questions or requests', `For questions about your data, or if you can't delete it yourself, email <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>.`)}
     </section>
   </div>`;
   return {
@@ -5606,6 +5616,7 @@ function viewLesson(tid, mid, lid) {
         <span class="spacer"></span>
         <button type="button" class="btn btn--primary btn--lg" data-continue>${done ? nextLabel : 'Complete & continue'} ${icon('arrow-r', 'icon--nudge')}</button>
       </nav>
+      ${reportHTML(`${t.level} · M${m.id.slice(1)} · ${l.title}`)}
     </article>
 
     <aside class="lesson-rail" aria-label="Lesson navigation">

@@ -2598,6 +2598,8 @@ dd { margin: 0; }
 .tr-weak p { margin: 0; }
 .tr-weak__why { display: block; }
 .tr-weak li > .icon { color: var(--warning-strong); }
+.report-line { display: flex; gap: 6px; align-items: flex-start; margin-top: var(--sp-5); font-size: var(--fs-sm); color: var(--text-2); }
+.report-line .icon { flex: none; margin-top: 3px; }
 .tr-memberships > li { display: grid; gap: 8px; }
 .tr-memberships__row { display: flex; align-items: center; gap: 10px; }
 .tr-group__foot { gap: 8px; flex-wrap: wrap; }
