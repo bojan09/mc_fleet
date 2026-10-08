@@ -87,7 +87,14 @@ const kb = (n) => `${Math.round(n / 1024)} KB`;
 console.log(`Built script.js (${kb(core.length)}) and ${Object.keys(content).length} content files (${kb(Object.values(content).reduce((a, c) => a + JSON.stringify(c).length, 0))}) from ${files.length} modules.`);
 
 // 5. Stamp hashes.
-const hash = (...names) => { const h = createHash('sha256'); names.forEach((n) => h.update(readFileSync(join(root, n)))); return h.digest('hex').slice(0, 10); };
+// Text files are hashed with LF line endings, so a Windows checkout (CRLF) and
+// CI (LF) stamp the same versions.
+const TEXT = /\.(html|js|css|json|webmanifest|svg|txt)$/;
+const hash = (...names) => {
+  const h = createHash('sha256');
+  names.forEach((n) => { const buf = readFileSync(join(root, n)); h.update(TEXT.test(n) ? buf.toString('utf8').replace(/\r\n/g, '\n') : buf); });
+  return h.digest('hex').slice(0, 10);
+};
 const stamp = (name, pairs) => {
   const file = join(root, name); let text = readFileSync(file, 'utf8');
   for (const [re, to] of pairs) { if (!re.test(text)) throw new Error(`${name}: ${re} not found`); text = text.replace(re, to); }

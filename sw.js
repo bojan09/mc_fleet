@@ -11,14 +11,15 @@
    - Visual Library thumbnails: precached; full photos cached once viewed (stale-while-revalidate).
    VERSION is stamped by tools/build.mjs; a new release gets a new cache and
    the old one is cleared on activate. */
-const VERSION = 'mca-3d166a0599';
+const VERSION = 'mca-b4ca8f7a8e';
 const APP_CACHE = `${VERSION}-app`;
 const APP_SHELL = [
   './',
   'index.html',
-  'styles.css?v=2c4011a267',
-  'script.js?v=81a739e058',
+  'styles.css?v=b02b0eeb20',
+  'script.js?v=5331991bdb',
   'manifest.webmanifest',
+  'theme.js',
   // Lesson text per track (tools/build.mjs fills this list).
   // content:start
   'content/beginner.json?v=faa675b05f',
@@ -27,6 +28,7 @@ const APP_SHELL = [
   'content/operations.json?v=f4d59c8a6e',
   // content:end
   'fonts/plex-sans-latin.woff2',
+  'fonts/plex-sans-cyrillic.woff2',
   'fonts/plex-mono-400-latin.woff2',
   'fonts/plex-mono-500-latin.woff2',
   'fonts/plex-mono-600-latin.woff2',

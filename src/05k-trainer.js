@@ -38,7 +38,7 @@ function moduleDoneIn(st, x) {
   return x.m.lessons.every((l) => c[`${x.t.id}.${x.m.id}.${l.id}`]);
 }
 const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
-const dueDate = (d) => new Date(`${d}T00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const dueDate = (d) => new Date(`${d}T00:00`).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' });
 function dueHTML(a, done) {
   if (!a.due) return '<span class="small muted">no due date</span>';
   const late = !done && a.due < todayISO();
@@ -199,7 +199,7 @@ async function trainerLoad(root) {
     trainerWire(root);
   } catch (e) {
     console.warn('Trainer groups failed:', e && e.message);
-    root.innerHTML = stateBlock({ ic: 'alert', title: 'Groups aren\'t available right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to use groups.', error: true, action: '<button type="button" class="btn" onclick="location.reload()">Try again</button>' });
+    root.innerHTML = stateBlock({ ic: 'alert', title: 'Groups aren\'t available right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to use groups.', error: true, action: '<button type="button" class="btn" data-reload>Try again</button>' });
   }
 }
 
@@ -299,7 +299,9 @@ function trainerWire(root) {
     downloadText(name, groupCSV(g, members, d.prog, d.forGroup(g.id)), 'text/csv;charset=utf-8');
   }));
   $$('[data-copy-code]', root).forEach((b) => b.addEventListener('click', () => {
-    try { navigator.clipboard.writeText(b.dataset.copyCode); toast({ kind: 'success', title: 'Join code copied', timeout: 2000 }); } catch (e) {}
+    // writeText rejects (not throws) when the browser blocks the clipboard, so only confirm on success.
+    const failed = () => toast({ kind: 'warning', title: 'Couldn’t copy', text: `Join code: ${b.dataset.copyCode}` });
+    try { navigator.clipboard.writeText(b.dataset.copyCode).then(() => toast({ kind: 'success', title: 'Join code copied', timeout: 2000 }), failed); } catch (e) { failed(); }
   }));
 }
 
@@ -318,7 +320,7 @@ function viewVerify(code) {
     ${pageHead({ eyebrow: `${icon('award', 'icon--sm')} Certificates`, title: 'Check a certificate', text: 'Enter the verification code printed on an MC Academy certificate to confirm it was issued.' })}
     <form class="vf-form card card--pad" novalidate><label class="field grow"><span>Verification code</span><input class="input mono" name="code" maxlength="10" value="${esc(code || '')}" placeholder="10 characters" autocomplete="off" required></label><button type="submit" class="btn btn--primary">${icon('search')} Check</button></form>
     <div id="vfOut" aria-live="polite"></div>
-    <p class="scope-note">${icon('info', 'icon--sm')}<span>MC Academy certificates are self-paced training records. Assessments are completed online in the academy. A certificate is not a CDL, government license or third-party industry certification.</span></p>
+    <p class="scope-note">${icon('info', 'icon--sm')}<span>MC Academy certificates are self-paced training records. Assessments are taken online without supervision, and the score is recorded by the learner’s own device — a trainer who needs proof of skill should test the learner directly. A certificate is not a CDL, government license or third-party industry certification.</span></p>
   </div>`;
   return {
     html, title: 'Check a certificate', nav: '', crumbs: [['Check a certificate']],
@@ -331,8 +333,8 @@ function viewVerify(code) {
           const r = await fetch(`${CLOUD.url}/rest/v1/rpc/verify_certificate`, { method: 'POST', headers: { apikey: CLOUD.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_code: c }) });
           if (!r.ok) throw new Error(r.status);
           const rows = await r.json(); const x = rows[0]; const t = x && TRACK_BY_ID[x.track];
-          out.innerHTML = x ? `<div class="vf-result is-ok anim-scale-in">${icon('check-circle')}<div><span class="eyebrow">Valid certificate · ${esc(c)}</span><h2>${esc(x.name)}</h2>
-              <p>passed the <strong>${esc(t ? t.level : x.track)}</strong> final${t ? ` — ${esc(t.title)}` : ''} with <strong>${pct(+x.score)}%</strong>.</p><p class="small muted">Issued ${new Date(x.issued_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div></div>`
+          out.innerHTML = x ? `<div class="vf-result is-ok anim-scale-in">${icon('check-circle')}<div><span class="eyebrow">Certificate on record · ${esc(c)}</span><h2>${esc(x.name)}</h2>
+              <p>passed the <strong>${esc(t ? t.level : x.track)}</strong> final${t ? ` — ${esc(t.title)}` : ''} with <strong>${pct(+x.score)}%</strong>.</p><p class="small muted">Issued ${new Date(x.issued_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div></div>`
             : `<div class="vf-result is-bad anim-scale-in">${icon('x-circle')}<div><h2>No certificate found</h2><p>Check the code for typos. Codes are 10 characters and don't use the letters I or O or the digits 0 and 1.</p></div></div>`;
         } catch (e) {
           out.innerHTML = stateBlock({ ic: 'alert', title: 'Couldn\'t check right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to check a certificate.', error: true });

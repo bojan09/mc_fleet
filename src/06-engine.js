@@ -15,7 +15,10 @@ const pct = (n) => Math.round(n * 100);
 const fmtMoney = (n, d = 0) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const fmtNum = (n, d = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-const todayStr = () => new Date().toISOString().slice(0, 10);
+/* Calendar day in the learner's own time zone (toISOString would give the UTC day,
+   so study just after midnight in Skopje landed on the previous day). */
+const dayKey = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const todayStr = () => dayKey(new Date());
 let UID = 0;
 const nextId = (p) => `${p}-${++UID}`;
 function shuffle(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -116,7 +119,7 @@ function streak() {
   const set = new Set(state.days);
   let n = 0; const d = new Date();
   if (!set.has(todayStr())) d.setDate(d.getDate() - 1);
-  while (set.has(d.toISOString().slice(0, 10))) { n++; d.setDate(d.getDate() - 1); }
+  while (set.has(dayKey(d))) { n++; d.setDate(d.getDate() - 1); }
   return n;
 }
 function recommended() {
@@ -567,7 +570,7 @@ const ROUTES = [
 function router() {
   // In-page anchors (#sec-…, #main) are not routes — let the browser handle them.
   if (location.hash && !location.hash.startsWith('#/')) return;
-  if (viewCleanup) { try { viewCleanup(); } catch (e) {} viewCleanup = null; }
+  if (viewCleanup) { try { viewCleanup(); } catch (e) { console.warn('View cleanup failed:', e); } viewCleanup = null; }
   const path = decodeURIComponent((location.hash || '#/dashboard').slice(1).split('?')[0]);
   // Lesson text loads on demand: fetch it first, then render this route again.
   const need = contentFor(path);
@@ -617,6 +620,8 @@ function setCrumbs(list) {
 function setNav(navId, bottomId) {
   document.body.dataset.nav = navId || '';
   $$('#sideNav [data-nav]').forEach((a) => { if (a.dataset.nav === navId) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  // Keep the collapsed Practice tools group open while one of its pages is showing.
+  const group = $('#navPractice'); if (group && $('[aria-current]', group)) group.open = true;
   $$('.bottom-nav [data-nav]').forEach((a) => { if (a.dataset.nav === (bottomId || navId)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
 }
 function refreshChrome() {
@@ -1201,7 +1206,7 @@ function runSim(root, t) {
 /* ---------- Certificate ---------- */
 function certificateHTML(t) {
   const f = state.finals[t.id];
-  const date = f && f.at ? new Date(f.at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+  const date = f && f.at ? new Date(f.at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
   return `<div class="certificate">
     <div class="cert-seal">${icon('award', 'icon--lg')}</div>
     <p class="cert-eyebrow mt-4">Maintenance Coordinator Academy · Certificate of Completion</p>
@@ -1211,7 +1216,7 @@ function certificateHTML(t) {
     <p>has completed the ${t.level} curriculum and passed the final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'}<br>with a score of <strong style="color:#0b1a2e">${f ? pct(f.score) : 0}%</strong>.</p>
     <div class="cert-meta"><div><strong>${date}</strong>Date awarded</div><div><strong>${t.modules.length} modules · ${t.modules.reduce((a, m) => a + m.lessons.length, 0)} lessons</strong>Curriculum</div>${(state.certIds || {})[t.id] ? `<div><strong>${esc(state.certIds[t.id])}</strong>Verification code</div>` : `<div><strong>MCA-${t.id.slice(0, 3).toUpperCase()}-${(f && f.at ? f.at : 0).toString(36).toUpperCase().slice(-6)}</strong>Record ID</div>`}</div>
     ${(state.certIds || {})[t.id] ? `<div class="cert-check">${qrSVG(VERIFY_BASE + state.certIds[t.id], 'QR code: check this certificate online')}<p class="cert-verify">Scan or visit<br>${esc(VERIFY_BASE.replace(/^https:\/\//, ''))}${esc(state.certIds[t.id])}</p></div>` : ''}
-    <p class="cert-note">A self-paced training record from MC Academy. It is not a CDL, government license or third-party industry certification.</p>
+    <p class="cert-note">A self-paced training record from MC Academy; the final assessment is unsupervised. It is not a CDL, government license or third-party industry certification.</p>
   </div>`;
 }
 function showCertificate(t) {
@@ -1247,7 +1252,7 @@ function viewPractice() {
   ];
   const html = `<div class="page">${pageHead({ eyebrow: `${icon('flask', 'icon--sm')} Practice Lab`, title: 'Practice like it\'s a real shift', text: 'Hands-on tools to build judgment and speed. Everything here also appears inside the relevant lessons.' })}
     <div class="grid grid--3 stagger">${tools.map(([id, ic, t, d, meta]) => `<a class="card card--hover" href="#/${id}"><div class="lab-card"><span class="lab-card__icon">${icon(ic)}</span><h2>${t}</h2><p>${d}</p><div class="row row--between"><span class="lab-card__go">Open ${icon('arrow-r')}</span><span class="small muted">${meta}</span></div></div></a>`).join('')}</div></div>`;
-  return { html, title: 'Practice Lab', nav: '', bottom: 'practice', crumbs: [['Practice Lab']] };
+  return { html, title: 'Practice Lab', nav: 'practice', bottom: 'practice', crumbs: [['Practice Lab']] };
 }
 
 /* ---------- Scenario simulator ---------- */
@@ -1395,7 +1400,7 @@ function viewFlashcards() {
     after: (v) => {
       const fc = $('#fc', v);
       const draw = () => {
-        if (!cards.length) { $('.fc-stage', v).innerHTML = stateBlock({ ic: 'check-circle', title: 'Nothing left to review', text: 'You know every card in this deck. Choose another deck or reset the filter.', action: `<button class="btn btn--primary" onclick="location.reload()">Show all cards</button>` }); return; }
+        if (!cards.length) { $('.fc-stage', v).innerHTML = stateBlock({ ic: 'check-circle', title: 'Nothing left to review', text: 'You know every card in this deck. Choose another deck or reset the filter.', action: `<button class="btn btn--primary" data-reload>Show all cards</button>` }); return; }
         const c = cards[i];
         fc.classList.remove('is-flipped'); flipped = false;
         $('.flashcard__front', fc).innerHTML = `<span class="badge badge--outline flashcard__deck">${esc(c.deck)}</span><div class="flashcard__term">${esc(c.front)}</div><div class="flashcard__hint">${icon('rotate', 'icon--sm')} Tap or press Space to flip</div>`;
@@ -1981,7 +1986,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Simulations: DVIR, parts, warranty and software practice', '#/simulations', 'activity'], ['Trainer groups', '#/trainer', 'users'], ['Check a certificate', '#/verify', 'award']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'monitor'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Simulations: DVIR, parts, warranty and software practice', '#/simulations', 'activity'], ['Trainer groups', '#/trainer', 'users'], ['Check a certificate', '#/verify', 'award']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({
@@ -2007,7 +2012,7 @@ function openSearch() {
       };
       inp.addEventListener('input', () => { active = 0; draw(); });
       // Lesson objectives and takeaways are searched too: load them, then refresh.
-      if (!hasContent()) loadContent().then(() => { if (inp.isConnected) draw(); }).catch(() => {});
+      if (!hasContent()) loadContent().then(() => { if (inp.isConnected) draw(); }).catch((e) => console.warn('Search: lesson text failed to load:', e && e.message));
       inp.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(flat.length - 1, active + 1); draw(); $('.palette-item.is-active', res)?.scrollIntoView({ block: 'nearest' }); }
         else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(0, active - 1); draw(); $('.palette-item.is-active', res)?.scrollIntoView({ block: 'nearest' }); }
@@ -2022,6 +2027,8 @@ function openSearch() {
 
 /* ---------- Global delegated interactions ---------- */
 function onDocClick(e) {
+  // "Try again" style buttons (no inline onclick: the Content-Security-Policy blocks it).
+  if (e.target.closest('[data-reload]')) { location.reload(); return; }
   const acc = e.target.closest('.acc-trigger');
   if (acc) {
     const item = acc.closest('.acc-item'); const open = !item.classList.contains('is-open');

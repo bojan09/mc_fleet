@@ -1,0 +1,50 @@
+name: CI
+
+# Runs the project's own checks (tools/) on every push and pull request.
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Ubuntu 24.04 blocks the user namespaces Chrome's sandbox needs.
+      - name: Allow Chrome sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Build
+        run: node tools/build.mjs
+
+      - name: Built files match src/
+        run: |
+          if ! git diff --exit-code -- index.html sw.js script.js content/; then
+            echo "::error::script.js, content/, index.html or sw.js is out of date. Run 'node tools/build.mjs' and commit the result."
+            exit 1
+          fi
+
+      - name: Content checks
+        run: node tools/check.mjs
+
+      - name: Browser sweep (375/768/1366 px, accessibility, contrast)
+        run: node tools/sweep.mjs
+        env:
+          BROWSER: /usr/bin/google-chrome
+
+      - name: Feature tests
+        env:
+          BROWSER: /usr/bin/google-chrome
+        run: |
+          node tools/split-test.mjs
+          node tools/update-test.mjs
+          node tools/review-test.mjs
+          node tools/sims-test.mjs
+          node tools/merge-test.mjs
+          node tools/trainer-test.mjs

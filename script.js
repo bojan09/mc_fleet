@@ -3292,6 +3292,9 @@ const CLOUD = {
   url: 'https://lqlewiyuhifvnodkpiul.supabase.co',
   key: 'sb_publishable_HOxayhHD0PfFFvm0nC45JQ_8JgHf56_', // publishable key — safe in the browser; RLS protects the data
   sdk: 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js',
+  // Subresource Integrity: the browser refuses the file if the CDN ever serves different bytes.
+  // Changing the SDK version means updating this hash (openssl dgst -sha384 -binary file | openssl base64 -A).
+  sdkIntegrity: 'sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok',
   client: null, user: null, status: 'off', timer: null, ready: false
 };
 const CLOUD_LOCAL_ONLY = ['theme']; // per-device preferences that never sync
@@ -3300,7 +3303,7 @@ function cloudLoadSdk() {
   if (window.supabase) return Promise.resolve();
   return new Promise((res, rej) => {
     const s = document.createElement('script');
-    s.src = CLOUD.sdk; s.async = true; s.crossOrigin = 'anonymous';
+    s.src = CLOUD.sdk; s.integrity = CLOUD.sdkIntegrity; s.async = true; s.crossOrigin = 'anonymous';
     s.onload = res; s.onerror = () => rej(new Error('Could not load the sign-in library'));
     document.head.appendChild(s);
   });
@@ -3520,7 +3523,7 @@ function viewSoftware(id) {
     </article>`;
   };
   const html = `<div class="page sw-hub">
-    ${pageHead({ eyebrow: `${icon('activity', 'icon--sm')} Software & Platforms`, title: 'Software & Platforms', text: 'Real-world tools that trucking companies use for fleet records, maintenance, telematics, compliance, dispatch and temperature-controlled freight. Learn what each one does, who uses it and how a Maintenance Coordinator works with it.' })}
+    ${pageHead({ eyebrow: `${icon('monitor', 'icon--sm')} Software & Platforms`, title: 'Software & Platforms', text: 'Real-world tools that trucking companies use for fleet records, maintenance, telematics, compliance, dispatch and temperature-controlled freight. Learn what each one does, who uses it and how a Maintenance Coordinator works with it.' })}
     <div class="sw-grid stagger">${SOFTWARE.map(card).join('')}</div>
 
     <section class="sw-hub__sec"><div class="section-head"><div><span class="eyebrow">How they fit together</span><h2>One truck, four systems</h2></div></div>
@@ -3570,7 +3573,7 @@ function viewSoftwarePage(id) {
   const toc = SW_SECTIONS.map(([k, t, ic], n) => `<li><button type="button" class="sw-toc__link" data-sec="${k}"><span class="sw-toc__n">${n + 1}</span><span>${esc(t)}</span></button></li>`).join('');
   const html = `<div class="page sw-page tone-${s.tone}">
     <header class="page-head sw-head">
-      <div><span class="eyebrow">${icon('activity', 'icon--sm')} Software & Platforms · ${i + 1} of ${SOFTWARE.length}</span>
+      <div><span class="eyebrow">${icon('monitor', 'icon--sm')} Software & Platforms · ${i + 1} of ${SOFTWARE.length}</span>
         <h1>${esc(s.name)}</h1><p>${esc(s.tagline)}</p>
         <div class="sw-head__meta"><span class="badge badge--outline">${esc(s.kind)}</span><span class="small muted">Made by ${esc(s.maker)}</span><span class="small muted">${icon('check-circle', 'icon--sm')} Facts checked ${esc(s.checked)}</span>
           <a class="industry__link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Official website ${icon('external', 'icon--sm')}<span class="sr-only"> (opens in a new tab)</span></a></div>
@@ -4346,7 +4349,7 @@ function moduleDoneIn(st, x) {
   return x.m.lessons.every((l) => c[`${x.t.id}.${x.m.id}.${l.id}`]);
 }
 const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
-const dueDate = (d) => new Date(`${d}T00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+const dueDate = (d) => new Date(`${d}T00:00`).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' });
 function dueHTML(a, done) {
   if (!a.due) return '<span class="small muted">no due date</span>';
   const late = !done && a.due < todayISO();
@@ -4507,7 +4510,7 @@ async function trainerLoad(root) {
     trainerWire(root);
   } catch (e) {
     console.warn('Trainer groups failed:', e && e.message);
-    root.innerHTML = stateBlock({ ic: 'alert', title: 'Groups aren\'t available right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to use groups.', error: true, action: '<button type="button" class="btn" onclick="location.reload()">Try again</button>' });
+    root.innerHTML = stateBlock({ ic: 'alert', title: 'Groups aren\'t available right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to use groups.', error: true, action: '<button type="button" class="btn" data-reload>Try again</button>' });
   }
 }
 
@@ -4607,7 +4610,9 @@ function trainerWire(root) {
     downloadText(name, groupCSV(g, members, d.prog, d.forGroup(g.id)), 'text/csv;charset=utf-8');
   }));
   $$('[data-copy-code]', root).forEach((b) => b.addEventListener('click', () => {
-    try { navigator.clipboard.writeText(b.dataset.copyCode); toast({ kind: 'success', title: 'Join code copied', timeout: 2000 }); } catch (e) {}
+    // writeText rejects (not throws) when the browser blocks the clipboard, so only confirm on success.
+    const failed = () => toast({ kind: 'warning', title: 'Couldn’t copy', text: `Join code: ${b.dataset.copyCode}` });
+    try { navigator.clipboard.writeText(b.dataset.copyCode).then(() => toast({ kind: 'success', title: 'Join code copied', timeout: 2000 }), failed); } catch (e) { failed(); }
   }));
 }
 
@@ -4626,7 +4631,7 @@ function viewVerify(code) {
     ${pageHead({ eyebrow: `${icon('award', 'icon--sm')} Certificates`, title: 'Check a certificate', text: 'Enter the verification code printed on an MC Academy certificate to confirm it was issued.' })}
     <form class="vf-form card card--pad" novalidate><label class="field grow"><span>Verification code</span><input class="input mono" name="code" maxlength="10" value="${esc(code || '')}" placeholder="10 characters" autocomplete="off" required></label><button type="submit" class="btn btn--primary">${icon('search')} Check</button></form>
     <div id="vfOut" aria-live="polite"></div>
-    <p class="scope-note">${icon('info', 'icon--sm')}<span>MC Academy certificates are self-paced training records. Assessments are completed online in the academy. A certificate is not a CDL, government license or third-party industry certification.</span></p>
+    <p class="scope-note">${icon('info', 'icon--sm')}<span>MC Academy certificates are self-paced training records. Assessments are taken online without supervision, and the score is recorded by the learner’s own device — a trainer who needs proof of skill should test the learner directly. A certificate is not a CDL, government license or third-party industry certification.</span></p>
   </div>`;
   return {
     html, title: 'Check a certificate', nav: '', crumbs: [['Check a certificate']],
@@ -4639,8 +4644,8 @@ function viewVerify(code) {
           const r = await fetch(`${CLOUD.url}/rest/v1/rpc/verify_certificate`, { method: 'POST', headers: { apikey: CLOUD.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_code: c }) });
           if (!r.ok) throw new Error(r.status);
           const rows = await r.json(); const x = rows[0]; const t = x && TRACK_BY_ID[x.track];
-          out.innerHTML = x ? `<div class="vf-result is-ok anim-scale-in">${icon('check-circle')}<div><span class="eyebrow">Valid certificate · ${esc(c)}</span><h2>${esc(x.name)}</h2>
-              <p>passed the <strong>${esc(t ? t.level : x.track)}</strong> final${t ? ` — ${esc(t.title)}` : ''} with <strong>${pct(+x.score)}%</strong>.</p><p class="small muted">Issued ${new Date(x.issued_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div></div>`
+          out.innerHTML = x ? `<div class="vf-result is-ok anim-scale-in">${icon('check-circle')}<div><span class="eyebrow">Certificate on record · ${esc(c)}</span><h2>${esc(x.name)}</h2>
+              <p>passed the <strong>${esc(t ? t.level : x.track)}</strong> final${t ? ` — ${esc(t.title)}` : ''} with <strong>${pct(+x.score)}%</strong>.</p><p class="small muted">Issued ${new Date(x.issued_at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</p></div></div>`
             : `<div class="vf-result is-bad anim-scale-in">${icon('x-circle')}<div><h2>No certificate found</h2><p>Check the code for typos. Codes are 10 characters and don't use the letters I or O or the digits 0 and 1.</p></div></div>`;
         } catch (e) {
           out.innerHTML = stateBlock({ ic: 'alert', title: 'Couldn\'t check right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to check a certificate.', error: true });
@@ -4834,7 +4839,10 @@ const pct = (n) => Math.round(n * 100);
 const fmtMoney = (n, d = 0) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const fmtNum = (n, d = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-const todayStr = () => new Date().toISOString().slice(0, 10);
+/* Calendar day in the learner's own time zone (toISOString would give the UTC day,
+   so study just after midnight in Skopje landed on the previous day). */
+const dayKey = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const todayStr = () => dayKey(new Date());
 let UID = 0;
 const nextId = (p) => `${p}-${++UID}`;
 function shuffle(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
@@ -4935,7 +4943,7 @@ function streak() {
   const set = new Set(state.days);
   let n = 0; const d = new Date();
   if (!set.has(todayStr())) d.setDate(d.getDate() - 1);
-  while (set.has(d.toISOString().slice(0, 10))) { n++; d.setDate(d.getDate() - 1); }
+  while (set.has(dayKey(d))) { n++; d.setDate(d.getDate() - 1); }
   return n;
 }
 function recommended() {
@@ -5386,7 +5394,7 @@ const ROUTES = [
 function router() {
   // In-page anchors (#sec-…, #main) are not routes — let the browser handle them.
   if (location.hash && !location.hash.startsWith('#/')) return;
-  if (viewCleanup) { try { viewCleanup(); } catch (e) {} viewCleanup = null; }
+  if (viewCleanup) { try { viewCleanup(); } catch (e) { console.warn('View cleanup failed:', e); } viewCleanup = null; }
   const path = decodeURIComponent((location.hash || '#/dashboard').slice(1).split('?')[0]);
   // Lesson text loads on demand: fetch it first, then render this route again.
   const need = contentFor(path);
@@ -5436,6 +5444,8 @@ function setCrumbs(list) {
 function setNav(navId, bottomId) {
   document.body.dataset.nav = navId || '';
   $$('#sideNav [data-nav]').forEach((a) => { if (a.dataset.nav === navId) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  // Keep the collapsed Practice tools group open while one of its pages is showing.
+  const group = $('#navPractice'); if (group && $('[aria-current]', group)) group.open = true;
   $$('.bottom-nav [data-nav]').forEach((a) => { if (a.dataset.nav === (bottomId || navId)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
 }
 function refreshChrome() {
@@ -6020,7 +6030,7 @@ function runSim(root, t) {
 /* ---------- Certificate ---------- */
 function certificateHTML(t) {
   const f = state.finals[t.id];
-  const date = f && f.at ? new Date(f.at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+  const date = f && f.at ? new Date(f.at).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
   return `<div class="certificate">
     <div class="cert-seal">${icon('award', 'icon--lg')}</div>
     <p class="cert-eyebrow mt-4">Maintenance Coordinator Academy · Certificate of Completion</p>
@@ -6030,7 +6040,7 @@ function certificateHTML(t) {
     <p>has completed the ${t.level} curriculum and passed the final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'}<br>with a score of <strong style="color:#0b1a2e">${f ? pct(f.score) : 0}%</strong>.</p>
     <div class="cert-meta"><div><strong>${date}</strong>Date awarded</div><div><strong>${t.modules.length} modules · ${t.modules.reduce((a, m) => a + m.lessons.length, 0)} lessons</strong>Curriculum</div>${(state.certIds || {})[t.id] ? `<div><strong>${esc(state.certIds[t.id])}</strong>Verification code</div>` : `<div><strong>MCA-${t.id.slice(0, 3).toUpperCase()}-${(f && f.at ? f.at : 0).toString(36).toUpperCase().slice(-6)}</strong>Record ID</div>`}</div>
     ${(state.certIds || {})[t.id] ? `<div class="cert-check">${qrSVG(VERIFY_BASE + state.certIds[t.id], 'QR code: check this certificate online')}<p class="cert-verify">Scan or visit<br>${esc(VERIFY_BASE.replace(/^https:\/\//, ''))}${esc(state.certIds[t.id])}</p></div>` : ''}
-    <p class="cert-note">A self-paced training record from MC Academy. It is not a CDL, government license or third-party industry certification.</p>
+    <p class="cert-note">A self-paced training record from MC Academy; the final assessment is unsupervised. It is not a CDL, government license or third-party industry certification.</p>
   </div>`;
 }
 function showCertificate(t) {
@@ -6066,7 +6076,7 @@ function viewPractice() {
   ];
   const html = `<div class="page">${pageHead({ eyebrow: `${icon('flask', 'icon--sm')} Practice Lab`, title: 'Practice like it\'s a real shift', text: 'Hands-on tools to build judgment and speed. Everything here also appears inside the relevant lessons.' })}
     <div class="grid grid--3 stagger">${tools.map(([id, ic, t, d, meta]) => `<a class="card card--hover" href="#/${id}"><div class="lab-card"><span class="lab-card__icon">${icon(ic)}</span><h2>${t}</h2><p>${d}</p><div class="row row--between"><span class="lab-card__go">Open ${icon('arrow-r')}</span><span class="small muted">${meta}</span></div></div></a>`).join('')}</div></div>`;
-  return { html, title: 'Practice Lab', nav: '', bottom: 'practice', crumbs: [['Practice Lab']] };
+  return { html, title: 'Practice Lab', nav: 'practice', bottom: 'practice', crumbs: [['Practice Lab']] };
 }
 
 /* ---------- Scenario simulator ---------- */
@@ -6214,7 +6224,7 @@ function viewFlashcards() {
     after: (v) => {
       const fc = $('#fc', v);
       const draw = () => {
-        if (!cards.length) { $('.fc-stage', v).innerHTML = stateBlock({ ic: 'check-circle', title: 'Nothing left to review', text: 'You know every card in this deck. Choose another deck or reset the filter.', action: `<button class="btn btn--primary" onclick="location.reload()">Show all cards</button>` }); return; }
+        if (!cards.length) { $('.fc-stage', v).innerHTML = stateBlock({ ic: 'check-circle', title: 'Nothing left to review', text: 'You know every card in this deck. Choose another deck or reset the filter.', action: `<button class="btn btn--primary" data-reload>Show all cards</button>` }); return; }
         const c = cards[i];
         fc.classList.remove('is-flipped'); flipped = false;
         $('.flashcard__front', fc).innerHTML = `<span class="badge badge--outline flashcard__deck">${esc(c.deck)}</span><div class="flashcard__term">${esc(c.front)}</div><div class="flashcard__hint">${icon('rotate', 'icon--sm')} Tap or press Space to flip</div>`;
@@ -6800,7 +6810,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'activity'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Simulations: DVIR, parts, warranty and software practice', '#/simulations', 'activity'], ['Trainer groups', '#/trainer', 'users'], ['Check a certificate', '#/verify', 'award']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'monitor'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Simulations: DVIR, parts, warranty and software practice', '#/simulations', 'activity'], ['Trainer groups', '#/trainer', 'users'], ['Check a certificate', '#/verify', 'award']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({
@@ -6826,7 +6836,7 @@ function openSearch() {
       };
       inp.addEventListener('input', () => { active = 0; draw(); });
       // Lesson objectives and takeaways are searched too: load them, then refresh.
-      if (!hasContent()) loadContent().then(() => { if (inp.isConnected) draw(); }).catch(() => {});
+      if (!hasContent()) loadContent().then(() => { if (inp.isConnected) draw(); }).catch((e) => console.warn('Search: lesson text failed to load:', e && e.message));
       inp.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(flat.length - 1, active + 1); draw(); $('.palette-item.is-active', res)?.scrollIntoView({ block: 'nearest' }); }
         else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(0, active - 1); draw(); $('.palette-item.is-active', res)?.scrollIntoView({ block: 'nearest' }); }
@@ -6841,6 +6851,8 @@ function openSearch() {
 
 /* ---------- Global delegated interactions ---------- */
 function onDocClick(e) {
+  // "Try again" style buttons (no inline onclick: the Content-Security-Policy blocks it).
+  if (e.target.closest('[data-reload]')) { location.reload(); return; }
   const acc = e.target.closest('.acc-trigger');
   if (acc) {
     const item = acc.closest('.acc-item'); const open = !item.classList.contains('is-open');

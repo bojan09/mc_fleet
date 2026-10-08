@@ -9,13 +9,16 @@ Supabase to sync progress. Hosted on Vercel: https://mcfleet-three.vercel.app
 | Path | What it is |
 | --- | --- |
 | `index.html`, `styles.css`, `sw.js`, `manifest.webmanifest` | The app shell, styles, offline service worker and PWA manifest |
+| `theme.js` | Applies the saved light/dark theme before first paint (a file, not inline, so the CSP needs no script hashes) |
+| `vercel.json` | Security headers for Vercel: Content-Security-Policy, nosniff, frame and referrer policy. A new third-party script, image or API host must be added to the CSP here |
 | `script.js` | **Built file — do not edit.** Generated from `src/`: engine, views and the track outline |
 | `content/` | **Built files — do not edit.** Lesson text per track, loaded when a page needs it |
 | `src/` | Source modules in file-name order. `01`–`03k` build the lessons (run at build time and split into `content/`); the rest are data, views and the engine |
 | `img/library/` | Locally stored Visual Library photos (Wikimedia Commons, credited in the app) |
-| `fonts/` | IBM Plex (SIL Open Font License, `fonts/OFL.txt`), Latin subset, self-hosted |
+| `fonts/` | IBM Plex (SIL Open Font License, `fonts/OFL.txt`), Latin subset plus Sans Cyrillic (for Macedonian names), self-hosted |
 | `supabase/` | SQL migrations for the cloud-sync database, run in number order; `supabase/tests/access.sql` tests the access rules |
 | `tools/` | Build and check scripts (no dependencies, Node 22+) |
+| `.github/workflows/` | `ci.yml` runs the build, checks, sweep and feature tests on every push; `supabase-keepalive.yml` queries the database every 3 days so the free Supabase project doesn't pause |
 
 ## Commands
 

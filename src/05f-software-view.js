@@ -45,7 +45,7 @@ function viewSoftware(id) {
     </article>`;
   };
   const html = `<div class="page sw-hub">
-    ${pageHead({ eyebrow: `${icon('activity', 'icon--sm')} Software & Platforms`, title: 'Software & Platforms', text: 'Real-world tools that trucking companies use for fleet records, maintenance, telematics, compliance, dispatch and temperature-controlled freight. Learn what each one does, who uses it and how a Maintenance Coordinator works with it.' })}
+    ${pageHead({ eyebrow: `${icon('monitor', 'icon--sm')} Software & Platforms`, title: 'Software & Platforms', text: 'Real-world tools that trucking companies use for fleet records, maintenance, telematics, compliance, dispatch and temperature-controlled freight. Learn what each one does, who uses it and how a Maintenance Coordinator works with it.' })}
     <div class="sw-grid stagger">${SOFTWARE.map(card).join('')}</div>
 
     <section class="sw-hub__sec"><div class="section-head"><div><span class="eyebrow">How they fit together</span><h2>One truck, four systems</h2></div></div>
@@ -95,7 +95,7 @@ function viewSoftwarePage(id) {
   const toc = SW_SECTIONS.map(([k, t, ic], n) => `<li><button type="button" class="sw-toc__link" data-sec="${k}"><span class="sw-toc__n">${n + 1}</span><span>${esc(t)}</span></button></li>`).join('');
   const html = `<div class="page sw-page tone-${s.tone}">
     <header class="page-head sw-head">
-      <div><span class="eyebrow">${icon('activity', 'icon--sm')} Software & Platforms · ${i + 1} of ${SOFTWARE.length}</span>
+      <div><span class="eyebrow">${icon('monitor', 'icon--sm')} Software & Platforms · ${i + 1} of ${SOFTWARE.length}</span>
         <h1>${esc(s.name)}</h1><p>${esc(s.tagline)}</p>
         <div class="sw-head__meta"><span class="badge badge--outline">${esc(s.kind)}</span><span class="small muted">Made by ${esc(s.maker)}</span><span class="small muted">${icon('check-circle', 'icon--sm')} Facts checked ${esc(s.checked)}</span>
           <a class="industry__link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">Official website ${icon('external', 'icon--sm')}<span class="sr-only"> (opens in a new tab)</span></a></div>

@@ -10,6 +10,9 @@ const CLOUD = {
   url: 'https://lqlewiyuhifvnodkpiul.supabase.co',
   key: 'sb_publishable_HOxayhHD0PfFFvm0nC45JQ_8JgHf56_', // publishable key — safe in the browser; RLS protects the data
   sdk: 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js',
+  // Subresource Integrity: the browser refuses the file if the CDN ever serves different bytes.
+  // Changing the SDK version means updating this hash (openssl dgst -sha384 -binary file | openssl base64 -A).
+  sdkIntegrity: 'sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok',
   client: null, user: null, status: 'off', timer: null, ready: false
 };
 const CLOUD_LOCAL_ONLY = ['theme']; // per-device preferences that never sync
@@ -18,7 +21,7 @@ function cloudLoadSdk() {
   if (window.supabase) return Promise.resolve();
   return new Promise((res, rej) => {
     const s = document.createElement('script');
-    s.src = CLOUD.sdk; s.async = true; s.crossOrigin = 'anonymous';
+    s.src = CLOUD.sdk; s.integrity = CLOUD.sdkIntegrity; s.async = true; s.crossOrigin = 'anonymous';
     s.onload = res; s.onerror = () => rej(new Error('Could not load the sign-in library'));
     document.head.appendChild(s);
   });
