@@ -6,11 +6,14 @@ import { fileURLToPath } from 'node:url';
 
 export const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-export function loadAcademy() {
+// extra: more top-level names to expose (functions, for logic tests); the
+// live app state is available as getState().
+export function loadAcademy(extra = []) {
   const src = readFileSync(join(root, 'script.js'), 'utf8');
   const stub = `var window={matchMedia:()=>({matches:false}),addEventListener(){}};var document={readyState:'loading',addEventListener(){},querySelector(){return null},querySelectorAll(){return[]},documentElement:{dataset:{}},body:{dataset:{}}};var localStorage={getItem(){return null},setItem(){},removeItem(){}};var sessionStorage=localStorage;var location={hash:'',search:'',protocol:'file:',origin:'',pathname:'/'};var navigator={onLine:true};var matchMedia=window.matchMedia;var history={};`;
   const body = src.trim().replace(/\}\)\(\);?$/, '').replace(/^[\s\S]*?\(function\s*\(\)\s*\{/, '');
   const names = ['TRACKS', 'TRACK_BY_ID', 'LESSONS', 'LESSON_MAP', 'GLOSSARY', 'findTerm', 'LIBRARY', 'LIB_MAP', 'LIB_PHOTOS', 'ART', 'SOFTWARE', 'SW_SECTIONS', 'LEARN_PATH', 'LEARN_TOGETHER', 'NOT_YET', 'SCENARIOS', 'TREES', 'EXERCISES', 'FLASHCARDS', 'EXAMS', 'REF', 'MOCKS'];
-  const ret = `return {${names.map((n) => `${n}: typeof ${n} !== 'undefined' ? ${n} : undefined`).join(',')}};`;
+  names.push(...extra);
+  const ret = `return {getState: () => state, ${names.map((n) => `${n}: typeof ${n} !== 'undefined' ? ${n} : undefined`).join(',')}};`;
   return new Function(stub + body + '\n' + ret)();
 }

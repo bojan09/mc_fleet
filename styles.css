@@ -2478,6 +2478,13 @@ dd { margin: 0; }
   .print-root .cs__lessons { columns: 2; }
 }
 
+.rv-start > div { flex-wrap: wrap; }
+.rv-start__later { flex-basis: 100%; margin-top: 4px; }
+.rv-list__when { display: inline-flex; align-items: center; gap: 8px; color: var(--text-2); }
+.rv-steps { display: inline-flex; gap: 3px; }
+.rv-steps > span:not(.sr-only) { width: 14px; height: 6px; border-radius: 3px; background: var(--border-strong); }
+.rv-steps > span.is-done { background: var(--success); }
+
 /* 25. SOFTWARE SIMULATIONS ================================================= */
 .sim { margin: var(--sp-5) 0; padding: var(--sp-5); border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); }
 .sim__head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }

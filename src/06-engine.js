@@ -1214,7 +1214,7 @@ function showCertificate(t) {
 /* ---------- Practice hub ---------- */
 function viewPractice() {
   const tools = [
-    ['review', 'rotate', 'Review my mistakes', 'Retry every question you answered wrong until it sticks. Correct answers clear it from the list.', `${missedCount()} to review`],
+    ['review', 'rotate', 'Review my mistakes', 'Retry questions you answered wrong, spaced out over 1, 3 and 7 days until they stick.', `${missedCount()} due now`],
     ['simulations', 'activity', 'Software Simulations', 'Build a work order, triage telematics alerts, read a dispatch board and a reefer display on simplified training screens.', `${SIM_LIST.filter(([id]) => state.exercises[id]).length}/${SIM_LIST.length} completed`],
     ['scenarios', 'message', 'Scenario Simulator', 'Respond to realistic messages from drivers, dispatch, shops and management — and see the reasoning.', `${Object.keys(state.scen).length}/${SCENARIOS.length} attempted`],
     ['trees', 'branch', 'Decision Trees', 'Work step by step through maintenance situations where each choice changes the outcome.', `${Object.keys(state.trees).length}/${Object.keys(TREES).length} explored`],
