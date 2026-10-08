@@ -8103,6 +8103,42 @@ function learnerName(m, prog) {
   return String((st && st.name) || '').trim() || m.display_name || 'Learner';
 }
 
+/* ---------- Group weak spots ---------- */
+const WEAK_QUIZ = 0.7; // module quiz average below this counts as a weak spot
+/* Modules where the group struggles: learners with questions still on their
+   review list in the module, and the group's quiz average there. */
+function groupWeakSpots(learners, prog) {
+  const by = new Map();
+  const get = (k) => { if (!by.has(k)) { const x = moduleByKey(k); if (!x) return null; by.set(k, { k, x, who: new Set(), n: 0, scores: [] }); } return by.get(k); };
+  learners.forEach((m) => {
+    const st = (prog.get(m.user_id) || {}).state || {};
+    Object.keys(st.missed || {}).forEach((id) => {
+      const mm = id.match(/^(\w+)\.(m\d+)\.\w+#/); const g = mm && get(`${mm[1]}.${mm[2]}`);
+      if (g) { g.who.add(m.user_id); g.n++; }
+    });
+    Object.entries(st.quizzes || {}).forEach(([k, q]) => { if (q && typeof q.best === 'number' && moduleByKey(k)) get(k).scores.push(q.best); });
+  });
+  return [...by.values()]
+    .map((g) => Object.assign(g, { avg: g.scores.length ? g.scores.reduce((a, b) => a + b, 0) / g.scores.length : null }))
+    .filter((g) => g.who.size || (g.avg != null && g.avg < WEAK_QUIZ))
+    .sort((a, b) => b.who.size - a.who.size || b.n - a.n || (a.avg ?? 1) - (b.avg ?? 1))
+    .slice(0, 5);
+}
+function groupWeakHTML(learners, prog, assigned) {
+  const spots = groupWeakSpots(learners, prog);
+  if (!spots.length) return '';
+  return `<div class="tr-weak">
+    <h4>Where the group struggles</h4>
+    <ul class="tr-assigned">${spots.map((g) => `<li>${icon('target', 'icon--sm')}<span class="grow"><strong>${esc(moduleLabel(g.x))}</strong><span class="small muted tr-weak__why">${[
+      g.who.size ? `${g.who.size} of ${learners.length} learner${learners.length === 1 ? '' : 's'} with questions to review (${g.n})` : '',
+      g.avg != null ? `quiz average ${pct(g.avg)}%` : ''
+    ].filter(Boolean).join(' · ')}</span></span>
+      <a class="btn btn--sm btn--ghost" href="#/cheatsheet/${g.x.t.id}/${g.x.m.id}">${icon('file', 'icon--sm')} Cheat sheet</a>
+      ${assigned.includes(g.k) ? '<span class="small muted">Assigned</span>' : `<button type="button" class="btn btn--sm btn--ghost" data-assign-pick="${g.k}">${icon('plus', 'icon--sm')} Assign</button>`}</li>`).join('')}</ul>
+    <p class="small muted">From questions still on learners' review lists and their module quiz scores.</p>
+  </div>`;
+}
+
 /* ---------- CSV export ---------- */
 function csvCell(v) {
   let s = v == null ? '' : String(v);
@@ -8214,6 +8250,7 @@ function trainerGroupHTML(g, members, prog, me, assigns) {
   return `<article class="card tr-group">
     <header class="tr-group__head"><div><h3>${esc(g.name)}</h3><span class="small muted">${rows.length} member${rows.length === 1 ? '' : 's'}</span></div>
       <div class="tr-code"><span class="small muted">Join code</span><strong class="mono">${esc(g.join_code)}</strong><button type="button" class="btn-icon" data-copy-code="${esc(g.join_code)}" aria-label="Copy join code">${icon('copy', 'icon--sm')}</button></div></header>
+    ${groupWeakHTML(learners, prog, mods.map((a) => a.module))}
     <div class="tr-assign">
       <h4>Assigned modules</h4>
       ${mods.length ? `<ul class="tr-assigned">${mods.map((a) => `<li>${icon('book', 'icon--sm')}<span class="grow">${esc(moduleLabel(a.x))}</span>${dueHTML(a, false)}${learners.length ? `<span class="num small muted">${doneBy(a)}/${learners.length} done</span>` : ''}<button type="button" class="btn-icon" data-unassign="${a.id}" aria-label="Remove assignment ${esc(moduleLabel(a.x))}">${icon('x', 'icon--sm')}</button></li>`).join('')}</ul>` : '<p class="small muted">Nothing assigned yet. Members see assigned modules on their dashboard.</p>'}
@@ -8271,6 +8308,11 @@ function trainerWire(root) {
     const { error } = await db.from('assignments').insert({ group_id: f.dataset.group, module, due: f.due.value || null });
     if (error) return fail(error, 'Couldn\'t assign the module');
     toast({ kind: 'success', title: 'Module assigned', text: 'Members see it on their dashboard.' }); reload();
+  }));
+  // "Assign" on a weak spot: pick the module in this group's form so a due date can be added.
+  $$('[data-assign-pick]', root).forEach((b) => b.addEventListener('click', () => {
+    const f = $('.tr-assign__form', b.closest('.tr-group')); f.module.value = b.dataset.assignPick;
+    f.scrollIntoView({ behavior: reduceMotion() ? 'auto' : 'smooth', block: 'center' }); f.due.focus();
   }));
   $$('[data-unassign]', root).forEach((b) => b.addEventListener('click', async () => {
     const { error } = await db.from('assignments').delete().eq('id', b.dataset.unassign);

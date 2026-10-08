@@ -21,8 +21,8 @@ const seed = {
       { group_id: 'g2', user_id: 'me', display_name: 'Test Trainer', joined_at: '2026-02-05T10:00:00Z' }
     ],
     progress: [
-      { user_id: 'ana', state: { completed: done('beginner', 'm1', ['l1', 'l2', 'l3']), quizzes: { 'beginner.m1': { best: 0.8 } }, days: ['2026-10-01'] } },
-      { user_id: 'ben', state: { name: 'Benjamin "Ben" Ortiz', completed: {}, days: [] } }
+      { user_id: 'ana', state: { completed: done('beginner', 'm1', ['l1', 'l2', 'l3']), quizzes: { 'beginner.m1': { best: 0.8 }, 'beginner.m4': { best: 0.5 } }, missed: { 'beginner.m3.l1#0': { n: 1 } }, days: ['2026-10-01'] } },
+      { user_id: 'ben', state: { name: 'Benjamin "Ben" Ortiz', completed: {}, missed: { 'beginner.m3.l2#1': { n: 2 }, 'beginner.m3.l1#0': { n: 1 } }, quizzes: { 'beginner.m3': { best: 0.6 } }, days: [] } }
     ],
     assignments: [
       { id: 'a1', group_id: 'g1', module: 'beginner.m1', due: day(-2) },
@@ -60,9 +60,15 @@ for (const width of [375, 1366]) {
   check(await b.evaluate(`[...document.querySelectorAll('.tr-table th')].some((th) => th.textContent === 'Assigned')`), 'table has an Assigned column');
   const mem = await text('.tr-memberships');
   check(/Dallas terminal/.test(mem) && /Beginner · M2/.test(mem) && /overdue/.test(mem) && /no due date/.test(mem), 'learner side lists assignments from their trainer');
+  const weak = await text('.tr-weak');
+  check(/Beginner · M3/.test(weak) && /2 of 2 learners with questions to review \(3\)/.test(weak) && /quiz average 60%/.test(weak), 'weak spots: module, learners, questions and quiz average');
+  check(/Beginner · M4/.test(weak) && /quiz average 50%/.test(weak) && !/Beginner · M1/.test(weak), 'low quiz average counts; a module with a good score and no misses does not');
+  check(weak.indexOf('M3') < weak.indexOf('M4'), 'most learners struggling listed first');
   check((await overflow()).length === 0, `nothing cut off (${(await overflow()).join(', ')})`);
 
   if (width === 1366) {
+    await b.evaluate(`document.querySelector('[data-assign-pick="beginner.m3"]').click(), true`);
+    check(await b.evaluate(`document.querySelector('.tr-assign__form').module.value === 'beginner.m3' && document.activeElement.name === 'due'`), 'Assign on a weak spot picks the module and focuses the due date');
     // assign a module
     await b.evaluate(`(() => { const f = document.querySelector('.tr-assign__form'); f.module.value = 'beginner.m3'; f.due.value = '${day(7)}'; f.requestSubmit(); return true; })()`);
     check(await wait(`/Beginner · M3/.test(document.querySelector('.tr-assign').textContent)`), 'new assignment appears after Assign');

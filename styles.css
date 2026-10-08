@@ -2593,6 +2593,11 @@ dd { margin: 0; }
 .tr-assigned .btn-icon { width: 28px; height: 28px; }
 .tr-assigned .grow, .dash-assigned__list .grow { flex: 1 1 14rem; min-width: 0; }
 .tr-late { color: var(--critical); font-weight: var(--fw-semibold); }
+.tr-weak { padding: var(--sp-4) var(--sp-5); border-bottom: 1px solid var(--border); display: grid; gap: 10px; }
+.tr-weak h4 { margin: 0; font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-2); }
+.tr-weak p { margin: 0; }
+.tr-weak__why { display: block; }
+.tr-weak li > .icon { color: var(--warning-strong); }
 .tr-memberships > li { display: grid; gap: 8px; }
 .tr-memberships__row { display: flex; align-items: center; gap: 10px; }
 .tr-group__foot { gap: 8px; flex-wrap: wrap; }
