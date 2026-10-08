@@ -2510,6 +2510,10 @@ dd { margin: 0; }
 .sim-fb .icon { flex: none; margin-top: 2px; }
 .sim-fb p { color: var(--text-2); margin-top: 2px; }
 .sim-result { margin-top: var(--sp-4); }
+.sim-dvir { display: grid; gap: 8px; margin-top: 12px; }
+.sim-dvir__row { grid-template-columns: minmax(0, 1fr) 220px; align-items: center; gap: 6px 12px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface); }
+.sim-dvir__row > span { font-weight: 400 !important; color: var(--text) !important; font-size: var(--fs-sm) !important; }
+@media (max-width: 600px) { .sim-dvir__row { grid-template-columns: 1fr; } }
 .sim-queue { display: grid; gap: 8px; }
 .sim-queue__row { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 6px 14px; align-items: center; padding: 10px 12px; border: 1px solid var(--border); border-left: 3px solid var(--tone); border-radius: var(--r-md); background: var(--surface-2); transition: background 200ms ease; }
 .sim-queue__row p { grid-column: 1; font-size: var(--fs-sm); color: var(--text-2); margin: 0; }

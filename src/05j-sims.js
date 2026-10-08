@@ -1,6 +1,6 @@
 
 /* ===========================================================================
-   SOFTWARE SIMULATIONS — hands-on practice with simplified, clearly labeled
+   SIMULATIONS (software) — hands-on practice with simplified, clearly labeled
    mock screens (never presented as the vendors' real interfaces). Each is a
    widget: { widget: 'sim:<id>' } in content, mounted by mountWidgets().
    Units, people and numbers are fictional.
@@ -161,12 +161,16 @@ const SIM_LIST = [
 
 function viewSimulations() {
   const html = `<div class="page page--narrow">
-    ${pageHead({ eyebrow: `${icon('flask', 'icon--sm')} Practice Lab`, title: 'Software simulations', text: 'Practice the tasks a Maintenance Coordinator does in real systems: build a work order, triage alerts, read a dispatch board and a reefer display. These are simplified training screens, not the vendors\' real interfaces.' })}
-    <div class="sim-index">${SIM_LIST.map(([id, t, k, sw], i) => `<a class="sim-index__item" href="#sim-${i}"><span class="num">${i + 1}</span><span><strong>${esc(t)}</strong><small>${esc(k)}</small></span>${state.exercises[id] ? icon('check-circle', 'icon--sm') : ''}</a>`).join('')}</div>
-    ${SIM_LIST.map(([id, t, k, sw], i) => `<section class="sim-sec" id="sim-${i}"><div class="widget" data-widget="${id}"></div><p class="small muted">Learn the concepts first: <a href="${swHref(SOFTWARE_MAP.get(sw))}">${esc(SOFTWARE_MAP.get(sw).name)}</a>.</p></section>`).join('')}
+    ${pageHead({ eyebrow: `${icon('flask', 'icon--sm')} Practice Lab`, title: 'Simulations', text: 'Practice the tasks a Maintenance Coordinator does every day: build a work order, triage alerts, read a dispatch board and a reefer display, close out driver inspection reports, order parts and start a warranty claim. These are simplified training screens with fictional units and numbers, not the vendors\' real interfaces.' })}
+    <div class="sim-index">${SIM_LIST.map(([id, t, k], i) => `<a class="sim-index__item" href="#sim-${i}"><span class="num">${i + 1}</span><span><strong>${esc(t)}</strong><small>${esc(k)}</small></span>${state.exercises[id] ? icon('check-circle', 'icon--sm') : ''}</a>`).join('')}</div>
+    ${SIM_LIST.map(([id, t, k, learn], i) => {
+      // learn: a Software & Platforms page id, or { href, name } of a lesson
+      const l = typeof learn === 'string' ? { href: swHref(SOFTWARE_MAP.get(learn)), name: SOFTWARE_MAP.get(learn).name } : learn;
+      return `<section class="sim-sec" id="sim-${i}"><div class="widget" data-widget="${id}"></div><p class="small muted">Learn the concepts first: <a href="${l.href}">${esc(l.name)}</a>.</p></section>`;
+    }).join('')}
   </div>`;
   return {
-    html, title: 'Software simulations', nav: 'simulations', bottom: 'practice', crumbs: [['Practice Lab', '#/practice'], ['Software simulations']],
+    html, title: 'Simulations', nav: 'simulations', bottom: 'practice', crumbs: [['Practice Lab', '#/practice'], ['Simulations']],
     // Standalone, each simulation is a top-level section: promote its title to h2.
     after: (v) => $$('.sim__head h3', v).forEach((h) => { const h2 = document.createElement('h2'); h2.innerHTML = h.innerHTML; h.replaceWith(h2); })
   };
