@@ -42,7 +42,9 @@ function noteAnswer(q, ok) {
 function updateMissedBadge() { const n = missedCount(); const el = $('#navMissed'); if (el) { el.textContent = n || ''; el.hidden = !n; } }
 const missedList = () => Object.keys(state.missed).map((id) => ({ id, ...state.missed[id], b: qById(id) })).filter((x) => x.b);
 const isDue = (x) => (x.due || 0) <= Date.now();
-const missedCount = () => missedList().filter(isDue).length; // due now (badge, practice card)
+// Due now (badge, practice card). Before the lesson text has loaded, lesson
+// questions are recognised by their lesson key so the count is still right.
+const missedCount = () => (hasContent() ? missedList() : Object.keys(state.missed).filter((id) => LESSON_MAP.has(id.split('#')[0]) || qById(id)).map((id) => state.missed[id])).filter(isDue).length;
 function whenText(due) {
   const days = Math.round((dayStart(due) - dayStart(Date.now())) / DAY_MS);
   return days <= 0 ? 'today' : days === 1 ? 'tomorrow' : `in ${days} days`;

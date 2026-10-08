@@ -569,6 +569,23 @@ function router() {
   if (location.hash && !location.hash.startsWith('#/')) return;
   if (viewCleanup) { try { viewCleanup(); } catch (e) {} viewCleanup = null; }
   const path = decodeURIComponent((location.hash || '#/dashboard').slice(1).split('?')[0]);
+  // Lesson text loads on demand: fetch it first, then render this route again.
+  const need = contentFor(path);
+  if (need && !hasContent(need === 'all' ? undefined : need)) {
+    const hash = location.hash; const view = $('#view');
+    view.innerHTML = '<div class="page"><div class="skeleton" style="height:28px;width:40%;border-radius:8px"></div><div class="skeleton mt-4" style="height:220px;border-radius:12px"></div><span class="sr-only">Loading…</span></div>';
+    view.setAttribute('aria-busy', 'true');
+    loadContent(need === 'all' ? undefined : need)
+      .then(() => { view.removeAttribute('aria-busy'); if (location.hash === hash) router(); })
+      .catch((e) => {
+        console.warn('Lesson content failed to load:', e && e.message); view.removeAttribute('aria-busy');
+        if (location.hash !== hash) return;
+        view.innerHTML = `<div class="page">${stateBlock({ ic: 'alert', title: 'This lesson couldn’t load', text: navigator.onLine ? 'Please try again in a moment.' : 'You’re offline and this lesson hasn’t been saved on this device yet. Connect to the internet to open it.', error: true, action: '<button type="button" class="btn btn--primary" data-retry-content>Try again</button>' })}</div>`;
+        const b = $('[data-retry-content]', view); if (b) b.addEventListener('click', () => router());
+        document.title = 'Couldn’t load · MC Academy';
+      });
+    return;
+  }
   let out = null;
   for (const [re, fn] of ROUTES) { const m = path.match(re); if (m) { out = fn(...m.slice(1)); break; } }
   if (!out) out = viewNotFound();
@@ -1975,7 +1992,7 @@ function openSearch() {
       const inp = $('#palQ', m); const res = $('#palRes', m); let active = 0; let flat = [];
       const draw = () => {
         const q = inp.value.trim().toLowerCase();
-        const lessons = LESSONS.map((x) => ({ x, s: !q ? 0 : x.l.title.toLowerCase().includes(q) ? 3 : x.m.title.toLowerCase().includes(q) ? 2 : (x.l.objectives.join(' ') + ' ' + x.l.takeaways.join(' ')).toLowerCase().includes(q) ? 1 : -1 })).filter((r) => r.s >= 0);
+        const lessons = LESSONS.map((x) => ({ x, s: !q ? 0 : x.l.title.toLowerCase().includes(q) ? 3 : x.m.title.toLowerCase().includes(q) ? 2 : ((x.l.objectives || []).join(' ') + ' ' + (x.l.takeaways || []).join(' ')).toLowerCase().includes(q) ? 1 : -1 })).filter((r) => r.s >= 0);
         const L = (q ? lessons.sort((a, b) => b.s - a.s) : lessons.filter((r) => !isDone(r.x.key))).slice(0, q ? 7 : 4).map((r) => ({ href: lessonHref(r.x), ic: 'book', t: r.x.l.title, s: `${r.x.t.level} · M${r.x.m.id.slice(1)} ${r.x.m.title}`, b: isDone(r.x.key) ? 'Done' : '' }));
         const G = GLOSSARY.filter((g) => q && (`${g.term} ${g.full}`.toLowerCase().includes(q) || g.def.toLowerCase().includes(q))).sort((a, b) => (b.term.toLowerCase().startsWith(q) ? 1 : 0) - (a.term.toLowerCase().startsWith(q) ? 1 : 0)).slice(0, 6).map((g) => ({ href: `#/glossary/${encodeURIComponent(g.term)}`, ic: 'book', t: g.term, s: g.full, b: 'Term' }));
         const P = SEARCH_PAGES.filter(([t]) => !q || t.toLowerCase().includes(q)).slice(0, q ? 5 : 6).map(([t, href, ic]) => ({ href, ic, t, s: 'Go to page' }));
@@ -1988,6 +2005,8 @@ function openSearch() {
         inp.setAttribute('aria-activedescendant', flat.length ? `pal-${active}` : '');
       };
       inp.addEventListener('input', () => { active = 0; draw(); });
+      // Lesson objectives and takeaways are searched too: load them, then refresh.
+      if (!hasContent()) loadContent().then(() => { if (inp.isConnected) draw(); }).catch(() => {});
       inp.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(flat.length - 1, active + 1); draw(); $('.palette-item.is-active', res)?.scrollIntoView({ block: 'nearest' }); }
         else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(0, active - 1); draw(); $('.palette-item.is-active', res)?.scrollIntoView({ block: 'nearest' }); }

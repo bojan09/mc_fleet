@@ -1,12 +1,16 @@
 // First-visit performance on a phone: slow 4G (150 ms RTT, 1.6 Mbps down),
 // 4x CPU slowdown, empty cache, compressed responses (as Vercel serves them).
-// Reports the median of several runs. Usage: node tools/perf.mjs [runs=3]
+// Reports the median of several runs. Usage: node tools/perf.mjs [runs=3] [route=#/dashboard]
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { root } from './load.mjs';
 import { startServer, launchBrowser } from './browser.mjs';
 
 const RUNS = Number(process.argv[2]) || 3;
+const ROUTE = process.argv[3] || '#/dashboard';
 const server = await startServer({ compress: true });
 // Warm the compression cache so timings reflect transfer, not server CPU.
-for (const f of ['index.html', 'script.js', 'styles.css', 'sw.js', 'manifest.webmanifest']) await fetch(server.base + f, { headers: { 'Accept-Encoding': 'br' } }).then((r) => r.arrayBuffer());
+for (const f of ['index.html', 'script.js', 'styles.css', 'sw.js', 'manifest.webmanifest', ...readdirSync(join(root, 'content')).map((x) => 'content/' + x)]) await fetch(server.base + f, { headers: { 'Accept-Encoding': 'br' } }).then((r) => r.arrayBuffer());
 const b = await launchBrowser();
 await b.cdp('Network.enable');
 await b.cdp('Page.enable');
@@ -23,7 +27,7 @@ const results = [];
 for (let i = 0; i < RUNS; i++) {
   // Fresh profile state between runs: no service worker, no storage.
   await b.cdp('Storage.clearDataForOrigin', { origin: server.base.slice(0, -1), storageTypes: 'all' });
-  await b.cdp('Page.navigate', { url: server.base + '#/dashboard' });
+  await b.cdp('Page.navigate', { url: server.base + ROUTE });
   let r;
   for (let t = 0; t < 120 && !(r && r.load); t++) {
     await new Promise((res) => setTimeout(res, 250));
@@ -46,7 +50,7 @@ await b.close(); server.close();
 
 const med = (f) => { const v = results.map(f).filter((x) => typeof x === 'number').sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; };
 const ms = (x) => (x == null ? 'n/a' : `${Math.round(x)} ms`);
-console.log(`Phone, slow 4G, 4x CPU, empty cache — median of ${RUNS} runs`);
+console.log(`Phone, slow 4G, 4x CPU, empty cache — ${ROUTE}, median of ${RUNS} runs`);
 console.log(`  First contentful paint  ${ms(med((r) => r.fcp))}`);
 console.log(`  App view rendered       ${ms(med((r) => r.view))}`);
 console.log(`  DOMContentLoaded        ${ms(med((r) => r.dcl))}`);

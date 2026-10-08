@@ -1,22 +1,31 @@
 /* Maintenance Coordinator Academy — service worker
    - App shell precached so the academy works offline.
    - Page navigations: network-first (fresh HTML when online), cached copy offline.
-   - script.js / styles.css are requested with a content hash (?v=…) that
-     tools/build.mjs stamps into index.html, so they are cache-first: a given
-     URL never changes, and new HTML always loads the code it was built with.
+   - script.js, styles.css and content/<track>.json (lesson text) are
+     requested with a content hash (?v=…) stamped by tools/build.mjs, so they
+     are cache-first: a given URL never changes, and new HTML always loads
+     the code and lessons it was built with. All are precached, so every
+     lesson works offline once the service worker is installed.
    - Other same-origin files (icons, images): stale-while-revalidate — served
      instantly from cache and refreshed in the background.
    - Visual Library thumbnails: precached; full photos cached once viewed (stale-while-revalidate).
    VERSION is stamped by tools/build.mjs; a new release gets a new cache and
    the old one is cleared on activate. */
-const VERSION = 'mca-fd2f3253ed';
+const VERSION = 'mca-ffba05f9aa';
 const APP_CACHE = `${VERSION}-app`;
 const APP_SHELL = [
   './',
   'index.html',
   'styles.css?v=ee8c2e7cc2',
-  'script.js?v=6560029109',
+  'script.js?v=8026f7d253',
   'manifest.webmanifest',
+  // Lesson text per track (tools/build.mjs fills this list).
+  // content:start
+  'content/beginner.json?v=faa675b05f',
+  'content/advanced.json?v=d4a5a81c77',
+  'content/expert.json?v=75721eb090',
+  'content/operations.json?v=f4d59c8a6e',
+  // content:end
   'fonts/plex-sans-latin.woff2',
   'fonts/plex-mono-400-latin.woff2',
   'fonts/plex-mono-500-latin.woff2',
