@@ -27,6 +27,7 @@ node tools/update-test.mjs  # new release: open page offers a reload, new cache 
 node tools/trainer-test.mjs # signed-in screens (groups, assignments, CSV) with a fake Supabase
 node tools/review-test.mjs  # spaced review schedule (1, 3, 7 days) with a simulated clock
 node tools/sims-test.mjs    # DVIR, core charge and warranty simulations grade right and wrong answers
+node tools/merge-test.mjs   # two-device sync: newest change wins, removals and resets stick
 ```
 
 Run the build, check and sweep before pushing. The build stamps content hashes

@@ -37,7 +37,7 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 
 /* ---------- State (localStorage) ---------- */
 const STORE_KEY = 'mca.v1';
-const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {} };
+const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0 };
 let storageOk = true;
 let state = migrateState(loadState());
 /* Lessons that moved between tracks keep their saved progress (LESSON_MOVES). */
@@ -64,6 +64,10 @@ function loadState() {
   } catch (e) { storageOk = false; return base; }
 }
 let saveWarned = false;
+/* Records when a removable item last changed (bookmark, completion,
+   flashcard, missed question, name), so syncing devices keeps the newest
+   change instead of bringing removed items back. See mergeProgress(). */
+function touch(key) { state.edits[key] = Date.now(); }
 function save() {
   cloudQueue();
   try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
@@ -643,7 +647,7 @@ function editName() {
     body: `<div class="field"><label for="nameInput">Name shown on your dashboard and certificates</label><input class="input" id="nameInput" maxlength="60" value="${esc(state.name)}" placeholder="e.g., Jordan Taylor" autofocus><span class="hint">${CLOUD.user ? 'Synced with your account.' : 'Stored in this browser.'}</span></div>`,
     foot: `<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--primary" id="nameSave">Save</button>`,
     onOpen: (m, close) => {
-      const saveName = () => { state.name = $('#nameInput', m).value.trim().slice(0, 60); save(); refreshChrome(); close(); toast({ kind: 'success', title: 'Profile updated' }); if ((location.hash || '').match(/dashboard|^$|^#\/?$/)) router(); };
+      const saveName = () => { state.name = $('#nameInput', m).value.trim().slice(0, 60); touch('name'); save(); refreshChrome(); close(); toast({ kind: 'success', title: 'Profile updated' }); if ((location.hash || '').match(/dashboard|^$|^#\/?$/)) router(); };
       $('#nameSave', m).addEventListener('click', saveName);
       $('#nameInput', m).addEventListener('keydown', (e) => { if (e.key === 'Enter') saveName(); });
     }
@@ -932,13 +936,13 @@ function viewLesson(tid, mid, lid) {
       }));
       $$('[data-bookmark]', v).forEach((b) => b.addEventListener('click', () => {
         const on = !state.bookmarks.includes(key);
-        state.bookmarks = on ? [...state.bookmarks, key] : state.bookmarks.filter((k) => k !== key); save();
+        state.bookmarks = on ? [...state.bookmarks, key] : state.bookmarks.filter((k) => k !== key); touch('bm:' + key); save();
         $$('[data-bookmark]', v).forEach((bb) => { bb.setAttribute('aria-pressed', on); bb.setAttribute('aria-label', on ? 'Remove bookmark' : 'Bookmark this lesson'); if (bb.dataset.tip) bb.dataset.tip = on ? 'Bookmarked' : 'Bookmark'; });
         toast({ kind: on ? 'success' : 'info', title: on ? 'Lesson bookmarked' : 'Bookmark removed', icon: 'bookmark', timeout: 2500 });
       }));
       const setComplete = (on) => {
         if (on) state.completed[key] = Date.now(); else delete state.completed[key];
-        save();
+        touch('done:' + key); save();
         const b = $('[data-complete]', v); b.classList.toggle('is-active', on); b.innerHTML = `${icon(on ? 'check-circle' : 'check')} ${on ? 'Completed' : 'Mark complete'}`;
         $$('[data-continue]', v).forEach((c) => { c.innerHTML = `${on ? nextLabel : 'Complete & continue'} ${icon('arrow-r', 'icon--nudge')}`; });
         if (on) {
@@ -949,7 +953,7 @@ function viewLesson(tid, mid, lid) {
       };
       $('[data-complete]', v).addEventListener('click', () => setComplete(!isDone(key)));
       $$('[data-continue]', v).forEach((c) => c.addEventListener('click', () => {
-        if (!isDone(key)) { state.completed[key] = Date.now(); save(); checkAchievements(); toast({ kind: 'success', title: 'Lesson complete', text: l.title, timeout: 2500 }); }
+        if (!isDone(key)) { state.completed[key] = Date.now(); touch('done:' + key); save(); checkAchievements(); toast({ kind: 'success', title: 'Lesson complete', text: l.title, timeout: 2500 }); }
         go(nextHref);
       }));
       // Scroll spy for "On this page"
@@ -1390,8 +1394,8 @@ function viewFlashcards() {
       fc.addEventListener('click', flip);
       $('[data-prev]', v).addEventListener('click', () => move(-1));
       $('[data-next]', v).addEventListener('click', () => move(1));
-      $('[data-know]', v).addEventListener('click', () => { state.flash.known[cid(cards[i])] = 1; save(); checkAchievements(); move(1); });
-      $('[data-review]', v).addEventListener('click', () => { delete state.flash.known[cid(cards[i])]; save(); move(1); });
+      $('[data-know]', v).addEventListener('click', () => { state.flash.known[cid(cards[i])] = 1; touch('fk:' + cid(cards[i])); save(); checkAchievements(); move(1); });
+      $('[data-review]', v).addEventListener('click', () => { delete state.flash.known[cid(cards[i])]; touch('fk:' + cid(cards[i])); save(); move(1); });
       $('[data-shuffle]', v).addEventListener('click', () => { cards = shuffle(cards); i = 0; draw(); toast({ title: 'Deck shuffled', timeout: 1800 }); });
       $('[data-unknown]', v).addEventListener('click', () => { cards = cards.filter((c) => !state.flash.known[cid(c)]); i = 0; draw(); });
       $$('[data-deck]', v).forEach((b) => b.addEventListener('click', () => { sessionStorageSet('fcDeck', b.dataset.deck); router(); }));
@@ -1925,7 +1929,7 @@ function viewBookmarks() {
       : stateBlock({ ic: 'bookmark', title: 'No bookmarks yet', text: 'Use the bookmark button on any lesson to save it here for quick reference.', action: `<a class="btn btn--primary" href="#/curriculum">Browse curriculum</a>` })}</div>`;
   return {
     html, title: 'Bookmarks', nav: 'bookmarks', crumbs: [['Bookmarks']],
-    after: (v) => $$('[data-unbm]', v).forEach((b) => b.addEventListener('click', () => { state.bookmarks = state.bookmarks.filter((k) => k !== b.dataset.unbm); save(); toast({ title: 'Bookmark removed', icon: 'bookmark', timeout: 2000 }); router(); }))
+    after: (v) => $$('[data-unbm]', v).forEach((b) => b.addEventListener('click', () => { state.bookmarks = state.bookmarks.filter((k) => k !== b.dataset.unbm); touch('bm:' + b.dataset.unbm); save(); toast({ title: 'Bookmark removed', icon: 'bookmark', timeout: 2000 }); router(); }))
   };
 }
 
@@ -1945,9 +1949,9 @@ function viewAchievements() {
       $$('[data-cert]', v).forEach((b) => b.addEventListener('click', () => showCertificate(TRACK_BY_ID[b.dataset.cert])));
       $$('[data-delete-account]', v).forEach((b) => b.addEventListener('click', confirmDeleteAccount));
       $('[data-reset]', v).addEventListener('click', () => openModal({
-        title: 'Reset all progress?', body: '<p>This permanently clears completed lessons, quiz scores, certificates, bookmarks and achievements stored in this browser. This cannot be undone.</p>',
+        title: 'Reset all progress?', body: `<p>This permanently clears completed lessons, quiz scores, certificates, bookmarks and achievements ${CLOUD.user ? 'on all your devices: in this browser and in your account' : 'stored in this browser'}. This cannot be undone.</p>`,
         foot: '<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--danger" id="doReset">Reset everything</button>',
-        onOpen: (m, close) => $('#doReset', m).addEventListener('click', () => { const theme = state.theme; state = JSON.parse(JSON.stringify(DEFAULT_STATE)); state.theme = theme; save(); close(); toast({ title: 'Progress reset', text: 'Starting fresh.' }); go('#/dashboard'); })
+        onOpen: (m, close) => $('#doReset', m).addEventListener('click', () => { const theme = state.theme; state = JSON.parse(JSON.stringify(DEFAULT_STATE)); state.theme = theme; state.resetAt = Date.now(); save(); close(); toast({ title: 'Progress reset', text: 'Starting fresh.' }); go('#/dashboard'); })
       }));
     }
   };

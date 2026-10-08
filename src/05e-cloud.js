@@ -24,24 +24,49 @@ function cloudLoadSdk() {
   });
 }
 
-/* Merge two progress snapshots without ever losing work: completion and
-   visits are unions, scores keep the best result. */
+/* Merge two progress snapshots (a = this device, b = the cloud copy).
+   - Scores keep the best result; things that are only ever added are unions.
+   - Things that can also be removed or changed (bookmarks, completions,
+     known flashcards, missed questions, the name) follow state.edits: when
+     one copy has it and the other doesn't, the side that changed it last
+     wins, so a removal on one device isn't undone by another.
+   - A reset on one device wins over older copies that haven't seen it. */
 function mergeProgress(a, b) {
-  const out = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  const fresh = () => JSON.parse(JSON.stringify(DEFAULT_STATE));
+  const ra = a.resetAt || 0, rb = b.resetAt || 0;
+  if (ra !== rb) return Object.assign(fresh(), JSON.parse(JSON.stringify(rb > ra ? b : a)), { theme: a.theme });
+  const out = fresh();
   const union = (x, y) => Object.assign({}, y || {}, x || {});
+  const ea = a.edits || {}, eb = b.edits || {};
+  const keyed = (x, y, prefix, time = () => 0) => {
+    x = x || {}; y = y || {};
+    const r = union(x, y);
+    new Set([...Object.keys(x), ...Object.keys(y)]).forEach((k) => {
+      const tx = Math.max(ea[prefix + k] || 0, k in x ? time(x[k]) : 0);
+      const ty = Math.max(eb[prefix + k] || 0, k in y ? time(y[k]) : 0);
+      if (tx === ty) return; // no newer change on either side: keep the union
+      const win = tx > ty ? x : y;
+      if (k in win) r[k] = win[k]; else delete r[k];
+    });
+    return r;
+  };
+  const asSet = (arr) => Object.fromEntries((arr || []).map((k) => [k, 1]));
   const best = (x = {}, y = {}, field) => { const r = Object.assign({}, y, x); Object.keys(y).forEach((k) => { if (x[k] && y[k]) r[k] = (y[k][field] || 0) > (x[k][field] || 0) ? y[k] : x[k]; }); return r; };
-  out.completed = union(a.completed, b.completed);
+  out.completed = keyed(a.completed, b.completed, 'done:', (v) => (typeof v === 'number' ? v : 0));
   out.checks = best(a.checks, b.checks, 'score');
   out.quizzes = best(a.quizzes, b.quizzes, 'best');
   out.finals = best(a.finals, b.finals, 'score');
   Object.keys(out.finals).forEach((k) => { if ((a.finals[k] || {}).passed || (b.finals[k] || {}).passed) out.finals[k] = Object.assign({}, out.finals[k], { passed: true }); });
   out.exercises = Object.assign({}, b.exercises, a.exercises); Object.keys(b.exercises || {}).forEach((k) => { out.exercises[k] = Math.max(a.exercises[k] || 0, b.exercises[k] || 0); });
-  ['scen', 'trees', 'glossaryViewed', 'calcUsed', 'achievements', 'missed', 'certIds'].forEach((k) => { out[k] = union(a[k], b[k]); });
-  out.flash = { known: union((a.flash || {}).known, (b.flash || {}).known) };
-  out.bookmarks = [...new Set([...(a.bookmarks || []), ...(b.bookmarks || [])])];
+  ['scen', 'trees', 'glossaryViewed', 'calcUsed', 'achievements', 'certIds'].forEach((k) => { out[k] = union(a[k], b[k]); });
+  out.missed = keyed(a.missed, b.missed, 'mq:');
+  out.flash = { known: keyed((a.flash || {}).known, (b.flash || {}).known, 'fk:') };
+  const bm = keyed(asSet(a.bookmarks), asSet(b.bookmarks), 'bm:');
+  out.bookmarks = [...new Set([...(a.bookmarks || []), ...(b.bookmarks || [])])].filter((k) => bm[k]);
+  out.edits = union(a.edits, b.edits); Object.keys(eb).forEach((k) => { out.edits[k] = Math.max(ea[k] || 0, eb[k]); });
   out.days = [...new Set([...(a.days || []), ...(b.days || [])])].sort().slice(-120);
   out.last = a.last || b.last;
-  out.name = a.name || b.name || '';
+  out.name = (eb.name || 0) > (ea.name || 0) ? b.name || '' : (ea.name || 0) > (eb.name || 0) ? a.name || '' : a.name || b.name || '';
   out.theme = a.theme;
   return out;
 }

@@ -35,6 +35,7 @@ function noteAnswer(q, ok) {
     if (box > REVIEW_DAYS.length) delete state.missed[b.id];
     else state.missed[b.id] = Object.assign({}, cur, { box, due: dayStart(Date.now()) + REVIEW_DAYS[box - 1] * DAY_MS });
   } else state.missed[b.id] = { n: ((cur || {}).n || 0) + 1, at: Date.now(), box: 0, due: 0 };
+  touch('mq:' + b.id);
   save();
   updateMissedBadge();
 }
