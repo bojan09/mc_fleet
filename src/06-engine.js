@@ -1210,7 +1210,7 @@ function certificateHTML(t) {
     <div class="cert-name">${esc(state.name || 'Your Name')}</div>
     <p>has completed the ${t.level} curriculum and passed the final ${t.final.kind === 'sim' ? 'simulation' : 'assessment'}<br>with a score of <strong style="color:#0b1a2e">${f ? pct(f.score) : 0}%</strong>.</p>
     <div class="cert-meta"><div><strong>${date}</strong>Date awarded</div><div><strong>${t.modules.length} modules · ${t.modules.reduce((a, m) => a + m.lessons.length, 0)} lessons</strong>Curriculum</div>${(state.certIds || {})[t.id] ? `<div><strong>${esc(state.certIds[t.id])}</strong>Verification code</div>` : `<div><strong>MCA-${t.id.slice(0, 3).toUpperCase()}-${(f && f.at ? f.at : 0).toString(36).toUpperCase().slice(-6)}</strong>Record ID</div>`}</div>
-    ${(state.certIds || {})[t.id] ? `<p class="cert-verify">Verify at ${esc(VERIFY_BASE.replace(/^https:\/\//, ''))}${esc(state.certIds[t.id])}</p>` : ''}
+    ${(state.certIds || {})[t.id] ? `<div class="cert-check">${qrSVG(VERIFY_BASE + state.certIds[t.id], 'QR code: check this certificate online')}<p class="cert-verify">Scan or visit<br>${esc(VERIFY_BASE.replace(/^https:\/\//, ''))}${esc(state.certIds[t.id])}</p></div>` : ''}
     <p class="cert-note">A self-paced training record from MC Academy. It is not a CDL, government license or third-party industry certification.</p>
   </div>`;
 }

@@ -30,6 +30,7 @@ node tools/review-test.mjs  # spaced review schedule (1, 3, 7 days) with a simul
 node tools/sims-test.mjs    # DVIR, core charge and warranty simulations grade right and wrong answers
 node tools/merge-test.mjs   # two-device sync: newest change wins, removals and resets stick
 node tools/split-test.mjs   # on-demand lesson text: every page renders as with one bundle; offline works
+node tools/qr-test.mjs      # certificate QR codes decode correctly (needs Python + opencv-python)
 ```
 
 Run the build, check and sweep before pushing. The build stamps content hashes
