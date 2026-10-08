@@ -68,6 +68,14 @@ async function dashAssigned(el) {
   } catch (e) { /* the dashboard works without it */ }
 }
 
+/* The name the learner set in the academy (synced with their progress), so a
+   rename shows up for the trainer; the name saved when they joined is the
+   fallback for learners whose progress hasn't synced. */
+function learnerName(m, prog) {
+  const st = (prog.get(m.user_id) || {}).state;
+  return String((st && st.name) || '').trim() || m.display_name || 'Learner';
+}
+
 /* ---------- CSV export ---------- */
 function csvCell(v) {
   let s = v == null ? '' : String(v);
@@ -79,7 +87,7 @@ function groupCSV(g, members, prog, assigns) {
   const head = ['Learner', 'Joined', 'Last active', 'Lessons completed', 'Lessons total', ...TRACKS.flatMap((t) => [`${t.level} lessons %`, `${t.level} final`]), 'Quiz average %', 'Questions to review', 'Assigned modules done', ...mods.map((y) => `Assigned: ${moduleLabel(y.x)}${y.a.due ? ` (due ${y.a.due})` : ''}`)];
   const rows = members.map((m) => {
     const st = (prog.get(m.user_id) || {}).state; const s = progressSummary(st);
-    return [m.display_name || 'Learner', m.joined_at.slice(0, 10), s.last || '', s.lessons, s.total,
+    return [learnerName(m, prog), m.joined_at.slice(0, 10), s.last || '', s.lessons, s.total,
       ...s.tracks.flatMap((x) => [pct(x.total ? x.done / x.total : 0), x.passed ? `passed ${pct(x.score)}%` : '']),
       s.quiz == null ? '' : pct(s.quiz), s.missed, `${mods.filter((y) => moduleDoneIn(st, y.x)).length}/${mods.length}`,
       ...mods.map((y) => (moduleDoneIn(st, y.x) ? 'done' : 'not done'))];
@@ -167,14 +175,14 @@ function trainerGroupHTML(g, members, prog, me, assigns) {
     const p = prog.get(m.user_id); const s = progressSummary(p && p.state);
     const asg = mods.filter((a) => moduleDoneIn(p && p.state, a.x)).length;
     const late = mods.filter((a) => a.due && a.due < todayISO() && !moduleDoneIn(p && p.state, a.x)).length;
-    return `<tr><td><strong>${esc(m.display_name || 'Learner')}</strong><div class="small muted">joined ${new Date(m.joined_at).toLocaleDateString()}</div></td>
+    return `<tr><td><strong>${esc(learnerName(m, prog))}</strong><div class="small muted">joined ${new Date(m.joined_at).toLocaleDateString()}</div></td>
       <td><div class="tr-bar">${progressBar(s.total ? s.lessons / s.total : 0, { cls: 'progress--sm', label: 'Lessons completed' })}<span class="num small">${s.lessons}/${s.total}</span></div></td>
       <td>${s.tracks.map((x) => `<span class="tr-track ${x.passed ? 'is-passed' : ''}" title="${esc(x.t.level)}: ${x.done}/${x.total} lessons${x.passed ? ` · final ${pct(x.score)}%` : ''}" style="--c:${x.t.color}">${x.passed ? icon('award', 'icon--sm') : ''}${esc(x.t.level.slice(0, 3))} ${pct(x.total ? x.done / x.total : 0)}%</span>`).join('')}</td>
       ${mods.length ? `<td class="num small">${asg}/${mods.length}${late ? `<div class="tr-late">${late} overdue</div>` : ''}</td>` : ''}
       <td class="num">${s.quiz == null ? '—' : pct(s.quiz) + '%'}</td>
       <td class="num">${s.missed}</td>
       <td class="small">${s.last ? new Date(s.last).toLocaleDateString() : '—'}</td>
-      <td><button type="button" class="btn btn--sm btn--ghost" data-remove="${g.id}|${m.user_id}" aria-label="Remove ${esc(m.display_name || 'learner')}">${icon('x')}</button></td></tr>`;
+      <td><button type="button" class="btn btn--sm btn--ghost" data-remove="${g.id}|${m.user_id}" aria-label="Remove ${esc(learnerName(m, prog))}">${icon('x')}</button></td></tr>`;
   });
   return `<article class="card tr-group">
     <header class="tr-group__head"><div><h3>${esc(g.name)}</h3><span class="small muted">${rows.length} member${rows.length === 1 ? '' : 's'}</span></div>

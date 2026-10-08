@@ -22,7 +22,7 @@ const seed = {
     ],
     progress: [
       { user_id: 'ana', state: { completed: done('beginner', 'm1', ['l1', 'l2', 'l3']), quizzes: { 'beginner.m1': { best: 0.8 } }, days: ['2026-10-01'] } },
-      { user_id: 'ben', state: { completed: {}, days: [] } }
+      { user_id: 'ben', state: { name: 'Benjamin "Ben" Ortiz', completed: {}, days: [] } }
     ],
     assignments: [
       { id: 'a1', group_id: 'g1', module: 'beginner.m1', due: day(-2) },
@@ -56,6 +56,7 @@ for (const width of [375, 1366]) {
   check(/Night shift/.test(card) && /NIGHT234/.test(card), 'group name and join code shown');
   check(/Beginner · M1/.test(card) && /1\/2 done/.test(card), 'assigned module with "1/2 done"');
   check(/1 overdue/.test(card), 'overdue count for the learner who has not finished');
+  check(/Benjamin "Ben" Ortiz/.test(card) && !/Ben "B" Ortiz/.test(card), 'table shows the name the learner set, not the one saved at joining');
   check(await b.evaluate(`[...document.querySelectorAll('.tr-table th')].some((th) => th.textContent === 'Assigned')`), 'table has an Assigned column');
   const mem = await text('.tr-memberships');
   check(/Dallas terminal/.test(mem) && /Beginner · M2/.test(mem) && /overdue/.test(mem) && /no due date/.test(mem), 'learner side lists assignments from their trainer');
@@ -77,7 +78,7 @@ for (const width of [375, 1366]) {
     check(lines.length === 3, `CSV has header + 2 learners (${lines.length} lines)`);
     check(/"Assigned: Beginner · M1 .*\(due \d{4}-\d\d-\d\d\)"/.test(lines[0]), 'CSV header names the assigned module and due date');
     check(lines.some((l) => l.startsWith(`"'=Ana"`)), 'CSV defuses a name that starts with = (no spreadsheet formula)');
-    check(lines.some((l) => l.startsWith('"Ben ""B"" Ortiz"')), 'CSV escapes quotes');
+    check(lines.some((l) => l.startsWith('"Benjamin ""Ben"" Ortiz"')), 'CSV uses the name the learner set, quotes escaped');
     check(/"done"/.test(lines.find((l) => l.includes('Ana'))) && /"not done"/.test(lines.find((l) => l.includes('Ben'))), 'CSV marks assigned module done / not done');
   }
 
