@@ -1,0 +1,7 @@
+{
+  "tool_name": "mcp__Claude_Browser__browser_batch",
+  "tool_input_preview": "{\"actions\":[{\"name\":\"javascript_exec_placeholder\",\"input\":{}}]}",
+  "error": "actions[0]: \"javascript_exec_placeholder\" cannot run in a batch",
+  "timestamp": "2026-10-08T21:19:51.793Z",
+  "retry_count": 1
+}

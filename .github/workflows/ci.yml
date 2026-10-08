@@ -48,3 +48,4 @@ jobs:
           node tools/sims-test.mjs
           node tools/merge-test.mjs
           node tools/trainer-test.mjs
+          node tools/profile-test.mjs

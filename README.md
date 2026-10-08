@@ -1,15 +1,15 @@
 # MC Academy
 
 Maintenance Coordinator training academy: a static, framework-free web app
-(HTML, CSS and vanilla JavaScript) with optional Google sign-in through
-Supabase to sync progress. Hosted on Vercel: https://mcfleet-three.vercel.app
+(HTML, CSS and vanilla JavaScript) with optional sign-in (Google, or email and password) through
+Supabase to sync progress and keep a profile. Hosted on Vercel: https://mcfleet-three.vercel.app
 
 ## Project layout
 
 | Path | What it is |
 | --- | --- |
 | `index.html`, `styles.css`, `sw.js`, `manifest.webmanifest` | The app shell, styles, offline service worker and PWA manifest |
-| `theme.js` | Applies the saved light/dark theme before first paint (a file, not inline, so the CSP needs no script hashes) |
+| `theme.js` | Applies the saved light/dark theme (and reduced-motion choice) before first paint (a file, not inline, so the CSP needs no script hashes) |
 | `vercel.json` | Security headers for Vercel: Content-Security-Policy, nosniff, frame and referrer policy. A new third-party script, image or API host must be added to the CSP here |
 | `script.js` | **Built file — do not edit.** Generated from `src/`: engine, views and the track outline |
 | `content/` | **Built files — do not edit.** Lesson text per track, loaded when a page needs it |
@@ -29,6 +29,7 @@ node tools/sweep.mjs    # every route at 375/768/1366 px: layout, headings, acce
 node tools/perf.mjs     # first-visit timing on a throttled phone (slow 4G, 4x CPU); optional: runs, start route
 node tools/update-test.mjs  # new release: open page offers a reload, new cache used
 node tools/trainer-test.mjs # signed-in screens (groups, assignments, CSV) with a fake Supabase
+node tools/profile-test.mjs # dashboard and profile signed in: details, picture upload, email/password change, preferences, reset
 node tools/review-test.mjs  # spaced review schedule (1, 3, 7 days) with a simulated clock
 node tools/sims-test.mjs    # DVIR, core charge and warranty simulations grade right and wrong answers
 node tools/merge-test.mjs   # two-device sync: newest change wins, removals and resets stick

@@ -5,5 +5,6 @@
     var s = JSON.parse(localStorage.getItem('mca.v1') || '{}');
     var t = s.theme || (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', t);
+    if (s.motion === 'reduce') document.documentElement.setAttribute('data-motion', 'reduce');
   } catch (e) {}
 })();

@@ -14,7 +14,7 @@ const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
 const pct = (n) => Math.round(n * 100);
 const fmtMoney = (n, d = 0) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const fmtNum = (n, d = 0) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
-const reduceMotion = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduceMotion = () => document.documentElement.getAttribute('data-motion') === 'reduce' || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
 /* Calendar day in the learner's own time zone (toISOString would give the UTC day,
    so study just after midnight in Skopje landed on the previous day). */
 const dayKey = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -40,7 +40,9 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 
 /* ---------- State (localStorage) ---------- */
 const STORE_KEY = 'mca.v1';
-const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0 };
+const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0, profile: { role: '', company: '', city: '' }, avatar: { src: '', url: '', color: '' }, goal: 1, motion: null };
+/* Who the learner is and how they like the app: kept when progress is reset. */
+const PROFILE_KEYS = ['name', 'profile', 'avatar', 'goal', 'theme', 'motion'];
 let storageOk = true;
 let state = migrateState(loadState());
 /* Lessons that moved between tracks keep their saved progress (LESSON_MOVES). */
@@ -565,7 +567,8 @@ const ROUTES = [
   [/^\/trainer$/, viewTrainer],
   [/^\/verify(?:\/([\w-]+))?$/, viewVerify],
   [/^\/cheatsheet\/(\w+)\/(\w+)$/, viewCheatSheet],
-  [/^\/achievements$/, viewAchievements]
+  [/^\/achievements$/, viewAchievements],
+  [/^\/profile$/, viewProfile]
 ];
 function router() {
   // In-page anchors (#sec-…, #main) are not routes — let the browser handle them.
@@ -636,11 +639,10 @@ function refreshChrome() {
   $('#topProgress').innerHTML = `${ring(p, { size: 30, stroke: 4, label: ' ', fs: 1 })}<span>${pct(p)}%</span>`;
   $('#topProgress').setAttribute('aria-label', `Overall progress ${pct(p)}% — open dashboard`);
   const name = state.name || 'Coordinator';
-  const initials = name.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
   const ctx = currentContext();
-  $('#sidebarFoot').innerHTML = `<button type="button" class="side-profile" id="profileBtn" style="width:100%;text-align:left" aria-label="Edit your name"><span class="side-avatar">${esc(initials)}</span><span class="grow"><strong>${esc(name)}</strong><small>${ctx.t.level} track · ${pct(p)}% overall</small></span>${icon('chev-r', 'icon--sm')}</button>`;
+  $('#sidebarFoot').innerHTML = `<a class="side-profile" id="profileBtn" href="#/profile" data-nav="profile" aria-label="Your profile: ${esc(name)}">${avatarHTML(34, 'side-avatar')}<span class="grow"><strong>${esc(name)}</strong><small>${ctx.t.level} track · ${pct(p)}% overall</small></span>${icon('chev-r', 'icon--sm')}</a>`;
+  if (document.body.dataset.nav === 'profile') $('#profileBtn').setAttribute('aria-current', 'page');
   $('#sidebarFoot').insertAdjacentHTML('beforeend', cloudAccountHTML());
-  $('#profileBtn').addEventListener('click', editName);
 }
 
 /* ---------- Sidebar (mobile drawer) ---------- */
@@ -683,52 +685,82 @@ function editName() {
 /* ---------- Dashboard ---------- */
 function viewDashboard() {
   const p = overallProgress();
-  const ctx = currentContext();
   const rec = recommended();
   const done = completedCount();
   const avg = avgQuiz();
   const certs = TRACKS.filter(finalPassed).length;
+  const days = streak();
   const hour = new Date().getHours();
   const greet = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  const first = state.name ? state.name.trim().split(/\s+/)[0] : '';
+  const prof = state.profile || {};
+  const roleLine = [prof.role, prof.company, prof.city].filter(Boolean).map(esc).join(' · ');
   const lastX = state.last && LESSON_MAP.get(state.last);
-  const quizRows = [];
-  TRACKS.forEach((t) => t.modules.forEach((m) => { const q = state.quizzes[quizKey(t, m)]; if (q) quizRows.push({ label: `${t.level} · M${m.id.slice(1)} ${m.title}`, s: q.best, href: `#/quiz/${t.id}/${m.id}`, at: q.at || 0 }); }));
-  TRACKS.forEach((t) => { const f = state.finals[t.id]; if (f) quizRows.push({ label: t.final.title, s: f.score, href: `#/final/${t.id}`, at: f.at || 0, final: true }); });
-  quizRows.sort((a, b) => b.at - a.at);
-  const earned = ACHIEVEMENTS.filter((a) => state.achievements[a.id]);
-  const nextAch = ACHIEVEMENTS.filter((a) => !state.achievements[a.id]).slice(0, 4 - Math.min(earned.length, 2));
-  const achShow = [...earned.slice(-2), ...nextAch].slice(0, 4);
+  const cont = lastX && !isDone(lastX.key);
+  const next = cont ? { kind: 'Continue where you left off', title: lastX.l.title, sub: `${lastX.t.level} · Module ${lastX.m.id.slice(1)}: ${lastX.m.title}`, href: lessonHref(lastX), ic: 'book', cta: 'Continue' }
+    : rec ? { kind: done ? 'Up next' : 'Start here', title: rec.title, sub: rec.sub, href: rec.href, ic: rec.icon, cta: done ? 'Start' : 'Start learning' } : null;
 
-  const html = `<div class="page">
-    <section class="hero" aria-labelledby="dashTitle">
-      <div class="dash-hero">
-        <div>
-          <span class="eyebrow">${icon('grad', 'icon--sm')} ${greet}${state.name ? ', ' + esc(state.name.split(' ')[0]) : ''}</span>
-          <h1 id="dashTitle">${done ? 'Keep your fleet — and your skills — moving.' : 'Welcome to the Maintenance Coordinator Academy.'}</h1>
-          <p>${done ? `You've completed ${done} of ${LESSONS.length} lessons. Every lesson brings you closer to operating like a professional coordinator.` : 'A structured path from zero knowledge to expert fleet maintenance coordination — built around real calls, real decisions and real consequences.'}</p>
-          ${rec ? `<div class="dash-hero__now"><small>${lastX && !isDone(lastX.key) ? 'Continue where you left off' : 'Up next'}</small><strong>${esc(lastX && !isDone(lastX.key) ? lastX.l.title : rec.title)}</strong><span>${esc(lastX && !isDone(lastX.key) ? `${lastX.t.level} · Module ${lastX.m.id.slice(1)}: ${lastX.m.title}` : rec.sub)}</span></div>` : ''}
-          <div class="dash-hero__mbar"><div class="row row--between small"><span>Overall progress</span><strong class="num" style="color:#fff">${pct(p)}%</strong></div>${progressBar(p, { label: 'Overall progress' })}</div>
-          <div class="dash-hero__cta">
-            ${rec ? `<a class="btn btn--primary btn--lg" href="${lastX && !isDone(lastX.key) ? lessonHref(lastX) : rec.href}">${icon('play')} ${done ? 'Continue learning' : 'Start the Beginner track'}</a>` : `<a class="btn btn--primary btn--lg" href="#/achievements">${icon('award')} View certificates</a>`}
-            <a class="btn btn--ghost btn--lg" href="#/curriculum">Browse curriculum ${icon('arrow-r', 'icon--nudge')}</a>
-          </div>
+  // Today: lessons finished today against the daily goal, and the last 7 days.
+  const today = todayStr();
+  const goal = state.goal || 1;
+  const doneToday = Object.values(state.completed).filter((v) => typeof v === 'number' && dayKey(new Date(v)) === today).length;
+  const studied = new Set(state.days);
+  const week = Array.from({ length: 7 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return { key: dayKey(d), label: d.toLocaleDateString('en-GB', { weekday: 'narrow' }), full: d.toLocaleDateString('en-GB', { weekday: 'long' }) }; });
+
+  // Recent activity: finished lessons, quizzes and final assessments, newest first.
+  const activity = [];
+  Object.entries(state.completed).forEach(([k, at]) => { const x = LESSON_MAP.get(k); if (x && typeof at === 'number') activity.push({ at, ic: 'check-circle', label: x.l.title, sub: `${x.t.level} · Lesson`, href: lessonHref(x) }); });
+  TRACKS.forEach((t) => t.modules.forEach((m) => { const q = state.quizzes[quizKey(t, m)]; if (q && q.at) activity.push({ at: q.at, ic: 'target', label: `Module ${m.id.slice(1)} quiz: ${m.title}`, sub: `${t.level} · Quiz`, href: `#/quiz/${t.id}/${m.id}`, s: q.best }); }));
+  TRACKS.forEach((t) => { const f = state.finals[t.id]; if (f && f.at) activity.push({ at: f.at, ic: 'award', label: t.final.title, sub: `${t.level} · Final assessment`, href: `#/final/${t.id}`, s: f.score }); });
+  activity.sort((a, b) => b.at - a.at);
+
+  const earned = ACHIEVEMENTS.filter((a) => state.achievements[a.id]);
+  const upcoming = ACHIEVEMENTS.filter((a) => !state.achievements[a.id]).slice(0, 3);
+  const missed = Object.keys(state.missed || {}).length;
+
+  const html = `<div class="page dash">
+    <section class="hero dash-top" aria-labelledby="dashTitle">
+      <div class="dash-top__who">
+        <a class="dash-top__avatar" href="#/profile" aria-label="Your profile">${avatarHTML(64)}</a>
+        <div class="grow">
+          <span class="eyebrow">${greet}</span>
+          <h1 id="dashTitle">${first ? esc(first) : 'Welcome to MC Academy'}</h1>
+          <p class="dash-top__role">${roleLine || `<a href="#/profile">Add your role and company</a>`}</p>
         </div>
-        <div class="dash-hero__ring">${ring(p, { size: 168, stroke: 12, cls: 'ring--dark', label: pct(p) + '%', sub: 'Overall', color: '#4f8cc9', fs: 34 })}</div>
+        <div class="dash-top__ring">${ring(p, { size: 88, stroke: 8, cls: 'ring--dark', label: pct(p) + '%', sub: 'Overall', color: '#4f8cc9', fs: 20 })}</div>
       </div>
+      ${next ? `<a class="dash-next" href="${next.href}">
+        <span class="dash-next__ic">${icon(next.ic)}</span>
+        <span class="dash-next__text"><small>${next.kind}</small><strong>${esc(next.title)}</strong><span>${esc(next.sub)}</span></span>
+        <span class="btn btn--primary dash-next__btn">${icon('play')} ${next.cta}</span>
+      </a>` : `<a class="dash-next" href="#/achievements"><span class="dash-next__ic">${icon('award')}</span><span class="dash-next__text"><small>Everything complete</small><strong>You've finished every track.</strong><span>View and share your certificates.</span></span><span class="btn btn--primary dash-next__btn">${icon('award')} Certificates</span></a>`}
+      <div class="dash-top__bar">${progressBar(p, { label: 'Overall progress' })}<span class="small">${done} of ${LESSONS.length} lessons · ${pct(p)}% overall</span></div>
     </section>
 
-    <div class="grid grid--4 mt-6 stagger">
-      ${statCard('book', done, `/ ${LESSONS.length}`, 'Lessons completed')}
-      ${statCard('target', avg == null ? '—' : pct(avg), avg == null ? '' : '%', 'Average quiz score')}
-      ${statCard('award', certs, `/ ${TRACKS.length}`, 'Certificates earned')}
-      ${statCard('activity', streak(), streak() === 1 ? 'day' : 'days', 'Study streak')}
+    <div class="dash-today mt-6 stagger">
+      <div class="card dash-tile">
+        ${ring(Math.min(doneToday / goal, 1), { size: 52, stroke: 6, label: `${Math.min(doneToday, 99)}/${goal}`, fs: 13, color: doneToday >= goal ? 'var(--success)' : '' })}
+        <div><span class="dash-tile__label">Today's goal</span><strong>${doneToday >= goal ? 'Goal reached' : `${goal - doneToday} lesson${goal - doneToday === 1 ? '' : 's'} to go`}</strong><a class="small" href="#/profile">Change goal</a></div>
+      </div>
+      <div class="card dash-tile dash-tile--streak">
+        <div><span class="dash-tile__label">Study streak</span><strong class="num">${days} <small>${days === 1 ? 'day' : 'days'}</small></strong></div>
+        <ol class="week" aria-label="Days studied this week">${week.map((d) => `<li class="${studied.has(d.key) ? 'is-on' : ''} ${d.key === today ? 'is-today' : ''}" title="${d.full}"><span class="sr-only">${d.full}: ${studied.has(d.key) ? 'studied' : 'not studied'}</span><span aria-hidden="true">${d.label}</span></li>`).join('')}</ol>
+      </div>
+      <div class="card dash-tile">
+        <span class="stat__icon">${icon('target')}</span>
+        <div><span class="dash-tile__label">Average quiz score</span><strong class="num">${avg == null ? '—' : pct(avg) + '%'}</strong></div>
+      </div>
+      <a class="card card--hover dash-tile" href="#/achievements">
+        <span class="stat__icon">${icon('award')}</span>
+        <div><span class="dash-tile__label">Certificates</span><strong class="num">${certs} <small>/ ${TRACKS.length}</small></strong></div>
+      </a>
     </div>
 
     <div class="dash-cols mt-6">
       <div class="stack">
         <div id="dashAssigned" class="dash-assigned-slot"></div>
         <section class="card" aria-labelledby="tpTitle">
-          <div class="card__head"><h2 id="tpTitle">Curriculum progress</h2><a class="btn btn--ghost btn--sm" href="#/curriculum">All tracks ${icon('chev-r', 'icon--sm')}</a></div>
+          <div class="card__head"><h2 id="tpTitle">Your tracks</h2><a class="btn btn--ghost btn--sm" href="#/curriculum">Curriculum ${icon('chev-r', 'icon--sm')}</a></div>
           <div class="card__body track-progress">
             ${TRACKS.map((t) => { const s = trackStats(t); return `<a class="tp-row" href="#/track/${t.id}" style="color:inherit;text-decoration:none">
               <span class="track-icon" style="--c:${t.color}">${icon(t.icon)}</span>
@@ -736,30 +768,22 @@ function viewDashboard() {
               <span class="tp-row__pct">${pct(s.p)}%</span></a>`; }).join('')}
           </div>
         </section>
-        ${rec ? `<a class="card card--hover rec-card" href="${rec.href}">
-          <span class="rec-card__icon">${icon(rec.icon, 'icon--lg')}</span>
-          <span class="grow"><span class="eyebrow">Recommended next</span><strong style="display:block;font-size:var(--fs-md);margin-top:2px">${esc(rec.title)}</strong><span class="small muted">${esc(rec.sub)}</span></span>
-          ${icon('arrow-r', 'icon--go')}</a>` : ''}
-        <section class="card" aria-labelledby="nowTitle">
-          <div class="card__head"><h2 id="nowTitle">Where you are</h2></div>
-          <div class="card__body">
-            <dl class="grid grid--3" style="gap:var(--sp-4)">
-              <div><dt class="eyebrow">Curriculum</dt><dd class="mt-2"><strong>${esc(ctx.t.title)}</strong></dd></div>
-              <div><dt class="eyebrow">Module</dt><dd class="mt-2"><strong>${ctx.m.id.slice(1)}. ${esc(ctx.m.title)}</strong></dd></div>
-              <div><dt class="eyebrow">Lesson</dt><dd class="mt-2"><a href="${lessonHref(ctx)}"><strong>${esc(ctx.l.title)}</strong></a></dd></div>
-            </dl>
-          </div>
+        <section class="card" aria-labelledby="actTitle">
+          <div class="card__head"><h2 id="actTitle">Recent activity</h2></div>
+          <div class="card__body">${activity.length ? `<ul class="activity">${activity.slice(0, 6).map((r) => `<li><a href="${r.href}"><span class="activity__ic">${icon(r.ic, 'icon--sm')}</span><span class="grow"><strong>${esc(r.label)}</strong><span>${esc(r.sub)} · ${timeAgo(r.at)}</span></span>${r.s != null ? scorePill(r.s) : ''}</a></li>`).join('')}</ul>`
+            : `<p class="small muted">Nothing yet. Finished lessons and quiz results will show up here.</p>`}</div>
         </section>
       </div>
       <div class="stack">
-        <section class="card" aria-labelledby="qsTitle">
-          <div class="card__head"><h2 id="qsTitle">Quiz &amp; assessment scores</h2></div>
-          <div class="card__body">${quizRows.length ? `<div class="score-list">${quizRows.slice(0, 6).map((r) => `<a class="score-list__row" href="${r.href}" style="text-decoration:none">${icon(r.final ? 'award' : 'target', 'icon--sm')}<span class="grow">${esc(r.label)}</span>${scorePill(r.s)}</a>`).join('')}</div>`
-            : `<div class="center" style="padding:var(--sp-4) 0"><p class="small muted">No quiz scores yet. Complete a module and take its quiz to see results here.</p></div>`}</div>
+        <section class="card" aria-labelledby="practTitle">
+          <div class="card__head"><h2 id="practTitle">Practice</h2><a class="btn btn--ghost btn--sm" href="#/practice">All tools ${icon('chev-r', 'icon--sm')}</a></div>
+          <div class="card__body dash-links">
+            ${[['#/review', 'rotate', 'Review mistakes', missed ? `${missed} question${missed === 1 ? '' : 's'} to revisit` : 'No missed questions'], ['#/scenarios', 'message', 'Scenario simulator', 'Answer real driver and shop calls'], ['#/flashcards', 'cards', 'Flashcards', `${Object.keys(state.flash.known).length} cards known`], ['#/calculators', 'calc', 'Calculators', 'Cost, downtime and rates']].map(([href, ic, t, d]) => `<a href="${href}"><span class="activity__ic">${icon(ic, 'icon--sm')}</span><span class="grow"><strong>${t}</strong><span>${d}</span></span>${icon('chev-r', 'icon--sm')}</a>`).join('')}
+          </div>
         </section>
         <section class="card" aria-labelledby="achTitle">
           <div class="card__head"><h2 id="achTitle">Achievements</h2><a class="btn btn--ghost btn--sm" href="#/achievements">${earned.length}/${ACHIEVEMENTS.length} ${icon('chev-r', 'icon--sm')}</a></div>
-          <div class="card__body" style="display:grid;gap:var(--sp-3)">${achShow.map(achHTML).join('')}</div>
+          <div class="card__body" style="display:grid;gap:var(--sp-3)">${(upcoming.length ? upcoming : earned.slice(-3)).map(achHTML).join('')}</div>
         </section>
       </div>
     </div>
@@ -767,8 +791,10 @@ function viewDashboard() {
   </div>`;
   return { html, title: 'Dashboard', nav: 'dashboard', after: (v) => dashAssigned($('#dashAssigned', v)) };
 }
-function statCard(ic, v, unit, label) {
-  return `<div class="card stat"><div class="stat__top"><span class="stat__icon">${icon(ic)}</span></div><div class="stat__value">${v}${unit ? ` <small>${unit}</small>` : ''}</div><div class="stat__label">${label}</div></div>`;
+/* "Today", "Yesterday", "3 days ago", then a date. */
+function timeAgo(at) {
+  const days = Math.round((new Date(todayStr()) - new Date(dayKey(new Date(at)))) / 864e5);
+  return days <= 0 ? 'Today' : days === 1 ? 'Yesterday' : days < 7 ? `${days} days ago` : new Date(at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
 function achHTML(a) {
   const got = state.achievements[a.id];
@@ -1964,20 +1990,26 @@ function viewAchievements() {
     <div class="section-head"><h2>Achievements</h2><span class="small muted">${earned} of ${ACHIEVEMENTS.length} earned</span></div>
     <div class="ach-grid stagger">${ACHIEVEMENTS.map(achHTML).join('')}</div>
     <div class="section-head"><h2>Data</h2></div>
-    <div class="card card--pad row row--between row--wrap"><div>${CLOUD.user ? `<strong>Your progress syncs to ${esc(CLOUD.user.email || 'your account')}.</strong><p class="small">It's saved on this device and in your account, so you can continue on any device where you sign in. <a href="#/privacy">How your data is handled</a>.</p>` : `<strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it. <button type="button" class="link-btn" data-cloud="in">Sign in with Google</button> to keep it in sync across devices. <a href="#/privacy">Privacy</a>.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p>`}</div><div class="row row--wrap">${CLOUD.user ? `<button type="button" class="btn btn--ghost" data-delete-account>${icon('x-circle')} Delete my account</button>` : ''}<button type="button" class="btn btn--danger" data-reset>${icon('rotate')} Reset all progress</button></div></div>
+    <div class="card card--pad row row--between row--wrap"><div>${CLOUD.user ? `<strong>Your progress syncs to ${esc(CLOUD.user.email || 'your account')}.</strong><p class="small">It's saved on this device and in your account, so you can continue on any device where you sign in.</p>` : `<strong>Your progress is stored in this browser.</strong><p class="small">Clearing browser data or switching devices will reset it. <button type="button" class="link-btn" data-cloud="in">Sign in</button> to keep it in sync across devices.${storageOk ? '' : ' Storage is currently unavailable — progress will not persist.'}</p>`}</div><a class="btn" href="#/profile">${icon('user')} Export, reset or delete in your profile</a></div>
   </div>`;
   return {
     html, title: 'Achievements', nav: 'achievements', crumbs: [['Achievements']],
-    after: (v) => {
-      $$('[data-cert]', v).forEach((b) => b.addEventListener('click', () => showCertificate(TRACK_BY_ID[b.dataset.cert])));
-      $$('[data-delete-account]', v).forEach((b) => b.addEventListener('click', confirmDeleteAccount));
-      $('[data-reset]', v).addEventListener('click', () => openModal({
-        title: 'Reset all progress?', body: `<p>This permanently clears completed lessons, quiz scores, certificates, bookmarks and achievements ${CLOUD.user ? 'on all your devices: in this browser and in your account' : 'stored in this browser'}. This cannot be undone.</p>`,
-        foot: '<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--danger" id="doReset">Reset everything</button>',
-        onOpen: (m, close) => $('#doReset', m).addEventListener('click', () => { const theme = state.theme; state = JSON.parse(JSON.stringify(DEFAULT_STATE)); state.theme = theme; state.resetAt = Date.now(); save(); close(); toast({ title: 'Progress reset', text: 'Starting fresh.' }); go('#/dashboard'); })
-      }));
-    }
+    after: (v) => $$('[data-cert]', v).forEach((b) => b.addEventListener('click', () => showCertificate(TRACK_BY_ID[b.dataset.cert])))
   };
+}
+/* Clears learning progress everywhere; the profile (name, details, picture,
+   goal) and per-device preferences stay. */
+function confirmResetProgress() {
+  openModal({
+    title: 'Reset all progress?', body: `<p>This permanently clears completed lessons, quiz scores, certificates, bookmarks and achievements ${CLOUD.user ? 'on all your devices: in this browser and in your account' : 'stored in this browser'}. Your profile and preferences stay. This cannot be undone.</p>`,
+    foot: '<button class="btn btn--ghost" data-close>Cancel</button><button class="btn btn--danger" id="doReset">Reset everything</button>',
+    onOpen: (m, close) => $('#doReset', m).addEventListener('click', () => {
+      const keep = Object.fromEntries(PROFILE_KEYS.map((k) => [k, state[k]]));
+      const edits = Object.fromEntries(PROFILE_KEYS.filter((k) => state.edits[k]).map((k) => [k, state.edits[k]]));
+      state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), keep, { edits, resetAt: Date.now() });
+      save(); close(); toast({ title: 'Progress reset', text: 'Starting fresh.' }); go('#/dashboard');
+    })
+  });
 }
 
 /* ---------- 404 ---------- */
@@ -1986,7 +2018,7 @@ function viewNotFound() {
 }
 
 /* ---------- Command palette search ---------- */
-const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'monitor'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Simulations: DVIR, parts, warranty and software practice', '#/simulations', 'activity'], ['Trainer groups', '#/trainer', 'users'], ['Check a certificate', '#/verify', 'award']];
+const SEARCH_PAGES = [['Dashboard', '#/dashboard', 'grid'], ['Software & Platforms', '#/software', 'monitor'], ...SOFTWARE.map((s) => [`${s.name} (${s.kind})`, swHref(s), s.icon]), ['Visual Library', '#/library', 'image'], ['Curriculum', '#/curriculum', 'layers'], ['Scenario Simulator', '#/scenarios', 'message'], ['Decision Trees', '#/trees', 'branch'], ['Practical Exercises', '#/exercises', 'clipboard'], ['Flashcards', '#/flashcards', 'cards'], ['Calculators', '#/calculators', 'calc'], ['Fleet Board', '#/fleet', 'truck'], ['Glossary', '#/glossary', 'book'], ['Quick Reference', '#/reference', 'file'], ['Bookmarks', '#/bookmarks', 'bookmark'], ['Achievements', '#/achievements', 'award'], ['Profile & account settings', '#/profile', 'user'], ['Privacy', '#/privacy', 'shield'], ['Review my mistakes', '#/review', 'rotate'], ['Simulations: DVIR, parts, warranty and software practice', '#/simulations', 'activity'], ['Trainer groups', '#/trainer', 'users'], ['Check a certificate', '#/verify', 'award']];
 function openSearch() {
   if (modalStack.length) return;
   openModal({
@@ -2101,6 +2133,7 @@ function setupPWA() {
 /* ---------- Boot ---------- */
 function boot() {
   applyTheme(document.documentElement.getAttribute('data-theme') || 'light');
+  applyMotion();
   $('#themeBtn').addEventListener('click', () => {
     const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     state.theme = t; save(); applyTheme(t);

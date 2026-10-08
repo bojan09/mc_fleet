@@ -79,7 +79,32 @@
           onAuthStateChange(fn) { listeners.push(fn); setTimeout(() => fn('INITIAL_SESSION', session), 0); return { data: { subscription: { unsubscribe() {} } } }; },
           async getSession() { listeners.forEach((fn) => fn('INITIAL_SESSION', session)); return { data: { session }, error: null }; },
           async signOut() { listeners.forEach((fn) => fn('SIGNED_OUT', null)); return { error: null }; },
-          async signInWithOAuth() { return { error: null }; }
+          async signInWithOAuth() { return { error: null }; },
+          async signInWithPassword() { return { data: { session }, error: null }; },
+          async signUp() { return { data: { session: null }, error: null }; },
+          async resetPasswordForEmail() { return { error: null }; },
+          async resend() { return { error: null }; },
+          async reauthenticate() { window.__FAKE_LOG.push({ auth: 'reauthenticate' }); return { error: null }; },
+          // Seed user.needsNonce to test the emailed-code step of a password change.
+          async updateUser(attrs) {
+            window.__FAKE_LOG.push({ auth: 'updateUser', attrs });
+            if (attrs.password && user.needsNonce && !attrs.nonce) return { data: null, error: { code: 'reauthentication_needed', message: 'Password update requires reauthentication.' } };
+            if (attrs.email) user.new_email = attrs.email;
+            if (attrs.data) user.user_metadata = Object.assign({}, user.user_metadata, attrs.data);
+            listeners.forEach((fn) => fn('USER_UPDATED', session));
+            return { data: { user }, error: null };
+          }
+        },
+        storage: {
+          from(bucket) {
+            const files = (window.__FAKE_FILES = window.__FAKE_FILES || {});
+            return {
+              async upload(path, blob, opts) { files[path] = { type: blob.type, size: blob.size, opts }; window.__FAKE_LOG.push({ storage: 'upload', bucket, path }); return { data: { path }, error: null }; },
+              async list(dir) { return { data: Object.keys(files).filter((p) => p.startsWith(dir + '/')).map((p) => ({ name: p.slice(dir.length + 1) })), error: null }; },
+              async remove(paths) { paths.forEach((p) => delete files[p]); window.__FAKE_LOG.push({ storage: 'remove', bucket, paths }); return { data: null, error: null }; },
+              getPublicUrl() { return { data: { publicUrl: location.origin + '/icons/apple-touch-icon.png' } }; }
+            };
+          }
         }
       };
     }

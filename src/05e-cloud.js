@@ -15,7 +15,7 @@ const CLOUD = {
   sdkIntegrity: 'sha384-Rj26LVGvoeRVR6+mwQmFfcR3QOBEwT+ZmuCWpuiqeTzJpCs0ER4ITAWGb4Hiy3Ok',
   client: null, user: null, status: 'off', timer: null, ready: false
 };
-const CLOUD_LOCAL_ONLY = ['theme']; // per-device preferences that never sync
+const CLOUD_LOCAL_ONLY = ['theme', 'motion']; // per-device preferences that never sync
 
 function cloudLoadSdk() {
   if (window.supabase) return Promise.resolve();
@@ -37,7 +37,7 @@ function cloudLoadSdk() {
 function mergeProgress(a, b) {
   const fresh = () => JSON.parse(JSON.stringify(DEFAULT_STATE));
   const ra = a.resetAt || 0, rb = b.resetAt || 0;
-  if (ra !== rb) return Object.assign(fresh(), JSON.parse(JSON.stringify(rb > ra ? b : a)), { theme: a.theme });
+  if (ra !== rb) return Object.assign(fresh(), JSON.parse(JSON.stringify(rb > ra ? b : a)), { theme: a.theme, motion: a.motion });
   const out = fresh();
   const union = (x, y) => Object.assign({}, y || {}, x || {});
   const ea = a.edits || {}, eb = b.edits || {};
@@ -70,7 +70,13 @@ function mergeProgress(a, b) {
   out.days = [...new Set([...(a.days || []), ...(b.days || [])])].sort().slice(-120);
   out.last = a.last || b.last;
   out.name = (eb.name || 0) > (ea.name || 0) ? b.name || '' : (ea.name || 0) > (eb.name || 0) ? a.name || '' : a.name || b.name || '';
+  // Profile details, picture and daily goal: the side that changed them last wins.
+  ['profile', 'avatar', 'goal'].forEach((k) => {
+    const pick = (eb[k] || 0) > (ea[k] || 0) ? b[k] : (ea[k] || 0) > (eb[k] || 0) ? a[k] : (a[k] !== undefined ? a[k] : b[k]);
+    if (pick !== undefined) out[k] = JSON.parse(JSON.stringify(pick));
+  });
   out.theme = a.theme;
+  out.motion = a.motion;
   return out;
 }
 function cloudSnapshot() {
@@ -116,10 +122,14 @@ async function cloudPull() {
   await cloudPush();
 }
 
+/* Where emailed links (confirm sign-up, reset password, confirm new email) return to. */
+const authReturn = () => location.origin + location.pathname;
+function rememberReturn() { try { sessionStorage.setItem('mca.return', location.hash || '#/dashboard'); } catch (e) {} }
+
 async function cloudSignIn() {
   try {
     await cloudInit();
-    try { sessionStorage.setItem('mca.return', location.hash || '#/dashboard'); } catch (e) {}
+    rememberReturn();
     const { error } = await CLOUD.client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname } });
     if (error) throw error;
   } catch (e) {
@@ -139,6 +149,7 @@ async function cloudSignOut() {
 async function cloudDeleteAccount() {
   if (!CLOUD.user || !CLOUD.client) return false;
   clearTimeout(CLOUD.timer);
+  await avatarRemoveFile().catch(() => {});
   const { error } = await CLOUD.client.rpc('delete_my_account');
   if (error) { console.warn('Account deletion failed:', error.message); return false; }
   await CLOUD.client.auth.signOut({ scope: 'local' }).catch(() => {});
@@ -155,8 +166,11 @@ async function cloudInit() {
   CLOUD.client.auth.onAuthStateChange((event, session) => {
     const was = CLOUD.user && CLOUD.user.id;
     CLOUD.user = session ? session.user : null;
+    // Opened the "reset password" email link: ask for the new password.
+    if (event === 'PASSWORD_RECOVERY') setTimeout(openSetPassword, 0);
+    if (event === 'USER_UPDATED' && /^#\/profile/.test(location.hash)) setTimeout(router, 0);
     if (CLOUD.user && CLOUD.user.id !== was) {
-      if (!state.name && CLOUD.user.user_metadata && CLOUD.user.user_metadata.full_name) { state.name = CLOUD.user.user_metadata.full_name; }
+      if (!state.name && CLOUD.user.user_metadata && CLOUD.user.user_metadata.full_name) { state.name = CLOUD.user.user_metadata.full_name; setTimeout(router, 0); }
       setTimeout(cloudPull, 0);
     }
     if (!CLOUD.user) cloudSetStatus('off');
@@ -176,20 +190,30 @@ async function cloudInit() {
 function cloudHasSession() {
   try { return Object.keys(localStorage).some((k) => k.startsWith('sb-') && k.endsWith('-auth-token')); } catch (e) { return false; }
 }
+/* An emailed link that failed (expired, already used) comes back as
+   ?error=…&error_description=… or #error=…: explain it and open the dashboard. */
+function cloudLinkError() {
+  const params = new URLSearchParams(location.search.slice(1) + '&' + (location.hash.startsWith('#/') ? '' : location.hash.slice(1)));
+  if (!params.get('error') && !params.get('error_code')) return;
+  const expired = /expired|otp/i.test(params.get('error_code') + ' ' + params.get('error_description'));
+  history.replaceState(null, '', location.pathname + '#/dashboard');
+  setTimeout(() => toast({ kind: 'warning', title: expired ? 'That link has expired' : 'That link didn\'t work', text: expired ? 'Email links work once and expire after a while. Ask for a new one.' : (params.get('error_description') || 'Please try again.').slice(0, 160), timeout: 8000 }), 400);
+}
 function setupCloud() {
+  cloudLinkError();
   if (cloudHasSession() || /[?&]code=/.test(location.search)) cloudInit().catch(() => cloudSetStatus('off'));
   window.addEventListener('online', () => { if (CLOUD.user) cloudPush(); });
   document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-cloud="in"]')) cloudSignIn();
+    if (e.target.closest('[data-cloud="in"]')) openAuth('in');
+    if (e.target.closest('[data-cloud="google"]')) cloudSignIn();
     if (e.target.closest('[data-cloud="out"]')) cloudSignOut();
   });
 }
 function cloudAccountHTML() {
   if (CLOUD.user) {
-    const email = CLOUD.user.email || 'Signed in';
-    return `<div class="side-account"><div class="side-account__row"><span class="side-account__status" id="cloudStatus" aria-live="polite">${cloudStatusHTML()}</span><button type="button" class="btn btn--ghost btn--sm" data-cloud="out">Sign out</button></div><small class="side-account__email" title="${esc(email)}">${esc(email)}</small><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
+    return `<div class="side-account"><div class="side-account__row"><span class="side-account__status" id="cloudStatus" aria-live="polite">${cloudStatusHTML()}</span><button type="button" class="btn btn--ghost btn--sm" data-cloud="out">Sign out</button></div><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
   }
-  return `<div class="side-account"><button type="button" class="btn btn--soft btn--sm side-account__in" data-cloud="in">${googleMark()} Sign in to sync progress</button><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
+  return `<div class="side-account"><button type="button" class="btn btn--soft btn--sm side-account__in" data-cloud="in">${icon('user', 'icon--sm')} Sign in or create account</button><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
 }
 function googleMark() {
   return '<svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>';

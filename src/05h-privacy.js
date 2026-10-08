@@ -18,28 +18,29 @@ function viewPrivacy() {
   const row = (ic, t, d) => `<div class="pv-row"><span class="pv-row__ic">${icon(ic)}</span><div><h3>${t}</h3><p>${d}</p></div></div>`;
   const html = `<div class="page page--narrow pv">
     ${pageHead({ eyebrow: `${icon('shield', 'icon--sm')} Privacy`, title: 'Your data and privacy', text: `What MC Academy stores, where it is kept, and how to delete it. Last updated ${PRIVACY_UPDATED}.` })}
-    <div class="callout callout--info" role="note"><span class="callout__icon">${icon('info')}</span><div><h2 class="pv-short">The short version</h2><p>You can use the whole academy without an account. Your progress stays in your own browser. If you sign in with Google, a copy of your progress is kept in your account so it syncs across devices. There are no ads, no tracking cookies, and your data is never sold.</p></div></div>
+    <div class="callout callout--info" role="note"><span class="callout__icon">${icon('info')}</span><div><h2 class="pv-short">The short version</h2><p>You can use the whole academy without an account. Your progress stays in your own browser. If you sign in (with Google or with email), a copy of your progress is kept in your account so it syncs across devices. There are no ads, no tracking cookies, and your data is never sold.</p></div></div>
 
     <section class="pv-sec"><h2>Without an account</h2>
-      ${row('grid', 'Stored in your browser only', 'Completed lessons, quiz and exam scores, bookmarks, achievements, the name you type in, the days you studied, and your theme. It is kept in your browser\'s local storage and never leaves your device.')}
-      ${row('rotate', 'How to delete it', 'Use <strong>Reset all progress</strong> on the <a href="#/achievements">Achievements</a> page, or clear this site\'s data in your browser settings.')}
+      ${row('grid', 'Stored in your browser only', 'Completed lessons, quiz and exam scores, bookmarks, achievements, the name and profile details you type in (role, company, city), your daily goal, the days you studied, and your theme and animation preferences. It is kept in your browser\'s local storage and never leaves your device.')}
+      ${row('rotate', 'How to delete it', 'Use <strong>Reset progress</strong> on your <a href="#/profile">Profile</a> page, or clear this site\'s data in your browser settings.')}
     </section>
 
-    <section class="pv-sec"><h2>If you sign in with Google</h2>
-      ${row('users', 'Your account', 'Google shares your name, email address, profile picture link and a Google account ID with our sign-in provider, Supabase. We use them only to identify your account and show your name.')}
-      ${row('activity', 'Your synced progress', 'The same progress listed above (except your theme) is stored with your account so it can follow you to other devices. Each account can only read and change its own progress.')}
+    <section class="pv-sec"><h2>If you create an account</h2>
+      ${row('users', 'Your account', 'You can sign in with Google or with your email and a password. With Google, Google shares your name, email address, profile picture link and a Google account ID with our sign-in provider, Supabase. With email, Supabase stores your email address and a securely hashed password (we never see the password itself) and sends the confirmation and password-reset emails. We use these details only to identify your account and show your name.')}
+      ${row('image', 'Profile picture (optional)', 'If you upload a picture, it is resized to 256 × 256 pixels in your browser and stored with Supabase. Anyone who has the picture\'s link can view it. Removing the picture or deleting your account deletes it.')}
+      ${row('activity', 'Your synced progress', 'The same progress and profile details listed above (except your theme and animation preferences) are stored with your account so they can follow you to other devices. Each account can only read and change its own progress.')}
       ${row('pin', 'Where it is kept', 'In a Supabase database in the European Union (Ireland, region eu-west-1).')}
       ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, academy progress, quiz scores and certificates, and can download them as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
       ${row('award', 'Certificate verification (optional)', 'If you ask for a verification code, your name, the track, your final score and the date are stored with that code. Anyone who has the code can check those details on the certificate check page.')}
       ${row('lock', 'Sign-in session', 'While you are signed in, your browser keeps a sign-in token in local storage. Signing out removes it.')}
-      ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on the Achievements page. Your account, its synced progress, group memberships and certificates are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete my account</strong> on the Achievements page or here. Your account, its synced progress, group memberships and certificates are deleted permanently.')}
+      ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on your <a href="#/profile">Profile</a> page. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete account</strong> on your Profile page or here. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently.')}
     </section>
 
     <section class="pv-sec"><h2>Services the site uses</h2>
       ${infographicHTML({ ig: 'table', icon: 'layers', title: 'Who handles what', head: ['Service', 'What for', 'What it receives'], rows: [
         ['Vercel', 'Hosts the website', 'Standard technical request data, such as your IP address and browser type, in its server logs.'],
-        ['Google', 'Sign-in (optional)', 'Only if you choose to sign in with Google.'],
-        ['Supabase', 'Accounts and progress sync (optional)', 'Your account details and synced progress, as described above.'],
+        ['Google', 'Sign-in (optional)', 'Only if you choose to sign in with Google. Your Google profile photo is loaded from Google if you use it as your picture.'],
+        ['Supabase', 'Accounts, progress sync, sign-in emails and profile pictures (optional)', 'Your account details, synced progress and any picture you upload, as described above.'],
         ['jsDelivr', 'Delivers the sign-in library', 'Only when you sign in. Your IP address and browser type.']
       ] })}
       <p class="small muted">Fonts and the photos in the Visual Library are stored on this site (photos are credited to their authors). Links to official company websites open those sites, which have their own privacy policies.</p>

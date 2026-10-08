@@ -138,7 +138,7 @@ function downloadText(name, text, type) {
 }
 
 function viewTrainer() {
-  const signIn = stateBlock({ ic: 'users', title: 'Sign in to use groups', text: 'Groups need an account so progress can be shared with your trainer. Signing in also keeps your progress in sync across devices.', action: '<button type="button" class="btn btn--primary" data-cloud="in">Sign in with Google</button>' });
+  const signIn = stateBlock({ ic: 'users', title: 'Sign in to use groups', text: 'Groups need an account so progress can be shared with your trainer. Signing in also keeps your progress in sync across devices.', action: '<button type="button" class="btn btn--primary" data-cloud="in">Sign in</button>' });
   // A saved session may still be restoring when the page opens: wait for it.
   const pending = !!CLOUD.user || cloudHasSession();
   const html = `<div class="page tr">

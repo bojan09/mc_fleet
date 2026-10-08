@@ -1,0 +1,258 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1791493773349,
+  "projectRoot": "E:\\Code Realted\\projects\\mc_academy\\mc_fleet",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "content": {
+      "path": "content",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1791493773333,
+      "keyFiles": [
+        "advanced.json",
+        "beginner.json",
+        "expert.json",
+        "operations.json"
+      ]
+    },
+    "fonts": {
+      "path": "fonts",
+      "purpose": null,
+      "fileCount": 6,
+      "lastAccessed": 1791493773334,
+      "keyFiles": [
+        "OFL.txt",
+        "plex-mono-400-latin.woff2",
+        "plex-mono-500-latin.woff2",
+        "plex-mono-600-latin.woff2",
+        "plex-sans-cyrillic.woff2"
+      ]
+    },
+    "icons": {
+      "path": "icons",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1791493773335,
+      "keyFiles": [
+        "apple-touch-icon.png",
+        "icon-192.png",
+        "icon-512.png",
+        "icon-maskable-512.png"
+      ]
+    },
+    "img": {
+      "path": "img",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1791493773336,
+      "keyFiles": []
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 34,
+      "lastAccessed": 1791493773337,
+      "keyFiles": [
+        "01-beginner.js",
+        "02-advanced.js",
+        "03-expert.js",
+        "03b-enrich.js",
+        "03c-deep.js"
+      ]
+    },
+    "supabase": {
+      "path": "supabase",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1791493773337,
+      "keyFiles": [
+        "01-progress.sql",
+        "02-delete-account.sql",
+        "03-groups-certificates.sql",
+        "04-assignments.sql"
+      ]
+    },
+    "tools": {
+      "path": "tools",
+      "purpose": null,
+      "fileCount": 14,
+      "lastAccessed": 1791493773337,
+      "keyFiles": [
+        "browser.mjs",
+        "build.mjs",
+        "check.mjs",
+        "fake-supabase.js",
+        "load.mjs"
+      ]
+    },
+    "supabase\\tests": {
+      "path": "supabase\\tests",
+      "purpose": "Test files",
+      "fileCount": 1,
+      "lastAccessed": 1791493773338,
+      "keyFiles": [
+        "access.sql"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src\\06-engine.js",
+      "accessCount": 17,
+      "lastAccessed": 1791494268296,
+      "type": "file"
+    },
+    {
+      "path": "src\\05e-cloud.js",
+      "accessCount": 9,
+      "lastAccessed": 1791494534375,
+      "type": "file"
+    },
+    {
+      "path": "styles.css",
+      "accessCount": 8,
+      "lastAccessed": 1791494335908,
+      "type": "directory"
+    },
+    {
+      "path": "src\\05h-privacy.js",
+      "accessCount": 5,
+      "lastAccessed": 1791494356865,
+      "type": "file"
+    },
+    {
+      "path": "src\\05n-profile.js",
+      "accessCount": 5,
+      "lastAccessed": 1791494538908,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 3,
+      "lastAccessed": 1791494078002,
+      "type": "directory"
+    },
+    {
+      "path": "index.html",
+      "accessCount": 3,
+      "lastAccessed": 1791494265900,
+      "type": "file"
+    },
+    {
+      "path": "src",
+      "accessCount": 2,
+      "lastAccessed": 1791493889392,
+      "type": "directory"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 2,
+      "lastAccessed": 1791494591060,
+      "type": "directory"
+    },
+    {
+      "path": "supabase\\05-avatars.sql",
+      "accessCount": 2,
+      "lastAccessed": 1791494754820,
+      "type": "file"
+    },
+    {
+      "path": "supabase\\01-progress.sql",
+      "accessCount": 1,
+      "lastAccessed": 1791493845236,
+      "type": "file"
+    },
+    {
+      "path": "supabase\\02-delete-account.sql",
+      "accessCount": 1,
+      "lastAccessed": 1791493895696,
+      "type": "file"
+    },
+    {
+      "path": "tools",
+      "accessCount": 1,
+      "lastAccessed": 1791493926894,
+      "type": "directory"
+    },
+    {
+      "path": "src\\05k-trainer.js",
+      "accessCount": 1,
+      "lastAccessed": 1791494089152,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\John\\AppData\\Local\\Temp\\claude\\E--Code-Realted-projects-mc-academy\\24e7d328-c7b8-474d-ae86-b6b3d191f810\\scratchpad\\dash.js",
+      "accessCount": 1,
+      "lastAccessed": 1791494140937,
+      "type": "file"
+    },
+    {
+      "path": "theme.js",
+      "accessCount": 1,
+      "lastAccessed": 1791494267143,
+      "type": "file"
+    },
+    {
+      "path": "vercel.json",
+      "accessCount": 1,
+      "lastAccessed": 1791494272302,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\John\\AppData\\Local\\Temp\\claude\\E--Code-Realted-projects-mc-academy\\24e7d328-c7b8-474d-ae86-b6b3d191f810\\scratchpad\\profile.css",
+      "accessCount": 1,
+      "lastAccessed": 1791494326069,
+      "type": "file"
+    },
+    {
+      "path": "tools\\browser.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1791494457391,
+      "type": "directory"
+    },
+    {
+      "path": "tools\\profile-test.mjs",
+      "accessCount": 1,
+      "lastAccessed": 1791494492386,
+      "type": "file"
+    },
+    {
+      "path": "C:\\Users\\John\\AppData\\Local\\Temp\\claude\\E--Code-Realted-projects-mc-academy\\24e7d328-c7b8-474d-ae86-b6b3d191f810\\tasks\\blkil7r07.output",
+      "accessCount": 1,
+      "lastAccessed": 1791494635151,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
