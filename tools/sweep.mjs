@@ -146,16 +146,23 @@ for (const [w, h] of WIDTHS) {
   if (res.problems.length) failed = true;
 }
 /* Contrast, every route, light and dark themes (desktop width) */
+// One call per route, each with a time limit, so a page that never settles
+// (or reloads the document) is reported by name instead of stalling the run.
+const contrastRoutes = await evaluate('window.__routes');
+const withLimit = (p, ms, what) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(what)), ms))]);
 for (const theme of ['light', 'dark']) {
-  const bad = await evaluate(`(async () => {
-    document.documentElement.setAttribute('data-theme', '${theme}');
-    const out = new Map();
-    for (const r of window.__routes) {
-      location.hash = r; await new Promise((res) => setTimeout(res, 60));
-      for (const p of ${CONTRAST}) { if (!out.has(p)) out.set(p, r); }
-    }
-    return [...out].map(([p, r]) => p + '  (first on ' + r + ')');
-  })()`);
+  const out = new Map();
+  for (const r of contrastRoutes) {
+    try {
+      const found = await withLimit(evaluate(`(async () => {
+        document.documentElement.setAttribute('data-theme', '${theme}');
+        location.hash = ${JSON.stringify(r)}; await new Promise((res) => setTimeout(res, 60));
+        return ${CONTRAST};
+      })()`), 15000, 'timed out');
+      for (const p of found) if (!out.has(p)) out.set(p, r);
+    } catch (err) { out.set(`page check failed (${err.message})`, r); }
+  }
+  const bad = [...out].map(([p, r]) => p + '  (first on ' + r + ')');
   console.log(`Contrast, ${theme} theme: ${bad.length} problem(s)`);
   bad.forEach((p) => console.log('  ' + p));
   if (bad.length) failed = true;

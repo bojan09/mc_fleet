@@ -10,7 +10,9 @@ import { root } from './load.mjs';
 import { startServer, launchBrowser } from './browser.mjs';
 
 const src = join(root, 'src');
-const full = readdirSync(src).filter((f) => /^\d.*\.js$/.test(f) && f !== '05l-content.js').sort().map((f) => readFileSync(join(src, f), 'utf8')).join('')
+// tables the build generates from the lesson text (e.g. QUIZ_SIZE) go in too
+const generated = (readFileSync(join(root, 'script.js'), 'utf8').match(/^const QUIZ_SIZE = .*;$/m) || [''])[0] + '\n';
+const full = generated + readdirSync(src).filter((f) => /^\d.*\.js$/.test(f) && f !== '05l-content.js').sort().map((f) => readFileSync(join(src, f), 'utf8')).join('')
   // the one-bundle app has everything already: no loading step
   .replace(/function router\(\) \{/, 'const contentFor = () => null; const hasContent = () => true; const loadContent = () => Promise.resolve();\nfunction router() {');
 const seeded = `(() => { let s = 42; Math.random = () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; })();`;

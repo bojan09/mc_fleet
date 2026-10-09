@@ -63,7 +63,13 @@ export async function launchBrowser() {
     if (m.method === 'Runtime.exceptionThrown') exceptions.push(m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text);
     if (m.method) listeners.forEach((fn) => fn(m));
   });
-  const cdp = (method, params = {}) => new Promise((r) => { const n = ++id; pending.set(n, r); ws.send(JSON.stringify({ id: n, method, params })); });
+  // If the browser goes away mid-run, fail loudly instead of leaving calls hanging.
+  let lost = null;
+  ws.addEventListener('close', () => { lost = new Error('Lost the connection to the browser (it closed or crashed).'); pending.forEach((fn) => fn({ lost })); pending.clear(); });
+  const cdp = (method, params = {}) => new Promise((r, rej) => {
+    if (lost) return rej(lost);
+    const n = ++id; pending.set(n, (m) => (m.lost ? rej(m.lost) : r(m))); ws.send(JSON.stringify({ id: n, method, params }));
+  });
   const evaluate = async (expression) => {
     const r = await cdp('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
     if (r.result.exceptionDetails) throw new Error(r.result.exceptionDetails.exception?.description || 'evaluation failed');

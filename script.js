@@ -12,6 +12,8 @@ const REF = {"urgency":{"ig":"matrix","icon":"target","title":"The urgency matri
 const RATECON = {"source":"RATE CONFIRMATION — Northgate Freight Brokerage (fictional)\nCarrier: Crestline Freight Lines LLC · MC# 000000 (fictional)\nLoad #: NFB-448213\nPickup: Dallas, TX · 06/12 08:00  |  Delivery: Atlanta, GA · 06/13 07:00\nEquipment: 53' dry van · Miles: 781\nLinehaul rate: $1,900.00   Fuel surcharge: $250.00 flat\nDetention: $50/hr after 2 hours free · in/out times required on BOL\nLumper: reimbursed with receipt   Layover: $250/day   TONU: $150\nPayment terms: Net 30 from receipt of invoice with signed POD","delivery":"DELIVERY — Atlanta, GA · 06/13\nArrived 06:40 · Departed 11:10 (in/out times written and signed on BOL)\nLumper service paid by driver: $185.00 (receipt #L-7731)\nPOD: BOL signed by receiver, no exceptions noted","answer":{"broker":"northgate","load":"NFB-448213","linehaul":1900,"fsc":250,"detention":125,"lumper":185,"total":2460}};
 const LESSON_MOVES = {"beginner.m1.l4":"operations.m1.l1","advanced.m6.l3":"operations.m1.l2","beginner.m10":"operations.m2"};
 const CONTENT_FILES = {"beginner":"content/beginner.json?v=faa675b05f","advanced":"content/advanced.json?v=d4a5a81c77","expert":"content/expert.json?v=75721eb090","operations":"content/operations.json?v=f4d59c8a6e"};
+// Questions per module quiz, so pages without lesson text loaded can show it.
+const QUIZ_SIZE = {"beginner.m1":7,"beginner.m2":4,"beginner.m3":12,"beginner.m4":4,"beginner.m5":6,"beginner.m6":4,"beginner.m7":4,"beginner.m8":4,"beginner.m9":4,"advanced.m1":4,"advanced.m2":6,"advanced.m3":4,"advanced.m4":6,"advanced.m5":4,"advanced.m6":4,"advanced.m7":4,"advanced.m8":4,"advanced.m9":4,"expert.m1":6,"expert.m2":4,"expert.m3":4,"expert.m4":4,"expert.m5":4,"expert.m6":4,"expert.m7":4,"expert.m8":6,"expert.m9":4,"operations.m1":6,"operations.m2":12};
 /* Photo sources for the Visual Library — all from Wikimedia Commons under free licenses.
    Each entry keeps the author, license and file page for attribution. */
 const LIB_PHOTOS = {
@@ -3762,18 +3764,23 @@ function learningGuideHTML() {
   const cur = LEARN_PATH.findIndex((st) => pathStageProgress(st) < 1);
   const first = LEARN_PATH[0];
   const startHref = (() => { const r = recommended(); return r && r.t.id === 'beginner' ? r.href : '#/track/beginner'; })();
+  // On phones only the current stage starts open, so the page isn't a dozen
+  // screens long; wider screens open everything.
+  const wide = matchMedia('(min-width: 761px)').matches;
+  const openAttr = (on) => (on || wide ? ' open' : '');
+  const chev = icon('chev-r', 'icon--sm fold__chev');
   const stage = (st, n) => {
     const p = pathStageProgress(st); const here = n === cur;
     const t = st.track && TRACK_BY_ID[st.track];
     return `<li class="path-stage path-stage--${st.tag} ${p >= 1 ? 'is-done' : ''} ${here ? 'is-current' : ''}" style="--i:${n}">
       <span class="path-stage__dot" aria-hidden="true">${p >= 1 ? icon('check', 'icon--sm') : n + 1}</span>
-      <div class="path-stage__card">
-        <div class="path-stage__top">${pathTag(st.tag)}${here ? '<span class="path-here">You are here</span>' : ''}<span class="small muted num path-stage__pct">${pct(p)}%</span></div>
-        <h3>${esc(st.title)}</h3>
+      <details class="path-stage__card"${openAttr(here)}>
+        <summary class="path-stage__sum"><span class="path-stage__top">${pathTag(st.tag)}${here ? '<span class="path-here">You are here</span>' : ''}<span class="small muted num path-stage__pct">${pct(p)}%</span>${chev}</span>
+        <h3>${esc(st.title)}</h3></summary>
         <p class="small">${esc(st.why)}</p>
         ${st.needs ? `<p class="path-needs">${icon('branch', 'icon--sm')}<span><strong>Builds on:</strong> ${esc(st.needs)}</span></p>` : ''}
         ${t ? `<a class="path-item" href="#/track/${t.id}"><span class="path-item__ic">${icon(t.icon, 'icon--sm')}</span><span class="grow"><strong>${esc(t.title)}</strong><small>${t.modules.length} modules · ${trackStats(t).done}/${trackStats(t).lessons} lessons</small></span>${icon('chev-r', 'icon--sm')}</a>` : `<div class="path-items">${st.items.map(pathItemHTML).join('')}</div>`}
-      </div></li>`;
+      </details></li>`;
   };
   return `<section class="path" aria-labelledby="pathTitle">
     <div class="path-start card">
@@ -3787,15 +3794,17 @@ function learningGuideHTML() {
     <p class="muted mb-4">The curriculum lists modules by track. This path suggests the best <em>order</em> for a beginner. Some modules are best studied side by side, so the path doesn't always follow module numbers. Your progress carries over either way.</p>
     <ol class="path-stages">${LEARN_PATH.map(stage).join('')}</ol>
 
-    <div class="section-head"><div><span class="eyebrow">${pathTag('together', 'path-tag--inline')}</span><h2>Topics that make more sense side by side</h2></div></div>
+    <details class="fold"${openAttr(false)}><summary class="section-head fold__sum"><div><span class="eyebrow">${pathTag('together', 'path-tag--inline')}</span><h2>Topics that make more sense side by side</h2></div>${chev}</summary>
     <div class="path-together stagger">${LEARN_TOGETHER.map((g) => `<article class="card path-group"><h3>${icon('layers', 'icon--sm')} ${esc(g.t)}</h3><p class="small muted">${esc(g.d)}</p><div class="path-items">${g.items.map(pathItemHTML).join('')}</div></article>`).join('')}</div>
+    </details>
 
-    <div class="section-head"><div><span class="eyebrow">Not yet</span><h2>What you don't need to learn yet</h2></div></div>
+    <details class="fold"${openAttr(false)}><summary class="section-head fold__sum"><div><span class="eyebrow">Not yet</span><h2>What you don't need to learn yet</h2></div>${chev}</summary>
     <div class="card card--pad path-later">
       <p class="small mb-4">These topics build on the fundamentals. A beginner will get much more out of them after finishing the Beginner track. Feel free to look, but don't let them slow you down.</p>
       <ul>${NOT_YET.map(([tag, t, key]) => { const r = pathModule(key); return `<li>${pathTag(tag)}<span class="grow">${esc(t)}</span>${r ? `<a class="small" href="#/track/${r.t.id}">${esc(r.t.level)} · Module ${r.m.id.slice(1)}</a>` : ''}</li>`; }).join('')}</ul>
       <p class="block-note mt-4">${icon('route', 'icon--sm')}<span>The <strong>Operations</strong> track is optional. Take it alongside or after Beginner if your role touches dispatch, loads or billing.</span></p>
     </div>
+    </details>
   </section>`;
 }
 
@@ -5600,7 +5609,7 @@ function stateBlock({ ic = 'info', title, text, action = '', error = false }) {
   return `<div class="state-block ${error ? 'state-block--error' : ''} anim-scale-in"><div class="state-block__icon">${icon(ic)}</div><h2>${esc(title)}</h2><p>${esc(text)}</p>${action}</div>`;
 }
 function pageHead({ eyebrow, title, text, right = '' }) {
-  return `<header class="page-head"><div>${eyebrow ? `<span class="eyebrow">${eyebrow}</span>` : ''}<h1>${title}</h1>${text ? `<p>${text}</p>` : ''}</div>${right}</header>`;
+  return `<header class="page-head${right.includes('class="ring') ? ' page-head--ring' : ''}"><div>${eyebrow ? `<span class="eyebrow">${eyebrow}</span>` : ''}<h1>${title}</h1>${text ? `<p>${text}</p>` : ''}</div>${right}</header>`;
 }
 
 /* ---------- Inline markup: [[Term]] → glossary tooltip button ---------- */
@@ -6186,7 +6195,7 @@ function viewTrack(tid) {
   const openMod = (rec && rec.t === t && rec.m) ? rec.m.id : t.modules[0].id;
   const fin = state.finals[t.id];
   const html = `<div class="page page--narrow">
-    <header class="page-head">
+    <header class="page-head page-head--ring">
       <div>
         <span class="badge badge--track" style="--c:${t.color}">${icon(t.icon)} ${t.level} track</span>
         <h1>${esc(t.title)}</h1>
@@ -6230,7 +6239,7 @@ function moduleHTML(t, m, i, open) {
       ${m.lessons.map((l) => { const key = `${t.id}.${m.id}.${l.id}`; const x = LESSON_MAP.get(key); return `<a class="lesson-row ${isDone(key) ? 'is-done' : ''} ${cur === key && !isDone(key) ? 'is-current' : ''}" href="${lessonHref(x)}">
         <span class="lesson-row__state">${icon('check')}</span><span class="lesson-row__title">${esc(l.title)}</span>
         <span class="lesson-row__meta">${state.bookmarks.includes(key) ? icon('bookmark', 'icon--sm') : ''}<span class="hide-sm">${icon('clock', 'icon--sm')}</span> ${l.minutes} min</span></a>`; }).join('')}
-      <a class="lesson-row lesson-row--quiz ${q && q.best >= 0.8 ? 'is-done' : ''}" href="#/quiz/${t.id}/${m.id}"><span class="lesson-row__state">${icon(q && q.best >= 0.8 ? 'check' : 'target')}</span><span class="lesson-row__title">Module quiz</span><span class="lesson-row__meta">${q ? scorePill(q.best) : `${m.lessons.reduce((a, l) => a + (l.check || []).length, 0)} questions`}</span></a>
+      <a class="lesson-row lesson-row--quiz ${q && q.best >= 0.8 ? 'is-done' : ''}" href="#/quiz/${t.id}/${m.id}"><span class="lesson-row__state">${icon(q && q.best >= 0.8 ? 'check' : 'target')}</span><span class="lesson-row__title">Module quiz</span><span class="lesson-row__meta">${q ? scorePill(q.best) : `${QUIZ_SIZE[quizKey(t, m)] || 0} questions`}</span></a>
       <a class="lesson-row lesson-row--sheet" href="#/cheatsheet/${t.id}/${m.id}"><span class="lesson-row__state">${icon('file')}</span><span class="lesson-row__title">Cheat sheet</span><span class="lesson-row__meta">Printable summary</span></a>
     </div></div></div>
   </div>`;
@@ -6622,7 +6631,7 @@ function viewPractice() {
     ['fleet', 'truck', 'Fleet Board', 'An interactive fleet status dashboard with PM status, open repairs, downtime and repeat failures.', `${FLEET.length} units`]
   ];
   const html = `<div class="page">${pageHead({ eyebrow: `${icon('flask', 'icon--sm')} Practice Lab`, title: 'Practice like it\'s a real shift', text: 'Hands-on tools to build judgment and speed. Everything here also appears inside the relevant lessons.' })}
-    <div class="grid grid--3 stagger">${tools.map(([id, ic, t, d, meta]) => `<a class="card card--hover" href="#/${id}"><div class="lab-card"><span class="lab-card__icon">${icon(ic)}</span><h2>${t}</h2><p>${d}</p><div class="row row--between"><span class="lab-card__go">Open ${icon('arrow-r')}</span><span class="small muted">${meta}</span></div></div></a>`).join('')}</div></div>`;
+    <div class="grid grid--3 lab-grid stagger">${tools.map(([id, ic, t, d, meta]) => `<a class="card card--hover" href="#/${id}"><div class="lab-card"><span class="lab-card__icon">${icon(ic)}</span><h2>${t}</h2><p>${d}</p><div class="row row--between lab-card__foot"><span class="lab-card__go">Open ${icon('arrow-r')}</span><span class="small muted lab-card__meta">${meta}</span></div></div></a>`).join('')}</div></div>`;
   return { html, title: 'Practice Lab', nav: 'practice', bottom: 'practice', crumbs: [['Practice Lab']] };
 }
 
@@ -7262,7 +7271,7 @@ function viewGlossary(termParam) {
   const html = `<div class="page page--narrow">${pageHead({ eyebrow: `${icon('book', 'icon--sm')} Reference`, title: 'Maintenance Glossary', text: `${GLOSSARY.length} essential terms with definitions, plain-language explanations, real-world examples and related terms.` })}
     <div class="gl-toolbar">
       <div class="input-group gl-search"><label class="sr-only" for="glQ">Search glossary</label>${icon('search')}<input class="input" id="glQ" type="search" placeholder="Search terms, abbreviations or definitions…" autocomplete="off"></div>
-      <div class="row row--wrap" role="group" aria-label="Filter by category">${cats.map((c) => `<button type="button" class="chip" data-cat="${c}" aria-pressed="${c === 'All'}">${c}</button>`).join('')}</div>
+      <div class="row row--wrap gl-cats" role="group" aria-label="Filter by category">${cats.map((c) => `<button type="button" class="chip" data-cat="${c}" aria-pressed="${c === 'All'}">${c}</button>`).join('')}</div>
       <div class="gl-letters" role="group" aria-label="Jump to letter">${letters.map((l) => `<button type="button" data-letter="${l}" ${has.has(l) ? '' : 'disabled'} aria-pressed="false">${l}</button>`).join('')}</div>
     </div>
     <p class="small muted mb-4" data-gl-count aria-live="polite"></p>
@@ -7276,7 +7285,7 @@ function viewGlossary(termParam) {
       const itemHTML = (g) => {
         const pid = 'gl-' + g.term.replace(/[^a-z0-9]/gi, '');
         const acronym = /^[A-Z][A-Z /]+$/.test(g.term);
-        return `<div class="gl-item" id="${pid}-item" data-term="${esc(g.term)}"><h2 class="acc-heading"><button type="button" class="gl-item__head" aria-expanded="false" aria-controls="${pid}"><span class="gl-item__abbr" aria-hidden="true">${acronym ? esc(g.term) : icon(GL_CAT_ICON[g.cat] || 'book', 'icon--sm')}</span><span class="grow"><span class="gl-item__term">${hl(g.term)}</span><br><span class="gl-item__full">${hl(g.full)}</span></span><span class="badge badge--outline">${g.cat}</span>${icon('chev-d')}</button></h2>
+        return `<div class="gl-item" id="${pid}-item" data-term="${esc(g.term)}"><h2 class="acc-heading"><button type="button" class="gl-item__head" aria-expanded="false" aria-controls="${pid}"><span class="gl-item__abbr" aria-hidden="true">${acronym ? esc(g.term) : icon(GL_CAT_ICON[g.cat] || 'book', 'icon--sm')}</span><span class="grow"><span class="gl-item__term">${hl(g.term)}</span><br><span class="gl-item__full">${hl(g.full)}</span><span class="gl-item__cat">${g.cat}</span></span><span class="badge badge--outline gl-item__badge">${g.cat}</span>${icon('chev-d')}</button></h2>
           <div class="acc-panel" id="${pid}" role="region"><div><div class="acc-panel__inner">
             ${LIB_TERM.has(g.term.toLowerCase()) ? (() => { const vx = LIB_TERM.get(g.term.toLowerCase()); return `<a class="gl-visual" href="#/library/${vx.id}"><span class="gl-visual__img">${libThumb(vx)}</span><span><strong>See what it looks like</strong><span class="small muted">${esc(vx.name)} in the Visual Library</span></span>${icon('chev-r', 'icon--sm')}</a>`; })() : ''}
             <div class="gl-detail"><div><h3>${icon('book')} Definition</h3><p>${hl(g.def)}</p></div><div><h3>${icon('bulb')} In plain terms</h3><p>${hl(g.simple)}</p></div><div><h3>${icon('truck')} Real-world example</h3><p>${hl(g.example)}</p></div></div>

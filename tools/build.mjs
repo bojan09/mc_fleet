@@ -72,6 +72,8 @@ const REF = ${JSON.stringify(data.REF)};
 const RATECON = ${JSON.stringify(data.RATECON)};
 const LESSON_MOVES = ${JSON.stringify(data.LESSON_MOVES)};
 const CONTENT_FILES = ${JSON.stringify(contentFiles)};
+// Questions per module quiz, so pages without lesson text loaded can show it.
+const QUIZ_SIZE = ${JSON.stringify(Object.fromEntries(data.TRACKS.flatMap((t) => t.modules.map((m) => [`${t.id}.${m.id}`, m.lessons.reduce((a, l) => a + (l.check || []).length, 0)]))))};
 `;
 const core = generated + files.filter((f) => !CONTENT.includes(f)).map(read).join('');
 const out = join(root, 'script.js');

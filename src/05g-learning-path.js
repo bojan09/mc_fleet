@@ -103,18 +103,23 @@ function learningGuideHTML() {
   const cur = LEARN_PATH.findIndex((st) => pathStageProgress(st) < 1);
   const first = LEARN_PATH[0];
   const startHref = (() => { const r = recommended(); return r && r.t.id === 'beginner' ? r.href : '#/track/beginner'; })();
+  // On phones only the current stage starts open, so the page isn't a dozen
+  // screens long; wider screens open everything.
+  const wide = matchMedia('(min-width: 761px)').matches;
+  const openAttr = (on) => (on || wide ? ' open' : '');
+  const chev = icon('chev-r', 'icon--sm fold__chev');
   const stage = (st, n) => {
     const p = pathStageProgress(st); const here = n === cur;
     const t = st.track && TRACK_BY_ID[st.track];
     return `<li class="path-stage path-stage--${st.tag} ${p >= 1 ? 'is-done' : ''} ${here ? 'is-current' : ''}" style="--i:${n}">
       <span class="path-stage__dot" aria-hidden="true">${p >= 1 ? icon('check', 'icon--sm') : n + 1}</span>
-      <div class="path-stage__card">
-        <div class="path-stage__top">${pathTag(st.tag)}${here ? '<span class="path-here">You are here</span>' : ''}<span class="small muted num path-stage__pct">${pct(p)}%</span></div>
-        <h3>${esc(st.title)}</h3>
+      <details class="path-stage__card"${openAttr(here)}>
+        <summary class="path-stage__sum"><span class="path-stage__top">${pathTag(st.tag)}${here ? '<span class="path-here">You are here</span>' : ''}<span class="small muted num path-stage__pct">${pct(p)}%</span>${chev}</span>
+        <h3>${esc(st.title)}</h3></summary>
         <p class="small">${esc(st.why)}</p>
         ${st.needs ? `<p class="path-needs">${icon('branch', 'icon--sm')}<span><strong>Builds on:</strong> ${esc(st.needs)}</span></p>` : ''}
         ${t ? `<a class="path-item" href="#/track/${t.id}"><span class="path-item__ic">${icon(t.icon, 'icon--sm')}</span><span class="grow"><strong>${esc(t.title)}</strong><small>${t.modules.length} modules · ${trackStats(t).done}/${trackStats(t).lessons} lessons</small></span>${icon('chev-r', 'icon--sm')}</a>` : `<div class="path-items">${st.items.map(pathItemHTML).join('')}</div>`}
-      </div></li>`;
+      </details></li>`;
   };
   return `<section class="path" aria-labelledby="pathTitle">
     <div class="path-start card">
@@ -128,15 +133,17 @@ function learningGuideHTML() {
     <p class="muted mb-4">The curriculum lists modules by track. This path suggests the best <em>order</em> for a beginner. Some modules are best studied side by side, so the path doesn't always follow module numbers. Your progress carries over either way.</p>
     <ol class="path-stages">${LEARN_PATH.map(stage).join('')}</ol>
 
-    <div class="section-head"><div><span class="eyebrow">${pathTag('together', 'path-tag--inline')}</span><h2>Topics that make more sense side by side</h2></div></div>
+    <details class="fold"${openAttr(false)}><summary class="section-head fold__sum"><div><span class="eyebrow">${pathTag('together', 'path-tag--inline')}</span><h2>Topics that make more sense side by side</h2></div>${chev}</summary>
     <div class="path-together stagger">${LEARN_TOGETHER.map((g) => `<article class="card path-group"><h3>${icon('layers', 'icon--sm')} ${esc(g.t)}</h3><p class="small muted">${esc(g.d)}</p><div class="path-items">${g.items.map(pathItemHTML).join('')}</div></article>`).join('')}</div>
+    </details>
 
-    <div class="section-head"><div><span class="eyebrow">Not yet</span><h2>What you don't need to learn yet</h2></div></div>
+    <details class="fold"${openAttr(false)}><summary class="section-head fold__sum"><div><span class="eyebrow">Not yet</span><h2>What you don't need to learn yet</h2></div>${chev}</summary>
     <div class="card card--pad path-later">
       <p class="small mb-4">These topics build on the fundamentals. A beginner will get much more out of them after finishing the Beginner track. Feel free to look, but don't let them slow you down.</p>
       <ul>${NOT_YET.map(([tag, t, key]) => { const r = pathModule(key); return `<li>${pathTag(tag)}<span class="grow">${esc(t)}</span>${r ? `<a class="small" href="#/track/${r.t.id}">${esc(r.t.level)} · Module ${r.m.id.slice(1)}</a>` : ''}</li>`; }).join('')}</ul>
       <p class="block-note mt-4">${icon('route', 'icon--sm')}<span>The <strong>Operations</strong> track is optional. Take it alongside or after Beginner if your role touches dispatch, loads or billing.</span></p>
     </div>
+    </details>
   </section>`;
 }
 
