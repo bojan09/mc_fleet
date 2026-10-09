@@ -3356,6 +3356,8 @@ function mergeProgress(a, b) {
   ['profile', 'avatar', 'goal'].forEach((k) => {
     const pick = (eb[k] || 0) > (ea[k] || 0) ? b[k] : (ea[k] || 0) > (eb[k] || 0) ? a[k] : (a[k] !== undefined ? a[k] : b[k]);
     if (pick !== undefined) out[k] = JSON.parse(JSON.stringify(pick));
+    // The Google photo link is filled in by whichever device saw it last.
+    if (k === 'avatar' && out.avatar && !out.avatar.google) { const g = (a.avatar || {}).google || (b.avatar || {}).google; if (g) out.avatar.google = g; }
   });
   out.theme = a.theme;
   out.motion = a.motion;
@@ -3453,6 +3455,7 @@ async function cloudInit() {
     if (event === 'USER_UPDATED' && /^#\/profile/.test(location.hash)) setTimeout(router, 0);
     if (CLOUD.user && CLOUD.user.id !== was) {
       if (!state.name && CLOUD.user.user_metadata && CLOUD.user.user_metadata.full_name) { state.name = CLOUD.user.user_metadata.full_name; setTimeout(router, 0); }
+      rememberGooglePhoto();
       setTimeout(cloudPull, 0);
     }
     if (!CLOUD.user) cloudSetStatus('off');
@@ -3837,7 +3840,7 @@ function viewPrivacy() {
       ${row('image', 'Profile picture (optional)', 'If you upload a picture, it is resized to 256 × 256 pixels in your browser and stored with Supabase. Anyone who has the picture\'s link can view it. Removing the picture or deleting your account deletes it.')}
       ${row('activity', 'Your synced progress', 'The same progress and profile details listed above (except your theme and animation preferences) are stored with your account so they can follow you to other devices. Each account can only read and change its own progress.')}
       ${row('pin', 'Where it is kept', 'In a Supabase database in the European Union (Ireland, region eu-west-1).')}
-      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, academy progress, quiz scores and certificates, and can download them as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
+      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, profile picture, academy progress, quiz scores and certificates, and can download them as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
       ${row('award', 'Certificate verification (optional)', 'If you ask for a verification code, your name, the track, your final score and the date are stored with that code. Anyone who has the code can check those details on the certificate check page.')}
       ${row('lock', 'Sign-in session', 'While you are signed in, your browser keeps a sign-in token in local storage. Signing out removes it.')}
       ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on your <a href="#/profile">Profile</a> page. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete account</strong> on your Profile page or here. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently.')}
@@ -4547,7 +4550,7 @@ function trainerGroupHTML(g, members, prog, me, assigns) {
     const p = prog.get(m.user_id); const s = progressSummary(p && p.state);
     const asg = mods.filter((a) => moduleDoneIn(p && p.state, a.x)).length;
     const late = mods.filter((a) => a.due && a.due < todayISO() && !moduleDoneIn(p && p.state, a.x)).length;
-    return `<tr><td><strong>${esc(learnerName(m, prog))}</strong><div class="small muted">joined ${new Date(m.joined_at).toLocaleDateString()}</div></td>
+    return `<tr><td><div class="tr-who">${avatarHTML(36, '', p && p.state, learnerName(m, prog))}<div><strong>${esc(learnerName(m, prog))}</strong><div class="small muted">joined ${new Date(m.joined_at).toLocaleDateString()}</div></div></div></td>
       <td><div class="tr-bar">${progressBar(s.total ? s.lessons / s.total : 0, { cls: 'progress--sm', label: 'Lessons completed' })}<span class="num small">${s.lessons}/${s.total}</span></div></td>
       <td>${s.tracks.map((x) => `<span class="tr-track ${x.passed ? 'is-passed' : ''}" title="${esc(x.t.level)}: ${x.done}/${x.total} lessons${x.passed ? ` · final ${pct(x.score)}%` : ''}" style="--c:${x.t.color}">${x.passed ? icon('award', 'icon--sm') : ''}${esc(x.t.level.slice(0, 3))} ${pct(x.total ? x.done / x.total : 0)}%</span>`).join('')}</td>
       ${mods.length ? `<td class="num small">${asg}/${mods.length}${late ? `<div class="tr-late">${late} overdue</div>` : ''}</td>` : ''}
@@ -4865,20 +4868,40 @@ const PASSWORD_MIN = 8;
 
 /* ---------- Picture ---------- */
 const googlePhoto = () => { const m = (CLOUD.user && CLOUD.user.user_metadata) || {}; return m.avatar_url || m.picture || ''; };
-const initialsOf = (name) => (String(name || '').trim() || 'Coordinator').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+/* First letters of the first and last name, skipping quotes and symbols
+   ("Ana Petrovska" → AP, 'Benjamin "Ben" Ortiz' → BO). */
+const initialsOf = (name) => {
+  const w = (String(name || '').trim() || 'Coordinator').split(/\s+/).map((p) => (p.match(/\p{L}/u) || [''])[0]).filter(Boolean);
+  return ((w[0] || '') + (w.length > 1 ? w[w.length - 1] : '')).toUpperCase() || '?';
+};
 /* An uploaded picture, else the Google photo (unless the learner chose
-   initials), else initials. */
-function avatarImage() {
-  const a = state.avatar || {};
-  if (a.src === 'upload' && a.url) return a.url;
-  if (a.src !== 'initials' && googlePhoto()) return googlePhoto();
+   initials), else initials. st is a learner's progress state: this learner's
+   own, or a group member's when a trainer views the group (their Google photo
+   link travels in st.avatar.google). Pictures from other accounts are only
+   shown from the two hosts the CSP allows, and colours only as #rrggbb. */
+const AVATAR_HOSTS = /^https:\/\/(lqlewiyuhifvnodkpiul\.supabase\.co|[\w-]+\.googleusercontent\.com)\//;
+const safeAvatarUrl = (u) => (typeof u === 'string' && AVATAR_HOSTS.test(u) ? u : '');
+function avatarImage(st = state) {
+  const a = (st && st.avatar) || {};
+  const google = st === state ? googlePhoto() || a.google : a.google;
+  const ok = (u) => (st === state ? typeof u === 'string' && u : safeAvatarUrl(u));
+  if (a.src === 'upload' && ok(a.url)) return a.url;
+  if (a.src !== 'initials' && ok(google)) return google;
   return '';
 }
-function avatarHTML(size = 40, cls = '') {
-  const a = state.avatar || {};
-  const ini = esc(initialsOf(state.name));
-  const img = avatarImage();
-  return `<span class="avatar ${cls}" style="--av:${size}px;${a.color ? `--av-bg:${esc(a.color)}` : ''}" data-initials="${ini}" aria-hidden="true">${img ? `<img class="avatar__img" src="${esc(img)}" alt="" width="${size}" height="${size}" referrerpolicy="no-referrer" decoding="async">` : ini}</span>`;
+function avatarHTML(size = 40, cls = '', st = state, name = state.name) {
+  const a = (st && st.avatar) || {};
+  const color = /^#[0-9a-f]{6}$/i.test(a.color || '') ? a.color : '';
+  const ini = esc(initialsOf(name));
+  const img = avatarImage(st);
+  return `<span class="avatar ${cls}" style="--av:${size}px;${color ? `--av-bg:${color}` : ''}" data-initials="${ini}" aria-hidden="true">${img ? `<img class="avatar__img" src="${esc(img)}" alt="" width="${size}" height="${size}" referrerpolicy="no-referrer" decoding="async" loading="lazy">` : ini}</span>`;
+}
+/* Keep the Google photo link in the synced profile so trainers can show it. */
+function rememberGooglePhoto() {
+  const g = safeAvatarUrl(googlePhoto());
+  if (!g || (state.avatar || {}).google === g) return;
+  state.avatar = Object.assign({ src: '', url: '', color: '' }, state.avatar, { google: g });
+  save(); // no edit time: a picture chosen on another device still wins (mergeProgress keeps the link)
 }
 // A picture that fails to load (offline, removed) falls back to initials.
 document.addEventListener('error', (e) => {

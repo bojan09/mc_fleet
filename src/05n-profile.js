@@ -16,20 +16,40 @@ const PASSWORD_MIN = 8;
 
 /* ---------- Picture ---------- */
 const googlePhoto = () => { const m = (CLOUD.user && CLOUD.user.user_metadata) || {}; return m.avatar_url || m.picture || ''; };
-const initialsOf = (name) => (String(name || '').trim() || 'Coordinator').split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+/* First letters of the first and last name, skipping quotes and symbols
+   ("Ana Petrovska" → AP, 'Benjamin "Ben" Ortiz' → BO). */
+const initialsOf = (name) => {
+  const w = (String(name || '').trim() || 'Coordinator').split(/\s+/).map((p) => (p.match(/\p{L}/u) || [''])[0]).filter(Boolean);
+  return ((w[0] || '') + (w.length > 1 ? w[w.length - 1] : '')).toUpperCase() || '?';
+};
 /* An uploaded picture, else the Google photo (unless the learner chose
-   initials), else initials. */
-function avatarImage() {
-  const a = state.avatar || {};
-  if (a.src === 'upload' && a.url) return a.url;
-  if (a.src !== 'initials' && googlePhoto()) return googlePhoto();
+   initials), else initials. st is a learner's progress state: this learner's
+   own, or a group member's when a trainer views the group (their Google photo
+   link travels in st.avatar.google). Pictures from other accounts are only
+   shown from the two hosts the CSP allows, and colours only as #rrggbb. */
+const AVATAR_HOSTS = /^https:\/\/(lqlewiyuhifvnodkpiul\.supabase\.co|[\w-]+\.googleusercontent\.com)\//;
+const safeAvatarUrl = (u) => (typeof u === 'string' && AVATAR_HOSTS.test(u) ? u : '');
+function avatarImage(st = state) {
+  const a = (st && st.avatar) || {};
+  const google = st === state ? googlePhoto() || a.google : a.google;
+  const ok = (u) => (st === state ? typeof u === 'string' && u : safeAvatarUrl(u));
+  if (a.src === 'upload' && ok(a.url)) return a.url;
+  if (a.src !== 'initials' && ok(google)) return google;
   return '';
 }
-function avatarHTML(size = 40, cls = '') {
-  const a = state.avatar || {};
-  const ini = esc(initialsOf(state.name));
-  const img = avatarImage();
-  return `<span class="avatar ${cls}" style="--av:${size}px;${a.color ? `--av-bg:${esc(a.color)}` : ''}" data-initials="${ini}" aria-hidden="true">${img ? `<img class="avatar__img" src="${esc(img)}" alt="" width="${size}" height="${size}" referrerpolicy="no-referrer" decoding="async">` : ini}</span>`;
+function avatarHTML(size = 40, cls = '', st = state, name = state.name) {
+  const a = (st && st.avatar) || {};
+  const color = /^#[0-9a-f]{6}$/i.test(a.color || '') ? a.color : '';
+  const ini = esc(initialsOf(name));
+  const img = avatarImage(st);
+  return `<span class="avatar ${cls}" style="--av:${size}px;${color ? `--av-bg:${color}` : ''}" data-initials="${ini}" aria-hidden="true">${img ? `<img class="avatar__img" src="${esc(img)}" alt="" width="${size}" height="${size}" referrerpolicy="no-referrer" decoding="async" loading="lazy">` : ini}</span>`;
+}
+/* Keep the Google photo link in the synced profile so trainers can show it. */
+function rememberGooglePhoto() {
+  const g = safeAvatarUrl(googlePhoto());
+  if (!g || (state.avatar || {}).google === g) return;
+  state.avatar = Object.assign({ src: '', url: '', color: '' }, state.avatar, { google: g });
+  save(); // no edit time: a picture chosen on another device still wins (mergeProgress keeps the link)
 }
 // A picture that fails to load (offline, removed) falls back to initials.
 document.addEventListener('error', (e) => {

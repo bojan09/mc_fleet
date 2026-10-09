@@ -2592,6 +2592,8 @@ dd { margin: 0; }
 .tr-code strong { font-size: 1.05rem; }
 .tr-group .table-wrap { margin: 0; border: 0; border-radius: 0; }
 .tr-table td { vertical-align: middle; }
+.tr-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.tr-who .avatar { font-size: 13px; }
 .tr-bar { display: flex; align-items: center; gap: 8px; min-width: 120px; }
 .tr-bar .progress { flex: 1; }
 .tr-track { display: inline-flex; align-items: center; gap: 3px; margin: 2px 4px 2px 0; padding: 2px 7px; border-radius: var(--r-full); border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); font-size: var(--fs-xs); white-space: nowrap; }

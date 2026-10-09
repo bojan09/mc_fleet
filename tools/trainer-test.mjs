@@ -21,8 +21,8 @@ const seed = {
       { group_id: 'g2', user_id: 'me', display_name: 'Test Trainer', joined_at: '2026-02-05T10:00:00Z' }
     ],
     progress: [
-      { user_id: 'ana', state: { completed: done('beginner', 'm1', ['l1', 'l2', 'l3']), quizzes: { 'beginner.m1': { best: 0.8 }, 'beginner.m4': { best: 0.5 } }, missed: { 'beginner.m3.l1#0': { n: 1 } }, days: ['2026-10-01'] } },
-      { user_id: 'ben', state: { name: 'Benjamin "Ben" Ortiz', completed: {}, missed: { 'beginner.m3.l2#1': { n: 2 }, 'beginner.m3.l1#0': { n: 1 } }, quizzes: { 'beginner.m3': { best: 0.6 } }, days: [] } }
+      { user_id: 'ana', state: { avatar: { src: 'upload', url: 'https://lqlewiyuhifvnodkpiul.supabase.co/storage/v1/object/public/avatars/ana/avatar.webp?v=1' }, completed: done('beginner', 'm1', ['l1', 'l2', 'l3']), quizzes: { 'beginner.m1': { best: 0.8 }, 'beginner.m4': { best: 0.5 } }, missed: { 'beginner.m3.l1#0': { n: 1 } }, days: ['2026-10-01'] } },
+      { user_id: 'ben', state: { avatar: { src: 'upload', url: 'https://tracker.example/pixel.gif', color: 'red;background:url(x)' }, name: 'Benjamin "Ben" Ortiz', completed: {}, missed: { 'beginner.m3.l2#1': { n: 2 }, 'beginner.m3.l1#0': { n: 1 } }, quizzes: { 'beginner.m3': { best: 0.6 } }, days: [] } }
     ],
     assignments: [
       { id: 'a1', group_id: 'g1', module: 'beginner.m1', due: day(-2) },
@@ -64,6 +64,10 @@ for (const width of [375, 1366]) {
   check(/Beginner · M3/.test(weak) && /2 of 2 learners with questions to review \(3\)/.test(weak) && /quiz average 60%/.test(weak), 'weak spots: module, learners, questions and quiz average');
   check(/Beginner · M4/.test(weak) && /quiz average 50%/.test(weak) && !/Beginner · M1/.test(weak), 'low quiz average counts; a module with a good score and no misses does not');
   check(weak.indexOf('M3') < weak.indexOf('M4'), 'most learners struggling listed first');
+  const pics = await b.evaluate(`[...document.querySelectorAll('.tr-group .tr-who')].map((w) => ({ name: w.querySelector('strong').textContent, img: (w.querySelector('img') || {}).src || '', style: w.querySelector('.avatar').getAttribute('style'), init: w.querySelector('.avatar').dataset.initials, loaded: performance.getEntriesByType('resource').some((e) => e.name.includes('avatars/ana/')) }))`);
+  const ana = pics.find((p) => p.name === '=Ana') || {}, ben = pics.find((p) => /Ortiz/.test(p.name)) || {};
+  check(ana.img.includes('avatars/ana/') || ana.loaded, 'learner picture shown in the table');
+  check(!ben.img && ben.init === 'BO' && !/background|red/.test(ben.style), 'picture from another host or a bad colour is ignored (initials shown)');
   check((await overflow()).length === 0, `nothing cut off (${(await overflow()).join(', ')})`);
 
   if (width === 1366) {

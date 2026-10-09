@@ -74,6 +74,8 @@ function mergeProgress(a, b) {
   ['profile', 'avatar', 'goal'].forEach((k) => {
     const pick = (eb[k] || 0) > (ea[k] || 0) ? b[k] : (ea[k] || 0) > (eb[k] || 0) ? a[k] : (a[k] !== undefined ? a[k] : b[k]);
     if (pick !== undefined) out[k] = JSON.parse(JSON.stringify(pick));
+    // The Google photo link is filled in by whichever device saw it last.
+    if (k === 'avatar' && out.avatar && !out.avatar.google) { const g = (a.avatar || {}).google || (b.avatar || {}).google; if (g) out.avatar.google = g; }
   });
   out.theme = a.theme;
   out.motion = a.motion;
@@ -171,6 +173,7 @@ async function cloudInit() {
     if (event === 'USER_UPDATED' && /^#\/profile/.test(location.hash)) setTimeout(router, 0);
     if (CLOUD.user && CLOUD.user.id !== was) {
       if (!state.name && CLOUD.user.user_metadata && CLOUD.user.user_metadata.full_name) { state.name = CLOUD.user.user_metadata.full_name; setTimeout(router, 0); }
+      rememberGooglePhoto();
       setTimeout(cloudPull, 0);
     }
     if (!CLOUD.user) cloudSetStatus('off');
