@@ -5965,8 +5965,9 @@ function go(hash) { if (location.hash === hash) router(); else location.hash = h
 function setCrumbs(list) {
   const el = $('#crumbs');
   const items = [['Academy', '#/dashboard'], ...list];
-  el.innerHTML = items.map(([label, href], i) => i === items.length - 1
-    ? `<span aria-current="page">${esc(label)}</span>`
+  // The last crumb can carry a short name for the phone top bar, where only it shows.
+  el.innerHTML = items.map(([label, href, short], i) => i === items.length - 1
+    ? `<span aria-current="page">${short ? `<span class="crumbs__full">${esc(label)}</span><span class="crumbs__short" aria-hidden="true">${esc(short)}</span>` : esc(label)}</span>`
     : `<a href="${href}">${esc(label)}</a>${icon('chev-r')}`).join('');
 }
 function setNav(navId, bottomId) {
@@ -6329,7 +6330,7 @@ function viewLesson(tid, mid, lid) {
 
   return {
     html, title: l.title, nav: `track-${t.id}`, bottom: 'curriculum',
-    crumbs: [['Curriculum', '#/curriculum'], [t.level, `#/track/${t.id}`], [`M${m.id.slice(1)}`, `#/track/${t.id}`], [l.title]],
+    crumbs: [['Curriculum', '#/curriculum'], [t.level, `#/track/${t.id}`], [`M${m.id.slice(1)}`, `#/track/${t.id}`], [l.title, '', `M${m.id.slice(1)} · Lesson ${m.lessons.indexOf(l) + 1}`]],
     after: (v) => {
       mountLessonCheck(v, x);
       $$('[data-toc]', v).forEach((a) => a.addEventListener('click', (e) => {

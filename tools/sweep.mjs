@@ -157,6 +157,8 @@ for (const theme of ['light', 'dark']) {
       const found = await withLimit(evaluate(`(async () => {
         document.documentElement.setAttribute('data-theme', '${theme}');
         location.hash = ${JSON.stringify(r)}; await new Promise((res) => setTimeout(res, 60));
+        // jump entry animations (fades) to their end so text is measured at full opacity
+        document.getAnimations().forEach((an) => { try { an.finish(); } catch {} });
         return ${CONTRAST};
       })()`), 15000, 'timed out');
       for (const p of found) if (!out.has(p)) out.set(p, r);
