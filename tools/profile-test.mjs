@@ -38,8 +38,10 @@ for (const width of [375, 1366]) {
   check(await wait(`!!document.querySelector('.dash-top') && /Ana/.test(document.querySelector('#dashTitle').textContent)`), 'dashboard greets by first name (from the Google name)');
   check(await wait(`/Synced|syncing|synced/i.test(document.querySelector('#sidebarFoot').textContent)`), 'sidebar shows the account');
   check(/Add your role and company/.test(await text('.dash-top__role')), 'dashboard asks for role and company');
-  check(/1 lesson to go/.test(await text('.dash-today')), 'today\'s goal starts at 1 lesson');
-  check(await b.evaluate(`document.querySelectorAll('.week li').length === 7`), 'week strip has 7 days');
+  check(/0\/1\s*lessons today/.test(await text('.dash-week')), 'today\'s goal starts at 1 lesson');
+  check(await b.evaluate(`document.querySelectorAll('.week__day').length === 7`), 'week strip has 7 days');
+  check(await b.evaluate(`[...document.querySelectorAll('.week__label')].map((e) => e.textContent).join(' ') === 'Mo Tu We Th Fr Sa Su'`), 'week runs Monday to Sunday');
+  check(await b.evaluate(`document.querySelectorAll('.week__day.is-now').length === 1 && !document.querySelector('.week__day.is-now ~ .is-missed, .week__day.is-now ~ .is-studied')`), 'one today; no later day counts as missed or studied');
   check((await overflow()).length === 0, `dashboard nothing cut off (${(await overflow()).join(', ')})`);
 
   await b.evaluate(`location.hash = '#/profile', true`);
@@ -113,7 +115,7 @@ for (const width of [375, 1366]) {
   await click('[data-reset]'); await wait(`!!document.querySelector('#doReset')`); await click('#doReset');
   check(await wait(`location.hash === '#/dashboard'`), 'reset returns to the dashboard');
   check(await stored(`Object.keys(s.completed).length === 0 && s.profile.city === 'Bitola' && s.goal === 3 && s.resetAt > 0`), 'reset clears progress but keeps profile and goal');
-  check(/3 lessons to go/.test(await text('.dash-today')), 'dashboard uses the new daily goal');
+  check(/0\/3/.test(await text('.dash-week')) && /Goal: 3 lessons a day/.test(await text('.dash-week')), 'dashboard uses the new daily goal');
   check(/Vardar Fleet/.test(await text('.dash-top__role')), 'dashboard shows role and company');
 }
 check(b.exceptions.length === 0, `no script errors${b.exceptions.length ? ': ' + b.exceptions.join(' | ') : ''}`);

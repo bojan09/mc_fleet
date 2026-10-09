@@ -3496,9 +3496,9 @@ function setupCloud() {
 }
 function cloudAccountHTML() {
   if (CLOUD.user) {
-    return `<div class="side-account"><div class="side-account__row"><span class="side-account__status" id="cloudStatus" aria-live="polite">${cloudStatusHTML()}</span><button type="button" class="btn btn--ghost btn--sm" data-cloud="out">Sign out</button></div><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
+    return `<div class="side-account"><span class="side-account__status" id="cloudStatus" aria-live="polite">${cloudStatusHTML()}</span><a class="side-account__link" href="#/privacy">Privacy</a><button type="button" class="side-account__link" data-cloud="out">Sign out</button></div>`;
   }
-  return `<div class="side-account"><button type="button" class="btn btn--soft btn--sm side-account__in" data-cloud="in">${icon('user', 'icon--sm')} Sign in or create account</button><a class="side-account__privacy" href="#/privacy">Privacy</a></div>`;
+  return `<div class="side-account"><button type="button" class="btn btn--soft btn--sm side-account__in" data-cloud="in">${icon('user', 'icon--sm')} Sign in</button><a class="side-account__link" href="#/privacy">Privacy</a></div>`;
 }
 function googleMark() {
   return '<svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>';
@@ -5980,7 +5980,7 @@ function refreshChrome() {
   $('#topProgress').setAttribute('aria-label', `Overall progress ${pct(p)}% — open dashboard`);
   const name = state.name || 'Coordinator';
   const ctx = currentContext();
-  $('#sidebarFoot').innerHTML = `<a class="side-profile" id="profileBtn" href="#/profile" data-nav="profile" aria-label="Your profile: ${esc(name)}">${avatarHTML(34, 'side-avatar')}<span class="grow"><strong>${esc(name)}</strong><small>${ctx.t.level} track · ${pct(p)}% overall</small></span>${icon('chev-r', 'icon--sm')}</a>`;
+  $('#sidebarFoot').innerHTML = `<a class="side-profile" id="profileBtn" href="#/profile" data-nav="profile" aria-label="Your profile: ${esc(name)}">${avatarHTML(34, 'side-avatar')}<span class="grow"><strong>${esc(name)}</strong><small>${ctx.t.level} track · ${pct(p)}%</small></span>${icon('chev-r', 'icon--sm')}</a>`;
   if (document.body.dataset.nav === 'profile') $('#profileBtn').setAttribute('aria-current', 'page');
   $('#sidebarFoot').insertAdjacentHTML('beforeend', cloudAccountHTML());
 }
@@ -6040,12 +6040,20 @@ function viewDashboard() {
   const next = cont ? { kind: 'Continue where you left off', title: lastX.l.title, sub: `${lastX.t.level} · Module ${lastX.m.id.slice(1)}: ${lastX.m.title}`, href: lessonHref(lastX), ic: 'book', cta: 'Continue' }
     : rec ? { kind: done ? 'Up next' : 'Start here', title: rec.title, sub: rec.sub, href: rec.href, ic: rec.icon, cta: done ? 'Start' : 'Start learning' } : null;
 
-  // Today: lessons finished today against the daily goal, and the last 7 days.
+  // Today: lessons finished today against the daily goal, and this calendar week (Monday to Sunday).
   const today = todayStr();
   const goal = state.goal || 1;
   const doneToday = Object.values(state.completed).filter((v) => typeof v === 'number' && dayKey(new Date(v)) === today).length;
   const studied = new Set(state.days);
-  const week = Array.from({ length: 7 }, (_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return { key: dayKey(d), label: d.toLocaleDateString('en-GB', { weekday: 'narrow' }), full: d.toLocaleDateString('en-GB', { weekday: 'long' }) }; });
+  const monday = new Date(); monday.setHours(12, 0, 0, 0); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  const week = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((label, i) => {
+    const d = new Date(monday); d.setDate(monday.getDate() + i);
+    const key = dayKey(d);
+    const st = studied.has(key) ? 'studied' : key === today ? 'today' : key < today ? 'missed' : 'future';
+    return { key, label, st, full: d.toLocaleDateString('en-GB', { weekday: 'long' }) };
+  });
+  const weekDays = week.filter((d) => d.st === 'studied').length;
+  const dayState = { studied: 'studied', today: 'not studied yet', missed: 'not studied', future: 'still to come' };
 
   // Recent activity: finished lessons, quizzes and final assessments, newest first.
   const activity = [];
@@ -6077,23 +6085,20 @@ function viewDashboard() {
       <div class="dash-top__bar">${progressBar(p, { label: 'Overall progress' })}<span class="small">${done} of ${LESSONS.length} lessons · ${pct(p)}% overall</span></div>
     </section>
 
-    <div class="dash-today mt-6 stagger">
-      <div class="card dash-tile">
-        ${ring(Math.min(doneToday / goal, 1), { size: 52, stroke: 6, label: `${Math.min(doneToday, 99)}/${goal}`, fs: 13, color: doneToday >= goal ? 'var(--success)' : '' })}
-        <div><span class="dash-tile__label">Today's goal</span><strong>${doneToday >= goal ? 'Goal reached' : `${goal - doneToday} lesson${goal - doneToday === 1 ? '' : 's'} to go`}</strong><a class="small" href="#/profile">Change goal</a></div>
+    <div class="dash-today mt-6">
+      <section class="card dash-week" aria-labelledby="weekTitle">
+        <div class="dash-week__head"><h2 id="weekTitle">This week</h2><a class="small" href="#/profile">Goal: ${goal} lesson${goal === 1 ? '' : 's'} a day</a></div>
+        <div class="dash-week__stats">
+          <div class="dash-week__stat"><span class="dash-week__ic${days ? ' is-on' : ''}">${icon('zap')}</span><div><strong class="num">${days}</strong><span>day streak</span></div></div>
+          <div class="dash-week__stat">${ring(Math.min(doneToday / goal, 1), { size: 40, stroke: 5, label: ' ', color: doneToday >= goal ? 'var(--success)' : '' })}<div><strong class="num">${Math.min(doneToday, 99)}<small>/${goal}</small></strong><span>${doneToday >= goal ? 'goal reached today' : 'lessons today'}</span></div></div>
+        </div>
+        <ol class="week" aria-label="Days studied this week">${week.map((d) => `<li class="week__day is-${d.st}${d.key === today ? ' is-now' : ''}"><span class="week__mark" aria-hidden="true">${d.st === 'studied' ? icon('check', 'icon--sm') : ''}</span><span class="week__label" aria-hidden="true">${d.label}</span><span class="sr-only">${d.full}${d.key === today ? ' (today)' : ''}: ${dayState[d.st]}</span></li>`).join('')}</ol>
+        <p class="dash-week__foot">${weekDays} of 7 days studied this week</p>
+      </section>
+      <div class="dash-stats">
+        <div class="card dash-stat"><span class="stat__icon">${icon('target')}</span><div><strong class="num">${avg == null ? '—' : pct(avg) + '%'}</strong><span>Average quiz score</span></div></div>
+        <a class="card card--hover dash-stat" href="#/achievements"><span class="stat__icon">${icon('award')}</span><div><strong class="num">${certs}<small> / ${TRACKS.length}</small></strong><span>Certificates</span></div></a>
       </div>
-      <div class="card dash-tile dash-tile--streak">
-        <div><span class="dash-tile__label">Study streak</span><strong class="num">${days} <small>${days === 1 ? 'day' : 'days'}</small></strong></div>
-        <ol class="week" aria-label="Days studied this week">${week.map((d) => `<li class="${studied.has(d.key) ? 'is-on' : ''} ${d.key === today ? 'is-today' : ''}" title="${d.full}"><span class="sr-only">${d.full}: ${studied.has(d.key) ? 'studied' : 'not studied'}</span><span aria-hidden="true">${d.label}</span></li>`).join('')}</ol>
-      </div>
-      <div class="card dash-tile">
-        <span class="stat__icon">${icon('target')}</span>
-        <div><span class="dash-tile__label">Average quiz score</span><strong class="num">${avg == null ? '—' : pct(avg) + '%'}</strong></div>
-      </div>
-      <a class="card card--hover dash-tile" href="#/achievements">
-        <span class="stat__icon">${icon('award')}</span>
-        <div><span class="dash-tile__label">Certificates</span><strong class="num">${certs} <small>/ ${TRACKS.length}</small></strong></div>
-      </a>
     </div>
 
     <div class="dash-cols mt-6">
