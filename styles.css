@@ -2007,8 +2007,9 @@ dd { margin: 0; }
 .ig-heat th { font-weight: 600; color: var(--muted); font-size: var(--fs-xs); text-align: center; padding: 2px 4px; white-space: nowrap; }
 .ig-heat th[scope="row"] { text-align: left; color: var(--text-2); padding-right: 8px; }
 .ig-heat td { min-width: 38px; height: 34px; text-align: center; border-radius: 6px; font-family: var(--font-mono); font-weight: 600; color: var(--text-2); background: color-mix(in srgb, var(--tone) var(--t), var(--surface-2)); }
-.ig-heat td.is-hot { color: #fff; }
-[data-theme="dark"] .ig-heat td.is-hot { color: #06121f; }
+/* hot cells: deepen the fill so the label keeps 4.5:1 whatever the tone */
+.ig-heat td.is-hot { color: #fff; background: color-mix(in srgb, color-mix(in srgb, var(--tone) var(--t), var(--surface-2)), #000 var(--hot-k, 38%)); }
+[data-theme="dark"] .ig-heat td.is-hot { color: #06121f; background: color-mix(in srgb, color-mix(in srgb, var(--tone) var(--t), var(--surface-2)), #fff var(--hot-k, 30%)); }
 .ig-heat tr { animation: ig-rise var(--dur-4) var(--ease-out) both; animation-delay: calc(var(--i, 0) * 60ms); }
 .ig-heat__legend { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: var(--fs-xs); color: var(--muted); }
 .ig-heat__legend i { width: 120px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--surface-2), var(--tone)); border: 1px solid var(--border); }
