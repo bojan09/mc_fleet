@@ -6105,8 +6105,8 @@ function viewDashboard() {
         <p class="dash-week__foot">${weekDays} of 7 days studied this week</p>
       </section>
       <div class="dash-stats">
-        <div class="card dash-stat"><span class="stat__icon">${icon('target')}</span><div><strong class="num">${avg == null ? '—' : pct(avg) + '%'}</strong><span>Average quiz score</span></div></div>
-        <a class="card card--hover dash-stat" href="#/achievements"><span class="stat__icon">${icon('award')}</span><div><strong class="num">${certs}<small> / ${TRACKS.length}</small></strong><span>Certificates</span></div></a>
+        <div class="card dash-stat"><span class="stat__icon">${icon('target')}</span><div><strong class="num">${avg == null ? '—' : pct(avg) + '%'}</strong><span>Average quiz score</span>${progressBar(avg || 0, { cls: 'progress--sm dash-stat__bar', label: 'Average quiz score' })}</div></div>
+        <a class="card card--hover dash-stat" href="#/achievements"><span class="stat__icon">${icon('award')}</span><div><strong class="num">${certs}<small> / ${TRACKS.length}</small></strong><span>Certificates</span>${progressBar(certs / TRACKS.length, { cls: 'progress--sm dash-stat__bar', color: 'var(--success)', label: 'Certificates earned' })}</div></a>
       </div>
     </div>
 

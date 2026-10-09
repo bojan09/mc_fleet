@@ -2805,6 +2805,18 @@ a.dash-stat:hover { text-decoration: none; }
 .dash-stat strong { font-family: var(--font-mono); font-size: 1.5rem; line-height: 1.1; letter-spacing: -0.02em; color: var(--text); }
 .dash-stat strong small { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
 .dash-stat span:not(.stat__icon) { font-size: var(--fs-sm); color: var(--muted); }
+.dash-stat > div { flex: 1; align-self: stretch; align-content: center; }
+.dash-stat__bar { margin-top: var(--sp-2); }
+/* Tablet and up: streak and today's goal sit in a column beside the week strip,
+   which keeps a sensible width instead of spreading the days far apart. */
+@media (min-width: 761px) {
+  .dash-week { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "head head" "stats week" "stats foot"; column-gap: var(--sp-8); align-items: center; }
+  .dash-week__head { grid-area: head; }
+  .dash-week__stats { grid-area: stats; grid-template-columns: minmax(0, 1fr); padding-right: var(--sp-8); border-right: 1px solid var(--border); align-self: stretch; align-content: center; }
+  .dash-week .week, .dash-week__foot { width: 100%; max-width: 420px; justify-self: center; }
+  .dash-week .week { grid-area: week; }
+  .dash-week__foot { grid-area: foot; text-align: center; }
+}
 
 .activity, .dash-links { list-style: none; margin: 0; padding: 0; display: grid; }
 .activity a, .dash-links a { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); color: inherit; text-decoration: none; min-height: var(--tap); }
