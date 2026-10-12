@@ -452,6 +452,8 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--sp-6) 0; }
 .search-trigger .icon { width: 17px; height: 17px; }
 .search-trigger kbd { margin-left: auto; }
 .topbar__progress { display: flex; align-items: center; gap: 8px; padding: 4px; border-radius: var(--r-full); color: var(--text); font-size: var(--fs-sm); font-weight: var(--fw-semibold); }
+.topbar__ring .ring__label { letter-spacing: -0.02em; }
+.topbar__ring .ring__value { stroke: var(--primary); }
 .topbar__progress:hover { text-decoration: none; background: var(--surface-3); }
 
 .main { flex: 1; outline: none; }
@@ -1509,8 +1511,6 @@ a.card.rec-card, .rec-card { display: flex; gap: var(--sp-4); align-items: cente
   .crumbs [aria-current] { font-weight: var(--fw-semibold); font-size: 15px; }
   .crumbs__full { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .crumbs__short { display: inline; }
-  /* The ring alone shows overall progress here (its label is read out); the % text makes room for the page name. */
-  .topbar__progress > span { display: none; }
   .search-trigger { width: 40px; min-width: 40px; height: 40px; padding: 0; justify-content: center; border-color: transparent; box-shadow: none; background: transparent; margin-left: auto; }
   .search-trigger__text, .search-trigger kbd { display: none; }
   .topbar__actions { flex: none; margin-left: 0; }

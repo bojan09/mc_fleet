@@ -637,7 +637,7 @@ function refreshChrome() {
   if (navId) $$('#navTracks [data-nav]').forEach((a) => { if (a.dataset.nav === navId) a.setAttribute('aria-current', 'page'); });
   updateMissedBadge();
   const p = overallProgress();
-  $('#topProgress').innerHTML = `${ring(p, { size: 30, stroke: 4, label: ' ', fs: 1 })}<span>${pct(p)}%</span>`;
+  $('#topProgress').innerHTML = ring(p, { size: 38, stroke: 3.5, fs: 10.5, cls: 'topbar__ring' });
   $('#topProgress').setAttribute('aria-label', `Overall progress ${pct(p)}% — open dashboard`);
   const name = state.name || 'Coordinator';
   const ctx = currentContext();
