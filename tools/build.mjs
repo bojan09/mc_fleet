@@ -26,14 +26,14 @@ const read = (f) => readFileSync(join(src, f), 'utf8');
 const files = readdirSync(src).filter((f) => /^\d.*\.js$/.test(f)).sort();
 
 // Modules that build TRACKS (and REF, RATECON, LESSON_MOVES used by the views).
-const CONTENT = ['01-beginner.js', '02-advanced.js', '03-expert.js', '03b-enrich.js', '03c-deep.js', '03d-industry.js', '03e-invoicing.js', '03f-equipment.js', '03g-operations.js', '03h-operations-track.js', '03k-process-visuals.js', '03k2-job-realism.js'];
+const CONTENT = ['01-beginner.js', '02-advanced.js', '03-expert.js', '03b-enrich.js', '03c-deep.js', '03d-industry.js', '03e-invoicing.js', '03f-equipment.js', '03g-operations.js', '03h-operations-track.js', '03k-process-visuals.js', '03k2-job-realism.js', '03l-software.js', '03l2-software-more.js'];
 const LIGHT = ['id', 'title', 'minutes']; // lesson fields kept in script.js
 const missing = CONTENT.filter((f) => !files.includes(f));
 if (missing.length) throw new Error(`content modules not found: ${missing.join(', ')}`);
 
 // 1. Run the lesson modules on their own.
 const body = CONTENT.map(read).join('').replace(/^[\s\S]*?\(function\s*\(\)\s*\{\s*'use strict';/, '');
-const data = new Function(`${body}\nreturn { TRACKS, REF, RATECON, LESSON_MOVES };`)();
+const data = new Function(`${body}\nreturn { TRACKS, REF, RATECON, LESSON_MOVES, SOFTWARE, SW_SECTIONS, SW_GROUPS };`)();
 
 // 2. Split: outline (light lesson fields) and per-track lesson content.
 const outline = JSON.parse(JSON.stringify(data.TRACKS));
@@ -46,6 +46,11 @@ outline.forEach((t) => {
     content[t.id][`${m.id}.${l.id}`] = heavy;
   }));
 });
+// Platform pages: card, quiz and sources stay in script.js; the 14 page
+// sections load with the page, from content/software.json.
+const swOutline = JSON.parse(JSON.stringify(data.SOFTWARE));
+content.software = {};
+swOutline.forEach((p) => { content.software[p.id] = { sections: p.sections }; delete p.sections; });
 const sha = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 10);
 const dir = join(root, 'content');
 if (existsSync(dir)) rmSync(dir, { recursive: true });
@@ -71,6 +76,10 @@ const [BEGINNER, ADVANCED, EXPERT, OPERATIONS] = ['beginner', 'advanced', 'exper
 const REF = ${JSON.stringify(data.REF)};
 const RATECON = ${JSON.stringify(data.RATECON)};
 const LESSON_MOVES = ${JSON.stringify(data.LESSON_MOVES)};
+const SW_SECTIONS = ${JSON.stringify(data.SW_SECTIONS)};
+const SW_GROUPS = ${JSON.stringify(data.SW_GROUPS)};
+const SOFTWARE = ${JSON.stringify(swOutline)};
+const SOFTWARE_MAP = new Map(SOFTWARE.map((s) => [s.id, s]));
 const CONTENT_FILES = ${JSON.stringify(contentFiles)};
 // Questions per module quiz, so pages without lesson text loaded can show it.
 const QUIZ_SIZE = ${JSON.stringify(Object.fromEntries(data.TRACKS.flatMap((t) => t.modules.map((m) => [`${t.id}.${m.id}`, m.lessons.reduce((a, l) => a + (l.check || []).length, 0)]))))};
@@ -85,6 +94,8 @@ const rebuilt = JSON.parse(JSON.stringify(outline));
 rebuilt.forEach((t) => t.modules.forEach((m) => m.lessons.forEach((l, i) => { m.lessons[i] = Object.assign(l, content[t.id][`${m.id}.${l.id}`]); })));
 const canon = (v) => JSON.stringify(v, (k, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.keys(x).sort().map((key) => [key, x[key]])) : x));
 if (canon(rebuilt) !== canon(data.TRACKS)) throw new Error('outline + content do not match the lesson modules');
+const swRebuilt = JSON.parse(JSON.stringify(swOutline)).map((p) => Object.assign(p, content.software[p.id]));
+if (canon(swRebuilt) !== canon(data.SOFTWARE)) throw new Error('platform outline + content do not match the software modules');
 const kb = (n) => `${Math.round(n / 1024)} KB`;
 console.log(`Built script.js (${kb(core.length)}) and ${Object.keys(content).length} content files (${kb(Object.values(content).reduce((a, c) => a + JSON.stringify(c).length, 0))}) from ${files.length} modules.`);
 
