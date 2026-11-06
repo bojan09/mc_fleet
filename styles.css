@@ -3045,3 +3045,4 @@ a, button, input, select, textarea, label, summary, [role="button"] { touch-acti
 .dg-sec { stroke-dasharray: 2 4; stroke-linecap: round; }
 .dg-head { fill: var(--text-2); }
 .dgfig figcaption { margin-top: var(--sp-3); font-size: var(--fs-sm); color: var(--text-2); }
+.ig__ex { display: inline-block; margin-top: 4px; padding: 1px 8px; border: 1px dashed var(--border-strong); border-radius: var(--r-full); font: 500 var(--fs-xs) var(--font-mono); color: var(--text-2); }

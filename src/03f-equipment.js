@@ -228,7 +228,7 @@ addLesson('beginner', 'm3', {
 
 /* Existing lessons: brakes and advanced tires */
 enrich('beginner.m3.l2', { at: 3, add: [REF.brakeTypes] });
-enrich('advanced.m4.l3', { add: [REF.treadMin, REF.dualsWide] });
+enrich('advanced.m4.l3', { add: [{ note: 'Tread minimums by position and duals vs wide-base singles are in <a href="#/lesson/beginner/m3/l5">Tire Basics (Beginner 3.5)</a>. Review them there if you need a refresher.' }] });
 
 /* Official sources for the regulatory facts used across the academy */
 Object.assign(REF, {

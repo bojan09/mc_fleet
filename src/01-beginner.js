@@ -347,10 +347,10 @@ const BEGINNER = {
               { icon: 'thermo', title: 'Overheating & fire risk', text: 'Rising temperature, steam, smoke, fuel leaks.' },
               { icon: 'layers', title: 'Coupling', text: 'Fifth wheel or kingpin problems, trailer separation risk.' }
             ] },
-            { callout: { kind: 'safety', title: 'Stop criteria', text: 'A vehicle should not continue when the driver cannot safely control, steer or stop it; when there is smoke, fire or fluid pouring; when a red stop-engine warning appears; when a tire has failed; or when a defect would place it out of service under inspection standards. When in doubt, stop safely and get a qualified technician.' } },
-            `In the United States, the Federal Motor Carrier Safety Administration ([[FMCSA]]) sets rules for commercial vehicles, and the Commercial Vehicle Safety Alliance publishes [[OOS]] (out-of-service) criteria used during roadside inspections. Your company\'s safety department is the authority on how these apply.`
+            { callout: { kind: 'safety', title: 'Stop criteria', text: 'The truck stops if the driver can\'t safely steer, control or stop it. It stops if there is smoke, fire or fluid pouring out, or a red stop-engine lamp. It stops if a tire has failed, or if a defect would put it out of service at a roadside inspection. When in doubt, stop safely and get a qualified technician.' } },
+            `In the U.S., the [[FMCSA]] sets the rules for trucks. A group of inspectors, the Commercial Vehicle Safety Alliance, publishes the [[OOS]] (out-of-service) criteria used at roadside inspections. Your company\'s safety department decides how these apply.`
           ],
-          example: { title: 'Pressure vs. safety', text: `Dispatch calls: the load in <span class="mono">T-120</span> is due in 3 hours and the driver says the brakes "feel soft." Dispatch asks if the driver can "just finish the run." A professional coordinator says no — brake performance complaints require inspection first — and immediately works on the fastest safe option: a mobile brake technician or the nearest capable shop, plus a recovery plan for the load.` },
+          example: { title: 'Pressure vs. safety', text: `Dispatch calls. The load in <span class="mono">T-120</span> is due in 3 hours, and the driver says the brakes "feel soft." Dispatch asks if the driver can "just finish the run." A good coordinator says no: a brake complaint needs an inspection first. Then they work on the fastest safe option, such as a mobile brake technician or the nearest capable shop, and a backup plan for the load.` },
           practical: { title: 'Continue or stop?', exercise: {
             type: 'classify', prompt: 'Should the vehicle continue, or stop for service first?', categories: ['Stop — get service', 'Continue — schedule repair'],
             items: [
@@ -420,7 +420,7 @@ const BEGINNER = {
             { widget: 'workflow' },
             { callout: { kind: 'tip', title: 'Company procedure rules', text: 'Approval limits, preferred vendors and documentation systems differ between companies. The workflow stays the same — the details inside each step follow your company\'s procedure.' } }
           ],
-          example: { title: 'Where cases go wrong', text: `Most problems come from skipping steps: not determining urgency (a brake issue gets treated like a light bulb), not confirming the repair (the driver leaves and the problem returns in 50 miles), or not documenting (next month nobody knows the same part was replaced before).` },
+          example: { title: 'Where cases go wrong', text: `Most problems come from skipped steps. Skip urgency, and a brake issue gets treated like a light bulb. Skip confirming the repair, and the problem comes back 50 miles later. Skip the record, and next month nobody knows the part was already replaced.` },
           practical: { title: 'Put the workflow in order', exercise: {
             type: 'order', prompt: 'Arrange the steps in the correct order.',
             items: ['Driver reports issue', 'Gather information', 'Determine urgency', 'Find appropriate vendor', 'Obtain diagnosis', 'Coordinate repair per procedure', 'Confirm repair', 'Close case']

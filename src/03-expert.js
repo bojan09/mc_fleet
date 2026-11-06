@@ -33,9 +33,9 @@ const EXPERT = {
               ['Predictive', 'Use telematics/fault trends to anticipate failures', 'Prevents roadside events', 'Requires data systems and analysis'],
               ['Run-to-failure', 'Deliberately allow failure on low-impact items', 'Avoids unnecessary work', 'Only acceptable for non-critical, low-cost items']
             ] } },
-            { callout: { kind: 'info', title: 'A plan is a set of choices', text: 'Strong fleets mix strategies: intervals for fluids and inspections, condition-based for brakes and tires, predictive for aftertreatment and engines using fault data. Safety-critical systems are never run-to-failure.' } }
+            { callout: { kind: 'info', title: 'A plan is a set of choices', text: 'Strong fleets mix strategies. They use fixed intervals for fluids and inspections, measurements for brakes and tires, and fault data to predict aftertreatment and engine problems. Safety systems are never run until they fail.' } }
           ],
-          example: { title: 'Brake measurements instead of fixed intervals', text: `A fleet replaced brake linings every set interval regardless of wear. By measuring lining thickness and pushrod stroke at each PM (condition-based), they replaced only worn components and caught fast-wearing units earlier — lowering cost and reducing brake-related out-of-service events.` },
+          example: { title: 'Brake measurements instead of fixed intervals', text: `A fleet used to replace brake linings on a fixed schedule, worn or not. Then it started measuring lining thickness and pushrod stroke at every PM. Now it replaces only worn parts and spots fast-wearing units early. Costs went down, and so did brake out-of-service events.` },
           practical: { title: 'Match the strategy', exercise: {
             type: 'classify', prompt: 'Choose the most suitable strategy for each item.', categories: ['Interval-based', 'Condition-based', 'Predictive'],
             items: [
