@@ -263,19 +263,19 @@ lessonAt('beginner.m8.l2').deep.push({ title: 'Reading a truck-stop service invo
     table: { head: ['Position', 'Tread', 'Pressure', 'DOT date', 'Action'], rows: [
       { n: 1, cells: ['Steer · left', '9/32', '110 psi', 'wk 24 · 2023', 'OK'] },
       { n: 2, cells: ['Steer · right', '3/32', '108 psi', 'wk 19 · 2021', 'Replaced: below 4/32 steer minimum'] },
-      { cells: ['Drive 1 · left outer', '8/32', '100 psi', 'wk 31 · 2022', 'OK'] },
+      { n: 4, cells: ['Drive 1 · left outer', '8/32', '100 psi', 'wk 31 · 2022', 'OK'] },
       { cells: ['Drive 1 · left inner', '7/32', '98 psi', 'wk 31 · 2022', 'OK'] },
       { n: 3, cells: ['Drive 2 · right outer', '6/32', '72 psi', 'wk 05 · 2022', 'Slow leak at valve: core replaced, aired to 100 psi'] },
       { n: 5, cells: ['Trailer 2 · right outer', '—', '0 psi', 'wk 40 · 2020', 'Flat, casing damaged: replaced with retread'] },
       { n: 6, cells: ['Trailer 2 · right inner', '5/32', '95 psi', 'wk 40 · 2020', 'Checked after partner flat: OK'] }
     ] },
     totals: [['New steer tire 295/75R22.5', '$485.00'], ['Retread trailer tire 295/75R22.5', '$245.00', 5], ['Casing credit (old trailer tire)', '−$35.00', 5], ['Mount and demount × 2', '$70.00'], ['Steer tire balance', '$25.00'], ['Valve core and cap', '$6.00'], ['Tire disposal', '$10.00'], ['Tax 8.25% (tires and parts)', '$60.72'], ['Total due', '$866.72', 8]],
-    foot: [['Wheel torque', '475 ft-lb · re-check after 50–100 mi', 7], ['DOT code', 'Last 4 digits = week and year made', 4], ['Driver signature', 'M. Reyes'], ['Technician', 'Tech #9']],
+    foot: [['Wheel torque', '475 ft-lb · re-check after 50–100 mi', 7], ['Driver signature', 'M. Reyes'], ['Technician', 'Tech #9']],
     notes: [
       { n: 1, t: 'Position', d: 'Axle, side, and inner or outer on duals. It must match what the driver reported.' },
       { n: 2, t: 'Legal minimum', d: 'Steer tires need at least 4/32 in of tread, other positions 2/32 in (49 CFR 393.75). 3/32 on a steer is replaced, not watched.' },
       { n: 3, t: 'Pressure', d: '72 psi against 100 on its partner means a leak. Low pressure ruins casings and causes blowouts.' },
-      { n: 4, t: 'DOT date', d: 'The last four digits of the DOT code are the week and year the tire was made. Old tires are worth flagging.' },
+      { n: 4, t: 'DOT date', d: 'The last four digits of the DOT code on the sidewall are the week and year the tire was made: 3122 means week 31 of 2022. The shop copies it to this column. Old tires are worth flagging.' },
       { n: 5, t: 'Retread and casing credit', d: 'Retreads are common on trailers and drives. A damaged old tire may earn a smaller credit, or none.' },
       { n: 6, t: 'The dual partner', d: 'When one dual goes flat, its partner carried double load. Check it.' },
       { n: 7, t: 'Torque and re-check', d: 'Record the torque and plan a re-check after the first 50–100 miles.' },
