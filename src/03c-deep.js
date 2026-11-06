@@ -30,8 +30,10 @@ Object.assign(REF, {
     ['III', 'Driver-Only', 'Driver credentials, hours of service, documents'],
     ['IV', 'Special Inspection', 'A one-time examination of a particular item'],
     ['V', 'Vehicle-Only', 'Full vehicle inspection without the driver present'],
-    ['VI', 'Enhanced (radioactive shipments)', 'Select radiological shipments']
-  ], note: 'A vehicle that passes a Level I or V inspection with no critical violations may receive a CVSA decal, generally valid for up to three months.' },
+    ['VI', 'Enhanced (radioactive shipments)', 'Select radiological shipments'],
+    ['VII', 'Jurisdictional Mandated', 'A state or provincial program that does not meet any other level; no CVSA decal'],
+    ['VIII', 'Electronic', 'Data checked wirelessly while the vehicle is moving, with no officer contact']
+  ], note: 'A vehicle that passes a Level I, V or VI inspection with no critical violations may receive a CVSA decal, valid for up to three months.' },
   dvir: { ig: 'process', icon: 'clipboard', title: 'The DVIR repair loop', items: [
     { icon: 'clipboard', t: 'Driver inspects', d: 'Pre-trip / post-trip' }, { icon: 'file', t: 'Defect reported', d: 'On the DVIR' }, { icon: 'wrench', t: 'Repair', d: 'Before operating, if safety-related' },
     { icon: 'check-circle', t: 'Certify', d: 'Repair (or no repair needed) certified' }, { icon: 'users', t: 'Next driver reviews', d: 'Signs off before driving' }
@@ -97,7 +99,7 @@ addModule('beginner', {
         REF.cvsa,
         { h: 'How inspections affect the company' },
         `Roadside inspection results feed the FMCSA\'s Compliance, Safety, Accountability program ([[CSA]]). Vehicle violations count toward the <strong>Vehicle Maintenance</strong> category (one of seven "BASICs"). Poor scores can lead to more inspections and interventions. Every defect you fix before it reaches the road helps the company\'s record.`,
-        { ig: 'bars', icon: 'shield', title: 'Where vehicle violations commonly come from (example fleet, one year)', fmt: '', items: [['Lighting', 41, 'critical'], ['Brakes / adjustment', 33, 'critical'], ['Tires', 19, 'warning'], ['Air leaks', 11, 'warning'], ['Other', 9]], note: 'Illustrative distribution. Lighting and brakes are consistently among the most-cited vehicle violations — and among the easiest to prevent with good DVIR follow-up.' }
+        { ig: 'bars', icon: 'shield', title: 'Most common vehicle out-of-service violations, U.S., fiscal year 2025', fmt: '', items: [['Tire flat, leaking or under 50% pressure', 93806, 'critical'], ['Defective brakes, 20% or more', 59133, 'critical'], ['Turn signal out, rearmost vehicle', 36619, 'warning'], ['Stop lamp out', 24516, 'warning']], note: 'Out-of-service orders from FMCSA roadside inspection data, as published in public FY2025 summaries; counts are approximate. Tires, brakes and lights are also the items a good DVIR and pre-trip catch first.' }
       ],
       example: { title: 'Cheap bulb, expensive violation', text: `A $4 bulb out on a trailer led to a Level II inspection and a violation on the company\'s record. After reviewing a quarter\'s inspections, the coordinator started a "lights and air" check at every trailer drop — lighting violations fell sharply the next quarter.` },
       practical: { title: 'Match the inspection level', exercise: {
@@ -111,7 +113,7 @@ addModule('beginner', {
         { t: 'mc', q: 'Which CSA category do vehicle defect violations mainly affect?', o: ['Unsafe Driving', 'Vehicle Maintenance', 'Driver Fitness', 'Crash Indicator'], a: 1, e: 'Vehicle defects count toward the Vehicle Maintenance BASIC.' },
         { t: 'tf', q: 'Periodic (annual) inspection reports must be kept for 14 months under U.S. rules.', a: true, e: '49 CFR 396.21 requires retention for 14 months.' }
       ],
-      takeaways: ['Maintenance records must show inspections, repairs and schedules.', 'CVSA levels range from full inspections to driver-only.', 'Violations affect the company\'s CSA record.', 'Lighting and brakes are common — and preventable — violations.'],
+      takeaways: ['Maintenance records must show inspections, repairs and schedules.', 'CVSA levels range from full inspections to driver-only.', 'Violations affect the company\'s CSA record.', 'Tires, brakes and lights cause most vehicle out-of-service orders, and most are preventable.', 'A roadside report with violations is certified within 15 days and kept for 12 months.'],
       tips: ['Review roadside inspection reports weekly and open cases for every vehicle violation.', 'Track violations by unit and by category.'],
       mistakes: ['Assuming a clean inspection means the unit is fine for months.', 'Losing inspection paperwork that proves repairs were made.']
     }

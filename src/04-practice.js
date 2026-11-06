@@ -232,6 +232,24 @@ const SCENARIOS = [
       { text: 'Okay, call me when it\'s done.', grade: 'poor', fb: 'Accepts 3 days of downtime without exploring options, and leaves the load stranded.' },
       { text: 'Tow it to another shop.', grade: 'ok', fb: 'Might help if that shop has the part — but confirm availability first; the tow itself costs time and money.' }
     ] },
+  { id: 'roadside-oos', title: 'Put out of service at a roadside inspection', cat: 'Compliance', level: 'Beginner', from: 'Driver · T-133 / TR-532', message: 'Got pulled into the scale for a Level I. Trooper put the trailer out of service: right rear brake out of adjustment. Sending you a photo of the report. He says I can\'t move it. Can I limp it to the truck stop down the road?', ctx: ['Loaded', 'I-20 WB scale', '10:15'],
+    options: [
+      { text: 'No, it stays parked until the brake is fixed. I\'m sending a brake-qualified mobile tech to the scale now and telling dispatch the load is delayed. Please send the full report photo and stay with the unit. I\'ll call you with the ETA.', grade: 'best', fb: 'An out-of-service vehicle may not move until the listed repair is done (49 CFR 396.9(c)). Bring the repair to the unit, keep dispatch informed, and get the report: the carrier must certify the repair within 15 days.' },
+      { text: 'It\'s only one brake. Go slow to the truck stop and we\'ll fix it there.', grade: 'poor', fb: 'Driving an out-of-service vehicle is a serious violation for the driver and the carrier, and the brake is still defective. Never move it.' },
+      { text: 'Okay, I\'ll find a shop near you for tomorrow.', grade: 'ok', fb: 'Right that it needs repair, but a mobile brake tech can usually fix an adjustment at the scale today. Waiting strands the driver and the load, and you still need the report.' }
+    ] },
+  { id: 'annual-lapse', title: 'Expired annual inspection at dispatch', cat: 'Compliance', level: 'Advanced', from: 'Dispatcher', message: 'TR-540 is loaded and leaving at 15:00. Yard says the annual sticker expired last week. It\'s a 200-mile run, nobody checks trailers. Can we just send it?', ctx: ['Loaded', 'Yard', '11:40'],
+    options: [
+      { text: 'Not on an expired annual. Our yard inspector can do it at 13:00, which still makes 15:00 if it passes. I\'m also holding TR-552 as a spare in case it needs repairs. I\'ll confirm by 14:00.', grade: 'best', fb: 'Every trailer needs a periodic inspection at least every 12 months (49 CFR 396.17). Missing proof is one of the most-cited violations. You fixed the gap before dispatch and protected the load in parallel.' },
+      { text: 'Fine, it\'s only 200 miles.', grade: 'poor', fb: 'An expired periodic inspection is a violation the moment the trailer is on the road, whatever the distance, and it goes on the company record.' },
+      { text: 'No, it can\'t go. Find another trailer.', grade: 'ok', fb: 'Correct on compliance, but you left dispatch to solve it alone. An inspection today might keep the original plan.' }
+    ] },
+  { id: 'tpms-alert', title: 'Tire pressure alert on a loaded trailer', cat: 'Roadside', level: 'Advanced', from: 'Telematics · TR-518', message: 'TPMS alert: axle 2 left outer, 61 psi and falling (other tires 100–105 psi). Unit is moving on I-35, loaded, 70 miles from delivery.', ctx: ['Loaded', 'I-35 NB', '09:05'],
+    options: [
+      { text: 'Call the driver now: take the next safe exit and stop. Get a gauge reading on that tire and its dual partner. If it\'s still falling or hissing, it stays parked and I send mobile tire service with axle 2, left, outer.', grade: 'best', fb: 'A fast-falling tire at about 60% pressure can fail at speed and take its dual with it. Stop safely, confirm with a gauge, and treat a hiss or a reading under half the sidewall pressure as out of service (49 CFR 393.75).' },
+      { text: 'It\'s only 70 miles. Let it finish and we\'ll check it after delivery.', grade: 'poor', fb: 'A tire losing pressure on a loaded trailer can blow out and overheat its dual. Waiting turns a tire repair into a road call, or worse.' },
+      { text: 'Send a note to check tire pressure at the next PM.', grade: 'poor', fb: 'A falling reading is an active leak, not a PM item.' }
+    ] },
   { id: 'lead-1', title: 'Why is downtime up 30%?', cat: 'Leadership', level: 'Expert', from: 'Operations Director', message: 'Downtime is up 30% this month. What\'s going on and what are you doing about it?', ctx: ['Management', 'Monthly review'],
     options: [
       { text: 'Repair counts are flat, but average approval wait rose from 3 to 9 hours after our fleet manager\'s on-call changed — that explains most of the increase. I recommend pre-approval up to $1,500 for common repairs and a backup approver after hours. I can have a draft process to you tomorrow.', grade: 'best', fb: 'Data-backed diagnosis of the process issue, with a specific recommendation and a deliverable.' },

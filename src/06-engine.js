@@ -379,7 +379,7 @@ function lessonCheckHTML(x) {
   return `<div class="check" data-check="${x.key}">
     <div class="check__head"><div><strong>Knowledge check</strong><div class="small muted" data-check-sum>${prev ? `Last score: ${prev.score}/${prev.total}` : `${qs.length} questions · instant feedback`}</div></div>
       <div class="check__progress" aria-hidden="true">${qs.map(() => '<span></span>').join('')}</div></div>
-    ${qs.map((q, i) => `<div class="q" data-qi="${i}"><div class="q__type"><span class="badge badge--outline">${Q_LABEL[q.t] || 'Question'}</span></div>${questionHTML(q, `${x.key}-q${i}`)}
+    ${qs.map((q, i) => `<div class="q" data-qi="${i}"><div class="q__type"><span class="badge badge--outline">${Q_LABEL[q.t] || 'Question'}</span></div>${questionHTML(q, `${x.key}-q${i}`, q.t === 'tf' ? null : shuffle(qOptions(q).map((_, n) => n)))}
       <div class="q__actions"><button type="button" class="btn btn--primary btn--sm" data-q-check>Check answer</button></div><div data-q-fb aria-live="polite"></div></div>`).join('')}
   </div>`;
 }

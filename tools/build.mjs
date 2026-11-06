@@ -26,7 +26,7 @@ const read = (f) => readFileSync(join(src, f), 'utf8');
 const files = readdirSync(src).filter((f) => /^\d.*\.js$/.test(f)).sort();
 
 // Modules that build TRACKS (and REF, RATECON, LESSON_MOVES used by the views).
-const CONTENT = ['01-beginner.js', '02-advanced.js', '03-expert.js', '03b-enrich.js', '03c-deep.js', '03d-industry.js', '03e-invoicing.js', '03f-equipment.js', '03g-operations.js', '03h-operations-track.js', '03k-process-visuals.js'];
+const CONTENT = ['01-beginner.js', '02-advanced.js', '03-expert.js', '03b-enrich.js', '03c-deep.js', '03d-industry.js', '03e-invoicing.js', '03f-equipment.js', '03g-operations.js', '03h-operations-track.js', '03k-process-visuals.js', '03k2-job-realism.js'];
 const LIGHT = ['id', 'title', 'minutes']; // lesson fields kept in script.js
 const missing = CONTENT.filter((f) => !files.includes(f));
 if (missing.length) throw new Error(`content modules not found: ${missing.join(', ')}`);

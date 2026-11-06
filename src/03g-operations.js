@@ -25,7 +25,7 @@ Object.assign(REF, {
   hosBasics: { ig: 'stats', icon: 'clock', title: 'Hours of Service basics — property-carrying drivers (U.S.)', items: [
     { v: '11', u: 'h', l: 'maximum driving after 10 consecutive hours off duty', tone: 'info' },
     { v: '14', u: 'h', l: 'on-duty window — no driving after the 14th hour, even with breaks', tone: 'warning' },
-    { v: '30', u: 'min', l: 'break required after 8 cumulative hours of driving', tone: 'info' },
+    { v: '30', u: 'min', l: 'break after 8 cumulative hours of driving; any 30 straight minutes not driving counts, including shop time', tone: 'info' },
     { v: '60/70', u: 'h', l: 'on-duty limit in 7/8 consecutive days', tone: 'info' }
   ], note: 'Summary of FMCSA rules (49 CFR Part 395). Exceptions exist (short-haul, adverse driving conditions, sleeper-berth split and others). Dispatch and the safety department apply HOS — the coordinator uses it to judge whether a repair time still works for the load.' },
   routeFactors: { ig: 'hub', icon: 'route', title: 'What goes into a truck route', center: { icon: 'route', t: 'Route plan' }, items: [
@@ -106,8 +106,8 @@ addLesson('advanced', 'm6', {
     type: 'choose', prompt: 'Driver started duty at 05:00 and has driven 6 hours. The truck is at a shop; repair ETR is 14:30. Delivery is 4 hours of driving away. What should you tell dispatch?',
     options: [
       { text: 'Nothing — the truck will be fixed today.', correct: false, why: 'Fixed isn\'t the same as able to deliver. The window matters.' },
-      { text: 'At 14:30 the driver has 4.5 hours left in the 14-hour window (ends 19:00) and 5 hours of driving time; the 4-hour run plus the 30-minute break due after 8 hours of driving uses the whole window, with no margin. Flag the risk now.', correct: true, why: 'Give dispatch the numbers early so they can decide on a relay or a new appointment.' },
-      { text: 'Tell the driver to skip the 30-minute break to save time.', correct: false, why: 'Never suggest breaking HOS rules. Dispatch and safety own HOS decisions.' }
+      { text: 'At 14:30 the driver has 4.5 hours left in the 14-hour window (ends 19:00) and 5 hours of driving time. The shop wait already counts as the 30-minute break, so the 4-hour run fits with about 30 minutes to spare. Any delay at delivery uses up that margin, so flag the risk now.', correct: true, why: 'Give dispatch the numbers early so they can decide on a relay or a new appointment. Since 2020, any 30 straight minutes off the wheel, including on-duty time at a shop, satisfies the break (49 CFR 395.3(a)(3)(ii)).' },
+      { text: 'Tell the driver to log the shop wait as off duty so the clock stops.', correct: false, why: 'Time waiting with the truck at a shop is usually on-duty time, and the 14-hour window keeps running either way. Never suggest how a driver should log. Dispatch and safety own HOS decisions.' }
     ]
   } },
   check: [

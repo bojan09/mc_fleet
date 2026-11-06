@@ -25,11 +25,11 @@ EXAMS.operations = {
         ] },
       reveal: [['Linehaul', '$2,150.00'], ['FSC', '$310.00'], ['Detention', '$50/hr after 2 h']] },
     { label: 'Delay', title: 'Handle a mid-trip delay',
-      blocks: [{ msg: { kind: 'note', title: 'Situation', text: 'The driver started duty at 05:00 and has driven 5 hours. A charging-system fault stopped the tractor; the shop\'s ETR is 13:00. From the shop, the delivery is 6 hours of driving.' } }],
+      blocks: [{ msg: { kind: 'note', title: 'Situation', text: 'The driver started duty at 05:00 and has driven 5 hours. A charging-system fault stopped the tractor; the shop\'s ETR is 13:00. From the shop, the delivery is 7 hours of driving.' } }],
       exercise: { type: 'choose', prompt: 'What do you tell dispatch?', options: [
         { text: '"Truck will be fixed at 13:00, all good."', correct: false, why: 'Fixed isn\'t the same as able to deliver. Check the driver\'s hours.' },
-        { text: '"ETR 13:00. At that point the driver has 6 hours left in the 14-hour window (ends 19:00) and a 30-minute break due after 3 more hours of driving — 6 hours of driving plus the break doesn\'t fit. Today\'s run to Charlotte isn\'t possible with this driver; the broker needs an update on the 07:30 appointment."', correct: true, why: 'Numbers early let dispatch update the broker, protect the appointment or plan a relay.' },
-        { text: '"Tell the driver to skip the break so he makes it."', correct: false, why: 'Never suggest breaking Hours of Service rules.' }
+        { text: '"ETR 13:00. At that point the driver has 6 hours of driving left and 6 hours in the 14-hour window (ends 19:00). The run is 7 hours, so today\'s run to Charlotte isn\'t possible with this driver; the broker needs an update on the 07:30 appointment."', correct: true, why: 'Numbers early let dispatch update the broker, protect the appointment or plan a relay.' },
+        { text: '"Tell the driver to push the last hour so he makes it."', correct: false, why: 'Driving past the 11-hour limit or the 14-hour window is illegal. Never suggest breaking Hours of Service rules.' }
       ] },
       reveal: [['Delay', 'Tractor repair, ETR 13:00'], ['Broker update', 'Via dispatch, 11:20']] },
     { label: 'Documents', title: 'Gather the invoice documents',

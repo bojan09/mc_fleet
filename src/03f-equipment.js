@@ -68,7 +68,7 @@ Object.assign(REF, {
     ['Article 5 ft or shorter, 1,100 lb or less', 'At least 1 tiedown', '393.110(b)'],
     ['Article 5 ft or shorter over 1,100 lb, or 5–10 ft long', 'At least 2 tiedowns', '393.110(b)'],
     ['Article longer than 10 ft', '2 tiedowns for the first 10 ft, plus 1 for each additional 10 ft or part of 10 ft', '393.110(b)'],
-    ['Driver re-inspection', 'Within the first 50 miles, then every 3 hours or 150 miles, whichever comes first', '392.9']
+    ['Driver re-inspection', 'Within the first 50 miles, then at every change of duty status, or every 3 hours or 150 miles, whichever comes first', '392.9']
   ], note: 'Tiedown counts apply when an article is not blocked against forward movement; commodity-specific rules (logs, metal coils, heavy equipment and others) add requirements. Summary for orientation only — the regulation and your safety department are the authority.' },
   treadPositions: { ig: 'versus', icon: 'target', title: 'Steer, drive and trailer tires look different for a reason', items: [
     { art: 'tread-steer', t: 'Steer tire', sub: 'Front axle — steering and handling.', facts: [['Tread', 'Rib: grooves run around the tire'], ['U.S. minimum', '4/32 in tread depth'], ['Rule', 'Regrooved tires aren\'t allowed on the front wheels of heavy trucks and tractors (49 CFR 393.75)']] },
