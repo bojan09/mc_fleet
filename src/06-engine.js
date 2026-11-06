@@ -336,6 +336,7 @@ function renderBlock(b) {
   }
   if (b.ig) return infographicHTML(b);
   if (b.doc) return docHTML(b.doc);
+  if (b.diagram) return diagramHTML(b.diagram, b.caption);
   if (b.industry) {
     const x = b.industry;
     return `<aside class="industry" aria-label="Industry example: ${esc(x.name)}"><div class="industry__head"><span class="industry__tag">${icon('pin', 'icon--sm')} Industry example</span><span class="badge badge--outline">${esc(x.cat)}</span></div>`

@@ -3030,3 +3030,18 @@ a, button, input, select, textarea, label, summary, [role="button"] { touch-acti
 .sw-real p { margin: 6px 0; color: var(--text-2); }
 .sw-real ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
 .sdoc__table table { min-width: 560px; }
+
+/* Mechanism diagrams (inline SVG) */
+.dgfig { margin: var(--sp-5) 0; border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); padding: var(--sp-4); }
+.dgfig__scroll { overflow-x: auto; }
+.dg { display: block; width: 100%; max-width: 680px; min-width: 520px; height: auto; margin: 0 auto; }
+.dg-box rect { fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1.5; }
+.dg-t { fill: var(--text); font: 600 15px var(--font-sans); }
+.dg-s { fill: var(--text-2); font: 12px var(--font-sans); }
+.dg-lab { fill: var(--text-2); font: 11.5px var(--font-mono); }
+.dg-l { fill: none; stroke: var(--text-2); stroke-width: 2; }
+.dg-ctl { stroke-dasharray: 6 5; }
+.dg-pri, .dg-sec { stroke: var(--primary); stroke-width: 3; }
+.dg-sec { stroke-dasharray: 2 4; stroke-linecap: round; }
+.dg-head { fill: var(--text-2); }
+.dgfig figcaption { margin-top: var(--sp-3); font-size: var(--fs-sm); color: var(--text-2); }

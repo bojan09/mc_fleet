@@ -326,3 +326,27 @@ lessonAt('advanced.m4.l2').deep.push({ title: 'Reading a roadside service ticket
     { label: 'Amount left under the authorization ($)', accept: ['159.75', '$159.75'] }
   ] } }
 ] });
+
+/* ---- Beginner 3.2: how the air brake system works (mechanism diagram) ---- */
+(() => {
+  const d = lessonAt('beginner.m3.l2').deep;
+  const at = d.findIndex((x) => x.title === 'Air-brake numbers to know');
+  d.splice(at < 0 ? d.length : at, 0, { title: 'How air brakes work', blocks: [
+    `Truck brakes run on compressed air. Follow the air from the engine to the wheels and most driver complaints start to make sense: a leak anywhere in this path lowers pressure, and low pressure means weak brakes or brakes that lock on.`,
+    { diagram: 'airbrake', caption: 'Simplified tractor-trailer air brake system. Layouts vary by truck; on most tractors the primary circuit works the rear brakes and the secondary circuit the front. Typical governor settings are shown; check the truck maker\'s figures.' },
+    { table: { head: ['Part', 'What it does', 'What a driver might report'], rows: [
+      ['Compressor and governor', 'Builds air pressure; the governor turns pumping off near the top of the range and back on near the bottom.', '"Air builds really slowly" or "never gets to full."'],
+      ['Air dryer', 'Removes water and oil before air reaches the tanks.', 'Water when tanks are drained; frozen lines in winter.'],
+      ['Tanks and check valves', 'Store air; check valves keep one circuit working if the other leaks.', 'One gauge drops while the other holds.'],
+      ['Foot valve', 'Sends air to the brakes when the driver presses the pedal.', '"Gauge drops fast every time I brake."'],
+      ['Spring brakes', 'Parking and emergency brakes held off by air; they apply when air is lost.', '"Brakes locked up and I can\'t release them."'],
+      ['Glad hands and trailer valves', 'Carry supply (red) and service (blue) air to the trailer.', '"Hiss at the back of the tractor" or "trailer brakes drag."']
+    ] } },
+    { ig: 'process', icon: 'zap', title: 'At each wheel: from air to stopping', items: [
+      { icon: 'activity', t: 'Brake chamber', d: 'Air pushes a diaphragm' }, { icon: 'arrow-r', t: 'Pushrod', d: 'Moves out: its travel is the "stroke"' },
+      { icon: 'wrench', t: 'Slack adjuster', d: 'Turns the camshaft; keeps stroke in limits' }, { icon: 'rotate', t: 'S-cam', d: 'Spreads the shoes' },
+      { icon: 'target', t: 'Shoes on drum', d: 'Friction stops the wheel' }
+    ], note: 'As linings wear, the pushrod has to travel farther. Automatic slack adjusters take up the slack; when one fails, the brake goes out of adjustment.' },
+    { callout: { kind: 'warning', title: 'What this means on a call', text: 'Any report of air loss, a hiss that does not stop, or a gauge that falls fast is a brake-system defect. The truck stays parked and a brake-qualified technician comes to it.' } }
+  ] });
+})();
