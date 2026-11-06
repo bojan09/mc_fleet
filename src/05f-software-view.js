@@ -8,7 +8,7 @@
 const swCheckKey = (s) => `sw.${s.id}`;
 const swHref = (s) => `#/software/${s.id}`;
 function swBrand(s, cls = '') {
-  return `<span class="sw-brand tone-${s.tone} ${cls}" aria-hidden="true"><span class="sw-brand__icon">${icon(s.icon)}</span><span class="sw-brand__name">${esc(s.name)}</span></span>`;
+  return `<span class="sw-brand tone-${s.tone} ${cls}" aria-hidden="true"><span class="sw-brand__icon">${icon(s.icon)}</span><span class="sw-brand__name">${esc(s.brand || s.name)}</span></span>`;
 }
 function swStatus(s) {
   const c = state.checks[swCheckKey(s)];
@@ -45,10 +45,10 @@ function viewSoftware(id) {
     </article>`;
   };
   const html = `<div class="page sw-hub">
-    ${pageHead({ eyebrow: `${icon('monitor', 'icon--sm')} Software & Platforms`, title: 'Software & Platforms', text: 'Real-world tools that trucking companies use for fleet records, maintenance, telematics, compliance, dispatch and temperature-controlled freight. Learn what each one does, who uses it and how a Maintenance Coordinator works with it.' })}
-    <div class="sw-grid stagger">${SOFTWARE.map(card).join('')}</div>
+    ${pageHead({ eyebrow: `${icon('monitor', 'icon--sm')} Software & Platforms`, title: 'Software & Platforms', text: 'Real-world tools that trucking companies use for fleet records, maintenance, telematics, engine diagnostics, temperature-controlled freight, roadside help, parts, dispatch and payments. Learn what each one does, who uses it and how a Maintenance Coordinator works with it.' })}
+    ${SW_GROUPS.map((g) => { const list = SOFTWARE.filter((s) => (s.group || SW_GROUPS[0]) === g); return list.length ? `<section class="sw-group" aria-labelledby="swg-${list[0].id}"><h2 class="sw-group__h" id="swg-${list[0].id}">${esc(g)} <span class="sw-group__n">${list.length}</span></h2><div class="sw-grid stagger">${list.map((x, i) => card(x, i).replace('<h2>', '<h3>').replace('</h2>', '</h3>')).join('')}</div></section>` : ''; }).join('')}
 
-    <section class="sw-hub__sec"><div class="section-head"><div><span class="eyebrow">How they fit together</span><h2>One truck, four systems</h2></div></div>
+    <section class="sw-hub__sec"><div class="section-head"><div><span class="eyebrow">How they fit together</span><h2>One truck, four core systems</h2></div></div>
       <div class="sw-map" role="list">
         <div class="sw-map__truck" role="listitem">${artSVG('rig', 'Tractor-trailer')}<strong>The truck, trailer and driver</strong></div>
         ${[['samsara', 'Reports what the truck is doing', 'Location, engine faults, safety events, HOS, DVIRs'], ['fleetio', 'Holds what the truck needs and has had', 'Records, PM reminders, issues, work orders, costs'], ['pro-transport', 'Knows which load it\'s on', 'Loads, dispatch, driver app, documents, billing'], ['thermo-king', 'Keeps the reefer cargo at temperature', 'Refrigeration unit, controller, alarms, TracKing']].map(([sid, a, b]) => { const s = SOFTWARE_MAP.get(sid); return `<a class="sw-map__node tone-${s.tone}" role="listitem" href="${swHref(s)}">${swBrand(s, 'sw-brand--sm')}<strong>${esc(a)}</strong><span>${esc(b)}</span></a>`; }).join('')}
@@ -77,7 +77,7 @@ function viewSoftware(id) {
         { text: 'You need T-214\'s repair history for a warranty claim', answer: 'Fleetio', why: 'Service history and work orders hold the repair record.' }
       ] }, { title: 'Which system?' })}
     </section>
-    <p class="scope-note">${icon('info', 'icon--sm')}<span>Fleetio, Samsara, ProTransport (RTS) and Thermo King (Trane Technologies) are trademarks of their owners. MC Academy is not affiliated with or endorsed by them. Descriptions are based on each company's official website, help center or literature, linked on every page. Features and plans change, so always check your company's own setup. Examples use fictional fleets.</span></p>
+    <p class="scope-note">${icon('info', 'icon--sm')}<span>All product and company names on these pages are trademarks of their owners. MC Academy is not affiliated with or endorsed by them. Descriptions are based on each company's official website, help center or literature, linked on every page. Features and plans change, so always check your company's own setup. Examples use fictional fleets.</span></p>
   </div>`;
   return { html, title: 'Software & Platforms', nav: 'software', crumbs: [['Software & Platforms']] };
 }

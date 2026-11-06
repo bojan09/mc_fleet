@@ -21,7 +21,7 @@ const LEARN_PATH = [
   { id: 'docs', tag: 'next', title: 'Work Orders & Documentation', items: [{ m: 'beginner.m6' }, { m: 'beginner.m8' }],
     needs: 'Maintenance, Inspections & Safety — a work order starts from a defect',
     why: 'The repair workflow from first call to closed case, and the records that prove what was done, when, and what it cost.' },
-  { id: 'software', tag: 'next', title: 'Fleet & Transportation Software', items: [{ sw: 'fleetio' }, { sw: 'samsara' }, { sw: 'thermo-king' }, { sw: 'pro-transport' }],
+  { id: 'software', tag: 'next', title: 'Fleet & Transportation Software', items: [{ sw: 'fleetio' }, { sw: 'samsara' }, { sw: 'thermo-king' }, { sw: 'pro-transport' }, { sw: 'decisiv' }, { sw: 'fleetnet' }],
     needs: 'Work Orders & Documentation — software records a process you should already understand',
     why: 'The real tools where that work is recorded and monitored: maintenance records, telematics, reefer units and dispatch.' },
   { id: 'real', tag: 'next', title: 'Real-World Maintenance Coordination', items: [{ m: 'beginner.m4' }, { m: 'beginner.m7' }, { page: ['Scenario Simulator', '#/scenarios', 'message', 'Practice Lab'] }, { page: ['Beginner final assessment', '#/final/beginner', 'award', 'Final assessment'] }],
@@ -42,6 +42,8 @@ const LEARN_TOGETHER = [
   { t: 'Fleetio + Maintenance Workflows', d: 'See how inspections, issues and work orders map to the workflow you learned.', items: [{ sw: 'fleetio' }, { m: 'beginner.m6' }] },
   { t: 'Samsara + Telematics + Fleet Monitoring', d: 'Fault codes, location and DVIRs, then how fleets track them across every unit.', items: [{ sw: 'samsara' }, { m: 'advanced.m7', later: true }, { m: 'expert.m9', later: true }] },
   { t: 'Thermo King + Refrigeration + Reefer Maintenance', d: 'Know the reefer trailer first, then the unit, its alarms and its maintenance.', items: [{ m: 'beginner.m3' }, { sw: 'thermo-king' }, { page: ['Reefer unit in the Visual Library', '#/library/reeferunit', 'image'] }] },
+  { t: 'Engine-maker alerts + Fault codes', d: 'Read a fault list first, then see how Cummins and Detroit add priority and next steps.', items: [{ m: 'advanced.m2', later: true }, { sw: 'cummins-connected' }, { sw: 'detroit-connect' }] },
+  { t: 'Roadside networks + Breakdowns', d: 'Run the first ten minutes of a breakdown, then hand it to a network, a truck stop shop or a parts branch.', items: [{ m: 'beginner.m5' }, { sw: 'fleetnet' }, { sw: 'loves-truck-care' }, { sw: 'fleetpride' }] },
   { t: 'Dispatch + Loads + Transportation Operations', d: 'How loads, drivers and dispatch work, and how a breakdown affects them.', items: [{ sw: 'pro-transport' }, { m: 'operations.m1' }, { m: 'advanced.m6', later: true }] }
 ];
 const NOT_YET = [

@@ -42,7 +42,7 @@ into `index.html` (`script.js?v=…`, `styles.css?v=…`) and `sw.js` (`VERSION`
 hash of every file it precaches), so each release gets its own offline cache and
 open pages offer a reload. No manual version bump is needed.
 
-Software & Platforms facts (`src/03l-software.js`) are re-checked against the
+Software & Platforms facts (`src/03l-software.js`, `src/03l2-software-more.js`) are re-checked against the
 official sources every quarter; `tools/check.mjs` warns when a platform's
 `checked` month is 3 or more months old.
 
