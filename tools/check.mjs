@@ -28,6 +28,11 @@ function walk(v, where) {
     if (v.t === 'tf') { if (typeof v.a !== 'boolean') err(where, `true/false answer must be boolean: "${v.q.slice(0, 50)}"`); }
     else if (!Array.isArray(v.o) || !Number.isInteger(v.a) || v.a < 0 || v.a >= v.o.length) err(where, `answer index out of range: "${v.q.slice(0, 50)}"`);
     if (!v.e) warn(where, `question has no explanation: "${v.q.slice(0, 50)}"`);
+    // Answer-length cue: a correct option much longer than every wrong one gives the answer away.
+    if (v.t !== 'tf' && Array.isArray(v.o) && v.o.length > 2 && Number.isInteger(v.a)) {
+      const len = v.o.map((x) => String(x).length); const other = Math.max(...len.filter((_, i) => i !== v.a));
+      if (len[v.a] > other * 1.5) warn(where, `correct option is ${(len[v.a] / other).toFixed(1)}x longer than any wrong one (answer cue): "${v.q.slice(0, 50)}"`);
+    }
   }
   if (typeof v.type === 'string' && (v.options || v.items || v.fields)) {
     const t = v.type; count.exercises++;

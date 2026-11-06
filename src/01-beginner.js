@@ -125,7 +125,7 @@ const BEGINNER = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'What does "owning a case" mean?', o: ['You pay for the repair', 'You are responsible for the case until it is closed, including follow-up and communication', 'You must personally inspect the vehicle', 'You decide which parts the technician uses'], a: 1, e: 'Ownership means accountability for the case\'s progress and communication until it is closed.' },
+            { t: 'mc', q: 'What does "owning a case" mean?', o: ['You pay the repair invoice from your department\'s budget once approved', 'You are responsible for the case until it is closed, including follow-up and communication', 'You must inspect the vehicle in person before any vendor may start work', 'You choose which parts and brands the technician installs on each repair'], a: 1, e: 'Ownership means accountability for the case\'s progress and communication until it is closed.' },
             { t: 'tf', q: 'Maintenance requests only come from drivers calling in.', a: false, e: 'Requests also come from inspection reports, telematics alerts, dispatch, PM schedules and shops.' }
           ],
           takeaways: ['Coordinators monitor the fleet, take in requests, and coordinate repairs.', 'Every issue becomes a documented case with a clear owner.', 'Requests come from many channels — drivers, DVIRs, telematics, dispatch.', 'A case never sits without a next step.']
@@ -194,7 +194,7 @@ const BEGINNER = {
             `Knowing the vocabulary lets you ask the two questions that matter to operations: <strong>when</strong> will it be done, and <strong>is anything holding it up</strong>.`
           ] },
           check: [
-            { t: 'mc', q: 'What does the DPF do?', o: ['Injects fluid to reduce NOx', 'Traps soot from exhaust and burns it off during regeneration', 'Cools the engine', 'Controls transmission shifting'], a: 1, e: 'The Diesel Particulate Filter traps soot; regeneration burns the soot off.' },
+            { t: 'mc', q: 'What does the DPF do?', o: ['Injects diesel exhaust fluid so the SCR catalyst can reduce NOx', 'Traps soot from exhaust and burns it off during regeneration', 'Cools recirculated exhaust gas before it returns to the intake', 'Measures exhaust temperature so the engine can adjust fuel timing'], a: 1, e: 'The Diesel Particulate Filter traps soot; regeneration burns the soot off.' },
             { t: 'mc', q: 'A driver reports low power and a DEF warning. Which system is most likely involved?', o: ['Cooling', 'Aftertreatment', 'Steering', 'Suspension'], a: 1, e: 'DEF is part of the aftertreatment (SCR) system. Aftertreatment faults commonly cause derates.' }
           ],
           takeaways: ['Engine, transmission, driveshaft and differential form the powertrain.', 'Cooling and fuel systems keep the engine running safely.', 'DPF, SCR/DEF and EGR make up aftertreatment — a frequent cause of derates.', 'Know enough vocabulary to ask about ETR and parts — leave diagnosis to technicians.']
@@ -281,7 +281,7 @@ const BEGINNER = {
           ] },
           check: [
             { t: 'mc', q: 'Which question should come first when a driver reports a problem?', o: ['What part do you think is broken?', 'Are you and the vehicle in a safe location?', 'How much will the repair cost?', 'Who was the last driver?'], a: 1, e: 'Safety first. Confirm the driver is safe before gathering technical details.' },
-            { t: 'scenario', q: 'A driver says, "I think it\'s the alternator." How should you record this?', o: ['Complaint: bad alternator', 'Record the symptoms factually and note the driver\'s opinion separately', 'Ignore the driver\'s opinion', 'Order an alternator right away'], a: 1, e: 'Document observed symptoms as facts. Diagnosis is confirmed by a technician.' }
+            { t: 'scenario', q: 'A driver says, "I think it\'s the alternator." How should you record this?', o: ['Write the complaint as "bad alternator" so the shop knows what to replace', 'Record the symptoms factually and note the driver\'s opinion separately', 'Leave out the driver\'s opinion and record only the dash lamps', 'Order an alternator now so the part is waiting when the truck arrives'], a: 1, e: 'Document observed symptoms as facts. Diagnosis is confirmed by a technician.' }
           ],
           takeaways: ['Use the seven questions every time: what, when, where, trend, safety, lights, performance.', 'Confirm safety before technical detail.', 'Record symptoms as facts; label opinions as opinions.', 'A good complaint description tells a vendor what to bring and you how urgent it is.']
         },
@@ -318,7 +318,7 @@ const BEGINNER = {
             ]
           } },
           check: [
-            { t: 'wwyd', q: 'During a call the driver says, "There\'s smoke coming from the wheel." What is your first action?', o: ['Ask when the truck last had a PM', 'Instruct the driver to stop safely as soon as possible and follow their emergency training', 'Look up the nearest shop', 'Ask whether it is a tractor or trailer wheel'], a: 1, e: 'Smoke from a wheel end can indicate a dragging brake or failed bearing and potential fire. Safety first; details second.' },
+            { t: 'wwyd', q: 'During a call the driver says, "There\'s smoke coming from the wheel." What is your first action?', o: ['Ask when the truck last had a PM so you can check the brake history', 'Instruct the driver to stop safely as soon as possible and follow their emergency training', 'Look up the nearest shop and tell the driver to head there carefully', 'Ask whether it is a tractor or trailer wheel so you open the right case'], a: 1, e: 'Smoke from a wheel end can indicate a dragging brake or failed bearing and potential fire. Safety first; details second.' },
             { t: 'tf', q: 'An amber check engine light with no change in performance is always an immediate stop.', a: false, e: 'Usually not an immediate stop, but it needs diagnosis. Red lights, stop-engine warnings and performance changes raise urgency. Follow company procedure.' }
           ],
           takeaways: ['Keep questions short and write while listening.', 'Escalation words — smoke, steam, can\'t stop, red light — change priorities instantly.', 'Always capture unit, location, mileage, symptom and time.', 'Quantify vague words like "small" or "a little".']
@@ -363,7 +363,7 @@ const BEGINNER = {
           } },
           check: [
             { t: 'mc', q: 'Which of these is a breakdown rather than a maintenance issue?', o: ['PM due in 2,000 miles', 'Tractor won\'t start', 'Sleeper light flickering', 'Worn floor mat'], a: 1, e: 'A no-start means the unit cannot operate — it requires service before it can move.' },
-            { t: 'wwyd', q: 'Dispatch asks you to let a driver continue with a brake issue to make an appointment. You:', o: ['Agree — the customer matters most', 'Decline, arrange the fastest safe repair, and help dispatch plan recovery', 'Tell the driver to drive slowly', 'Let the driver decide alone without support'], a: 1, e: 'Safety is non-negotiable. Your job is to find the fastest safe path and help protect the load another way.' }
+            { t: 'wwyd', q: 'Dispatch asks you to let a driver continue with a brake issue to make an appointment. You:', o: ['Agree this once, since missing the appointment could lose the customer', 'Decline, arrange the fastest safe repair, and help dispatch plan recovery', 'Allow it if the driver keeps the speed low and avoids the highway', 'Leave it to the driver, since they can feel how the brakes are working'], a: 1, e: 'Safety is non-negotiable. Your job is to find the fastest safe path and help protect the load another way.' }
           ],
           takeaways: ['A breakdown means the unit cannot or should not continue.', 'Brakes, steering, tires, lighting, overheating/fire and coupling are safety-critical.', 'Never pressure a driver to operate an unsafe vehicle.', 'Your safety department is the authority on regulatory questions.']
         },
@@ -401,7 +401,7 @@ const BEGINNER = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'A driver reports steam from the hood and the temperature gauge rising. Best first instruction?', o: ['Keep driving to the next shop', 'Stop safely as soon as possible and follow shutdown training', 'Open the radiator cap to check coolant', 'Turn on the A/C'], a: 1, e: 'Overheating can destroy an engine. Stop safely. Never open a hot cooling system.' },
+            { t: 'mc', q: 'A driver reports steam from the hood and the temperature gauge rising. Best first instruction?', o: ['Keep driving gently to the next shop so the repair starts sooner', 'Stop safely as soon as possible and follow shutdown training', 'Pull over and open the radiator cap to check the coolant level', 'Turn the heater on full and keep going to help cool the engine'], a: 1, e: 'Overheating can destroy an engine. Stop safely. Never open a hot cooling system.' },
             { t: 'tf', q: 'For a reefer trailer with a failed refrigeration unit, the cargo may be at risk, making the situation time-critical.', a: true, e: 'Temperature-controlled cargo can spoil — coordinate reefer service and a dispatch plan quickly.' }
           ],
           takeaways: ['Roadside pattern: make it safe → gather facts → get the right help → communicate.', 'Match the vendor to the problem: tire service, mobile mechanic or tow.', 'Red warnings, overheating and brake problems mean stop safely.', 'Reefer failures put cargo at risk — treat as time-critical.']
@@ -461,7 +461,7 @@ const BEGINNER = {
           } },
           check: [
             { t: 'mc', q: 'In the example, why was the case opened on TR-518 instead of T-133?', o: ['The driver requested it', 'The ABS warning was for the trailer', 'T-133 was not in the system', 'Tractors don\'t have ABS'], a: 1, e: 'The fault belonged to the trailer. Cases are opened on the unit that has the problem.' },
-            { t: 'mc', q: 'Which step produces the data needed to calculate downtime?', o: ['Accurate time stamps throughout the case', 'The vendor invoice only', 'The dispatcher\'s notes', 'The final approval'], a: 0, e: 'Downtime is calculated from time stamps — when the unit went down and when it was released.' }
+            { t: 'mc', q: 'Which step produces the data needed to calculate downtime?', o: ['Accurate time stamps throughout the case', 'The vendor\'s final invoice, which lists the repair hours', 'The dispatcher\'s notes about when the load was replanned', 'The fleet manager\'s approval of the final estimate'], a: 0, e: 'Downtime is calculated from time stamps — when the unit went down and when it was released.' }
           ],
           takeaways: ['A strong case log is time-stamped at every step.', 'Communicate cause, ETR and impact — not just "it\'s getting fixed."', 'Approval decisions follow company limits and procedures.', 'Confirm with both the technician and the driver before closing.']
         }
@@ -500,7 +500,7 @@ const BEGINNER = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'Which set of details should every dispatch update include?', o: ['Unit, status, cause, ETR, impact, next update', 'Driver\'s mood and weather', 'Invoice total only', 'The shop\'s address only'], a: 0, e: 'These six elements let dispatch plan without calling you back.' },
+            { t: 'mc', q: 'Which set of details should every dispatch update include?', o: ['Unit, status, cause, ETR, impact, next update', 'Unit, driver name, shop address and invoice total', 'Status, weather, the driver\'s mood and the vendor\'s phone', 'Cause, part numbers, labor rate and warranty terms'], a: 0, e: 'These six elements let dispatch plan without calling you back.' },
             { t: 'tf', q: 'If you don\'t know an ETR, it is best to give an optimistic estimate so dispatch isn\'t worried.', a: false, e: 'Be honest: say you don\'t know yet and when you expect to know.' }
           ],
           takeaways: ['Be specific, timely, honest and respectful.', 'Drivers need clear next steps and a check-back time.', 'Dispatch updates: unit, status, cause, ETR, impact, next update.', 'Never guess an ETR to make someone feel better.']
@@ -539,7 +539,7 @@ const BEGINNER = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'What should a request to a shop always include regarding authorization?', o: ['Nothing — shops decide', 'Instructions to call with diagnosis and estimate before additional repairs', 'Permission to do any repair needed', 'The driver\'s phone number only'], a: 1, e: 'Clear authorization rules prevent surprise charges and follow company approval procedures.' },
+            { t: 'mc', q: 'What should a request to a shop always include regarding authorization?', o: ['Nothing; the shop decides which repairs are needed and bills for them', 'Instructions to call with diagnosis and estimate before additional repairs', 'Permission to do any repair the technician finds, to save time', 'The driver\'s phone number so the shop can get approval from them'], a: 1, e: 'Clear authorization rules prevent surprise charges and follow company approval procedures.' },
             { t: 'mc', q: 'A fleet manager asks about a repair. What should you lead with?', o: ['Full transcript of the driver call', 'The decision needed, cost, and impact', 'The shop\'s history', 'Your opinion of the dispatcher'], a: 1, e: 'Managers need decision-ready information first; details on request.' }
           ],
           takeaways: ['Shops need complete, factual complaint details and authorization rules.', 'Parts inquiries need VIN/part numbers, quantity, location and timing.', 'Managers want the decision, cost and risk first.', 'Tailor every message to its audience.']
@@ -610,7 +610,7 @@ const BEGINNER = {
           } },
           check: [
             { t: 'mc', q: 'A unit went down at 08:10 and was released at 15:55. What is the downtime?', o: ['6h 45m', '7h 45m', '8h 10m', '7h 15m'], a: 1, e: '08:10 to 15:55 is 7 hours 45 minutes.' },
-            { t: 'mc', q: 'Why document who approved an estimate and the approved amount?', o: ['It is not necessary', 'To resolve invoice discrepancies and follow approval procedures', 'To tell the driver', 'For fuel tax reporting'], a: 1, e: 'Approval records protect the company when invoices don\'t match estimates.' }
+            { t: 'mc', q: 'Why document who approved an estimate and the approved amount?', o: ['So the driver knows which repairs were approved for their truck', 'To resolve invoice discrepancies and follow approval procedures', 'Because fuel tax reporting needs every approved repair amount', 'It is not needed once the shop has finished the work'], a: 1, e: 'Approval records protect the company when invoices don\'t match estimates.' }
           ],
           takeaways: ['Record parts, labor, fees, invoice and PO numbers.', 'Compare invoices to approved estimates.', 'Downtime = unit down to returned to service.', 'Accurate records support warranty, cost control, compliance and audits.']
         }

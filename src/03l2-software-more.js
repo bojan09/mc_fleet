@@ -222,7 +222,7 @@ SOFTWARE.push(
     quiz: [
       { t: 'mc', q: 'Where does a coordinator find fault codes in MyGeotab?', o: ['Maintenance > Faults', 'The fuel card portal', 'The driver\'s pay stub', 'The trailer\'s VIN plate'], a: 0, e: 'Geotab documents fault codes under Maintenance > Faults.' },
       { t: 'tf', q: 'A fault with status "None" in MyGeotab is no longer active.', a: true, e: 'None means not active now. Still check the history for repeats.' },
-      { t: 'scenario', q: 'MyGeotab shows the same code three times this week, all now inactive. What do you do?', o: ['Nothing, they cleared', 'Plan an inspection, for example with the next PM, and note the history', 'Replace the engine', 'Delete the history'], a: 1, e: 'Repeats point to a real problem. Plan a diagnosis before it becomes a road call.' }
+      { t: 'scenario', q: 'MyGeotab shows the same code three times this week, all now inactive. What do you do?', o: ['Nothing: inactive codes mean the problem fixed itself', 'Plan an inspection, for example with the next PM, and note the history', 'Replace the part the code names before the next load', 'Delete the history so the faults page stays clean'], a: 1, e: 'Repeats point to a real problem. Plan a diagnosis before it becomes a road call.' }
     ],
     sources: [
       ['Geotab Support — Faults', 'https://support.geotab.com/help/mygeotab/maintenance-and-diagnostics/diagnostics/faults'],
@@ -327,7 +327,7 @@ SOFTWARE.push(
     },
     quiz: [
       { t: 'mc', q: 'What does SRM stand for in Decisiv\'s description?', o: ['Service Relationship Management', 'Shop Repair Manual', 'Safety Risk Monitor', 'Standard Repair Mileage'], a: 0, e: 'Decisiv describes its platform as Service Relationship Management.' },
-      { t: 'mc', q: 'Who mainly uses Decisiv together?', o: ['Fleets and their service providers', 'Drivers and brokers', 'Shippers and receivers', 'Fuel stations'], a: 0, e: 'It connects fleets with dealers and service providers around repairs.' },
+      { t: 'mc', q: 'Who mainly uses Decisiv together?', o: ['Fleets and their service providers', 'Drivers and the brokers who book their loads', 'Shippers and receivers tracking deliveries', 'Fuel stations billing fleet accounts'], a: 0, e: 'It connects fleets with dealers and service providers around repairs.' },
       { t: 'tf', q: 'An estimate waiting for fleet approval adds to downtime.', a: true, e: 'Every hour an estimate waits is an hour the truck is not being repaired.' }
     ],
     sources: [
@@ -427,7 +427,7 @@ SOFTWARE.push(
       ]
     },
     quiz: [
-      { t: 'mc', q: 'What is VMRS?', o: ['A standard coding system for vehicle maintenance', 'A tire brand', 'A truck stop chain', 'A fuel card'], a: 0, e: 'Vehicle Maintenance Reporting Standards, from ATA\'s Technology & Maintenance Council.' },
+      { t: 'mc', q: 'What is VMRS?', o: ['A standard coding system for vehicle maintenance', 'A tire tracking system for retreads', 'A national network of truck stop shops', 'A fuel tax reporting program for fleets'], a: 0, e: 'Vehicle Maintenance Reporting Standards, from ATA\'s Technology & Maintenance Council.' },
       { t: 'mc', q: 'Which company sold TMT before Trimble\'s branding?', o: ['TMW Systems', 'KeepTruckin', 'Speedco', 'Comdata'], a: 0, e: 'Trimble TMT Fleet Maintenance was formerly from TMW Systems.' },
       { t: 'tf', q: 'Outside repairs do not need to be entered in the fleet\'s maintenance system.', a: false, e: 'Every repair belongs in the unit\'s history, or costs, repeats and warranty get lost.' }
     ],
@@ -504,9 +504,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['Carrier Transicold makes many of the reefer units in the field; Lynx Fleet monitors them remotely.', 'Setpoint, return air and alarm code are the first three facts to get.', 'Alarm meanings come from the model\'s own manual or dealer.', 'Protect the load in parallel with the repair.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What is Lynx Fleet?', o: ['Carrier Transicold\'s telematics platform for refrigerated fleets', 'A tire brand', 'A fuel card', 'A roadside network'], a: 0, e: 'Lynx Fleet monitors refrigeration units remotely.' },
+      { t: 'mc', q: 'What is Lynx Fleet?', o: ['Carrier Transicold\'s telematics platform for refrigerated fleets', 'A Carrier Transicold tire monitoring system', 'A fuel card for refrigerated carriers', 'A roadside network for reefer breakdowns'], a: 0, e: 'Lynx Fleet monitors refrigeration units remotely.' },
       { t: 'tf', q: 'A coordinator may tell the driver to lower the setpoint to protect a load.', a: false, e: 'The setpoint comes from the shipper. Changing it can ruin the freight.' },
-      { t: 'mc', q: 'Where should you look up what a Carrier reefer alarm code means?', o: ['The unit\'s operator or service manual, or a Carrier Transicold dealer', 'Another brand\'s alarm chart', 'The fuel receipt', 'The truck\'s VIN'], a: 0, e: 'Codes differ by maker and model. Use the official manual or dealer.' }
+      { t: 'mc', q: 'Where should you look up what a Carrier reefer alarm code means?', o: ['The unit\'s own manual or a Carrier dealer', 'Another reefer brand\'s alarm code chart', 'The trailer\'s last annual inspection report', 'The tractor\'s engine fault code list'], a: 0, e: 'Codes differ by maker and model. Use the official manual or dealer.' }
     ],
     sources: [
       ['Carrier — Lynx Fleet platform enhanced monitoring (news)', 'https://www.carrier.com/carrier/en/worldwide/news/news-article/carrier-transicold-s-lynx-fleet-platform-rolls-out-enhanced-monitoring-of-refrigerated-fleets.html'],
@@ -580,7 +580,7 @@ SOFTWARE.push(
     quiz: [
       { t: 'mc', q: 'What does a Cummins Connected Diagnostics notification add to a plain fault code?', o: ['Priority and a recommended action', 'The driver\'s pay', 'Fuel prices', 'A delivery appointment'], a: 0, e: 'It states urgency, recommended action, likely cause and derate timing.' },
       { t: 'tf', q: 'A derate warning tells you a power limit may come after a set time.', a: true, e: 'Use it as a deadline for the repair.' },
-      { t: 'mc', q: 'How is the service usually activated?', o: ['Through a telematics reseller, a Cummins representative or Cummins Care', 'At a truck wash', 'By the shipper', 'Through the fuel card'], a: 0, e: 'Cummins documents activation through these channels.' }
+      { t: 'mc', q: 'How is the service usually activated?', o: ['Through a telematics reseller, a Cummins representative or Cummins Care', 'Automatically, on every truck with a Cummins engine', 'By the shipper, for loads that need tracking', 'Through the fleet\'s fuel card provider'], a: 0, e: 'Cummins documents activation through these channels.' }
     ],
     sources: [
       ['Cummins — Mobile apps bring Cummins service anywhere', 'https://www.cummins.com/news/2016/03/17/mobile-apps-bring-cummins-service-anywhere-you-roam'],
@@ -652,9 +652,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['Virtual Technician sends fault severity for Detroit powertrains.', 'Severe events get expert follow-up with cause, parts and stocked locations.', 'Choose the shop with the part.', 'Use the portal for history per VIN.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'Who reviews severe Detroit Connect fault events, according to Detroit?', o: ['Experts at the Detroit Customer Support Center', 'The driver', 'The broker', 'The fuel desk'], a: 0, e: 'Detroit describes CSC experts analyzing severe events and following up.' },
+      { t: 'mc', q: 'Who reviews severe Detroit Connect fault events, according to Detroit?', o: ['Experts at the Detroit Customer Support Center', 'The driver, using the Detroit Connect app', 'The fleet\'s own telematics provider', 'The nearest Freightliner dealer\'s parts desk'], a: 0, e: 'Detroit describes CSC experts analyzing severe events and following up.' },
       { t: 'tf', q: 'For severe events, the follow-up can include nearby service locations with the needed parts in stock.', a: true, e: 'That helps you pick the shop that can fix it today.' },
-      { t: 'mc', q: 'Which trucks commonly use Detroit engines?', o: ['Freightliner and Western Star', 'Only trailers', 'Reefer units', 'Forklifts'], a: 0, e: 'Detroit is part of Daimler Truck North America, maker of Freightliner and Western Star.' }
+      { t: 'mc', q: 'Which trucks commonly use Detroit engines?', o: ['Freightliner and Western Star', 'Only trailers and converter dollies', 'Reefer units and APUs', 'Forklifts and yard tractors'], a: 0, e: 'Detroit is part of Daimler Truck North America, maker of Freightliner and Western Star.' }
     ],
     sources: [
       ['Freightliner (AU) — Detroit Connect Virtual Technician', 'https://freightliner.com.au/siteassets/documents/detroit-connect-virtual-technician.pdf'],
@@ -727,9 +727,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['FleetNet America is a 24/7 roadside and repair network for medium and heavy fleets.', 'It finds the provider; you still own the case.', 'Complete facts and clear limits make it fast.', 'Every network event belongs in your records.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What does FleetNet America mainly provide?', o: ['A 24/7 roadside and repair network', 'Engine fault codes', 'Fuel cards', 'Reefer units'], a: 0, e: 'It triages breakdowns and dispatches providers from its network.' },
+      { t: 'mc', q: 'What does FleetNet America mainly provide?', o: ['A 24/7 roadside and repair network', 'Engine fault codes from the truck', 'Fuel cards for over-the-road fleets', 'Refrigeration units for trailers'], a: 0, e: 'It triages breakdowns and dispatches providers from its network.' },
       { t: 'tf', q: 'Once FleetNet takes an event, the coordinator has nothing more to do.', a: false, e: 'You still authorize, follow up, inform dispatch and record it.' },
-      { t: 'mc', q: 'Which company owns FleetNet America?', o: ['Cox Automotive', 'Cummins', 'Trimble', 'Carrier'], a: 0, e: 'FleetNet is a Cox Automotive brand.' }
+      { t: 'mc', q: 'Which company owns FleetNet America?', o: ['Cox Automotive', 'Cummins Inc.', 'Trimble Inc.', 'Carrier Global'], a: 0, e: 'FleetNet is a Cox Automotive brand.' }
     ],
     sources: [
       ['FleetNet America — Emergency roadside assistance', 'https://fleetnetamerica.com/?p=32'],
@@ -800,7 +800,7 @@ SOFTWARE.push(
       takeaways: [ { ul: ["Love's Truck Care and Speedco are an on-route service network.", 'Tires, lube/PM, light mechanical, roadside and DOT inspections.', 'Time service with fuel stops and breaks.', 'Check which services each site offers.'] } ]
     },
     quiz: [
-      { t: 'mc', q: "What is Speedco?", o: ["Love's quick lube and preventive maintenance brand", 'A fuel card', 'A telematics device', 'A reefer maker'], a: 0, e: "Love's bought Speedco from Bridgestone in 2017." },
+      { t: 'mc', q: "What is Speedco?", o: ["Love's quick lube and preventive maintenance brand", 'A fuel card for Love\'s customers', 'A telematics device for Love\'s fleets', 'A brand of reefer units'], a: 0, e: "Love's bought Speedco from Bridgestone in 2017." },
       { t: 'tf', q: 'Booking a PM during the driver\'s break at an on-route location can avoid extra downtime.', a: true, e: 'The truck is already stopped; the work fits the break.' },
       { t: 'mc', q: "Which service does Love's Truck Care NOT list in its standard menu?", o: ['Tire work', 'Lube and PM', 'DOT inspections', 'Freight brokerage'], a: 3, e: 'It is a truck service network, not a freight broker.' }
     ],
@@ -871,8 +871,8 @@ SOFTWARE.push(
       takeaways: [ { ul: ['FleetPride is a heavy-duty parts distributor with a national branch network.', 'Exact part numbers or VIN fit prevent wrong parts.', 'Check other branches before accepting a parts delay.', 'Record the cost and track cores.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What is FleetPride?', o: ['A heavy-duty truck and trailer parts distributor', 'A telematics platform', 'A fuel card', 'An engine maker'], a: 0, e: 'It sells parts through branches and online.' },
-      { t: 'mc', q: 'What should you have before searching for a part?', o: ['The exact part number or the unit\'s VIN', 'The driver\'s phone number', 'The load number', 'The fuel price'], a: 0, e: 'Part number or VIN fit avoids ordering the wrong part.' },
+      { t: 'mc', q: 'What is FleetPride?', o: ['A heavy-duty parts distributor', 'A telematics and ELD platform', 'A fuel card for heavy trucks', 'A maker of heavy-duty engines'], a: 0, e: 'It sells parts through branches and online.' },
+      { t: 'mc', q: 'What should you have before searching for a part?', o: ['The exact part number or the unit\'s VIN', 'The driver\'s phone number and location', 'The load number and delivery time', 'The fuel price at the nearest stop'], a: 0, e: 'Part number or VIN fit avoids ordering the wrong part.' },
       { t: 'tf', q: 'If the usual supplier is out of a part, checking other branches can cut downtime.', a: true, e: 'Another branch or dealer may have it today.' }
     ],
     sources: [
@@ -939,9 +939,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['LoadMaster is a TMS: dispatch\'s system.', 'Maintenance status and ETR drive dispatch planning.', 'Linked systems can flag units unavailable automatically.', 'Release units promptly.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What kind of software is McLeod LoadMaster?', o: ['A transportation management system (TMS)', 'An engine diagnostic tool', 'A reefer controller', 'A parts catalog'], a: 0, e: 'It manages loads, dispatch and billing.' },
+      { t: 'mc', q: 'What kind of software is McLeod LoadMaster?', o: ['A transportation management system (TMS)', 'An engine diagnostic tool for shops', 'A reefer temperature controller', 'A heavy-duty parts catalog'], a: 0, e: 'It manages loads, dispatch and billing.' },
       { t: 'tf', q: 'A unit with an open repair order can be flagged unavailable for dispatch when maintenance and LoadMaster are linked.', a: true, e: 'Maintenance vendors describe this integration.' },
-      { t: 'mc', q: 'What is the coordinator\'s main job in the TMS?', o: ['Keep unit status and ETR accurate', 'Book loads', 'Price freight', 'Pay drivers'], a: 0, e: 'Dispatch plans from your status and ETR.' }
+      { t: 'mc', q: 'What is the coordinator\'s main job in the TMS?', o: ['Keep unit status and ETR accurate', 'Book loads for idle trucks', 'Price freight for customers', 'Approve driver pay each week'], a: 0, e: 'Dispatch plans from your status and ETR.' }
     ],
     sources: [
       ['McLeod Software', 'https://www.mcleodsoftware.com'],
@@ -1012,7 +1012,7 @@ SOFTWARE.push(
       takeaways: [ { ul: ['Comdata provides fuel cards and on-road payments.', 'Express Codes and virtual cards can pay roadside vendors.', 'Approve, verify, pay exactly, record.', 'Payment codes are money: guard them.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What can a Comdata Express Code be used for, according to Comdata?', o: ['Moving funds electronically to registered payees such as repair shops', 'Reading engine faults', 'Booking loads', 'Setting reefer temperature'], a: 0, e: 'It transfers funds to registered cardholders, including repair shops.' },
+      { t: 'mc', q: 'What can a Comdata Express Code be used for, according to Comdata?', o: ['Sending funds to registered payees, like repair shops', 'Reading engine fault codes from the truck', 'Booking loads on a freight load board', 'Setting the reefer unit\'s temperature'], a: 0, e: 'It transfers funds to registered cardholders, including repair shops.' },
       { t: 'tf', q: 'You should verify a vendor through a number you already trust before sending a payment code.', a: true, e: 'Never send money to an unverified contact.' },
       { t: 'mc', q: 'How much should you pay a roadside vendor?', o: ['Exactly the approved amount', 'Whatever they ask', 'Double to be safe', 'Nothing until next month'], a: 0, e: 'Pay the approved amount and record it.' }
     ],

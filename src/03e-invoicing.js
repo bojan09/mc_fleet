@@ -121,7 +121,7 @@ addModule('beginner', {
           { text: 'Detention 2.5 hours', answer: 'In/out times', why: 'Proves how long the truck waited.' }
         ] } },
       check: [
-        { t: 'mc', q: 'What is a POD?', o: ['Proof of Delivery — signed delivery paperwork', 'Payment on Demand', 'Point of Dispatch', 'Price of Diesel'], a: 0, e: 'Proof of Delivery, usually the BOL signed by the receiver.' },
+        { t: 'mc', q: 'What is a POD?', o: ['Proof of Delivery — signed delivery paperwork', 'Payment on Demand — invoice due on receipt', 'Point of Dispatch — where the load started', 'Price of Diesel — the fuel surcharge base'], a: 0, e: 'Proof of Delivery, usually the BOL signed by the receiver.' },
         { t: 'tf', q: 'A charge on the invoice that isn\'t on the rate confirmation or otherwise approved will often be disputed.', a: true, e: 'Customers pay what they agreed to and what\'s supported.' }
       ],
       takeaways: ['Rate con = what was agreed. BOL = what was shipped. POD = that it was delivered.', 'Every accessorial needs its own support.', 'Read the POD for exceptions before billing.', 'Missing paperwork is the #1 cause of slow payment.'],
@@ -171,8 +171,8 @@ addModule('beginner', {
           { text: 'Remove the detention and lumper to make it simpler', correct: false, why: 'Those charges are valid and supported — don\'t give up earned money.' }
         ] } },
       check: [
-        { t: 'mc', q: 'What is a TMS?', o: ['Truck Maintenance Schedule', 'Transportation Management System — software for loads, dispatch and billing', 'Total Miles Summary', 'Toll Management Service'], a: 1, e: 'TMS stands for transportation management system.' },
-        { t: 'wwyd', q: 'The broker requires invoices through its portal. You:', o: ['Email them anyway', 'Submit through the portal with required fields and attachments', 'Mail a paper copy', 'Wait for the broker to ask'], a: 1, e: 'Use the method the customer requires.' }
+        { t: 'mc', q: 'What is a TMS?', o: ['Truck Maintenance Schedule — the list of PM due dates', 'Transportation Management System — software for loads, dispatch and billing', 'Total Miles Summary — monthly miles by unit', 'Toll Management Service — billing for road tolls'], a: 1, e: 'TMS stands for transportation management system.' },
+        { t: 'wwyd', q: 'The broker requires invoices through its portal. You:', o: ['Email it anyway, since email is faster than a portal', 'Submit through the portal with required fields and attachments', 'Mail a paper copy with the signed documents', 'Wait until the broker asks for the invoice'], a: 1, e: 'Use the method the customer requires.' }
       ],
       takeaways: ['Thirteen steps from load assignment to payment — each can fail.', 'Most problems start with missing or unclear paperwork.', 'Submit the way the customer requires.', 'Run the pre-submission checklist every time.'],
       tips: ['Invoice the same day the POD arrives.', 'Keep a log of submission dates to track payment due dates.'],
@@ -270,7 +270,7 @@ addModule('beginner', {
           { text: '"Lumper charge — no receipt."', answer: 'Missing / unsupported documents', why: 'Accessorial without support.' }
         ] } },
       check: [
-        { t: 'mc', q: 'An invoice is rejected for a mismatched load number. Best fix?', o: ['Resubmit unchanged', 'Correct the load number exactly as on the rate con and resubmit with a note', 'Create a new load', 'Call the shipper'], a: 1, e: 'Fix the reference and explain the correction.' },
+        { t: 'mc', q: 'An invoice is rejected for a mismatched load number. Best fix?', o: ['Resubmit it unchanged; the broker will match it by amount', 'Correct the load number exactly as on the rate con and resubmit with a note', 'Create a new load with the broker\'s number and invoice that', 'Call the shipper and ask them to approve the invoice'], a: 1, e: 'Fix the reference and explain the correction.' },
         { t: 'tf', q: 'Sending the same invoice twice "just in case" helps you get paid faster.', a: false, e: 'Duplicates cause confusion and holds.' }
       ],
       takeaways: ['Most rejections are paperwork and reference errors.', 'Correct the specific problem and say what changed.', 'Build every invoice from the rate con and delivery documents.', 'Check before you submit — it\'s faster than fixing after.'],

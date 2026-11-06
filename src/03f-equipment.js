@@ -182,7 +182,7 @@ addLesson('beginner', 'm3', {
   } },
   check: [
     { t: 'mc', q: 'In a 6x4 tractor, how many axles are driven?', o: ['One', 'Two', 'Four', 'Six'], a: 1, e: 'Six wheel positions, four of them driven — both rear axles.' },
-    { t: 'mc', q: 'Main advantage of a step deck over a flatbed?', o: ['It\'s enclosed', 'It carries taller cargo under the same height limit', 'It needs no securement', 'It has a refrigeration unit'], a: 1, e: 'The lower main deck leaves more room under the height limit.' },
+    { t: 'mc', q: 'Main advantage of a step deck over a flatbed?', o: ['It is enclosed, so cargo is protected from weather and theft', 'It carries taller cargo under the same height limit', 'It needs fewer tiedowns because the low deck holds cargo in place', 'It is shorter, so it fits more loading docks than a flatbed'], a: 1, e: 'The lower main deck leaves more room under the height limit.' },
     { t: 'tf', q: 'Reefer unit engine hours are tracked separately from trailer miles.', a: true, e: 'The refrigeration unit has its own engine and PM schedule, usually by hours.' }
   ],
   takeaways: ['Day cabs work local; sleepers work long-haul; straight trucks carry cargo on their own chassis.', 'Axle configuration = wheel positions × driven positions.', 'Deck height decides how tall a load fits on open-deck trailers.', 'Reefers, tankers, chassis and dollies each bring their own vendor and questions.'],

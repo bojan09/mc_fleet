@@ -112,8 +112,8 @@ const EXPERT = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'PM compliance is calculated as:', o: ['PMs due ÷ PMs done', 'PMs completed on time ÷ PMs due × 100', 'PM cost ÷ total cost', 'Units ÷ PMs'], a: 1, e: 'On-time PMs as a share of PMs due.' },
-            { t: 'mc', q: 'Why must a "repeat repair" be clearly defined?', o: ['It doesn\'t matter', 'Without a consistent definition, the KPI can\'t be compared over time', 'To increase the number', 'Because shops require it'], a: 1, e: 'Consistent definitions make KPIs trustworthy.' }
+            { t: 'mc', q: 'PM compliance is calculated as:', o: ['PMs due ÷ PMs completed × 100', 'PMs completed on time ÷ PMs due × 100', 'PM cost ÷ total maintenance cost × 100', 'Units in the fleet ÷ PMs completed'], a: 1, e: 'On-time PMs as a share of PMs due.' },
+            { t: 'mc', q: 'Why must a "repeat repair" be clearly defined?', o: ['It doesn\'t matter, as long as the shop agrees it was a repeat', 'Without a consistent definition, the KPI can\'t be compared over time', 'A wider definition makes the number bigger, which helps budgets', 'Shops require it before they will accept a warranty claim'], a: 1, e: 'Consistent definitions make KPIs trustworthy.' }
           ],
           takeaways: ['Know the formulas: CPM, cost per vehicle, downtime %, PM compliance, repeat rate, breakdown frequency.', 'Each KPI answers a different question.', 'Define terms before measuring.', 'Compare trends over time, not single points.']
         },
@@ -183,7 +183,7 @@ const EXPERT = {
             items: ['Trailer tires wearing out rapidly', 'Irregular wear on inside edges of one axle', 'Axle misaligned', 'Alignment not checked after suspension repair', 'No post-repair alignment check in procedure']
           } },
           check: [
-            { t: 'mc', q: 'Which statement is a root cause rather than a failure?', o: ['Alternator failed', 'Belt tensioner broke', 'Belt tensioner not included in PM inspection checklist', 'Battery light on'], a: 2, e: 'A missing inspection step explains why failures occur — fixing it prevents recurrence.' },
+            { t: 'mc', q: 'Which statement is a root cause rather than a failure?', o: ['Alternator failed and the battery ran down', 'Belt tensioner broke and the belt came off', 'Belt tensioner not included in PM inspection checklist', 'Battery light came on while driving at night'], a: 2, e: 'A missing inspection step explains why failures occur — fixing it prevents recurrence.' },
             { t: 'tf', q: 'Replacing the failed part always eliminates the root cause.', a: false, e: 'Replacing the part fixes the failure; the underlying reason may remain.' }
           ],
           takeaways: ['Symptom → failure → root cause.', 'Fixing the root cause prevents recurrence.', 'Use 5 Whys grounded in evidence.', 'Combine repair history, driver reports, parts data and trends.']
@@ -220,8 +220,8 @@ const EXPERT = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'Why did T-120\'s repairs keep failing?', o: ['Bad luck', 'Each repair treated the immediate failure, not the underlying causes', 'The driver damaged it', 'DPFs cannot be repaired'], a: 1, e: 'Without addressing why the DPF loaded, it kept loading.' },
-            { t: 'wwyd', q: 'A shop wants to clear codes and release the truck for a third derate in 60 days. You:', o: ['Approve — fastest option', 'Ask for root-cause diagnosis, share the full history, and check warranty on recent repairs', 'Send it to a different shop without history', 'Ground the truck permanently'], a: 1, e: 'Break the cycle with diagnosis and history.' }
+            { t: 'mc', q: 'Why did T-120\'s repairs keep failing?', o: ['Bad luck: that engine\'s DPF system fails at random', 'Each repair treated the immediate failure, not the underlying causes', 'The driver kept damaging it with too much idling', 'DPFs can\'t be repaired, so each fix was only temporary'], a: 1, e: 'Without addressing why the DPF loaded, it kept loading.' },
+            { t: 'wwyd', q: 'A shop wants to clear codes and release the truck for a third derate in 60 days. You:', o: ['Approve it, since clearing codes is the fastest way to get it moving', 'Ask for root-cause diagnosis, share the full history, and check warranty on recent repairs', 'Send it to a different shop without the history, so they start fresh', 'Take the truck out of service for good and request a replacement'], a: 1, e: 'Break the cycle with diagnosis and history.' }
           ],
           takeaways: ['Repair history reveals patterns individual repairs miss.', 'Look for contributing factors, not just a single part.', 'Share history with every vendor.', 'Create triggers that start RCA automatically.']
         }
@@ -277,8 +277,8 @@ const EXPERT = {
             { ul: ['Which decision had the largest impact on the outcome?', 'At what point should the recovery plan have started?', 'What information did dispatch need, and when?'] }
           ] },
           check: [
-            { t: 'wwyd', q: 'The only nearby shop can\'t start for 2 days; the part is also 2 days out. The load is due tomorrow. What first?', o: ['Wait for the shop', 'Start the recovery plan with dispatch now while sourcing faster repair options', 'Tell the driver to keep driving', 'Cancel the load'], a: 1, e: 'Parallel workstreams: protect the load while pursuing the repair.' },
-            { t: 'mc', q: 'Dispatch pushes to run a truck with a brake defect "just 40 miles." Correct response?', o: ['Allow — it\'s short', 'Decline, explain it\'s a safety-critical defect, and offer the fastest safe alternatives', 'Let the driver decide alone', 'Ignore the call'], a: 1, e: 'Short distance doesn\'t change a safety-critical defect.' }
+            { t: 'wwyd', q: 'The only nearby shop can\'t start for 2 days; the part is also 2 days out. The load is due tomorrow. What first?', o: ['Wait for the shop, since nothing can happen until the part arrives', 'Start the recovery plan with dispatch now while sourcing faster repair options', 'Tell the driver to keep driving carefully to make tomorrow\'s delivery', 'Cancel the load so the customer can find another carrier'], a: 1, e: 'Parallel workstreams: protect the load while pursuing the repair.' },
+            { t: 'mc', q: 'Dispatch pushes to run a truck with a brake defect "just 40 miles." Correct response?', o: ['Allow it, since 40 miles at low speed is a short, controlled risk', 'Decline, explain it\'s a safety-critical defect, and offer the fastest safe alternatives', 'Let the driver decide, since they can judge how the brakes feel', 'Ignore the call and wait for dispatch to find another truck'], a: 1, e: 'Short distance doesn\'t change a safety-critical defect.' }
           ],
           takeaways: ['Start recovery planning early when ETR confidence is low.', 'Safety-critical defects are never negotiable.', 'Parallel workstreams create options.', 'Optimize the overall outcome, not one variable.']
         }
@@ -338,7 +338,7 @@ const EXPERT = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'The most effective performance feedback is:', o: ['General and emotional', 'Specific, factual and with a requested action', 'Given only annually', 'Given only to the technician'], a: 1, e: 'Specifics and actions lead to change.' },
+            { t: 'mc', q: 'The most effective performance feedback is:', o: ['General and emotional, so the vendor feels the impact', 'Specific, factual and with a requested action', 'Saved for the annual review, so it covers the whole year', 'Given only to the technician, not the shop\'s manager'], a: 1, e: 'Specifics and actions lead to change.' },
             { t: 'tf', q: 'Sharing positive feedback with vendors is part of good vendor management.', a: true, e: 'Recognition reinforces what you want more of.' }
           ],
           takeaways: ['Set expectations, measure, review, address, decide.', 'Feedback: specific, factual, action-oriented.', 'Recognize good performance too.', 'Preferred networks are built on data and trust.']
@@ -398,7 +398,7 @@ const EXPERT = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'A warranty request to a shop should reference:', o: ['Only the current complaint', 'The original RO, dates, mileage and current complaint', 'The driver\'s personal info', 'Nothing — shops track it'], a: 1, e: 'Specific references make claims easy to verify.' },
+            { t: 'mc', q: 'A warranty request to a shop should reference:', o: ['Only the current complaint, since the shop keeps its own records', 'The original RO, dates, mileage and current complaint', 'The driver\'s personal details and the load being hauled', 'Nothing extra; shops track their own warranty work'], a: 1, e: 'Specific references make claims easy to verify.' },
             { t: 'tf', q: 'Tracking warranty recovery as a KPI demonstrates the value of history checks.', a: true, e: 'Recovered dollars are a measurable outcome.' }
           ],
           takeaways: ['Reference original RO, dates and mileage.', 'Confirm coverage before extra work.', 'Keep failed parts when required.', 'Track warranty recovery as a KPI.']
@@ -437,7 +437,7 @@ const EXPERT = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'What does the "R" in SBAR ask for?', o: ['Repair history', 'Your recommendation and what you need', 'Road conditions', 'Rates'], a: 1, e: 'End with a clear recommendation and request.' },
+            { t: 'mc', q: 'What does the "R" in SBAR ask for?', o: ['The repair history of the unit', 'Your recommendation and what you need', 'Road and weather conditions at the scene', 'The rates the vendor charges for the work'], a: 1, e: 'End with a clear recommendation and request.' },
             { t: 'tf', q: 'A senior manager\'s request overrides a safety-critical defect.', a: false, e: 'Safety is non-negotiable regardless of seniority — offer safe alternatives.' }
           ],
           takeaways: ['Escalate safety, authority, customer, vendor and policy issues.', 'Use SBAR for clear escalation.', 'In difficult conversations: facts, empathy, limits, options.', 'Safety is never negotiable — at any level.']
@@ -456,8 +456,8 @@ const EXPERT = {
             { ul: ['Do I lead escalations with the ask?', 'Do I present options, not just problems?', 'Do I follow up on commitments I make?'] }
           ] },
           check: [
-            { t: 'mc', q: 'Where does a coordinator\'s influence mainly come from?', o: ['Job title', 'Reliability, accuracy and follow-through', 'Being the loudest', 'Avoiding escalation'], a: 1, e: 'Trust is built by consistent, accurate communication.' },
-            { t: 'mc', q: 'When bringing a problem to management, you should also bring:', o: ['Blame', 'Options and a recommendation', 'Only the problem', 'Nothing else'], a: 1, e: 'Options and recommendations make decisions faster.' }
+            { t: 'mc', q: 'Where does a coordinator\'s influence mainly come from?', o: ['Job title and place in the org chart', 'Reliability, accuracy and follow-through', 'Being the loudest voice on the call', 'Avoiding escalation so nobody gets upset'], a: 1, e: 'Trust is built by consistent, accurate communication.' },
+            { t: 'mc', q: 'When bringing a problem to management, you should also bring:', o: ['Who is to blame for it', 'Options and a recommendation', 'Only the problem, clearly stated', 'A request for more staff'], a: 1, e: 'Options and recommendations make decisions faster.' }
           ],
           takeaways: ['Bring options and a recommendation.', 'Stay calm and factual under pressure.', 'Follow through builds influence.', 'Choose the right audience and channel.']
         }
@@ -486,7 +486,7 @@ const EXPERT = {
             items: ['Driver stranded on a highway shoulder in a storm, truck won\'t start', 'Loaded unit with brake air leak at a truck stop', 'Reefer with failing unit and temperature-sensitive cargo', 'Loaded dry van with amber check engine light, driving normally', 'Empty trailer at the yard with a door latch issue']
           } },
           check: [
-            { t: 'mc', q: 'With limited shop capacity, which unit should get the first bay?', o: ['The newest unit', 'The unit with the highest combined safety and operational impact', 'The unit that called first', 'The cheapest repair'], a: 1, e: 'Allocate scarce capacity by impact.' },
+            { t: 'mc', q: 'With limited shop capacity, which unit should get the first bay?', o: ['The newest unit, since it earns the most per mile', 'The unit with the highest combined safety and operational impact', 'The unit whose driver called in first this morning', 'The cheapest repair, so more units get done today'], a: 1, e: 'Allocate scarce capacity by impact.' },
             { t: 'tf', q: 'During disruptions, a single consolidated status list helps dispatch and leadership.', a: true, e: 'One source of truth reduces confusion.' }
           ],
           takeaways: ['Triage: life safety, safety-critical, time-critical, revenue, routine.', 'Allocate scarce capacity by impact.', 'Use mobile and overflow vendors strategically.', 'One status list, fixed update cadence.']
@@ -508,7 +508,7 @@ const EXPERT = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'A leadership update during a disruption should include:', o: ['Only good news', 'Units down, safety issues, loads at risk, actions, asks, next update', 'Each driver\'s full call log', 'Vendor phone numbers'], a: 1, e: 'Decision-ready summaries.' },
+            { t: 'mc', q: 'A leadership update during a disruption should include:', o: ['Only the good news, so leadership stays calm and confident', 'Units down, safety issues, loads at risk, actions, asks, next update', 'Every driver\'s full call log and message history from today', 'Vendor names and phone numbers for every unit that is down'], a: 1, e: 'Decision-ready summaries.' },
             { t: 'tf', q: 'Empty trailers with minor issues should be prioritized over drivers in unsafe locations.', a: false, e: 'Life safety always comes first.' }
           ],
           takeaways: ['Life safety first, always.', 'Consolidate information for leadership.', 'Use numbers, actions and asks.', 'Keep a fixed update cadence.']

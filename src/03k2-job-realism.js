@@ -177,7 +177,7 @@ enrich('beginner.m8.l1', { add: [
   { callout: { kind: 'tip', title: 'Four headings', text: 'Open, waiting, due soon, call me if. If a case is not in the note, the next shift does not know it exists.' } }
 ] });
 lessonAt('beginner.m8.l1').check.push(
-  { t: 'mc', q: 'What does the next shift most need from your handover note?', o: ['A copy of every message from today', 'Open cases with status and ETR, items waiting on someone, things due soon, and when to call you', 'Only the cases that are closed', 'Nothing; they can read the case system'], a: 1, e: 'A short note with open cases, waiting items, upcoming due dates and escalation triggers keeps cases from falling through the gap between shifts.' }
+  { t: 'mc', q: 'What does the next shift most need from your handover note?', o: ['A copy of every message and call log from today, in time order', 'Open cases with status and ETR, what\'s waiting, what\'s due soon, and when to call you', 'Only the cases closed today, so the next shift knows what is done', 'A short note saying everything is in the case system, with no details'], a: 1, e: 'A short note with open cases, waiting items, upcoming due dates and escalation triggers keeps cases from falling through the gap between shifts.' }
 );
 
 /* ===========================================================================
@@ -284,7 +284,7 @@ lessonAt('beginner.m8.l2').deep.push({ title: 'Reading a truck-stop service invo
   } }
 ] });
 lessonAt('advanced.m4.l3').check.push(
-  { t: 'mc', q: 'On work order 7731-0442, why was the right steer tire replaced?', o: ['It was more than 2 years old', 'Its tread was 3/32 in, below the 4/32 in steer minimum', 'Its pressure was 108 psi', 'The driver asked for it'], a: 1, e: 'Steer tires need at least 4/32 in of tread under 49 CFR 393.75.' },
+  { t: 'mc', q: 'On work order 7731-0442, why was the right steer tire replaced?', o: ['It was made in 2021, and tires over two years old must be replaced', 'Its tread was 3/32 in, below the 4/32 in steer minimum', 'Its pressure was 108 psi, below the 110 psi of the left steer', 'The driver asked for a new pair of steer tires'], a: 1, e: 'Steer tires need at least 4/32 in of tread under 49 CFR 393.75.' },
   { t: 'mc', q: 'A tire\'s DOT code ends in 1921. When was it made?', o: ['January 2019', 'Week 19 of 2021', 'Year 1921', 'It is the tire size'], a: 1, e: 'The last four digits are the week and year of manufacture.' }
 );
 
