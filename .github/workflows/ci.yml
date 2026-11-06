@@ -33,6 +33,9 @@ jobs:
       - name: Content checks
         run: node tools/check.mjs
 
+      - name: Item analysis and before/after logic
+        run: node tools/items-test.mjs
+
       - name: Browser sweep (375/768/1366 px, accessibility, contrast)
         run: node tools/sweep.mjs
         env:

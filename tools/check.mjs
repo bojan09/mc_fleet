@@ -54,7 +54,7 @@ A.TRACKS.forEach((t) => t.modules.forEach((m) => m.lessons.forEach((l) => {
   if (!l.title || !l.minutes) err(key, 'lesson needs a title and minutes');
   walk(l, key);
 })));
-['SCENARIOS', 'TREES', 'EXERCISES', 'FLASHCARDS', 'EXAMS', 'REF', 'GLOSSARY'].forEach((n) => A[n] && walk(A[n], n));
+['SCENARIOS', 'TREES', 'EXERCISES', 'FLASHCARDS', 'EXAMS', 'REF', 'GLOSSARY', 'PREPOST'].forEach((n) => A[n] && walk(A[n], n));
 
 /* Glossary */
 const terms = new Map();

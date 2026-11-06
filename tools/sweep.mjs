@@ -90,7 +90,7 @@ const SWEEP = `(async () => {
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
   const routes = ['#/dashboard', '#/curriculum', '#/practice', '#/scenarios', '#/trees', '#/exercises', '#/flashcards', '#/calculators', '#/fleet', '#/glossary', '#/library', '#/reference', '#/bookmarks', '#/achievements', '#/profile', '#/software', '#/privacy', '#/review', '#/simulations', '#/trainer', '#/verify', '#/verify/ABCDEFGH23'];
   ${'$'}{EXTRA}
-  for (const t of TRACKS_IDS) { location.hash = '#/track/' + t; await wait(40); routes.push('#/track/' + t, '#/final/' + t); document.querySelectorAll('#view a[href^="#/lesson"], #view a[href^="#/quiz"], #view a[href^="#/cheatsheet"]').forEach((a) => routes.push(a.getAttribute('href'))); }
+  for (const t of TRACKS_IDS) { location.hash = '#/track/' + t; await wait(40); routes.push('#/track/' + t, '#/final/' + t); document.querySelectorAll('#view a[href^="#/lesson"], #view a[href^="#/quiz"], #view a[href^="#/cheatsheet"], #view a[href^="#/pretest"], #view a[href^="#/posttest"]').forEach((a) => routes.push(a.getAttribute('href'))); }
   for (const r of ['#/software', '#/library']) { location.hash = r; await wait(40); document.querySelectorAll('#view a[href^="#/software/"], #view a[href^="#/library/"]').forEach((a) => routes.push(a.getAttribute('href'))); }
   const out = [];
   for (const r of [...new Set(routes)]) {

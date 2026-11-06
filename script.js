@@ -2611,6 +2611,14 @@ function mergeProgress(a, b) {
     // The Google photo link is filled in by whichever device saw it last.
     if (k === 'avatar' && out.avatar && !out.avatar.google) { const g = (a.avatar || {}).google || (b.avatar || {}).google; if (g) out.avatar.google = g; }
   });
+  // Before/after checks: keep the earliest "before" and the latest "after" per track.
+  out.prepost = {};
+  new Set([...Object.keys(a.prepost || {}), ...Object.keys(b.prepost || {})]).forEach((tid) => {
+    const x = (a.prepost || {})[tid] || {}, y = (b.prepost || {})[tid] || {}; const r = {};
+    const pre = [x.pre, y.pre].filter(Boolean).sort((p, q) => p.at - q.at)[0]; if (pre) r.pre = pre;
+    const post = [x.post, y.post].filter(Boolean).sort((p, q) => q.at - p.at)[0]; if (post) r.post = post;
+    out.prepost[tid] = r;
+  });
   out.theme = a.theme;
   out.motion = a.motion;
   return out;
@@ -2656,6 +2664,7 @@ async function cloudPull() {
     router();
   }
   await cloudPush();
+  attFlush();
 }
 
 /* Where emailed links (confirm sign-up, reset password, confirm new email) return to. */
@@ -3084,7 +3093,7 @@ function moduleGuideHTML(t, m) {
    PRIVACY — what the academy stores, where, and how to delete it; account
    deletion for signed-in users; contact.
    =========================================================================== */
-const PRIVACY_UPDATED = 'October 2026';
+const PRIVACY_UPDATED = 'November 2026';
 const CONTACT_EMAIL = 'stanbdev@gmail.com';
 
 /* "Report a problem": an email with the page name and link filled in. */
@@ -3103,15 +3112,16 @@ function viewPrivacy() {
 
     <section class="pv-sec"><h2>Without an account</h2>
       ${row('grid', 'Stored in your browser only', 'Completed lessons, quiz and exam scores, bookmarks, achievements, the name and profile details you type in (role, company, city), your daily goal, the days you studied, and your theme and animation preferences. It is kept in your browser\'s local storage and never leaves your device.')}
-      ${row('rotate', 'How to delete it', 'Use <strong>Reset progress</strong> on your <a href="#/profile">Profile</a> page, or clear this site\'s data in your browser settings.')}
+      ${row('rotate', 'How to delete it', 'Use <strong>Reset progress</strong> on your <a href="#/profile">Profile</a> page, or clear this site\'s data in your browser settings (this also clears answers waiting to upload).')}
     </section>
 
     <section class="pv-sec"><h2>If you create an account</h2>
       ${row('users', 'Your account', 'You can sign in with Google or with your email and a password. With Google, Google shares your name, email address, profile picture link and a Google account ID with our sign-in provider, Supabase. With email, Supabase stores your email address and a securely hashed password (we never see the password itself) and sends the confirmation and password-reset emails. We use these details only to identify your account and show your name.')}
       ${row('image', 'Profile picture (optional)', 'If you upload a picture, it is resized to 256 × 256 pixels in your browser and stored with Supabase. Anyone who has the picture\'s link can view it. Removing the picture or deleting your account deletes it.')}
+      ${row('list-check', 'Your answers to questions', 'Each time you answer a quiz or check question, the app notes which question, the option you picked, whether it was right, how long it took and where you answered it. Signed out, the newest 500 answers stay in your browser only and are never sent anywhere. Signed in, they upload to your account in the background so your answers can improve the questions. Each account can add and read only its own answers; nobody can change them.')}
       ${row('activity', 'Your synced progress', 'The same progress and profile details listed above (except your theme and animation preferences) are stored with your account so they can follow you to other devices. Each account can only read and change its own progress.')}
       ${row('pin', 'Where it is kept', 'In a Supabase database in the European Union (Ireland, region eu-west-1).')}
-      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, profile picture, academy progress, quiz scores and certificates, and can download them as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
+      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, profile picture, academy progress, quiz scores and certificates, and how you answered each question (shown as question analysis for the group, to find questions that need fixing), and can download progress as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
       ${row('award', 'Certificate verification (optional)', 'If you ask for a verification code, your name, the track, your final score and the date are stored with that code. Anyone who has the code can check those details on the certificate check page.')}
       ${row('lock', 'Sign-in session', 'While you are signed in, your browser keeps a sign-in token in local storage. Signing out removes it.')}
       ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on your <a href="#/profile">Profile</a> page. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete account</strong> on your Profile page or here. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently.')}
@@ -3172,6 +3182,7 @@ function qBank() {
   Q_BANK = new Map();
   LESSONS.forEach((x) => (x.l.check || []).forEach((q, i) => Q_BANK.set(q, { id: `${x.key}#${i}`, q, label: x.l.title, sub: `${x.t.level} · Module ${x.m.id.slice(1)}: ${x.m.title}`, href: lessonHref(x), t: x.t, m: x.m })));
   SOFTWARE.forEach((s) => s.quiz.forEach((q, i) => Q_BANK.set(q, { id: `sw.${s.id}#${i}`, q, label: s.name, sub: 'Software & Platforms', href: swHref(s) })));
+  Object.entries(PREPOST).forEach(([tid, qs]) => qs.forEach((q, i) => Q_BANK.set(q, { id: `pp.${tid}#${i}`, q, label: `Before/after check · ${TRACK_BY_ID[tid].level}`, sub: 'Before and after check', href: `#/pretest/${tid}` })));
   return Q_BANK;
 }
 let Q_BY_ID = null;
@@ -3185,7 +3196,7 @@ const dayStart = (t) => { const d = new Date(t); d.setHours(0, 0, 0, 0); return 
 /* Called by gradeQuestion() for every answered question. Entries saved
    before spaced review existed have no box/due: they count as due now. */
 function noteAnswer(q, ok) {
-  const b = qBank().get(q); if (!b) return;
+  const b = qBank().get(q); if (!b || b.id.startsWith('pp.')) return;
   const cur = state.missed[b.id];
   if (ok) {
     if (!cur || (cur.due || 0) > Date.now()) return; // not on the list, or not due yet
@@ -3845,7 +3856,7 @@ function trainerGroupHTML(g, members, prog, me, assigns) {
     </div>
     ${rows.length ? `<div class="table-wrap"><table class="table tr-table"><thead><tr><th scope="col">Learner</th><th scope="col">Lessons</th><th scope="col">Tracks</th>${mods.length ? '<th scope="col">Assigned</th>' : ''}<th scope="col">Quiz avg</th><th scope="col">To review</th><th scope="col">Last active</th><th scope="col"><span class="sr-only">Remove</span></th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`
       : `<p class="small muted tr-empty">No members yet. Share the join code: learners open <strong>Trainer groups</strong>, sign in and enter it.</p>`}
-    <footer class="tr-group__foot">${rows.length ? `<button type="button" class="btn btn--sm btn--ghost" data-csv="${g.id}">${icon('download', 'icon--sm')} Download CSV</button>` : ''}<button type="button" class="btn btn--sm btn--ghost" data-delete-group="${g.id}">${icon('x-circle', 'icon--sm')} Delete group</button></footer>
+    <footer class="tr-group__foot">${rows.length ? `<a class="btn btn--sm btn--ghost" href="#/trainer/items/${g.id}">${icon('bar', 'icon--sm')} Question analysis</a><button type="button" class="btn btn--sm btn--ghost" data-csv="${g.id}">${icon('download', 'icon--sm')} Download CSV</button>` : ''}<button type="button" class="btn btn--sm btn--ghost" data-delete-group="${g.id}">${icon('x-circle', 'icon--sm')} Delete group</button></footer>
   </article>`;
 }
 
@@ -4692,6 +4703,262 @@ function diagramHTML(id, caption) {
   const f = DIAGRAMS[id]; if (!f) return '';
   return `<figure class="dgfig"><div class="dgfig__scroll">${f()}</div>${caption ? `<figcaption>${inline(caption)}</figcaption>` : ''}</figure>`;
 }
+/* ===========================================================================
+   QUESTION ATTEMPTS — what a learner answered, for item analysis
+   Every graded question (lesson checks, module quizzes, review, platform
+   checks, before/after tests) becomes one attempt: question id, option
+   chosen, right or wrong, time on the question, where it was answered.
+   Offline-first, like progress: attempts queue in this browser
+   (localStorage "mca.attempts", newest 500 kept) and upload in batches to
+   public.attempts when the learner is signed in and online. Signed out, they
+   never leave the device. Attempts are not part of the synced progress.
+   =========================================================================== */
+const ATT_KEY = 'mca.attempts';
+const ATT_MAX = 500;
+const ATT = { timer: null, sending: false };
+/* Answer timing: ms since the page appeared, or since the previous answer on it. */
+let Q_CLOCK = Date.now();
+function attLoad() { try { const v = JSON.parse(localStorage.getItem(ATT_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+function attSave(list) { try { localStorage.setItem(ATT_KEY, JSON.stringify(list.slice(-ATT_MAX))); } catch (e) {} }
+function attContext() {
+  const h = location.hash;
+  return /^#\/lesson\//.test(h) ? 'lesson' : /^#\/quiz\//.test(h) ? 'quiz' : /^#\/review/.test(h) ? 'review'
+    : /^#\/(?:academy\/)?software\//.test(h) ? 'platform' : /^#\/pretest\//.test(h) ? 'pre' : /^#\/posttest\//.test(h) ? 'post' : 'other';
+}
+function recordAttempt(itemId, chosen, correct, ms, ctx) {
+  if (!/^[a-z0-9.#_-]{3,80}$/.test(String(itemId)) || !Number.isInteger(chosen) || chosen < 0 || chosen > 9) return;
+  const list = attLoad();
+  list.push({ i: itemId, c: chosen, ok: !!correct, ms: Number.isFinite(ms) ? Math.max(0, Math.min(3600000, Math.round(ms))) : null, x: ctx || attContext(), at: new Date().toISOString() });
+  attSave(list);
+  attQueue();
+}
+function attQueue() { clearTimeout(ATT.timer); ATT.timer = setTimeout(attFlush, 3000); }
+async function attFlush() {
+  if (ATT.sending || !CLOUD.user || !CLOUD.client || !navigator.onLine) return;
+  const batch = attLoad().slice(0, 100); if (!batch.length) return;
+  ATT.sending = true;
+  try {
+    const { error } = await CLOUD.client.from('attempts').insert(batch.map((a) => ({ item_id: a.i, chosen: a.c, correct: a.ok, ms: a.ms, context: a.x, answered_at: a.at })));
+    if (error) { console.warn('Attempt upload failed:', error.message); return; }
+    const sent = new Set(batch.map((a) => `${a.at}|${a.i}`));
+    const left = attLoad().filter((a) => !sent.has(`${a.at}|${a.i}`));
+    attSave(left);
+    if (left.length) attQueue();
+  } finally { ATT.sending = false; }
+}
+window.addEventListener('online', () => attQueue());
+
+/* ---------- Item analysis (pure; tested by tools/items-test.mjs) ----------
+   Uses each learner's FIRST attempt at each question, outside spaced review,
+   so practice on the same question doesn't inflate the numbers.
+   p = share correct (difficulty: high = easy).
+   d = discrimination: share correct in the top 27% of learners minus the
+       bottom 27%, ranked by their overall share correct (needs 4+ learners).
+   picks = how often each option (by its original index) was chosen. */
+function itemStats(rows) {
+  const first = new Map();
+  rows.filter((r) => r.context !== 'review').slice().sort((a, b) => String(a.answered_at).localeCompare(String(b.answered_at)))
+    .forEach((r) => { const k = `${r.user_id}|${r.item_id}`; if (!first.has(k)) first.set(k, r); });
+  const fr = [...first.values()];
+  const per = new Map();
+  fr.forEach((r) => { const s = per.get(r.user_id) || { n: 0, ok: 0 }; s.n++; if (r.correct) s.ok++; per.set(r.user_id, s); });
+  const score = new Map([...per].map(([u, s]) => [u, s.ok / s.n]));
+  const items = new Map();
+  fr.forEach((r) => {
+    const it = items.get(r.item_id) || { id: r.item_id, n: 0, ok: 0, picks: {}, who: [] };
+    it.n++; if (r.correct) it.ok++; it.picks[r.chosen] = (it.picks[r.chosen] || 0) + 1; it.who.push([score.get(r.user_id), r.correct]);
+    items.set(r.item_id, it);
+  });
+  return [...items.values()].map((it) => {
+    const ranked = it.who.slice().sort((a, b) => b[0] - a[0]);
+    const g = Math.max(1, Math.round(ranked.length * 0.27));
+    const share = (arr) => arr.filter((x) => x[1]).length / arr.length;
+    return { id: it.id, n: it.n, p: it.ok / it.n, d: ranked.length >= 4 ? share(ranked.slice(0, g)) - share(ranked.slice(-g)) : null, picks: it.picks };
+  });
+}
+/* What a trainer should look at first. */
+function itemFlag(s, optionCount) {
+  if (s.n < 5) return { level: 0, text: 'Too few answers yet' };
+  if (s.d != null && s.d < 0) return { level: 3, text: 'Weaker learners do better: check the answer key' };
+  if (s.p < 0.3) return { level: 2, text: 'Very hard, or the key or wording is wrong' };
+  if (s.p > 0.95) return { level: 1, text: 'Almost everyone gets it right' };
+  if (s.d != null && s.d < 0.2) return { level: 2, text: 'Doesn\'t separate strong from weak learners' };
+  const unused = optionCount ? [...Array(optionCount).keys()].filter((i) => !s.picks[i]).length : 0;
+  if (s.n >= 10 && unused) return { level: 1, text: `${unused} option${unused > 1 ? 's' : ''} nobody picks` };
+  return { level: 0, text: 'Working' };
+}
+/* Before/after per track: a learner's "before" score uses their first answer
+   to each before-test question; "after" uses their latest answer to each. */
+function prePostSummary(rows) {
+  const out = {};
+  ['pre', 'post'].forEach((kind) => {
+    const pick = new Map(); // track|user|item -> row
+    rows.filter((r) => r.context === kind && /^pp\./.test(r.item_id)).forEach((r) => {
+      const k = `${r.item_id.slice(3).split('#')[0]}|${r.user_id}|${r.item_id}`; const cur = pick.get(k);
+      const later = cur && String(r.answered_at) > String(cur.answered_at);
+      if (!cur || (kind === 'pre' ? !later && String(r.answered_at) < String(cur.answered_at) : later)) pick.set(k, r);
+    });
+    const per = new Map(); // track|user -> {n, ok}
+    pick.forEach((r, k) => { const tu = k.split('|').slice(0, 2).join('|'); const s = per.get(tu) || { n: 0, ok: 0 }; s.n++; if (r.correct) s.ok++; per.set(tu, s); });
+    per.forEach((s, tu) => { const tid = tu.split('|')[0]; const t = (out[tid] = out[tid] || { pre: [], post: [] }); t[kind].push(s.ok / s.n); });
+  });
+  return out;
+}
+
+/* ---------- Trainer view: #/trainer/items/<group id> ---------- */
+function viewItemAnalysis(gid) {
+  const html = `<div class="page ia">
+    ${pageHead({ eyebrow: `${icon('bar', 'icon--sm')} Trainer groups`, title: 'Question analysis', text: 'How each question performs for this group: how many learners get it right, whether it separates strong from weak learners, and which wrong answers they pick. Based on each learner\'s first try, outside spaced review.' })}
+    <div id="iaRoot"><div class="skeleton" style="height:220px;border-radius:12px"></div></div>
+  </div>`;
+  return { html, title: 'Question analysis', nav: 'trainer', crumbs: [['Trainer groups', '#/trainer'], ['Question analysis']], after: (v) => itemAnalysisLoad($('#iaRoot', v), gid) };
+}
+async function itemAnalysisLoad(root, gid) {
+  try {
+    await cloudInit();
+    if (!CLOUD.user) { root.innerHTML = stateBlock({ ic: 'lock', title: 'Sign in to see your group', text: 'Question analysis is for trainers who run a group.' }); return; }
+    const db = CLOUD.client; const me = CLOUD.user.id;
+    const g = await db.from('groups').select('id,name,owner').eq('id', gid).maybeSingle();
+    if (g.error) throw g.error;
+    if (!g.data || g.data.owner !== me) { root.innerHTML = stateBlock({ ic: 'lock', title: 'Not your group', text: 'Only the trainer who runs a group can see its question analysis.' }); return; }
+    const mem = await db.from('group_members').select('user_id').eq('group_id', gid);
+    if (mem.error) throw mem.error;
+    const ids = (mem.data || []).map((m) => m.user_id).filter((u) => u !== me);
+    let rows = [];
+    for (let from = 0; ids.length; from += 1000) {
+      const r = await db.from('attempts').select('user_id,item_id,chosen,correct,context,answered_at').in('user_id', ids).order('answered_at').range(from, from + 999);
+      if (r.error) throw r.error; rows = rows.concat(r.data || []); if (!r.data || r.data.length < 1000) break;
+    }
+    if (!CONTENT_LOADED.has('beginner')) await loadContent().catch(() => {});
+    root.innerHTML = itemAnalysisHTML(g.data, ids.length, rows);
+  } catch (e) {
+    console.warn('Question analysis failed:', e && e.message);
+    root.innerHTML = stateBlock({ ic: 'alert', title: 'Question analysis isn\'t available right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to see it.', error: true });
+  }
+}
+function itemAnalysisHTML(g, learners, rows) {
+  const stats = itemStats(rows);
+  const pp = prePostSummary(rows);
+  const mean = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : null);
+  const ppRows = Object.entries(pp).map(([tid, v]) => { const t = TRACK_BY_ID[tid]; const a = mean(v.pre), b = mean(v.post);
+    return `<tr><td>${esc(t ? t.level : tid)}</td><td class="num">${v.pre.length ? `${pct(a)}% <span class="muted small">(${v.pre.length})</span>` : '—'}</td><td class="num">${v.post.length ? `${pct(b)}% <span class="muted small">(${v.post.length})</span>` : '—'}</td><td class="num">${a != null && b != null ? `${b >= a ? '+' : ''}${pct(b - a)} pts` : '—'}</td></tr>`; }).join('');
+  const rowsHTML = stats.map((s) => {
+    const b = qById(s.id); const q = b && b.q; const opts = q ? (q.t === 'tf' ? ['True', 'False'] : q.o) : [];
+    const correct = q ? (q.t === 'tf' ? (q.a ? 0 : 1) : q.a) : -1;
+    const f = itemFlag(s, opts.length);
+    const picks = opts.map((o, i) => { const c = s.picks[i] || 0; return `<li class="${i === correct ? 'is-key' : ''}"><span class="ia-pick__bar" style="--p:${(c / s.n).toFixed(3)}"></span><span class="ia-pick__t">${i === correct ? icon('check', 'icon--sm') : ''}${esc(String(o).slice(0, 70))}</span><span class="num">${c}</span></li>`; }).join('');
+    return { f, html: `<tr class="ia-row ia-row--${f.level}"><td><div class="ia-q">${q ? inline(q.q) : esc(s.id)}</div><div class="small muted">${b ? `<a href="${b.href}">${esc(b.label)}</a>` : esc(s.id)}</div></td>
+      <td class="num">${s.n}</td><td class="num">${pct(s.p)}%</td><td class="num">${s.d == null ? '—' : s.d.toFixed(2)}</td>
+      <td><ul class="ia-picks">${picks}</ul></td><td><span class="ia-flag ia-flag--${f.level}">${esc(f.text)}</span></td></tr>` };
+  }).sort((a, b) => b.f.level - a.f.level).map((x) => x.html).join('');
+  return `<p class="small muted">${esc(g.name)} · ${learners} learner${learners === 1 ? '' : 's'} · ${rows.length} answers recorded</p>
+    ${ppRows ? `<section class="card card--pad mt-4"><h2 class="ia-h">Before and after</h2><p class="small muted">Average score on each track's 8-question check: first try before, latest try after (number of learners in brackets).</p>
+      <div class="table-wrap"><table class="table"><thead><tr><th scope="col">Track</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Change</th></tr></thead><tbody>${ppRows}</tbody></table></div></section>` : ''}
+    <section class="mt-6"><h2 class="ia-h">Questions</h2>
+      ${stats.length ? `<p class="small muted">Correct % is difficulty (high = easy; most good questions sit between 30% and 90%). Separation is the share correct among the strongest 27% of learners minus the weakest 27%: 0.3 or more is good, below 0.2 is weak, below 0 means check the answer key.</p>
+        <div class="table-wrap"><table class="table ia-table"><thead><tr><th scope="col">Question</th><th scope="col">Answers</th><th scope="col">Correct</th><th scope="col">Separation</th><th scope="col">Options picked</th><th scope="col">Look at</th></tr></thead><tbody>${rowsHTML}</tbody></table></div>`
+        : `<p class="muted">No answers yet. Questions appear here once learners in this group answer them while signed in.</p>`}
+    </section>`;
+}
+/* ===========================================================================
+   BEFORE / AFTER CHECKS — #/pretest/<track> and #/posttest/<track>
+   Eight new questions per maintenance track, aligned to the track outcomes
+   and not used anywhere else, so the "after" score measures learning rather
+   than memory of a lesson check. The same eight are used before and after
+   (options shuffled). The "before" check shows only the score, so it doesn't
+   teach the answers; the "after" check shows the answers and the change.
+   Results: state.prepost[track] = { pre: {score, total, at}, post: {...} };
+   each answer is also recorded as an attempt (context "pre" / "post").
+   =========================================================================== */
+const PREPOST = {
+  beginner: [
+    { t: 'mc', q: 'A driver calls: "My truck is making a weird noise." What do you ask first?', o: ['Which shop the driver would like to use for the repair', 'Which unit it is, where they are, and whether it is safe to keep going', 'How many miles are left until the next PM is due', 'Whether the noise started after the last fuel stop'], a: 1, e: 'Unit, location and safety come first. Everything else depends on them.' },
+    { t: 'mc', q: 'A driver reports that the trailer\'s marker lights are out. Which unit do you open the case on?', o: ['The trailer, using its own unit number', 'The tractor, since it supplies power to the lights', 'Both units, under one shared case number', 'Neither: lights are the driver\'s job to fix'], a: 0, e: 'Tractor and trailer have separate records. The defect is on the trailer.' },
+    { t: 'mc', q: 'Which report means the truck should stop safely now?', o: ['Amber check-engine lamp, power normal', 'Fuel gauge showing a quarter tank', 'Low-air warning with a steady hiss', 'Dash clock showing the wrong time'], a: 2, e: 'A low-air warning with a hiss is a brake-system defect.' },
+    { t: 'mc', q: 'A post-trip DVIR lists a cracked mirror. What must happen before the truck is dispatched again?', o: ['The next driver decides whether to fix it', 'Dispatch signs the report for the driver', 'Nothing, since mirrors are not on the checklist', 'It is repaired, or certified as not needing repair'], a: 3, e: 'A reported defect is repaired or certified before the vehicle runs again (49 CFR 396.11).' },
+    { t: 'mc', q: 'Which update helps dispatch most?', o: ['"T-120 at shop: alternator, ETR 15:00, next update 13:00"', '"Truck is at the shop, I will update you later today"', '"Driver says it should be fine fairly soon"', '"The shop is busy today, not sure when it\'s done"'], a: 0, e: 'Unit, cause, ETR and the next update let dispatch plan.' },
+    { t: 'mc', q: 'Which note belongs in the case record?', o: ['"Driver sounded annoyed on the phone again"', '"Shop is probably overcharging us as usual"', '"08:40 driver reports coolant leak, T-114, mile 142"', '"Same old problem with this truck, nothing new"'], a: 2, e: 'Records are factual: time, unit, what was reported and where.' },
+    { t: 'mc', q: 'What is the U.S. minimum tread depth on a steer tire?', o: ['2/32 in', '4/32 in', '6/32 in', '8/32 in'], a: 1, e: '49 CFR 393.75: 4/32 in on steer tires, 2/32 in on other positions.' },
+    { t: 'mc', q: 'The shop says the repair is done. What comes before closing the case?', o: ['Closing it right away, since the shop said so', 'Paying the invoice before it has arrived', 'Confirming with the driver that the problem is gone', 'Asking dispatch to close the case for you'], a: 2, e: 'Confirm the fix with the driver, then document and close.' }
+  ],
+  advanced: [
+    { t: 'mc', q: 'PM-A is due every 25,000 mi or 90 days, whichever comes first. A truck ran 9,000 mi in 90 days. When is PM-A due?', o: ['At 25,000 miles', 'At 90 days', 'When the driver asks for it', 'At the next annual inspection'], a: 1, e: 'Whichever limit comes first: here, 90 days.' },
+    { t: 'mc', q: 'A coolant temperature fault shows FMI 0. What does that suggest?', o: ['The sensor wiring is shorted to ground', 'The code is left over from a past repair', 'The temperature really is above normal', 'The engine computer needs a software update'], a: 2, e: 'FMI 0: data valid but above the normal range. The condition is real.' },
+    { t: 'mc', q: 'An estimate is $3,900 and your approval limit is $2,500. What do you do?', o: ['Send it to your manager with a short summary', 'Approve it to avoid more downtime', 'Ask the shop to split it into two bills', 'Tell the shop to wait until next week'], a: 0, e: 'Route it within authority, quickly, with the facts.' },
+    { t: 'mc', q: 'A reman starter costs $310 plus a $90 core charge. What is the final cost once the old starter is returned and accepted?', o: ['$220', '$400', '$490', '$310'], a: 3, e: '$310 + $90 paid, then $90 credited back: $310.' },
+    { t: 'mc', q: 'Diagnosis isn\'t finished yet. What do you tell dispatch?', o: ['An ETR of 14:00, just to be safe', 'No ETR yet; diagnosis is due by 11:00', 'That the truck will be ready today', 'Nothing until the repair is finished'], a: 1, e: 'Say what is known and when you will know more.' },
+    { t: 'mc', q: 'A driver waited 3 hours at a shop after driving 6 hours. Is a 30-minute break still due before driving on?', o: ['Yes, after 2 more hours of driving', 'Yes, before driving at all', 'No: the shop wait counts as the break', 'Only if the driver had no lunch'], a: 2, e: 'Any 30 straight minutes not driving, on duty or off, satisfies the break (49 CFR 395.3).' },
+    { t: 'mc', q: 'A unit cost $9,000 in maintenance over 75,000 miles. What is its cost per mile?', o: ['$0.08', '$0.12', '$0.83', '$8.33'], a: 1, e: '$9,000 ÷ 75,000 mi = $0.12 per mile.' },
+    { t: 'mc', q: 'A water pump fails 6 months after a shop replaced it under a 12-month warranty. What first?', o: ['Send the truck to the nearest shop', 'Buy a new pump and file a claim later', 'Call the shop that did it, with the RO', 'Have the driver top up the coolant'], a: 2, e: 'Start with the shop that did the work, before anyone else repairs it.' }
+  ],
+  expert: [
+    { t: 'mc', q: 'Which of these is a root cause, not a failure?', o: ['The alternator stopped charging', 'The battery light came on', 'The truck would not restart', 'Belt checks were missing from the PM list'], a: 3, e: 'A root cause explains why the failure happened and can be fixed in the process.' },
+    { t: 'mc', q: '50 units over 30 days had 1,800 downtime hours in total. What is fleet availability?', o: ['90%', '64%', '95%', '98%'], a: 2, e: '50 × 30 × 24 = 36,000 h; (36,000 − 1,800) ÷ 36,000 = 95%.' },
+    { t: 'mc', q: 'A truck has its third DPF derate in 60 days. What is the best next step?', o: ['Ask for a root-cause diagnosis with the full history', 'Clear the codes and release it again', 'Move it to a new shop without the history', 'Replace the DPF without any diagnosis'], a: 0, e: 'Repeats need the history and a root cause, and a warranty check.' },
+    { t: 'mc', q: 'Three calls at once: a driver stranded on a shoulder at −10°F, a reefer drifting slowly, a yard no-start. Who gets the first mobile truck?', o: ['The yard no-start, since it is closest', 'The reefer load, since cargo is costly', 'Whoever called first this morning', 'The stranded driver on the shoulder'], a: 3, e: 'Life safety first; protect cargo in parallel; low-risk work waits.' },
+    { t: 'mc', q: 'What belongs in a leadership update during a disruption?', o: ['Every message received so far', 'Units down, risks, actions, asks, next update', 'Only the units that are already fixed', 'The phone numbers of every vendor'], a: 1, e: 'A decision-ready summary with a clear ask and the next update time.' },
+    { t: 'mc', q: 'Why must "repeat repair" have a written definition?', o: ['So the number means the same thing every month', 'So shops will accept warranty claims', 'So the number looks lower to management', 'So technicians finish jobs faster'], a: 0, e: 'Without a fixed definition, the KPI can\'t be compared over time.' },
+    { t: 'mc', q: 'Vendor A is fastest but has a 12% comeback rate; Vendor B is slower with 2%. Why can B win on a scorecard?', o: ['B is cheaper per labor hour', 'Comebacks add downtime and repeat cost', 'Scorecards ignore repair speed', 'A has fewer shop locations'], a: 1, e: 'A comeback is a second breakdown, a second invoice and more downtime.' },
+    { t: 'mc', q: 'How does a forecast differ from a budget?', o: ['It never changes during the year', 'It ignores the planned miles', 'It covers only parts, not labor', 'It updates with actual results and known events'], a: 3, e: 'A forecast is the budget updated with what has actually happened.' }
+  ]
+};
+
+function viewPrePost(kind, tid) {
+  const t = TRACK_BY_ID[tid]; const qs = PREPOST[tid];
+  if (!t || !qs || !['pre', 'post'].includes(kind)) return viewNotFound();
+  const prev = (state.prepost[tid] || {})[kind];
+  const pre = (state.prepost[tid] || {}).pre;
+  const order = qs.map((q) => shuffle(q.o.map((_, i) => i)));
+  const html = `<div class="page page--narrow pp">
+    ${pageHead({ eyebrow: `${icon(t.icon, 'icon--sm')} ${esc(t.level)} track`, title: kind === 'pre' ? 'Before you start' : 'After the track', text: kind === 'pre'
+      ? `Eight questions, about 5 minutes. It isn't graded and doesn't affect anything: it shows where you start, so you can see what you learn. Answer what you can; guessing is fine.`
+      : `The same eight questions as the before check. Your result shows how much you have learned${pre ? `, compared with your before score of ${pre.score}/${pre.total}` : ''}.` })}
+    ${prev ? `<p class="callout callout--info small" role="note"><span class="callout__icon">${icon('info')}</span><span>You took this ${kind === 'pre' ? 'before check' : 'after check'} on ${new Date(prev.at).toLocaleDateString()} and scored ${prev.score}/${prev.total}. Taking it again ${kind === 'pre' ? 'won\'t change your before score.' : 'replaces your after score.'}</span></p>` : ''}
+    <form class="pp-form" novalidate>
+      ${qs.map((q, i) => `<div class="q card card--pad" data-qi="${i}">${questionHTML(q, `pp-${tid}-${i}`, order[i])}</div>`).join('')}
+      <div class="q__actions"><button type="submit" class="btn btn--primary">${icon('check')} ${kind === 'pre' ? 'See my starting score' : 'See my result'}</button><span class="small muted" data-pp-status role="status"></span></div>
+    </form>
+    <div data-pp-result aria-live="polite"></div>
+  </div>`;
+  return {
+    html, title: `${kind === 'pre' ? 'Before' : 'After'} check · ${t.level}`, nav: `track-${t.id}`, bottom: 'curriculum',
+    crumbs: [['Curriculum', '#/curriculum'], [t.level, `#/track/${t.id}`], [kind === 'pre' ? 'Before check' : 'After check']],
+    after: (v) => {
+      const form = $('.pp-form', v);
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const qels = $$('.q', form);
+        if (qels.some((el) => !$('input:checked', el))) { $('[data-pp-status]', v).textContent = 'Answer every question first. Guessing is fine.'; return; }
+        let ok = 0;
+        qels.forEach((el, i) => {
+          const q = qs[i]; const sel = $('input:checked', el); const chosen = +sel.value; const good = chosen === q.a; if (good) ok++;
+          recordAttempt(`pp.${tid}#${i}`, chosen, good, null, kind); // answers are submitted together: no per-question time
+          $$('input', el).forEach((x) => { x.disabled = true; });
+          if (kind === 'post') $$('.opt', el).forEach((o) => { const oi = +o.dataset.oi; if (oi === q.a) o.classList.add('is-correct'); else if (oi === chosen) o.classList.add('is-wrong'); });
+        });
+        const res = { score: ok, total: qs.length, at: Date.now() };
+        state.prepost[tid] = Object.assign({}, state.prepost[tid]);
+        if (kind === 'post' || !state.prepost[tid].pre) state.prepost[tid][kind] = res;
+        touch('pp:' + tid); save();
+        $('.q__actions', form).remove();
+        const gain = kind === 'post' && pre ? ok - pre.score : null;
+        $('[data-pp-result]', v).innerHTML = `<div class="card card--pad pp-result mt-4"><h2>${ok}/${qs.length}</h2>
+          <p>${kind === 'pre' ? 'That is your starting point. Work through the track, then take the after check to see the difference.' : gain == null ? 'Take the before check next time you start a track, to see the change.' : gain > 0 ? `Up ${gain} from your before score of ${pre.score}/${pre.total}.` : gain === 0 ? `The same as your before score. Review the lessons on the questions you missed.` : `Down ${-gain} from your before score. Review the lessons on the questions you missed.`}</p>
+          <div class="row row--wrap mt-3"><a class="btn btn--primary" href="#/track/${t.id}">Back to the ${esc(t.level)} track</a></div></div>`;
+      });
+    }
+  };
+}
+/* Card on each track page that has a before/after check. */
+function prePostCardHTML(t) {
+  if (!PREPOST[t.id]) return '';
+  const r = state.prepost[t.id] || {};
+  const cell = (kind, label) => { const x = r[kind]; return `<a class="pp-card__cell ${x ? 'is-done' : ''}" href="#/${kind}test/${t.id}"><span class="small muted">${label}</span><strong>${x ? `${x.score}/${x.total}` : 'Start'}</strong></a>`; };
+  const gain = r.pre && r.post ? r.post.score - r.pre.score : null;
+  return `<section class="card card--pad mb-6 pp-card"><div class="grow"><span class="eyebrow">Before and after check · 8 questions · ~5 min</span>
+      <p class="small mt-2">Take it before you start and again when you finish, to see what you learned${gain != null ? `: <strong>${gain >= 0 ? '+' : ''}${gain}</strong> so far` : ''}.</p></div>
+    <div class="pp-card__cells">${cell('pre', 'Before')}${cell('post', 'After')}</div></section>`;
+}
 
 /* ===========================================================================
    4. ENGINE
@@ -4734,7 +5001,7 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 
 /* ---------- State (localStorage) ---------- */
 const STORE_KEY = 'mca.v1';
-const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0, profile: { role: '', company: '', city: '' }, avatar: { src: '', url: '', color: '' }, goal: 1, motion: null };
+const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0, profile: { role: '', company: '', city: '' }, avatar: { src: '', url: '', color: '' }, goal: 1, motion: null, prepost: {} };
 /* Who the learner is and how they like the app: kept when progress is reset. */
 const PROFILE_KEYS = ['name', 'profile', 'avatar', 'goal', 'theme', 'motion'];
 let storageOk = true;
@@ -5066,6 +5333,9 @@ function gradeQuestion(el, q) {
   });
   $('.opts', el).classList.add('is-locked');
   noteAnswer(q, ok);
+  const qb = qBank().get(q); const now = Date.now();
+  if (qb && !qb.id.startsWith('pp.')) recordAttempt(qb.id, chosen, ok, now - Q_CLOCK);
+  Q_CLOCK = now;
   return { ok, html: `<div class="feedback feedback--${ok ? 'correct' : 'wrong'}" role="status">${icon(ok ? 'check-circle' : 'x-circle')}<div><strong>${ok ? 'Correct' : 'Not quite'}</strong><p>${inline(q.e)}</p></div></div>` };
 }
 
@@ -5261,6 +5531,8 @@ const ROUTES = [
   [/^\/review$/, viewReview],
   [/^\/simulations$/, viewSimulations],
   [/^\/trainer$/, viewTrainer],
+  [/^\/trainer\/items\/([\w-]+)$/, viewItemAnalysis],
+  [/^\/(pre|post)test\/(\w+)$/, viewPrePost],
   [/^\/verify(?:\/([\w-]+))?$/, viewVerify],
   [/^\/cheatsheet\/(\w+)\/(\w+)$/, viewCheatSheet],
   [/^\/achievements$/, viewAchievements],
@@ -5302,6 +5574,7 @@ function router() {
   mountWidgets(view);
   mountExercises(view);
   if (out.after) out.after(view);
+  Q_CLOCK = Date.now(); // question timing starts when the page is shown
   closeSidebar();
   if (!out.keepScroll) window.scrollTo({ top: 0, behavior: 'auto' });
   $('#main').focus({ preventScroll: true });
@@ -5554,6 +5827,7 @@ function viewTrack(tid) {
     <section class="card card--pad mb-6"><span class="eyebrow">What you'll be able to do</span>
       <ul class="grid grid--2 mt-3" style="list-style:none;padding:0;gap:10px">${t.outcomes.map((o) => `<li class="row" style="align-items:flex-start;gap:10px">${icon('check-circle', 'icon--sm')}<span class="small" style="color:var(--text-2)">${esc(o)}</span></li>`).join('')}</ul>
     </section>
+    ${prePostCardHTML(t)}
     <div class="module-list stagger">${t.modules.map((m, i) => moduleHTML(t, m, i, m.id === openMod)).join('')}</div>
     <div class="final-card mt-6 ${fin && fin.passed ? 'is-passed' : ''}">
       <span class="final-card__icon">${icon('award')}</span>
@@ -6709,6 +6983,7 @@ function confirmResetProgress() {
       const keep = Object.fromEntries(PROFILE_KEYS.map((k) => [k, state[k]]));
       const edits = Object.fromEntries(PROFILE_KEYS.filter((k) => state.edits[k]).map((k) => [k, state.edits[k]]));
       state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), keep, { edits, resetAt: Date.now() });
+      attSave([]); // answers waiting to upload go with the reset
       save(); close(); toast({ title: 'Progress reset', text: 'Starting fresh.' }); go('#/dashboard');
     })
   });

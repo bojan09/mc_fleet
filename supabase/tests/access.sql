@@ -1,5 +1,5 @@
--- MC Academy — access-rule test for groups, progress, certificates and
--- assignments. Creates a pretend trainer (T), trainee (M) and outsider (O),
+-- MC Academy — access-rule test for groups, progress, certificates,
+-- assignments and question attempts. Creates a pretend trainer (T), trainee (M) and outsider (O),
 -- acts as each through row-level security, then ALWAYS rolls back: the last
 -- line raises an error on purpose, so nothing it created is kept.
 --
@@ -45,6 +45,14 @@ begin
   begin insert into public.assignments (group_id, module) values (gid, 'beginner.m2'); fails := fails || ' | M added an assignment';
   exception when insufficient_privilege then null; end; checks := checks + 1;
   cid := public.issue_certificate('beginner'); checks := checks + 1; if cid is null then fails := fails || ' | M got no certificate'; end if;
+  insert into public.attempts (item_id, chosen, correct, ms, context) values ('beginner.m1.l1#0', 1, true, 5200, 'lesson'), ('beginner.m1.l1#1', 0, false, 8100, 'lesson');
+  select count(*) into n from public.attempts; checks := checks + 1; if n <> 2 then fails := fails || ' | M sees ' || n || ' attempts'; end if;
+  update public.attempts set correct = true; get diagnostics n = row_count; checks := checks + 1; if n <> 0 then fails := fails || ' | M edited attempts'; end if;
+  delete from public.attempts; get diagnostics n = row_count; checks := checks + 1; if n <> 0 then fails := fails || ' | M deleted attempts'; end if;
+  begin insert into public.attempts (user_id, item_id, chosen, correct, context) values (o, 'beginner.m1.l1#0', 0, true, 'lesson'); fails := fails || ' | M added an attempt as O';
+  exception when insufficient_privilege then null; end; checks := checks + 1;
+  begin insert into public.attempts (item_id, chosen, correct, context) values ('bad id with spaces', 0, true, 'lesson'); fails := fails || ' | invalid item_id accepted';
+  exception when check_violation then null; end; checks := checks + 1;
   execute 'reset role';
 
   -- T: sees the member's progress, cannot change it or see certificates
@@ -54,6 +62,8 @@ begin
   select count(*) into n from public.group_members; checks := checks + 1; if n <> 1 then fails := fails || ' | T sees ' || n || ' memberships'; end if;
   select count(*) into n from public.certificates;  checks := checks + 1; if n <> 0 then fails := fails || ' | T sees certificates'; end if;
   update public.progress set state = '{}' where user_id = m; get diagnostics n = row_count; checks := checks + 1; if n <> 0 then fails := fails || ' | T changed member progress'; end if;
+  select count(*) into n from public.attempts;      checks := checks + 1; if n <> 2 then fails := fails || ' | T sees ' || n || ' member attempts'; end if;
+  delete from public.attempts where user_id = m; get diagnostics n = row_count; checks := checks + 1; if n <> 0 then fails := fails || ' | T deleted member attempts'; end if;
   execute 'reset role';
 
   -- O: sees nothing of the group, cannot join, forge or spoof
@@ -64,6 +74,7 @@ begin
   select count(*) into n from public.progress;      checks := checks + 1; if n <> 1 then fails := fails || ' | O sees ' || n || ' progress rows'; end if;
   select count(*) into n from public.certificates;  checks := checks + 1; if n <> 0 then fails := fails || ' | O sees certificates'; end if;
   select count(*) into n from public.assignments;   checks := checks + 1; if n <> 0 then fails := fails || ' | O sees assignments'; end if;
+  select count(*) into n from public.attempts;      checks := checks + 1; if n <> 0 then fails := fails || ' | O sees attempts'; end if;
   update public.groups set name = 'x' where id = gid; get diagnostics n = row_count; checks := checks + 1; if n <> 0 then fails := fails || ' | O renamed the group'; end if;
   delete from public.group_members where group_id = gid; get diagnostics n = row_count; checks := checks + 1; if n <> 0 then fails := fails || ' | O removed members'; end if;
   delete from public.groups where id = gid; get diagnostics n = row_count; checks := checks + 1; if n <> 0 then fails := fails || ' | O deleted the group'; end if;
@@ -87,6 +98,8 @@ begin
   select count(*) into n from public.certificates; checks := checks + 1; if n <> 0 then fails := fails || ' | anon sees certificates'; end if;
   select count(*) into n from public.groups;       checks := checks + 1; if n <> 0 then fails := fails || ' | anon sees groups'; end if;
   select count(*) into n from public.assignments;  checks := checks + 1; if n <> 0 then fails := fails || ' | anon sees assignments'; end if;
+  begin select count(*) into n from public.attempts; if n <> 0 then fails := fails || ' | anon sees attempts'; end if;
+  exception when insufficient_privilege then null; end; checks := checks + 1;
   execute 'reset role';
 
   -- M leaves: T loses access to M's progress
@@ -97,6 +110,7 @@ begin
   perform set_config('request.jwt.claims', json_build_object('sub', t, 'role', 'authenticated')::text, true);
   execute 'set local role authenticated';
   select count(*) into n from public.progress; checks := checks + 1; if n <> 1 then fails := fails || ' | T still sees ' || n || ' progress rows after M left'; end if;
+  select count(*) into n from public.attempts; checks := checks + 1; if n <> 0 then fails := fails || ' | T still sees attempts after M left'; end if;
   delete from public.assignments where group_id = gid; get diagnostics n = row_count; checks := checks + 1; if n <> 1 then fails := fails || ' | T could not remove the assignment'; end if;
   execute 'reset role';
 

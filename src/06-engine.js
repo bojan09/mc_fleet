@@ -40,7 +40,7 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 
 /* ---------- State (localStorage) ---------- */
 const STORE_KEY = 'mca.v1';
-const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0, profile: { role: '', company: '', city: '' }, avatar: { src: '', url: '', color: '' }, goal: 1, motion: null };
+const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0, profile: { role: '', company: '', city: '' }, avatar: { src: '', url: '', color: '' }, goal: 1, motion: null, prepost: {} };
 /* Who the learner is and how they like the app: kept when progress is reset. */
 const PROFILE_KEYS = ['name', 'profile', 'avatar', 'goal', 'theme', 'motion'];
 let storageOk = true;
@@ -372,6 +372,9 @@ function gradeQuestion(el, q) {
   });
   $('.opts', el).classList.add('is-locked');
   noteAnswer(q, ok);
+  const qb = qBank().get(q); const now = Date.now();
+  if (qb && !qb.id.startsWith('pp.')) recordAttempt(qb.id, chosen, ok, now - Q_CLOCK);
+  Q_CLOCK = now;
   return { ok, html: `<div class="feedback feedback--${ok ? 'correct' : 'wrong'}" role="status">${icon(ok ? 'check-circle' : 'x-circle')}<div><strong>${ok ? 'Correct' : 'Not quite'}</strong><p>${inline(q.e)}</p></div></div>` };
 }
 
@@ -567,6 +570,8 @@ const ROUTES = [
   [/^\/review$/, viewReview],
   [/^\/simulations$/, viewSimulations],
   [/^\/trainer$/, viewTrainer],
+  [/^\/trainer\/items\/([\w-]+)$/, viewItemAnalysis],
+  [/^\/(pre|post)test\/(\w+)$/, viewPrePost],
   [/^\/verify(?:\/([\w-]+))?$/, viewVerify],
   [/^\/cheatsheet\/(\w+)\/(\w+)$/, viewCheatSheet],
   [/^\/achievements$/, viewAchievements],
@@ -608,6 +613,7 @@ function router() {
   mountWidgets(view);
   mountExercises(view);
   if (out.after) out.after(view);
+  Q_CLOCK = Date.now(); // question timing starts when the page is shown
   closeSidebar();
   if (!out.keepScroll) window.scrollTo({ top: 0, behavior: 'auto' });
   $('#main').focus({ preventScroll: true });
@@ -860,6 +866,7 @@ function viewTrack(tid) {
     <section class="card card--pad mb-6"><span class="eyebrow">What you'll be able to do</span>
       <ul class="grid grid--2 mt-3" style="list-style:none;padding:0;gap:10px">${t.outcomes.map((o) => `<li class="row" style="align-items:flex-start;gap:10px">${icon('check-circle', 'icon--sm')}<span class="small" style="color:var(--text-2)">${esc(o)}</span></li>`).join('')}</ul>
     </section>
+    ${prePostCardHTML(t)}
     <div class="module-list stagger">${t.modules.map((m, i) => moduleHTML(t, m, i, m.id === openMod)).join('')}</div>
     <div class="final-card mt-6 ${fin && fin.passed ? 'is-passed' : ''}">
       <span class="final-card__icon">${icon('award')}</span>
@@ -2015,6 +2022,7 @@ function confirmResetProgress() {
       const keep = Object.fromEntries(PROFILE_KEYS.map((k) => [k, state[k]]));
       const edits = Object.fromEntries(PROFILE_KEYS.filter((k) => state.edits[k]).map((k) => [k, state.edits[k]]));
       state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), keep, { edits, resetAt: Date.now() });
+      attSave([]); // answers waiting to upload go with the reset
       save(); close(); toast({ title: 'Progress reset', text: 'Starting fresh.' }); go('#/dashboard');
     })
   });

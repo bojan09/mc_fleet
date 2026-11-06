@@ -77,6 +77,14 @@ function mergeProgress(a, b) {
     // The Google photo link is filled in by whichever device saw it last.
     if (k === 'avatar' && out.avatar && !out.avatar.google) { const g = (a.avatar || {}).google || (b.avatar || {}).google; if (g) out.avatar.google = g; }
   });
+  // Before/after checks: keep the earliest "before" and the latest "after" per track.
+  out.prepost = {};
+  new Set([...Object.keys(a.prepost || {}), ...Object.keys(b.prepost || {})]).forEach((tid) => {
+    const x = (a.prepost || {})[tid] || {}, y = (b.prepost || {})[tid] || {}; const r = {};
+    const pre = [x.pre, y.pre].filter(Boolean).sort((p, q) => p.at - q.at)[0]; if (pre) r.pre = pre;
+    const post = [x.post, y.post].filter(Boolean).sort((p, q) => q.at - p.at)[0]; if (post) r.post = post;
+    out.prepost[tid] = r;
+  });
   out.theme = a.theme;
   out.motion = a.motion;
   return out;
@@ -122,6 +130,7 @@ async function cloudPull() {
     router();
   }
   await cloudPush();
+  attFlush();
 }
 
 /* Where emailed links (confirm sign-up, reset password, confirm new email) return to. */
