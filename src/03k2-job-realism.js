@@ -89,3 +89,93 @@ enrich('advanced.m4.l3', { add: [
 lessonAt('advanced.m4.l3').check.push(
   { t: 'mc', q: 'A driver hears a steady hiss from a trailer tire at a fuel stop. What is the right call?', o: ['Drive to the shop 15 miles away before it gets worse', 'Keep the unit parked and send mobile tire service with the exact position', 'Air it up and keep going to the delivery', 'Wait until the next PM'], a: 1, e: 'A tire with an audible leak is out of service (49 CFR 393.75(a)(3)). Send service to the unit with axle, side and inside/outside position.' }
 );
+
+/* ---- Advanced 2.1: triage a list of fault codes, not one code ---- */
+lessonAt('advanced.m2.l1').deep.push({ title: 'Triage a fault list', blocks: [
+  `Telematics rarely sends one tidy code. You get a list: some active, some old, some repeating. The skill is putting them in order before you call anyone. Here is T-412's fault snapshot at 06:40.`,
+  { table: { head: ['Status', 'SPN', 'FMI', 'Description', 'Lamp', 'Count'], rows: [
+    ['Active', '100', '1', 'Engine oil pressure low', 'Red STOP', '1'],
+    ['Active', '3251', '0', 'DPF differential pressure high', 'Amber', '4'],
+    ['Active', '1761', '18', 'DEF tank level low', 'Amber', '1'],
+    ['Inactive', '168', '18', 'Battery voltage low', 'None', '1 (12 days ago)']
+  ] } },
+  { ul: [
+    '<strong>Lamp and status first.</strong> An active code with a red lamp outranks everything else on the list.',
+    '<strong>Count the repeats.</strong> A code that has come back four times is a real problem, not a glitch.',
+    '<strong>Look for one cause behind many codes.</strong> Several unrelated sensor codes at once often point to low voltage or one bad connector.',
+    '<strong>Inactive means history.</strong> Note it for the next PM; it is not a road call on its own.',
+    '<strong>Never ask a driver to clear codes.</strong> The technician needs them.'
+  ] },
+  { exercise: { type: 'classify', prompt: 'Sort each line of T-412\'s snapshot.', categories: ['Stop safely now', 'Plan service soon', 'Driver action or monitor'], items: [
+    { text: 'SPN 100 / FMI 1 · oil pressure low · red STOP lamp · active', answer: 'Stop safely now', why: 'Low oil pressure with a red lamp can destroy an engine in minutes. Stop safely, shut down, arrange service.' },
+    { text: 'SPN 3251 / FMI 0 · DPF pressure high · amber · active, 4 times', answer: 'Plan service soon', why: 'A clogging DPF leads to a derate. Repeats mean a regen or a cleaning is due: book it before it strands the truck.' },
+    { text: 'SPN 1761 / FMI 18 · DEF level low · amber · active', answer: 'Driver action or monitor', why: 'Refill DEF at the next stop. Left alone, the engine will limit power.' },
+    { text: 'SPN 168 / FMI 18 · battery voltage low · inactive, 12 days ago', answer: 'Driver action or monitor', why: 'One old occurrence. Ask for a battery and charging test at the next PM.' }
+  ] } },
+  { note: 'Descriptions are shown in plain words. Exact SPN and FMI definitions come from the SAE J1939 standard and each engine maker\'s fault guide; the technician confirms.' }
+] });
+
+/* ---- Advanced 3.1: check the final invoice against the approval ---- */
+lessonAt('advanced.m3.l1').deep.push({ title: 'Checking the final invoice', blocks: [
+  `The estimate is what you approved. The invoice is what the shop wants paid. Compare them line by line before anyone pays, while the details are still fresh.`,
+  { table: { head: ['Line · T-118 brake job', 'Approved estimate', 'Invoice', 'Check'], rows: [
+    ['Labor, 4.0 h book at $165/h', '$660.00', '5.5 h · $907.50', 'Ask why 1.5 h over. Was extra time approved?'],
+    ['Brake shoes and drums, drive axles', '$1,240.00', '$1,240.00', 'Matches'],
+    ['Slack adjusters (2)', 'Not on estimate', '$310.00', 'Who approved it, and when? Ask for the measurement that failed.'],
+    ['Shop supplies', '$66.00 (10% of labor)', '$136.13 (15%)', 'Rate changed. Ask for the shop\'s policy.'],
+    ['Brake shoe core charge', '$120.00', '$120.00', 'Fine, if the old shoes went back. Make sure the credit posts.']
+  ] } },
+  { ul: [
+    'Same unit, VIN and odometer as the case.',
+    'Every line is on the approved estimate or has a recorded approval.',
+    'Labor hours match the estimate or book time, or there is a reason.',
+    'Parts prices match the quote; warranty items are not billed to you.',
+    'Shop supplies and fees follow the agreed policy.',
+    'Cores are returned and their credits tracked.'
+  ] },
+  { exercise: { type: 'multi', prompt: 'Which T-118 invoice lines do you question before approving payment?', options: [
+    { text: 'Labor billed at 5.5 hours', correct: true, why: '1.5 hours over the approved estimate with no recorded approval.' },
+    { text: 'Brake shoes and drums', correct: false, why: 'Matches the estimate exactly.' },
+    { text: 'Two slack adjusters', correct: true, why: 'Not on the estimate. Unapproved work needs an explanation before payment.' },
+    { text: 'Shop supplies at 15%', correct: true, why: 'The rate is higher than the estimate used. Ask for the policy.' },
+    { text: 'Brake shoe core charge', correct: false, why: 'It was on the estimate and is refunded when the cores are accepted.' }
+  ] } }
+] });
+
+/* ---- Advanced 4.2: what the tow company needs ---- */
+lessonAt('advanced.m4.l2').deep.push({ title: 'Ordering a heavy tow', blocks: [
+  `A tow ordered with missing details arrives with the wrong truck, or not at all. Give the tow company everything in one call.`,
+  { table: { head: ['Tell them', 'Why it matters'], rows: [
+    ['Unit and combination: tractor only, or tractor and trailer; loaded or empty; rough weight', 'Decides the wrecker class and whether the trailer goes too'],
+    ['Exact location: road, direction, exit or mile marker, shoulder or lane, a GPS pin', 'The wrecker finds the truck the first time'],
+    ['What is wrong: no-start, brakes locked, air leak, crash damage', 'Locked spring brakes need air supplied or the brakes caged before the truck can roll'],
+    ['Destination: shop name, address, hours, and that they will accept it', 'Avoids a tow to a closed gate'],
+    ['Payment: quoted rate (hook-up plus per mile, or hourly), PO number, who signs', 'Prevents billing disputes later']
+  ] } },
+  { callout: { kind: 'info', title: 'The driveline question', text: 'Towing a tractor with its drive wheels on the ground usually means disconnecting the driveshaft or pulling the axle shafts, so the transmission is not damaged. The operator knows this; make sure it is in the quote and on the invoice.' } },
+  { callout: { kind: 'tip', title: 'Get it in writing', text: 'Get the ETA and the quote by text or email before you confirm. Then give the driver the tow company\'s name and ETA.' } }
+] });
+
+/* ---- Advanced 4.3: wheel torque after tire work ---- */
+lessonAt('advanced.m4.l3').tips.push('After any wheel comes off, ask the vendor to re-check lug-nut torque after the first 50–100 miles, as most wheel makers recommend. Loose wheels can come off.');
+
+/* ---- Expert 6.1: recalls are free repairs ---- */
+enrich('expert.m6.l1', { add: [
+  { h: 'Recalls: repairs the manufacturer pays for' },
+  `A safety recall is a defect the manufacturer must fix at no charge. Recalls cover trucks, trailers, tires and equipment. Check every unit's VIN on NHTSA's free recall search (nhtsa.gov/recalls) or the truck maker's recall page when a unit joins the fleet, and before each PM or annual inspection. Tires are checked by the DOT code on the sidewall.`,
+  { callout: { kind: 'tip', title: 'Pair recalls with planned visits', text: 'Book open recalls with an authorized dealer during a planned PM, so the unit visits the shop once. Record the recall number and the completion date in the unit\'s history.' } }
+] });
+lessonAt('expert.m6.l1').check.push(
+  { t: 'tf', q: 'An open safety recall on a truck is repaired by an authorized dealer at no charge to the fleet.', a: true, e: 'Safety recall repairs are paid by the manufacturer. Check VINs regularly and book recalls alongside planned shop visits.' }
+);
+
+/* ---- Beginner 8.1: the end-of-shift handover ---- */
+enrich('beginner.m8.l1', { add: [
+  { h: 'The end-of-shift handover' },
+  `Breakdowns do not stop at shift change. The next coordinator needs one short note that says what is open, what is waiting, and when to call you. Write it before you leave, every shift.`,
+  { msg: { kind: 'note', title: 'Handover · Tue 18:00 → night (R. Diaz)', text: 'OPEN\n• T-133: trailer brake out of service at the I-20 scale. Mobile tech on site, ETR 19:30. Roadside report to certify by 11/20.\n• T-126: water pump leak. Delta Diesel warranty diagnosis tomorrow 08:00.\n\nWAITING\n• T-101: clutch $4,820. Fleet manager approval asked 16:10.\n• T-118: reman alternator core return pending ($90 credit).\n\nDUE SOON\n• TR-540: annual inspection 11/09.\n• T-122: PM-B in 1,200 mi.\n\nCALL ME IF\n• T-133 ETR slips past 21:00 (load due 07:00).' } },
+  { callout: { kind: 'tip', title: 'Four headings', text: 'Open, waiting, due soon, call me if. If a case is not in the note, the next shift does not know it exists.' } }
+] });
+lessonAt('beginner.m8.l1').check.push(
+  { t: 'mc', q: 'What does the next shift most need from your handover note?', o: ['A copy of every message from today', 'Open cases with status and ETR, items waiting on someone, things due soon, and when to call you', 'Only the cases that are closed', 'Nothing; they can read the case system'], a: 1, e: 'A short note with open cases, waiting items, upcoming due dates and escalation triggers keeps cases from falling through the gap between shifts.' }
+);
