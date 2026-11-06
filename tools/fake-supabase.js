@@ -31,6 +31,7 @@
       eq(c, v) { q.filters.push((r) => r[c] === v); return api; },
       in(c, vs) { q.filters.push((r) => vs.includes(r[c])); return api; },
       order(c) { q.order = c; return api; },
+      range(a, b) { q.range = [a, b]; return api; },
       maybeSingle() { q.single = true; return api; },
       insert(row) { q.op = 'insert'; q.payload = row; return api; },
       upsert(row) { q.op = 'upsert'; q.payload = row; return api; },
@@ -41,6 +42,7 @@
       window.__FAKE_LOG.push({ table, op: q.op });
       const rows = t(table);
       if (q.op === 'insert') {
+        if (Array.isArray(q.payload)) { q.payload.forEach((p) => rows.push(Object.assign({ id: uuid(), user_id: user.id }, p))); return { data: null, error: null }; }
         const r = Object.assign({ id: uuid(), created_at: new Date().toISOString() }, table === 'groups' ? { owner: user.id, join_code: 'TESTCODE' } : {}, q.payload);
         if (table === 'assignments' && rows.some((x) => x.group_id === r.group_id && x.module === r.module)) return { data: null, error: { message: 'duplicate key' } };
         rows.push(r); return { data: null, error: null };
@@ -53,6 +55,7 @@
       let hit = rows.filter((r) => q.filters.every((f) => f(r)));
       if (q.op === 'delete') { db[table] = rows.filter((r) => !hit.includes(r)); return { data: null, error: null }; }
       if (q.order) hit = hit.slice().sort((a, b) => String(a[q.order]).localeCompare(String(b[q.order])));
+      if (q.range) hit = hit.slice(q.range[0], q.range[1] + 1);
       const data = hit.map((r) => shape(table, r, q.cols));
       return { data: q.single ? data[0] || null : data, error: null };
     }

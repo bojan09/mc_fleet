@@ -175,7 +175,9 @@ function infographicHTML(b) {
 
     default: return '';
   }
-  return `<figure class="ig ${cls}"><figcaption class="ig__head"><span class="ig__tag">${icon(b.icon || 'bar', 'icon--sm')} Infographic</span><span class="ig__title">${esc(b.title)}</span></figcaption>${inner}${b.note ? `<p class="ig__note">${icon('info', 'icon--sm')}<span>${inline(b.note)}</span></p>` : ''}</figure>`;
+  /* Charts built on made-up numbers say so; real-data charts set real: true. */
+  const exTag = b.real ? '' : ['bars', 'donut', 'waterfall', 'heatmap', 'stackcompare'].includes(b.ig) ? 'Example data · fictional fleet' : b.ig === 'ratings' ? 'General tendencies, not measurements' : '';
+  return `<figure class="ig ${cls}"><figcaption class="ig__head"><span class="ig__tag">${icon(b.icon || 'bar', 'icon--sm')} Infographic</span><span class="ig__title">${esc(b.title)}</span>${exTag ? `<span class="ig__ex">${exTag}</span>` : ''}</figcaption>${inner}${b.note ? `<p class="ig__note">${icon('info', 'icon--sm')}<span>${inline(b.note)}</span></p>` : ''}</figure>`;
 }
 
 /* ---------- Widget: gauge cluster ---------- */

@@ -14,6 +14,7 @@ function qBank() {
   Q_BANK = new Map();
   LESSONS.forEach((x) => (x.l.check || []).forEach((q, i) => Q_BANK.set(q, { id: `${x.key}#${i}`, q, label: x.l.title, sub: `${x.t.level} · Module ${x.m.id.slice(1)}: ${x.m.title}`, href: lessonHref(x), t: x.t, m: x.m })));
   SOFTWARE.forEach((s) => s.quiz.forEach((q, i) => Q_BANK.set(q, { id: `sw.${s.id}#${i}`, q, label: s.name, sub: 'Software & Platforms', href: swHref(s) })));
+  Object.entries(PREPOST).forEach(([tid, qs]) => qs.forEach((q, i) => Q_BANK.set(q, { id: `pp.${tid}#${i}`, q, label: `Before/after check · ${TRACK_BY_ID[tid].level}`, sub: 'Before and after check', href: `#/pretest/${tid}` })));
   return Q_BANK;
 }
 let Q_BY_ID = null;
@@ -27,7 +28,7 @@ const dayStart = (t) => { const d = new Date(t); d.setHours(0, 0, 0, 0); return 
 /* Called by gradeQuestion() for every answered question. Entries saved
    before spaced review existed have no box/due: they count as due now. */
 function noteAnswer(q, ok) {
-  const b = qBank().get(q); if (!b) return;
+  const b = qBank().get(q); if (!b || b.id.startsWith('pp.')) return;
   const cur = state.missed[b.id];
   if (ok) {
     if (!cur || (cur.due || 0) > Date.now()) return; // not on the list, or not due yet

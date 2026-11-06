@@ -3,7 +3,7 @@
    PRIVACY — what the academy stores, where, and how to delete it; account
    deletion for signed-in users; contact.
    =========================================================================== */
-const PRIVACY_UPDATED = 'October 2026';
+const PRIVACY_UPDATED = 'November 2026';
 const CONTACT_EMAIL = 'stanbdev@gmail.com';
 
 /* "Report a problem": an email with the page name and link filled in. */
@@ -22,15 +22,16 @@ function viewPrivacy() {
 
     <section class="pv-sec"><h2>Without an account</h2>
       ${row('grid', 'Stored in your browser only', 'Completed lessons, quiz and exam scores, bookmarks, achievements, the name and profile details you type in (role, company, city), your daily goal, the days you studied, and your theme and animation preferences. It is kept in your browser\'s local storage and never leaves your device.')}
-      ${row('rotate', 'How to delete it', 'Use <strong>Reset progress</strong> on your <a href="#/profile">Profile</a> page, or clear this site\'s data in your browser settings.')}
+      ${row('rotate', 'How to delete it', 'Use <strong>Reset progress</strong> on your <a href="#/profile">Profile</a> page, or clear this site\'s data in your browser settings (this also clears answers waiting to upload).')}
     </section>
 
     <section class="pv-sec"><h2>If you create an account</h2>
       ${row('users', 'Your account', 'You can sign in with Google or with your email and a password. With Google, Google shares your name, email address, profile picture link and a Google account ID with our sign-in provider, Supabase. With email, Supabase stores your email address and a securely hashed password (we never see the password itself) and sends the confirmation and password-reset emails. We use these details only to identify your account and show your name.')}
       ${row('image', 'Profile picture (optional)', 'If you upload a picture, it is resized to 256 × 256 pixels in your browser and stored with Supabase. Anyone who has the picture\'s link can view it. Removing the picture or deleting your account deletes it.')}
+      ${row('list-check', 'Your answers to questions', 'Each time you answer a quiz or check question, the app notes which question, the option you picked, whether it was right, how long it took and where you answered it. Signed out, the newest 500 answers stay in your browser only and are never sent anywhere. Signed in, they upload to your account in the background so your answers can improve the questions. Each account can add and read only its own answers; nobody can change them.')}
       ${row('activity', 'Your synced progress', 'The same progress and profile details listed above (except your theme and animation preferences) are stored with your account so they can follow you to other devices. Each account can only read and change its own progress.')}
       ${row('pin', 'Where it is kept', 'In a Supabase database in the European Union (Ireland, region eu-west-1).')}
-      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, profile picture, academy progress, quiz scores and certificates, and can download them as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
+      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, profile picture, academy progress, quiz scores and certificates, and how you answered each question (shown as question analysis for the group, to find questions that need fixing), and can download progress as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
       ${row('award', 'Certificate verification (optional)', 'If you ask for a verification code, your name, the track, your final score and the date are stored with that code. Anyone who has the code can check those details on the certificate check page.')}
       ${row('lock', 'Sign-in session', 'While you are signed in, your browser keeps a sign-in token in local storage. Signing out removes it.')}
       ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on your <a href="#/profile">Profile</a> page. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete account</strong> on your Profile page or here. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently.')}

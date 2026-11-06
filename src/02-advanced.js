@@ -50,7 +50,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'What does "whichever comes first" mean in a PM schedule?', o: ['The PM is done at the mileage limit only', 'The PM is due at the first of the mileage, time or hours limits reached', 'The driver chooses', 'PMs are only done after failures'], a: 1, e: 'Multiple triggers protect units that run few miles but still age or idle.' },
+            { t: 'mc', q: 'What does "whichever comes first" mean in a PM schedule?', o: ['The PM is done at the mileage limit only; time and hours are ignored', 'The PM is due at the first of the mileage, time or hours limits reached', 'The PM is due only when all three limits have been reached', 'The driver chooses which limit to use for each service'], a: 1, e: 'Multiple triggers protect units that run few miles but still age or idle.' },
             { t: 'tf', q: 'PM intervals are identical for every fleet.', a: false, e: 'Intervals depend on manufacturer guidance, duty cycle, and fleet policy.' }
           ],
           takeaways: ['PM prevents failures; reactive repairs cost more and happen at bad times.', 'Triggers: mileage, time, engine hours — often whichever comes first.', 'PM levels (A/B/C) vary by fleet.', 'Schedule PMs around freight and home time.']
@@ -76,8 +76,8 @@ const ADVANCED = {
             items: ['TR-540: annual inspection expired yesterday', 'T-109: PM A overdue by 6,000 miles', 'T-126: PM B due this week', 'T-131: PM A due in 1,800 miles']
           } },
           check: [
-            { t: 'mc', q: 'Why is an expired annual inspection more serious than a late oil change?', o: ['It costs more', 'It is a compliance issue that may prevent the unit from operating', 'Oil changes don\'t matter', 'Inspections are optional'], a: 1, e: 'Periodic inspection is a regulatory requirement. Consult the safety department.' },
-            { t: 'wwyd', q: 'A tractor is 4,000 miles overdue for PM because dispatch keeps assigning it loads. You:', o: ['Ignore it', 'Ground it immediately without telling dispatch', 'Work with dispatch to find a load that routes near a shop or align with home time, and escalate if needed', 'Let the driver decide'], a: 2, e: 'Coordinate first; escalate per procedure if it keeps slipping.' }
+            { t: 'mc', q: 'Why is an expired annual inspection more serious than a late oil change?', o: ['It costs more to fix, because inspections take longer than oil changes', 'It is a compliance issue that may prevent the unit from operating', 'It voids the engine warranty, while a late oil change does not', 'It only matters if the unit is pulled in for a roadside inspection'], a: 1, e: 'Periodic inspection is a regulatory requirement. Consult the safety department.' },
+            { t: 'wwyd', q: 'A tractor is 4,000 miles overdue for PM because dispatch keeps assigning it loads. You:', o: ['Let it keep running; the PM can wait until the truck has a free week', 'Ground it at once without telling dispatch, so it can\'t be assigned', 'Work with dispatch on a load near a shop or around home time, and escalate if needed', 'Let the driver decide when to bring it in for service'], a: 2, e: 'Coordinate first; escalate per procedure if it keeps slipping.' }
           ],
           takeaways: ['Service history reveals what is due, repeats and warranty.', 'Track statuses: OK, due soon, due, overdue.', 'Overdue inspections are compliance issues.', 'Solve the reason a PM is overdue, not just the symptom.']
         }
@@ -115,7 +115,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'In a J1939 code, what does the FMI describe?', o: ['The component\'s part number', 'How the parameter is failing (e.g., too high, too low, erratic)', 'The mileage at failure', 'The technician\'s name'], a: 1, e: 'SPN identifies what; FMI identifies the failure mode.' },
+            { t: 'mc', q: 'In a J1939 code, what does the FMI describe?', o: ['The part number of the component that failed', 'How the parameter is failing (e.g., too high, too low, erratic)', 'Which part of the truck is affected, such as the engine or brakes', 'How many times the fault has occurred since it was last cleared'], a: 1, e: 'SPN identifies what; FMI identifies the failure mode.' },
             { t: 'tf', q: 'If a DTC points to a sensor, the sensor is always the failed part.', a: false, e: 'Wiring, connectors or the actual system may be the cause. Technicians confirm with testing.' }
           ],
           takeaways: ['Lamp color gives the first read on urgency.', 'DTCs = SPN (what) + FMI (how), on J1939 systems.', 'A code is a clue, not a diagnosis.', 'Collect active/inactive status, lamps, derates and timing.']
@@ -144,7 +144,7 @@ const ADVANCED = {
           } },
           check: [
             { t: 'mc', q: 'The shop gives an ETR that depends on a test result. The best update to dispatch is:', o: ['Give only the best-case time', 'Give the best case, the likely alternative, and when you\'ll confirm', 'Wait until everything is certain before saying anything', 'Give the worst case only'], a: 1, e: 'Conditional ETRs let dispatch plan for both outcomes.' },
-            { t: 'mc', q: 'Which question is appropriate for a coordinator to ask a technician?', o: ['"Why don\'t you just replace the turbo?"', '"What\'s confirmed versus still being tested, and what\'s plan B?"', '"Can you skip the diagnosis?"', '"Can you guess the cost?"'], a: 1, e: 'Understanding the plan and contingencies is the coordinator\'s job.' }
+            { t: 'mc', q: 'Which question is appropriate for a coordinator to ask a technician?', o: ['"Why don\'t you just replace the turbo and see if that fixes it?"', '"What\'s confirmed versus still being tested, and what\'s plan B?"', '"Can you skip the diagnosis and start with the usual repair?"', '"Can you give me a rough cost before you look at the truck?"'], a: 1, e: 'Understanding the plan and contingencies is the coordinator\'s job.' }
           ],
           takeaways: ['Symptoms are observed; causes are found.', 'Diagnostic reports: complaint, codes, tests, findings, recommendation, estimate/ETR.', 'Ask what\'s confirmed, what\'s plan B, and what drives the ETR.', 'Communicate conditional ETRs honestly.']
         }
@@ -188,7 +188,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'What is a core charge?', o: ['A non-refundable fee', 'A deposit refunded when the old rebuildable part is returned', 'A charge for engine work only', 'A fee for after-hours service'], a: 1, e: 'Core charges encourage return of rebuildable parts; return the core to get the refund.' },
+            { t: 'mc', q: 'What is a core charge?', o: ['A non-refundable fee for disposing of the old part', 'A deposit refunded when the old rebuildable part is returned', 'A charge added to engine work for the shop\'s special tools', 'A surcharge for parts delivered after business hours'], a: 1, e: 'Core charges encourage return of rebuildable parts; return the core to get the refund.' },
             { t: 'mc', q: 'Labor of 3.5 hours at $185/hour equals:', o: ['$555.00', '$647.50', '$685.00', '$740.00'], a: 1, e: '3.5 × 185 = 647.50.' }
           ],
           takeaways: ['Estimates: diagnostics, labor, parts, cores, supplies, fees, taxes.', 'Labor = hours × rate; book times are common references.', 'Return cores to recover deposits.', 'Question duplicated or unusual charges politely.']
@@ -222,7 +222,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'An estimate exceeds your approval limit. You should:', o: ['Approve anyway to save time', 'Route to the fleet manager per procedure with a clear summary', 'Ask the shop to split the invoice', 'Delay until the shop lowers it'], a: 1, e: 'Follow approval procedure. Never split invoices to avoid limits.' },
+            { t: 'mc', q: 'An estimate exceeds your approval limit. You should:', o: ['Approve it anyway, since waiting adds downtime', 'Route to the fleet manager per procedure with a clear summary', 'Ask the shop to split it into two invoices under your limit', 'Hold it until the shop agrees to lower the price'], a: 1, e: 'Follow approval procedure. Never split invoices to avoid limits.' },
             { t: 'tf', q: 'Warranty should be checked before the repair starts whenever possible.', a: true, e: 'Identifying warranty early avoids voiding claims and paying for covered work.' }
           ],
           takeaways: ['Sort additional findings: safety-critical, related, recommended, questionable.', 'Ask for evidence on large or unrelated additions.', 'Follow approval limits and document approvals.', 'Check warranty before work begins.']
@@ -360,7 +360,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'Diagnosis isn\'t complete. What\'s the best way to communicate the ETR?', o: ['Guess a time', 'Say there is no ETR yet, when diagnosis is expected, and a planning assumption', 'Say "soon"', 'Say nothing until it\'s done'], a: 1, e: 'Honest, with a time for the next update and a planning assumption.' },
+            { t: 'mc', q: 'Diagnosis isn\'t complete. What\'s the best way to communicate the ETR?', o: ['Give your best guess so dispatch has a time to plan with', 'Say there is no ETR yet, when diagnosis is expected, and a planning assumption', 'Say "soon" and update them once the shop calls back', 'Say nothing until the repair is done, to avoid giving a wrong time'], a: 1, e: 'Honest, with a time for the next update and a planning assumption.' },
             { t: 'tf', q: 'A courier fee can be justified if it saves a day of downtime.', a: true, e: 'Compare the fee to the cost of downtime.' }
           ],
           takeaways: ['Build ETRs from stages.', 'State confidence: high, medium, low.', 'Parallelize: order likely parts during diagnosis.', 'Spending a little can save a lot of downtime.']
@@ -397,7 +397,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'What is deadhead?', o: ['Miles driven with no revenue load', 'A dead battery', 'A driver out of hours', 'A cancelled load'], a: 0, e: 'Deadhead miles are empty, non-revenue miles.' },
+            { t: 'mc', q: 'What is deadhead?', o: ['Miles driven with no revenue load', 'A tractor with a dead battery', 'A driver who is out of hours', 'A load cancelled after pickup'], a: 0, e: 'Deadhead miles are empty, non-revenue miles.' },
             { t: 'tf', q: 'A long repair can prevent a driver from legally finishing a trip even after the truck is fixed.', a: true, e: 'Hours-of-service limits may run out during downtime.' }
           ],
           takeaways: ['Maintenance decisions affect loads, appointments, drivers and customers.', 'HOS limits can turn a repair delay into a missed delivery.', 'Deadhead adds cost without revenue.', 'Ask dispatch what matters most for each load.']
@@ -426,7 +426,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'A trailer is damaged and cannot move, but the cargo is intact. Best option is usually:', o: ['Power swap', 'Trailer swap / transload', 'Reschedule only', 'Wait'], a: 1, e: 'The cargo must move to a working trailer.' },
+            { t: 'mc', q: 'A trailer is damaged and cannot move, but the cargo is intact. Best option is usually:', o: ['Power swap (send another tractor)', 'Trailer swap or transload', 'Reschedule the delivery only', 'Wait for a mobile repair'], a: 1, e: 'The cargo must move to a working trailer.' },
             { t: 'tf', q: 'Recovery decisions are best made as late as possible.', a: false, e: 'Early decisions preserve more options.' }
           ],
           takeaways: ['Options: wait, power swap, trailer swap, rental, reschedule.', 'Give dispatch facts early so they can choose.', 'Coordinate swap logistics and the broken unit\'s repair path.', 'Low ETR confidence = raise recovery early.']
@@ -464,7 +464,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'Downtime is rising while the number of repairs is flat. This most likely indicates:', o: ['More breakdowns', 'A process problem such as slow approvals, parts or shop backlog', 'Better maintenance', 'Fewer trucks'], a: 1, e: 'Same work, more time = a process bottleneck.' },
+            { t: 'mc', q: 'Downtime is rising while the number of repairs is flat. This most likely indicates:', o: ['More breakdowns happening across the fleet', 'A process problem such as slow approvals, parts or shop backlog', 'Better maintenance, so repairs take longer but last longer', 'Fewer trucks in the fleet, each doing more miles'], a: 1, e: 'Same work, more time = a process bottleneck.' },
             { t: 'tf', q: 'A single tire replaced after road debris is a repeat-failure pattern.', a: false, e: 'Repeat patterns are the same problem recurring on a unit or with a vendor.' }
           ],
           takeaways: ['Track status, mileage, PM, open repairs, downtime, repeats and vendors.', 'Each data point supports a specific decision.', 'Look for patterns, not just individual cases.', 'Rising downtime with flat repairs = process issue.']
@@ -516,7 +516,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'Cost per mile is calculated as:', o: ['Miles ÷ cost', 'Maintenance cost ÷ miles driven', 'Cost × miles', 'Revenue ÷ miles'], a: 1, e: 'CPM = cost ÷ miles.' },
+            { t: 'mc', q: 'Cost per mile is calculated as:', o: ['Miles driven ÷ maintenance cost', 'Maintenance cost ÷ miles driven', 'Maintenance cost × miles driven', 'Revenue ÷ miles driven'], a: 1, e: 'CPM = cost ÷ miles.' },
             { t: 'tf', q: 'Reactive repairs often cost more than the repair invoice alone.', a: true, e: 'Tows, premiums, downtime and recovery add hidden costs.' }
           ],
           takeaways: ['CPM = maintenance cost ÷ miles.', 'Use CPM to compare units and spot outliers.', 'Reactive maintenance carries hidden costs.', 'PM compliance is a primary cost-control lever.']
@@ -543,7 +543,7 @@ const ADVANCED = {
             ]
           } },
           check: [
-            { t: 'mc', q: 'Which is part of the true cost of a repeat repair?', o: ['Only the second invoice', 'Second invoice, additional downtime, possible tow and lost confidence', 'Nothing — warranty always covers it', 'Only driver pay'], a: 1, e: 'Repeats multiply cost beyond the invoice.' },
+            { t: 'mc', q: 'Which is part of the true cost of a repeat repair?', o: ['Only the second invoice, since the first repair was already paid', 'Second invoice, additional downtime, possible tow and lost confidence', 'Nothing extra, because warranty covers every repeat repair', 'Only the driver\'s extra pay while the truck is down'], a: 1, e: 'Repeats multiply cost beyond the invoice.' },
             { t: 'tf', q: 'The vendor with the lowest labor rate always produces the lowest total cost.', a: false, e: 'Hours, speed, comebacks, tow distance and downtime matter.' }
           ],
           takeaways: ['Downtime has a real daily cost — use it in decisions.', 'Compare vendors on total cost, not rate alone.', 'Repeat repairs multiply costs.', 'Ask for and track repair warranties and comebacks.']

@@ -79,7 +79,7 @@ addModule('beginner', {
           { text: 'Cup holder broken', answer: 'Schedule repair', why: 'No effect on safe operation.' }
         ] } },
       check: [
-        { t: 'mc', q: 'What must the next driver do with the previous DVIR?', o: ['Nothing', 'Review it and confirm defects were repaired or not needing repair', 'Throw it away', 'Send it to the customer'], a: 1, e: 'Drivers review the last report before driving (49 CFR 396.13).' },
+        { t: 'mc', q: 'What must the next driver do with the previous DVIR?', o: ['Nothing, as long as the truck passes their own pre-trip inspection', 'Review it and confirm defects were repaired or not needing repair', 'Sign it only if they found new defects during their own pre-trip', 'Send it to the customer along with the delivery paperwork'], a: 1, e: 'Drivers review the last report before driving (49 CFR 396.13).' },
         { t: 'tf', q: 'A DVIR defect that affects safe operation should be repaired before the vehicle is dispatched.', a: true, e: 'Safety-affecting defects are repaired (and certified) before the vehicle operates again.' }
       ],
       takeaways: ['DVIRs are a major source of maintenance cases.', 'Safety-affecting defects are fixed before dispatch.', 'Repairs are certified so the next driver can sign off.', 'Your safety department owns the exact procedure.'],
@@ -99,7 +99,7 @@ addModule('beginner', {
         REF.cvsa,
         { h: 'How inspections affect the company' },
         `Roadside inspection results feed the FMCSA\'s Compliance, Safety, Accountability program ([[CSA]]). Vehicle violations count toward the <strong>Vehicle Maintenance</strong> category (one of seven "BASICs"). Poor scores can lead to more inspections and interventions. Every defect you fix before it reaches the road helps the company\'s record.`,
-        { ig: 'bars', icon: 'shield', title: 'Most common vehicle out-of-service violations, U.S., fiscal year 2025', fmt: '', items: [['Tire flat, leaking or under 50% pressure', 93806, 'critical'], ['Defective brakes, 20% or more', 59133, 'critical'], ['Turn signal out, rearmost vehicle', 36619, 'warning'], ['Stop lamp out', 24516, 'warning']], note: 'Out-of-service orders from FMCSA roadside inspection data, as published in public FY2025 summaries; counts are approximate. Tires, brakes and lights are also the items a good DVIR and pre-trip catch first.' }
+        { ig: 'bars', real: true, icon: 'shield', title: 'Most common vehicle out-of-service violations, U.S., fiscal year 2025', fmt: '', items: [['Tire flat, leaking or under 50% pressure', 93806, 'critical'], ['Defective brakes, 20% or more', 59133, 'critical'], ['Turn signal out, rearmost vehicle', 36619, 'warning'], ['Stop lamp out', 24516, 'warning']], note: 'Out-of-service orders from FMCSA roadside inspection data, as published in public FY2025 summaries; counts are approximate. Tires, brakes and lights are also the items a good DVIR and pre-trip catch first.' }
       ],
       example: { title: 'Cheap bulb, expensive violation', text: `A $4 bulb out on a trailer led to a Level II inspection and a violation on the company\'s record. After reviewing a quarter\'s inspections, the coordinator started a "lights and air" check at every trailer drop — lighting violations fell sharply the next quarter.` },
       practical: { title: 'Match the inspection level', exercise: {
@@ -180,7 +180,7 @@ addModule('advanced', {
           { label: 'Reorder point (units)', accept: ['5'] }
         ] } },
       check: [
-        { t: 'mc', q: 'Reorder point is:', o: ['Maximum shelf quantity', 'Daily usage × lead time + safety stock', 'Price × quantity', 'Lead time ÷ usage'], a: 1, e: 'Order when stock falls to the expected lead-time usage plus a buffer.' },
+        { t: 'mc', q: 'Reorder point is:', o: ['Maximum shelf quantity minus what is on hand', 'Daily usage × lead time + safety stock', 'Unit price × quantity ordered last month', 'Lead time ÷ daily usage, plus one spare'], a: 1, e: 'Order when stock falls to the expected lead-time usage plus a buffer.' },
         { t: 'tf', q: 'In ABC analysis, "A" items are a small share of part numbers that drive most usage value.', a: true, e: 'Focus attention where the value is.' }
       ],
       takeaways: ['Stock what fails often and what stops trucks.', 'Reorder point = usage × lead time + safety stock.', 'ABC analysis focuses attention on high-value items.', 'Track cores to recover deposits.'],
@@ -222,7 +222,7 @@ addModule('expert', {
           { text: 'Air pressure dropping with low-air warning', answer: 'Act now', why: 'Brake-system — safety-critical.' }
         ] } },
       check: [
-        { t: 'mc', q: 'What is "alert fatigue"?', o: ['Drivers being tired', 'So many low-value alerts that important ones get missed', 'A battery fault', 'A telematics outage'], a: 1, e: 'Tiering prevents critical alerts from drowning in noise.' },
+        { t: 'mc', q: 'What is "alert fatigue"?', o: ['Drivers getting tired from too many hours behind the wheel', 'So many low-value alerts that important ones get missed', 'A battery that drains because the telematics device stays on', 'A telematics outage that stops alerts from arriving at all'], a: 1, e: 'Tiering prevents critical alerts from drowning in noise.' },
         { t: 'tf', q: 'A telematics fault code alone is enough to order parts.', a: false, e: 'Codes guide diagnosis; technicians confirm.' }
       ],
       takeaways: ['Telematics lets you act before the driver calls.', 'Tier alerts: act now, act today, plan, watch.', 'Trends by unit reveal failures in progress.', 'Codes guide — technicians confirm.'],
@@ -259,7 +259,7 @@ addModule('expert', {
           { text: 'Quarterly maintenance cost per mile', answer: 'Lagging', why: 'Outcome measure.' }
         ] } },
       check: [
-        { t: 'mc', q: 'Why require standard system codes on work orders?', o: ['To slow technicians down', 'To make trend analysis by system possible', 'For taxes', 'Because drivers ask'], a: 1, e: 'Consistent codes turn records into usable data.' },
+        { t: 'mc', q: 'Why require standard system codes on work orders?', o: ['To slow technicians down so they write more carefully', 'To make trend analysis by system possible', 'Because tax rules require codes on every repair', 'Because drivers ask to see them on their records'], a: 1, e: 'Consistent codes turn records into usable data.' },
         { t: 'mc', q: 'Which is a leading indicator?', o: ['Road calls last month', 'PM compliance', 'Cost per mile last quarter', 'Roadside violations last year'], a: 1, e: 'PM compliance predicts future reliability.' }
       ],
       takeaways: ['A CMMS brings cases, work orders, parts and costs together.', 'Data quality rules make analysis possible.', 'Use leading indicators to act early.', 'Close the loop: capture, clean, analyze, act, measure.'],

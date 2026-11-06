@@ -1,6 +1,6 @@
 /* =========================================================================
    MAINTENANCE COORDINATOR ACADEMY — script.js (built by tools/build.mjs)
-   GENERATED: the track outline below comes from src/01-beginner.js…03k2-job-realism.js.
+   GENERATED: the track outline below comes from src/01-beginner.js…03l2-software-more.js.
    Lesson text is in content/<track>.json and loaded on demand (05l-content).
    Edit the src/ modules, not this file.
    ========================================================================= */
@@ -11,9 +11,13 @@ const [BEGINNER, ADVANCED, EXPERT, OPERATIONS] = ['beginner', 'advanced', 'exper
 const REF = {"urgency":{"ig":"matrix","icon":"target","title":"The urgency matrix","y":"Safety risk","x":"Operational impact","q":[{"t":"Hold — repair before it moves","tone":"critical","items":["Trailer lights out at the yard","Brake defect found on an empty unit","Expired annual inspection"]},{"t":"Stop & fix now","tone":"critical","items":["Brake air leak, loaded, deadline today","Damaged steer tire","Red STOP ENGINE lamp"]},{"t":"Schedule","tone":"success","items":["Amber lamp, running normally, empty","Cab comfort items","PM due in 2,000 miles"]},{"t":"Fast-track the repair","tone":"warning","items":["Derate on a loaded truck (safe location)","Reefer alarm with cargo","Parts delay on a loaded unit"]}],"note":"Safety risk always overrides operational impact: anything in the top row does not move until a qualified technician clears it."},"lamps":{"ig":"scale","icon":"alert","title":"Warning lamp color guide","stops":[{"t":"Green / blue","d":"Information — a system is on or active.","tone":"success"},{"t":"Amber","d":"Attention — diagnose soon; watch for any change.","tone":"warning"},{"t":"Amber + power loss","d":"Likely derate — get to a safe place; arrange prompt diagnosis.","tone":"warning"},{"t":"Red","d":"Serious — stop safely as soon as possible.","tone":"critical"}],"note":"Symbols vary by manufacturer; color is the most reliable first clue. Always ask the driver to read the exact message."},"update":{"ig":"process","icon":"message","title":"The dispatch update formula","items":[{"icon":"truck","t":"Unit","d":"Tractor + trailer"},{"icon":"activity","t":"Status","d":"Down, at shop, rolling"},{"icon":"wrench","t":"Cause","d":"Short and factual"},{"icon":"clock","t":"ETR","d":"With confidence level"},{"icon":"route","t":"Impact","d":"Load and appointment"},{"icon":"phone","t":"Next update","d":"A specific time"}]},"intake":{"ig":"card","icon":"clipboard","title":"The complaint intake card","form":"Case intake · T-127","rows":[["Safe location?","Yes — truck stop, off the roadway"],["Unit / trailer","T-127 / TR-532"],["Location","Love's, I-40 exit 76, Amarillo TX"],["Odometer / hours","412,880 mi"],["What happened","Hissing, low-air warning cycling on/off"],["When / trend","~20 min ago · getting worse"],["Where on vehicle","Rear of tractor, drive-axle area"],["Lamps / codes","Low-air warning"],["Performance","Air gauge drops fast when braking"],["Load / deadline","Loaded · delivery 13:00"]],"note":"Ten fields, about two minutes on the phone. Every field answers a question the vendor, dispatch or the case log will ask later."},"ladder":{"ig":"ladder","icon":"trend","title":"The escalation ladder","levels":[{"t":"Coordinator","d":"Within your approval limit and written procedure."},{"t":"Lead / supervisor","d":"Capacity conflicts, unclear procedure, disputes with dispatch."},{"t":"Fleet manager","d":"Costs above your limit, repeat failures, vendor disputes."},{"t":"Leadership","d":"Major customer impact, policy or budget decisions."}],"note":"Safety or compliance concerns go to the safety department immediately — at any level, without climbing the ladder first."},"triage":{"ig":"pyramid","icon":"layers","title":"Disruption triage pyramid","levels":[{"t":"Life safety","d":"People in danger, vehicles in unsafe locations.","tone":"critical"},{"t":"Safety-critical defects","d":"Brakes, steering, tires, lighting, fire risk.","tone":"critical"},{"t":"Time-critical cargo","d":"Reefer loads, hard deadlines, high-value freight.","tone":"warning"},{"t":"Revenue impact","d":"Loaded units first, then empty units.","tone":"info"},{"t":"Routine","d":"Defer and schedule.","tone":"success"}]},"kpis":{"ig":"formulas","icon":"bar","title":"Core KPI formulas","items":[{"t":"Cost per mile","f":"maintenance cost ÷ miles","d":"Lower is better"},{"t":"Downtime %","f":"downtime h ÷ available h × 100","d":"Lower is better"},{"t":"Fleet availability","f":"(available h − downtime h) ÷ available h","d":"Higher is better"},{"t":"PM compliance","f":"PMs on time ÷ PMs due × 100","d":"Higher is better"},{"t":"Repeat repair rate","f":"repeat repairs ÷ total repairs","d":"Lower is better"},{"t":"Breakdown frequency","f":"road calls ÷ miles × 100,000","d":"Lower is better"},{"t":"MTBF","f":"operating h ÷ failures","d":"Higher is better"},{"t":"MTTR","f":"repair h ÷ repairs","d":"Lower is better"}]},"tireRules":{"ig":"stats","icon":"target","title":"Tire and roadside numbers to know (U.S.)","items":[{"v":"18","l":"tires on a standard five-axle tractor-trailer","tone":"info"},{"v":"4/32","u":"in","l":"minimum steer-tire tread depth","tone":"critical"},{"v":"2/32","u":"in","l":"minimum tread depth on other positions","tone":"warning"},{"v":"10","u":"min","l":"to place warning devices after a stop on the road","tone":"info"}],"note":"Based on FMCSA rules (49 CFR 393.75 and 392.22). Your safety department is the authority on how they apply."},"workorder":{"ig":"annotated","icon":"file","title":"Anatomy of a repair order","lines":[["RO# 88213 · Lone Star Truck Center — Dallas, TX",1],["Unit T-114 · VIN …48213 · Odo 512,340 · Eng hrs 18,902",2],["Complaint: Coolant leak, front of engine",3],["Cause: Water pump seal failure",4],["Correction: Replaced water pump, pressure tested system",5],["Parts $620 · Labor 4.5 h @ $190 · Supplies $45",6],["In 06/12 08:40 · Out 06/12 15:55 · PO 22019",7]],"notes":[{"n":1,"t":"Reference numbers","d":"Tie the invoice to your case and PO."},{"n":2,"t":"Identity & meters","d":"Needed for warranty and PM intervals."},{"n":3,"t":"Complaint","d":"What the driver reported."},{"n":4,"t":"Cause","d":"What the technician found."},{"n":5,"t":"Correction","d":"What was actually done."},{"n":6,"t":"Cost detail","d":"Compare line by line to the approved estimate."},{"n":7,"t":"Times & approval","d":"Downtime math and the approval trail."}]},"roadside":{"ig":"process","icon":"route","title":"The roadside pattern","items":[{"icon":"shield","t":"Make it safe","d":"Off the road, hazards, warning devices"},{"icon":"clipboard","t":"Gather facts","d":"Unit, location, symptom, lamps"},{"icon":"wrench","t":"Right help","d":"Tire, mobile tech or tow"},{"icon":"message","t":"Communicate","d":"Driver, dispatch, safety"},{"icon":"clock","t":"Track to release","d":"Follow-ups until rolling"}]},"pinout":{"ig":"table","icon":"zap","title":"The 7-way trailer connector (SAE J560 color code)","head":["Wire color","Typical circuit","If it fails"],"rows":[["<span class=\"swatch\" style=\"background:#f4f4f4\"></span> White","Ground","Several or all trailer lights act up at once"],["<span class=\"swatch\" style=\"background:#222\"></span> Black","Clearance, marker & ID lamps","Marker lights out"],["<span class=\"swatch\" style=\"background:#e0b400\"></span> Yellow","Left turn signal","Left turn signal out"],["<span class=\"swatch\" style=\"background:#c62828\"></span> Red","Stop (brake) lamps","No brake lights — safety-critical"],["<span class=\"swatch\" style=\"background:#2e7d32\"></span> Green","Right turn signal","Right turn signal out"],["<span class=\"swatch\" style=\"background:#6d4c41\"></span> Brown","Tail, license & clearance lamps","Tail lights out — safety-critical at night"],["<span class=\"swatch\" style=\"background:#1565c0\"></span> Blue","Auxiliary — commonly trailer ABS power","Trailer ABS lamp may come on"]],"note":"Common industry convention. Individual trailers can differ — technicians confirm with a tester."},"fmi":{"ig":"table","icon":"zap","title":"Common J1939 FMI codes","head":["FMI","Meaning","What it often points to"],"rows":[["0","Data valid but above normal range — most severe","A real condition: pressure/temperature too high"],["1","Data valid but below normal range — most severe","A real condition: pressure/level too low"],["2","Data erratic, intermittent or incorrect","Intermittent sensor, wiring or connector"],["3","Voltage above normal, or shorted to high source","Wiring/sensor circuit problem"],["4","Voltage below normal, or shorted to low source","Wiring/sensor circuit problem"],["5","Current below normal, or open circuit","Broken wire, unplugged connector"],["7","Mechanical system not responding or out of adjustment","A component isn't doing what it's told"],["31","Condition exists","A reported state — read the SPN description"]],"note":"SAE J1939 failure mode identifiers. FMIs 3–6 usually suggest an electrical circuit issue; 0 and 1 usually suggest the measured condition itself is out of range. A technician confirms either way."},"cvsa":{"ig":"table","icon":"shield","title":"CVSA roadside inspection levels","head":["Level","Name","What's checked"],"rows":[["I","North American Standard Inspection","Driver documents and a full vehicle inspection, including under the vehicle"],["II","Walk-Around","Driver documents and vehicle items checkable without going under it"],["III","Driver-Only","Driver credentials, hours of service, documents"],["IV","Special Inspection","A one-time examination of a particular item"],["V","Vehicle-Only","Full vehicle inspection without the driver present"],["VI","Enhanced (radioactive shipments)","Select radiological shipments"],["VII","Jurisdictional Mandated","A state or provincial program that does not meet any other level; no CVSA decal"],["VIII","Electronic","Data checked wirelessly while the vehicle is moving, with no officer contact"]],"note":"A vehicle that passes a Level I, V or VI inspection with no critical violations may receive a CVSA decal, valid for up to three months."},"dvir":{"ig":"process","icon":"clipboard","title":"The DVIR repair loop","items":[{"icon":"clipboard","t":"Driver inspects","d":"Pre-trip / post-trip"},{"icon":"file","t":"Defect reported","d":"On the DVIR"},{"icon":"wrench","t":"Repair","d":"Before operating, if safety-related"},{"icon":"check-circle","t":"Certify","d":"Repair (or no repair needed) certified"},{"icon":"users","t":"Next driver reviews","d":"Signs off before driving"}],"note":"Based on FMCSA 49 CFR 396.11 and 396.13. Your safety department defines exactly how your company completes each step."},"reorder":{"ig":"formulas","icon":"layers","title":"Parts stocking formulas","items":[{"t":"Reorder point","f":"daily usage × lead time days + safety stock","d":"Order when stock hits this"},{"t":"Safety stock","f":"extra units for demand/lead-time swings","d":"Buffer against stockouts"},{"t":"Inventory turns","f":"annual parts cost used ÷ avg inventory value","d":"Higher = leaner"},{"t":"Fill rate","f":"requests filled from stock ÷ total requests","d":"Higher = fewer delays"}]},"powerUnits":{"ig":"versus","icon":"truck","title":"Power units: what pulls or carries the freight","items":[{"art":"daycab","t":"Day cab tractor","sub":"No sleeping compartment.","facts":[["Typical work","Local and regional — driver home daily"],["Duty","Many stops, frequent coupling and uncoupling"]],"watch":"Brakes and clutch/transmission wear from stop-start work; fifth wheel and glad hands from frequent coupling."},{"art":"sleeper","t":"Sleeper tractor","sub":"Sleeper berth behind the seats.","facts":[["Typical work","Long-haul, multi-day trips"],["Duty","Long highway miles"]],"watch":"Mileage-based PMs, aftertreatment, and cab comfort systems the driver lives with (HVAC, APU — auxiliary power unit — if equipped)."},{"art":"straight","t":"Straight truck (box truck)","sub":"Cab and cargo body on one chassis — no separate trailer.","facts":[["Typical work","Local delivery"],["License","Class B CDL when GVWR is 26,001 lb or more"]],"watch":"Cargo body, doors and liftgate (if equipped) — plus the same brakes and tires as any truck."},{"art":"yard","t":"Yard tractor","sub":"Also called a terminal tractor, spotter or yard dog.","facts":[["Typical work","Moving trailers around yards, ports and warehouses"],["Coupling","Hydraulic fifth wheel lifts the trailer"]],"watch":"Hydraulics and fifth wheel; very high engine hours compared with miles, so PMs are usually hour-based."}],"key":"A tractor pulls a separate trailer; a straight truck carries the cargo on its own chassis. Knowing which one broke tells you whether the freight can be moved by swapping power."},"axleConfigs":{"ig":"versus","icon":"gauge","title":"Tractor axle configurations (driven wheels highlighted)","items":[{"art":"axle-4x2","t":"4x2","sub":"Two axles — one driven rear axle.","facts":[["Weight","Lightest of the three"],["Common use","Local and regional work, lighter loads"]]},{"art":"axle-6x4","t":"6x4","sub":"Three axles — both rear axles driven.","facts":[["Traction","Best of the three"],["Common use","The usual setup for heavy over-the-road tractors"]]},{"art":"axle-6x2","t":"6x2","sub":"Three axles — only one rear axle driven.","facts":[["Trade-off","Lighter, can save fuel, but less traction on slippery roads"],["Common use","Highway fleets focused on fuel economy"]]}],"key":"The first number counts wheel positions (duals count as one); the second counts how many of them are driven. A 6x2 stuck on ice is a traction limit, not necessarily a defect — ask before you send a technician."},"enclosedTrailers":{"ig":"versus","icon":"layers","title":"Enclosed trailers: dry van vs reefer","items":[{"art":"dryvan","t":"Dry van","sub":"Enclosed box, no temperature control. The most common trailer in truckload freight.","facts":[["Common lengths","53 ft; also 48 ft and 28 ft \"pups\""],["Width","102 in (8.5 ft) — U.S. federal width limit"],["Freight","Palletized and boxed general freight"]],"use":"Retail, packaged goods, paper, parts — anything that doesn't need temperature control.","watch":"Doors, hinges and seals; floor and roof damage; lights; tires; brakes; tandem slider pins."},{"art":"reefer","tone":"info","t":"Reefer (refrigerated van)","sub":"Insulated box plus a front-mounted refrigeration unit, commonly with its own diesel engine and fuel tank.","facts":[["Tracked by","Trailer miles + reefer unit engine hours"],["Setpoint","From the shipper's instructions on the load paperwork"],["Inside space","Slightly less than a dry van (insulated walls)"]],"use":"Food, pharmaceuticals, flowers, chemicals — anything temperature-sensitive, hot or cold.","watch":"Unit PMs by hours, alarms, unit fuel, door seals, and temperature records. A reefer failure with cargo aboard is time-critical."}],"key":"Same box, different risk: a dry-van breakdown delays freight; a reefer failure can destroy it. Reefer units often need a refrigeration technician, not a trailer shop."},"openDeck":{"ig":"versus","icon":"layers","title":"Open-deck trailers: how deck height changes what fits","items":[{"art":"flatbed","t":"Flatbed","sub":"One flat deck (roughly 5 ft off the ground), loaded from the sides or top.","facts":[["Common lengths","48 ft and 53 ft"],["Securement","Straps, chains and tarps — 49 CFR 393 Subpart I"]],"use":"Lumber, steel, building materials, pipe.","watch":"Deck boards, winches, stake pockets, worn straps/chains, lights, tires."},{"art":"stepdeck","t":"Step deck (drop deck)","sub":"Short upper deck over the kingpin, then a lower main deck.","facts":[["Why","Lower deck carries taller cargo than a flatbed within the same height limit"],["Wheels","Often smaller, low-profile tires"]],"use":"Machinery and tall loads that would be over height on a flatbed.","watch":"Low-profile tires (check stock before a roadside call), deck, ramps if equipped."},{"art":"rgn","t":"RGN / lowboy","sub":"Removable gooseneck (RGN) detaches so equipment can drive on from the front; very low well deck.","facts":[["Why","Tallest and heaviest equipment"],["Permits","Loads are often oversize/overweight and need state permits"]],"use":"Excavators, dozers, cranes, transformers.","watch":"Gooseneck hydraulics or mechanism, extra axles, deck — and the permit conditions if a breakdown delays the move."}],"key":"The lower the deck, the taller the cargo that fits under the height limit (dashed red line). The limit itself varies by state — commonly 13 ft 6 in — so drivers and dispatch check routes for tall loads."},"specialtyTrailers":{"ig":"versus","icon":"layers","title":"Specialty equipment: tanker, intermodal chassis, doubles","items":[{"art":"tanker","t":"Tanker","sub":"Carries liquids, gases or dry bulk.","facts":[["Driver","CDL tank vehicle (N) endorsement; hazmat (H) too if the load is placarded hazmat"],["Handling","Liquid surge; many tanks have baffles or compartments"]],"watch":"Valves, hoses, vapor recovery, wash records. Hazmat cargo tanks have periodic test and inspection requirements (49 CFR Part 180)."},{"art":"intermodal","t":"Intermodal chassis","sub":"A frame that carries a shipping container between ports, rail ramps and customers.","facts":[["Containers","Commonly 20, 40, 45 and 53 ft"],["Ownership","Often a chassis pool or provider — not the carrier"]],"watch":"Lights, tires, brakes and twist locks. Confirm who provides the chassis before arranging a repair — that decides who authorizes and pays."},{"art":"doubles","t":"Doubles","sub":"Two short (about 28 ft) trailers joined by a converter dolly.","facts":[["Driver","CDL doubles/triples (T) endorsement"],["Common in","LTL networks"]],"watch":"The dolly is its own unit: tires, brakes, lights, drawbar eye and safety chains."}],"key":"Each of these adds a party or a requirement: tank qualifications, a chassis owner, or a third unit (the dolly) that needs its own inspection and records."},"dryVanAnatomy":{"ig":"anatomy","icon":"search","title":"Parts of a dry van trailer","art":"dryvan","w":680,"pins":[{"x":8,"y":38.5,"t":"Rear swing doors","d":"Hinges, seals, lock rods. A door that won't latch can stop a load."},{"x":8.5,"y":73,"t":"Rear impact guard","d":"The \"ICC bar.\" Damage or missing parts are inspection violations."},{"x":20,"y":85,"t":"Sliding tandem","d":"Axles slide on a rail to adjust weight distribution; locking pins must engage."},{"x":46,"y":38.5,"t":"Sidewalls & logistic posts","d":"Holes or bent posts let in water and weaken the box."},{"x":78.5,"y":79,"t":"Landing gear","d":"Supports the parked trailer. \"Won't crank\" is a common yard call."},{"x":89.5,"y":66,"t":"Kingpin","d":"Locks into the tractor's fifth wheel. Wear or damage is a coupling safety issue."},{"x":93,"y":35,"t":"Nose: glad hands & 7-way","d":"Air and electrical connections to the tractor."}],"note":"Whether a part belongs to the tractor or the trailer decides which unit the case is opened on."},"loadTypes":{"ig":"versus","icon":"layers","title":"How freight fills a trailer: FTL vs LTL vs partial","items":[{"art":"ftl","t":"Full truckload (FTL)","sub":"One shipper's freight uses the trailer.","facts":[["Route","Pickup → delivery, usually direct"],["Handling","Loaded once, unloaded once"]],"watch":"A breakdown delays one customer, but the whole trailer — recovery often means a tractor swap."},{"art":"ltl","t":"Less-than-truckload (LTL)","sub":"Many shippers' freight shares one trailer.","facts":[["Route","Through terminals (hub-and-spoke)"],["Pricing","Freight class (NMFC classes 50–500), weight and distance"]],"watch":"Linehaul schedules between terminals: a late trailer can miss its departure and delay every shipment on it."},{"art":"partial","t":"Partial / volume","sub":"More than typical LTL, less than a full trailer.","facts":[["Route","Often shares a trailer with another partial; few stops"],["Handling","Usually not rehandled at terminals"]],"watch":"Multiple appointments on one trip — a delay affects every stop."}],"key":"The load type tells you how many customers a breakdown affects and whether the freight can wait."},"dockTypes":{"ig":"versus","icon":"clock","title":"Live load vs drop and hook","items":[{"art":"live","tone":"warning","t":"Live load / live unload","sub":"The driver and tractor wait at the dock while freight is loaded or unloaded.","facts":[["Time","Free time, then detention per the rate agreement"],["Equipment","Tractor and trailer tied up together"]],"watch":"A no-start at the dock blocks the customer's door — these calls are urgent even when the fix is simple."},{"art":"drop","tone":"success","t":"Drop and hook","sub":"The driver drops one trailer and hooks a preloaded one.","facts":[["Time","Usually much faster for the driver"],["Equipment","Needs more trailers than tractors (a trailer pool)"]],"watch":"Trailers sit in customer yards for days. Defects surface at pickup — plan trailer PMs and inspections so pooled trailers don't fall behind."}],"key":"Live loads tie up the tractor; drop-and-hook ties up trailers. Both change where and when you can schedule maintenance."},"cargoTypes":{"ig":"versus","icon":"shield","title":"Cargo types and what changes for maintenance","items":[{"art":"dryvan","t":"Dry freight","sub":"No temperature control.","watch":"Standard urgency — the freight can usually wait for a repair."},{"art":"reefer","tone":"info","t":"Temperature-controlled","sub":"Setpoint from the shipper's instructions.","watch":"Reefer faults are time-critical. Keep the unit running and cargo in range while you arrange service."},{"art":"hazmat","tone":"critical","t":"Hazardous materials","sub":"Regulated under 49 CFR Parts 171–180 (U.S. DOT / PHMSA).","facts":[["Placards","Table 1 materials: any amount. Table 2: 1,001 lb or more aggregate"],["Driver","Hazmat (H) endorsement when placards are required"]],"watch":"Leaks, fire risk and vendor qualifications. Follow your safety department's procedure before arranging any repair."},{"art":"oversize","tone":"warning","t":"Oversize / overweight","sub":"Beyond legal size or weight limits.","facts":[["Permits","State permits set routes, travel times, signs/flags and escorts — rules vary by state"]],"watch":"A breakdown can push the move outside its permitted route or hours. Involve dispatch or the permit team immediately."}]},"weights":{"ig":"axles","icon":"bar","title":"Weight per axle group: gross weight isn't the only limit","art":"rig","groups":[{"t":"Trailer tandem","x":13.2},{"t":"Drive tandem","x":77.2},{"t":"Steer axle","x":91.3}],"limits":[34000,34000,12000],"gross":80000,"rows":[{"l":"Balanced","d":"Legal on every axle group","v":[33900,33600,11800]},{"l":"Heavy on the drives","d":"Legal gross, illegal drive tandem","v":[32400,35200,11900]},{"l":"Over gross","d":"The load itself must change","v":[35800,34000,12000]}],"note":"U.S. federal Interstate limits: 34,000 lb per tandem axle group and 80,000 lb gross (23 CFR 658.17), subject to the bridge formula; states set rules for other roads and permits. The 12,000 lb steer figure is a common axle/tire rating used here for illustration, not a federal limit. Sliding the trailer tandem generally shifts weight between the drives and trailer axles; sliding the fifth wheel shifts it between the steer and drives — the driver confirms at a scale."},"securement":{"ig":"table","icon":"shield","title":"Cargo securement basics (U.S. — 49 CFR 393 Subpart I)","head":["Rule","Requirement","Source"],"rows":[["Aggregate working load limit","Tiedowns together must be rated for at least 50% of the cargo weight","393.106(d)"],["Article 5 ft or shorter, 1,100 lb or less","At least 1 tiedown","393.110(b)"],["Article 5 ft or shorter over 1,100 lb, or 5–10 ft long","At least 2 tiedowns","393.110(b)"],["Article longer than 10 ft","2 tiedowns for the first 10 ft, plus 1 for each additional 10 ft or part of 10 ft","393.110(b)"],["Driver re-inspection","Within the first 50 miles, then at every change of duty status, or every 3 hours or 150 miles, whichever comes first","392.9"]],"note":"Tiedown counts apply when an article is not blocked against forward movement; commodity-specific rules (logs, metal coils, heavy equipment and others) add requirements. Summary for orientation only — the regulation and your safety department are the authority."},"treadPositions":{"ig":"versus","icon":"target","title":"Steer, drive and trailer tires look different for a reason","items":[{"art":"tread-steer","t":"Steer tire","sub":"Front axle — steering and handling.","facts":[["Tread","Rib: grooves run around the tire"],["U.S. minimum","4/32 in tread depth"],["Rule","Regrooved tires aren't allowed on the front wheels of heavy trucks and tractors (49 CFR 393.75)"]]},{"art":"tread-drive","t":"Drive tire","sub":"Powered axles — traction.","facts":[["Tread","Lug/block pattern with deep side slots"],["U.S. minimum","2/32 in tread depth"],["Retreads","Commonly used here"]]},{"art":"tread-trailer","t":"Trailer tire","sub":"Free-rolling — carries load, no steering or power.","facts":[["Tread","Rib pattern, often shallower"],["U.S. minimum","2/32 in tread depth"],["Retreads","Commonly used here"]]}],"key":"A tire that is legal on a drive or trailer axle can be illegal on the steer axle. Always record the exact position: steer, drive or trailer — axle, side, inside or outside dual."},"tireSection":{"ig":"anatomy","icon":"target","title":"Inside a truck tire (cross-section)","art":"tire-section","w":420,"pins":[{"x":50,"y":14,"t":"Tread","d":"The rubber that touches the road. Depth is measured in the grooves in 32nds of an inch."},{"x":50,"y":30,"t":"Steel belts","d":"Stiffen the tread area. Belt separation shows up as bulges and vibration — remove from service."},{"x":15,"y":57,"t":"Sidewall","d":"Carries the size, load and DOT codes. Cuts, bulges or exposed cords are serious — the sidewall isn't repairable like the tread area."},{"x":78,"y":62,"t":"Inner liner","d":"Holds the air in a tubeless tire."},{"x":25.5,"y":85,"t":"Bead","d":"Steel wire bundle that seals the tire against the wheel."},{"x":50,"y":94,"t":"Wheel (rim)","d":"Must match the tire's rim size exactly. Cracked wheels and loose lug nuts are separate, serious defects."}]},"tireCode":{"ig":"decode","icon":"search","title":"Reading a tire sidewall: 295/75R22.5 144/141L","parts":[["295","Section width","Tire width in millimeters, sidewall to sidewall."],["/",null],["75","Aspect ratio","Sidewall height as a percentage of width — 75% of 295 mm."],["R","Construction","R = radial."],["22.5","Rim diameter","Wheel diameter in inches. Tire and wheel must match."],[" ",null],["144/141","Load index (single/dual)","144 = 2,800 kg (about 6,170 lb) per tire used single; 141 = 2,575 kg (about 5,680 lb) per tire used in duals."],["L","Speed symbol","L = 120 km/h (75 mph) maximum."]],"note":"Other common sizes use an older format, like 11R22.5 (11 = nominal width in inches). The DOT code's last four digits show when the tire was made: \"2324\" = week 23 of 2024. Give the vendor the full size from the sidewall, not from memory."},"treadMin":{"ig":"tread","icon":"target","title":"Same depth, different verdict: tread depth by position","max":12,"items":[{"l":"Steer","v":6,"min":4},{"l":"Steer","v":3,"min":4},{"l":"Drive","v":3,"min":2},{"l":"Trailer","v":1,"min":2}],"note":"U.S. minimums under 49 CFR 393.75: 4/32 in for steer tires, 2/32 in for all other positions. 3/32 in is legal on a drive tire but not on a steer tire. Many fleets replace tires well before the legal minimum by policy."},"plyTypes":{"ig":"versus","icon":"layers","title":"Radial vs bias-ply construction","items":[{"art":"radial","t":"Radial","sub":"Cords run straight across from bead to bead, with steel belts under the tread.","facts":[["Where","The standard for modern highway truck tires"],["Why","Flexible sidewall, stable tread: longer wear, lower rolling resistance"]]},{"art":"bias","t":"Bias-ply","sub":"Cords cross each other at alternating angles.","facts":[["Where","Older design; still found on some specialty and off-road equipment"],["Why","Stiff, tough sidewall; more heat and wear at highway speed"]]}],"key":"The \"R\" in the size tells you it's radial. Radial and bias tires shouldn't be mixed on the same axle."},"dualsWide":{"ig":"versus","icon":"target","title":"Duals vs wide-base singles","items":[{"art":"duals","t":"Dual tires","sub":"Two tires on each end of a drive or trailer axle.","facts":[["Plus","If one fails, the wheel end isn't left bare — but the partner is suddenly overloaded"],["Watch","Both tires must be matched in size and wear to share the load"]],"watch":"An underinflated inner dual overloads the outer one. After a flat, have the partner inspected too."},{"art":"widebase","t":"Wide-base single","sub":"One wide tire replaces each pair of duals (for example, 445/50R22.5).","facts":[["Plus","Lighter; can improve fuel economy"],["Watch","No partner tire — a failure leaves that wheel end with nothing"]],"watch":"Roadside stock is thinner in some areas. Keep your fleet's wide-base sizes in the tire vendor list."}],"key":"With duals, the partner tire takes the whole load when one fails and must be inspected too; with a wide-base single there is no partner at all. Either way, the driver stops safely and a tire technician decides whether the unit can move."},"brakeTypes":{"ig":"versus","icon":"zap","title":"Drum vs air disc brakes","items":[{"art":"drum","t":"S-cam drum brake","sub":"An S-shaped cam pushes brake shoes against the inside of a drum.","facts":[["Where","Long the most common type on North American trucks and trailers"],["Adjustment","Slack adjusters keep the brake in adjustment as linings wear"]],"watch":"Out-of-adjustment brakes are a common inspection violation — ask why a brake keeps drifting."},{"art":"disc","t":"Air disc brake","sub":"A caliper squeezes pads against a rotor.","facts":[["Where","Increasingly common, especially on steer axles"],["Differences","Generally resists fade better; faster pad changes; higher purchase cost"]],"watch":"Pads and rotors are different parts from drum shoes — confirm the brake type before ordering or sending a vendor."}],"key":"Both are air-operated and both are safety-critical. The brake type changes the parts, the labor, and which vendor can do the job."},"scope":{"callout":{"kind":"info","title":"Scope of this academy","text":"MC Academy is educational training. Regulations cited are U.S. federal rules (FMCSA, PHMSA, FHWA) and the CVSA inspection standards used in North America; states can add their own rules, and every carrier has its own procedures and approval limits. Nothing here is legal, regulatory or professional advice — when a rule matters for a real decision, check the current official source and your safety department."}},"sources":{"ig":"table","icon":"shield","title":"Official sources for the academy regulatory facts","head":["Topic","Official source","Used in"],"rows":[["Federal Motor Carrier Safety Regulations (49 CFR Parts 390-399)","<a href=\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - Title 49, Subchapter B</a>","Vehicle parts, inspection, repair and maintenance, driving rules"],["Tires, including tread depth (49 CFR 393.75)","<a href=\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-393/subpart-G/section-393.75\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - 393.75</a>","Tire lessons, Quick Reference"],["Cargo securement (49 CFR 393 Subpart I)","<a href=\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-393/subpart-I\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - Part 393, Subpart I</a>","Freight and loads lesson"],["Inspection, repair and maintenance; DVIRs (49 CFR Part 396)","<a href=\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - Part 396</a>","Inspections and DVIR lessons"],["Warning devices after a stop (49 CFR 392.22)","<a href=\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-392/subpart-C/section-392.22\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - 392.22</a>","Roadside lessons"],["Hours of Service","<a href=\"https://www.fmcsa.dot.gov/regulations/hours-of-service\" target=\"_blank\" rel=\"noopener noreferrer\">FMCSA - Hours of Service</a>","Dispatch and downtime lessons"],["CDL endorsements (49 CFR 383.93)","<a href=\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-383/subpart-E/section-383.93\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - 383.93</a>","Equipment types lesson"],["Vehicle weight limits (23 CFR 658.17)","<a href=\"https://www.ecfr.gov/current/title-23/chapter-I/subchapter-G/part-658/section-658.17\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - 658.17</a>","Freight and loads lesson"],["Bridge formula","<a href=\"https://ops.fhwa.dot.gov/freight/publications/brdg_frm_wghts/\" target=\"_blank\" rel=\"noopener noreferrer\">FHWA - Bridge Formula Weights</a>","Freight and loads lesson"],["Hazmat placarding (49 CFR 172.504)","<a href=\"https://www.ecfr.gov/current/title-49/subtitle-B/chapter-I/subchapter-C/part-172/subpart-F/section-172.504\" target=\"_blank\" rel=\"noopener noreferrer\">eCFR - 172.504</a>","Cargo types"],["Hazardous materials program","<a href=\"https://www.phmsa.dot.gov/about-phmsa/offices/office-hazardous-materials-safety\" target=\"_blank\" rel=\"noopener noreferrer\">PHMSA - Office of Hazardous Materials Safety</a>","Cargo types"],["Out-of-service criteria","<a href=\"https://cvsa.org/inspections/out-of-service-criteria/\" target=\"_blank\" rel=\"noopener noreferrer\">CVSA - Out-of-Service Criteria</a>","Safety and inspection lessons"],["Roadside inspection levels","<a href=\"https://cvsa.org/inspections/all-inspection-levels/\" target=\"_blank\" rel=\"noopener noreferrer\">CVSA - All Inspection Levels</a>","Inspection lessons, Quick Reference"]],"note":"Regulations change. The links go to the current official text; the academy summarizes it for orientation only."},"carrierTypes":{"ig":"versus","icon":"truck","title":"Types of carriers and freight companies","items":[{"t":"For-hire carrier","sub":"Hauls other companies' freight for pay.","facts":[["Registration","USDOT number; interstate for-hire carriers also need FMCSA operating authority (currently identified by an MC number)"],["Example","A truckload carrier moving retail freight for many shippers"]],"watch":"Uptime is revenue: every down unit is a load that isn't moving or a customer at risk."},{"t":"Private fleet","sub":"A company hauling its own goods.","facts":[["Registration","USDOT number for interstate commercial vehicles"],["Example","A grocery chain delivering to its own stores"]],"watch":"Service to the company's own stores or plants drives priorities more than load revenue."},{"t":"Owner-operator","sub":"A driver who owns (or leases) their truck.","facts":[["How they work","Often leased onto a carrier's authority; some run under their own authority"],["Who pays repairs","Set by the lease agreement — usually the owner-operator for their own truck"]],"watch":"Confirm who owns the unit before arranging or approving any repair."},{"t":"Freight broker","sub":"Arranges transportation between shippers and carriers — doesn't haul the freight.","facts":[["Registration","FMCSA broker authority and a $75,000 financial security (surety bond or trust)"],["Documents","Sends the carrier a rate confirmation for each load"]],"watch":"On brokered loads, the broker needs delay updates — through your dispatch team, following company procedure."}],"key":"The same breakdown call can involve different decision-makers: your own fleet, an owner-operator, a chassis provider, or a broker waiting for an update. Ask who owns the unit and whose load it is."},"loadLifecycle":{"ig":"process","icon":"route","title":"The life of a load","items":[{"icon":"search","t":"Load found","d":"Customer contract, broker or load board"},{"icon":"file","t":"Rate confirmed","d":"Rate con: pickup, delivery, rate, rules"},{"icon":"truck","t":"Dispatched","d":"Driver, tractor, trailer assigned"},{"icon":"clipboard","t":"Picked up","d":"BOL signed, seal number noted"},{"icon":"pin","t":"In transit","d":"Tracking and check calls"},{"icon":"check-circle","t":"Delivered","d":"Signed BOL = proof of delivery"},{"icon":"dollar","t":"Invoiced & paid","d":"Invoice + documents, then payment"}],"note":"A breakdown can interrupt any step. The earlier it happens, the more options dispatch has — which is why fast, accurate ETRs matter."},"loadBoard":{"ig":"card","icon":"search","title":"Reading a load board posting (example)","form":"Load board posting · example","rows":[["Origin → destination","Dallas, TX → Atlanta, GA (≈ 780 mi)"],["Pickup / delivery","06/12 14:00–16:00 · 06/13 08:00 appointment"],["Equipment","Van, 53 ft"],["Weight / length","38,000 lb · full load"],["Commodity","Packaged consumer goods"],["Rate","Posted all-in rate, or \"call for rate\""],["Posted by","Broker name, MC number, contact"],["Extras","Drop trailer at pickup; driver assist: no"]],"note":"Illustrative example — every load board and broker formats postings differently. Dispatch books loads; the coordinator needs to know the equipment and appointment details because they decide how urgent a repair is."},"hosBasics":{"ig":"stats","icon":"clock","title":"Hours of Service basics — property-carrying drivers (U.S.)","items":[{"v":"11","u":"h","l":"maximum driving after 10 consecutive hours off duty","tone":"info"},{"v":"14","u":"h","l":"on-duty window — no driving after the 14th hour, even with breaks","tone":"warning"},{"v":"30","u":"min","l":"break after 8 cumulative hours of driving; any 30 straight minutes not driving counts, including shop time","tone":"info"},{"v":"60/70","u":"h","l":"on-duty limit in 7/8 consecutive days","tone":"info"}],"note":"Summary of FMCSA rules (49 CFR Part 395). Exceptions exist (short-haul, adverse driving conditions, sleeper-berth split and others). Dispatch and the safety department apply HOS — the coordinator uses it to judge whether a repair time still works for the load."},"routeFactors":{"ig":"hub","icon":"route","title":"What goes into a truck route","center":{"icon":"route","t":"Route plan"},"items":[{"icon":"clock","t":"Appointments","d":"Pickup and delivery windows"},{"icon":"users","t":"Driver hours","d":"HOS and planned breaks"},{"icon":"alert","t":"Restrictions","d":"Low clearances, weight limits, hazmat routes"},{"icon":"gauge","t":"Fuel stops","d":"Network, price, DEF"},{"icon":"wrench","t":"Service points","d":"PM due, known vendors on the lane"},{"icon":"sun","t":"Weather & traffic","d":"Closures, chain laws, delays"}]},"fuelSignals":{"ig":"table","icon":"gauge","title":"Fuel data as a maintenance signal","head":["What the data shows","Possible maintenance causes","Coordinator action"],"rows":[["MPG drops on one unit, same lanes and loads","Underinflated tires, dragging brakes, aftertreatment or injector problems","Check recent faults; schedule an inspection"],["High idle time","Driver comfort needs (HVAC, APU not working), or habit","Ask the driver; check APU/HVAC repair history"],["DEF use far from normal","SCR/DEF system issue, or DEF purchases not captured","Check DEF-related fault codes"],["Fuel purchased with no miles driven","Unit in the shop, reefer fueling, or a data issue","Confirm with fuel records before assuming misuse"]],"note":"Patterns point to questions, not diagnoses. A technician confirms any mechanical cause."},"ifta":{"ig":"table","icon":"file","title":"Fuel tax and trip records: IFTA in brief","head":["Question","Answer"],"rows":[["What is IFTA?","The International Fuel Tax Agreement among the 48 contiguous U.S. states and 10 Canadian provinces. Carriers report fuel and miles by jurisdiction on one quarterly return."],["Which vehicles?","Generally, qualified motor vehicles used in interstate operation: two axles and over 26,000 lb, three or more axles, or a combination over 26,000 lb."],["Why it touches maintenance","Miles driven to and from shops, and fuel bought during repairs, still belong in trip records. Accurate odometer readings on work orders help."],["Who handles it","Usually accounting, fuel tax or safety/compliance staff — not the maintenance coordinator."]],"note":"Overview only. Your base jurisdiction and your company's tax staff are the authority on IFTA reporting."}};
 const RATECON = {"source":"RATE CONFIRMATION — Northgate Freight Brokerage (fictional)\nCarrier: Crestline Freight Lines LLC · MC# 000000 (fictional)\nLoad #: NFB-448213\nPickup: Dallas, TX · 06/12 08:00  |  Delivery: Atlanta, GA · 06/13 07:00\nEquipment: 53' dry van · Miles: 781\nLinehaul rate: $1,900.00   Fuel surcharge: $250.00 flat\nDetention: $50/hr after 2 hours free · in/out times required on BOL\nLumper: reimbursed with receipt   Layover: $250/day   TONU: $150\nPayment terms: Net 30 from receipt of invoice with signed POD","delivery":"DELIVERY — Atlanta, GA · 06/13\nArrived 06:40 · Departed 11:10 (in/out times written and signed on BOL)\nLumper service paid by driver: $185.00 (receipt #L-7731)\nPOD: BOL signed by receiver, no exceptions noted","answer":{"broker":"northgate","load":"NFB-448213","linehaul":1900,"fsc":250,"detention":125,"lumper":185,"total":2460}};
 const LESSON_MOVES = {"beginner.m1.l4":"operations.m1.l1","advanced.m6.l3":"operations.m1.l2","beginner.m10":"operations.m2"};
-const CONTENT_FILES = {"beginner":"content/beginner.json?v=701833f1c1","advanced":"content/advanced.json?v=4a1676cdeb","expert":"content/expert.json?v=26ca0f8bac","operations":"content/operations.json?v=b08c70453b"};
+const SW_SECTIONS = [["what","What is it?","info"],["why","Why is it used?","target"],["who","Who uses it?","users"],["concepts","Key concepts","book"],["features","Main features","grid"],["how","How it works","activity"],["example","Real-world trucking example","truck"],["role","The Maintenance Coordinator's role","clipboard"],["workflow","Step-by-step workflow","route"],["visual","Visual explanation","image"],["mistakes","Common mistakes","alert"],["check","Quick knowledge check","list-check"],["scenario","Practical scenario","message"],["takeaways","Key takeaways","check-circle"]];
+const SW_GROUPS = ["Maintenance & records","Telematics & diagnostics","Refrigeration","Roadside, parts & service","Dispatch, TMS & payments"];
+const SOFTWARE = [{"id":"fleetio","name":"Fleetio","maker":"Fleetio","kind":"Fleet maintenance software","icon":"wrench","tone":"info","url":"https://www.fleetio.com","checked":"October 2026","tagline":"Fleet management software for vehicle records and maintenance: inspections, issues, work orders, service reminders, parts and fuel.","card":{"what":"Fleet management software, used in a web browser and through the Fleetio Go mobile app.","use":"Keeping every vehicle's record in one place and running maintenance: inspections, issues, work orders, preventive maintenance reminders, parts and fuel.","who":"Maintenance coordinators, fleet managers, technicians, parts staff and drivers (inspections)."},"quiz":[{"t":"mc","q":"In Fleetio, what is an **issue**?","o":["A planned, recurring service such as an oil change","An unplanned problem on a vehicle that stays open until resolved","An invoice from an outside vendor","A driver's assignment to a truck"],"a":1,"e":"Issues are unplanned problems such as a leak or a lamp out. Planned work is set up as service tasks and service reminders."},{"t":"mc","q":"What happens when a work order is completed?","o":["It is archived, and the vehicle's history stays as it was","Fleetio creates a service entry, and the vehicle's service history and reminders update","The vendor is paid automatically from the work order total","Nothing changes until the invoice is mailed and entered by hand"],"a":1,"e":"A completed work order generates a service entry. That adds to the service history and updates service reminders."},{"t":"wwyd","q":"T-118 comes in for a broken mirror. Its PM A reminder shows \"due soon\". What would you do?","o":["Fix the mirror only; PMs are someone else's problem","Add the PM to the same work order so the unit stops once","Delete the reminder","Wait until the PM is overdue"],"a":1,"e":"Combining due-soon preventive work with a repair avoids a second trip to the shop and extra downtime."},{"t":"mc","q":"Which piece of information most affects whether PM reminders are accurate?","o":["The vendor's labor rate on the last invoice","The meter reading (odometer or engine hours)","The truck's model year and engine type","The driver's home terminal and route"],"a":1,"e":"Mileage- and hour-based reminders count from the meter. A wrong reading moves every due date."},{"t":"tf","q":"A failed item in a Fleetio inspection can be turned into a work order.","a":true,"e":"True. Fleetio describes converting failed inspection items into work orders in a few clicks."}],"sources":[["Fleetio — Digital work orders","https://www.fleetio.com/features/digital-work-orders"],["Fleetio — Preventive maintenance scheduling","https://www.fleetio.com/features/preventive-maintenance-scheduling"],["Fleetio — Inspections","https://fleetio.com/manage/features/inspections"],["Fleetio Go mobile app","https://www.fleetio.com/go"],["Fleetio Help — Service tasks vs issues, service entries vs work orders","https://help.fleetio.com/maintenance/service-tasks-vs-issues-service-entries-vs-work-orders"],["Fleetio Help — Samsara integration","https://help.fleetio.com/en_US/telematicsgps/samsara-integration-5"]],"group":"Maintenance & records"},{"id":"samsara","name":"Samsara","maker":"Samsara","kind":"Telematics & connected operations","icon":"activity","tone":"success","url":"https://www.samsara.com","checked":"October 2026","tagline":"A telematics platform: in-vehicle devices send location, engine and safety data to a cloud dashboard that raises alerts and reports.","card":{"what":"A telematics platform: hardware in the truck (the Vehicle Gateway and AI dash cams) plus a cloud dashboard and driver app.","use":"GPS tracking, engine fault codes, driver safety events and dash-cam video, ELD/Hours of Service, DVIRs, fuel and idle data, and alerts.","who":"Fleet managers, safety, dispatch and compliance staff, maintenance coordinators (faults and DVIRs) and drivers."},"quiz":[{"t":"mc","q":"Which Samsara device reads location and engine data from the truck?","o":["The Vehicle Gateway","The fuel card","The trailer kingpin","The driver's pay statement"],"a":0,"e":"Samsara describes the Vehicle Gateway as a cellular gateway with GPS and a CAN bus interface."},{"t":"scenario","q":"Samsara reports a harsh-braking event on T-208. The driver says a car cut in front of them; the brakes felt normal. Who owns the follow-up?","o":["Maintenance — replace the brakes","Safety — review and coach as needed","Billing","Nobody"],"a":1,"e":"Harsh-braking events are a safety and coaching topic. With no mechanical symptom, there is no maintenance action."},{"t":"mc","q":"Which system would most likely tell you where a broken-down truck is right now?","o":["The parts catalog, which lists the nearest shops","The telematics platform (Samsara)","The maintenance system's last service entry","The vendor's most recent invoice"],"a":1,"e":"GPS location from telematics helps you send roadside service to the right place."},{"t":"wwyd","q":"You get an engine fault alert. What would you check first?","o":["The fuel price at the nearest truck stop","The driver's symptoms and lamps, then the code","Last month's invoices for the same unit","The vendor's labor rate for diagnostics"],"a":1,"e":"Safety and urgency come first. Symptoms and lamp color tell you whether the truck must stop."},{"t":"tf","q":"A fault code always tells you exactly which part to replace.","a":false,"e":"False. A code shows what the truck's computer detected. A qualified technician diagnoses the cause."}],"sources":[["Samsara — Fleet telematics","https://www.samsara.com/products/telematics"],["Samsara — Connected maintenance","https://www.samsara.com/products/telematics/fleet-maintenance"],["Samsara — ELD compliance","https://www.samsara.com/products/apps-and-workflows/eld-compliance"],["Samsara Help — Event-based recording","https://kb.samsara.com/hc/en-us/articles/36409226230541-Event-Based-Recording"],["Samsara Help — Driver coaching workflow","https://kb.samsara.com/hc/en-us/articles/360056588511-Driver-Coaching-Workflow"],["Samsara Help — Work orders for maintenance management","https://kb.samsara.com/hc/en-us/articles/32504504318989-Work-Orders-for-Maintenance-Management"]],"group":"Telematics & diagnostics"},{"id":"pro-transport","name":"ProTransport","maker":"RTS","kind":"Trucking software (TMS)","icon":"route","tone":"warning","url":"https://www.rtsinc.com/product/pro-transport","checked":"October 2026","tagline":"Trucking management software from RTS for loads, dispatch, drivers, documents, accounting and reporting.","card":{"what":"A transportation management system (TMS) made by RTS, a trucking services company.","use":"Entering loads, dispatching them to drivers, driver trip updates and document uploads, invoicing, driver pay statements, IFTA and safety and maintenance reminders.","who":"Dispatchers, operations, billing and accounting, drivers through the mobile app, and fleet owners."},"quiz":[{"t":"mc","q":"What kind of system is ProTransport?","o":["A transport refrigeration unit for trailers","A trucking management system (TMS) made by RTS","A tire tracking system made by a tire maker","An engine diagnostic tool for technicians"],"a":1,"e":"ProTransport is RTS's trucking software for loads, dispatch, accounting and more."},{"t":"mc","q":"A driver photographs the signed BOL in the ProTransport Driver Mobile App. What happens, according to RTS?","o":["It is emailed to the shop","It is attached to the correct load automatically","It is deleted after 24 hours","It updates the truck's PM schedule"],"a":1,"e":"RTS says uploaded documents are attached to the correct load, so office staff can see them right away."},{"t":"scenario","q":"You need to know whether T-509 is currently on a load before scheduling a PM. Which system answers that?","o":["The TMS","The tire sidewall","The reefer controller","The parts catalog"],"a":0,"e":"Load and dispatch assignments live in the TMS."},{"t":"wwyd","q":"A dispatched truck breaks down. What should the Maintenance Coordinator do about the TMS side?","o":["Nothing; the TMS updates itself","Tell dispatch immediately: unit, location, load affected and ETR","Cancel the load in the TMS yourself","Email the broker directly without telling dispatch"],"a":1,"e":"Dispatch owns the load. Give them what they need to replan and update the customer."},{"t":"tf","q":"Every company using ProTransport has exactly the same modules and integrations.","a":false,"e":"False. RTS offers different plans and integrations. Learn what your company uses."}],"sources":[["RTS — ProTransport trucking software","https://www.rtsinc.com/product/pro-transport"],["RTS — ProTransport Enterprise TMS","https://rtsinc.com/trucking-services/trucking-software/enterprise"],["RTS — ProTransport Driver Mobile App","https://rtsinc.com/resources/blogs/protransport-driver-mobile-app"]],"group":"Dispatch, TMS & payments"},{"id":"thermo-king","name":"Thermo King","maker":"Trane Technologies","kind":"Transport refrigeration (equipment)","icon":"thermo","tone":"critical","url":"https://www.thermoking.com","checked":"October 2026","tagline":"Transport temperature control: refrigeration units (TRUs) that keep reefer trailers and trucks at the right temperature, plus their controllers and telematics.","card":{"what":"A transport temperature-control brand of Trane Technologies. It makes refrigeration units (TRUs) for trailers, trucks, rail and containers.","use":"Keeping temperature-sensitive cargo at its setpoint: cooling, heating, defrost, alarms, pretrip tests and temperature records.","who":"Drivers (pretrip, setpoint checks), dispatch, maintenance coordinators, refrigeration technicians and dealers."},"quiz":[{"t":"mc","q":"What does Thermo King primarily make?","o":["Dispatch and load planning software","Transport refrigeration and temperature-control units","Truck and trailer tires for long haul","Fuel cards and payment systems for fleets"],"a":1,"e":"Thermo King is a transport temperature-control brand of Trane Technologies."},{"t":"mc","q":"Which reading shows the air coming back from the cargo area into the unit?","o":["Discharge air","Return air","Setpoint","Hourmeter"],"a":1,"e":"Return air is the air returning from the load. Discharge (supply) air is what leaves the unit."},{"t":"mc","q":"Why does a reefer unit go into defrost?","o":["To save fuel by shutting the unit off for a while","To melt ice from the evaporator coil so air and heat can move through it","To warm the driver's cab during cold nights","To recharge the unit's battery from the alternator"],"a":1,"e":"Ice on the evaporator coil blocks airflow and cooling. Defrost removes it."},{"t":"wwyd","q":"A driver reports a reefer alarm. Which information is most important to collect first?","o":["The tractor's odometer and the date of its last PM","The alarm code plus setpoint, return and discharge air temperatures","The trailer's last annual inspection date and VIN","The driver's delivery appointment and route"],"a":1,"e":"The alarm code and temperatures tell you how urgent it is and whether the cargo is at risk."},{"t":"mc","q":"Reefer unit PM is usually scheduled by…","o":["Trailer miles","Unit engine hours","Driver age","Fuel price"],"a":1,"e":"The unit runs whether the trailer moves or not. Its hourmeter drives PM."}],"sources":[["Thermo King — Single-temperature trailer units (North America)","https://www.thermoking.com/na/en/road/trailers/single-temperature-controlled-units.html"],["Thermo King — Smart Reefer 4 (SR-4) operator literature","https://www.emea-user-manuals.thermoking.com/etech-emea-public/thermoking-emea/Minneapolis%20-%20Trailer/Literature/Operation%20or%20Owners/0005641713.xml/$/0005340771"],["Thermo King — Alarm codes","https://thermoking.com/na/en/alarm-codes.html"],["Thermo King — Frederick Jones inducted into Truck Hall of Fame","https://www.thermoking.com/na/en/newsroom/frederick-jones-inducted-into-the-aths-hall-of-fame.html"],["Thermo King Europe — About","https://europe.thermoking.com/about"],["Thermo King Europe — Advancer","https://europe.thermoking.com/advancer"]],"group":"Refrigeration"},{"id":"motive","name":"Motive","maker":"Motive Technologies","kind":"Telematics, ELD & safety","icon":"activity","tone":"success","group":"Telematics & diagnostics","url":"https://gomotive.com","checked":"November 2026","tagline":"A telematics, ELD and AI dash cam platform (formerly KeepTruckin) that reports engine fault codes, inspections and location to a fleet dashboard.","card":{"what":"A fleet platform: the Vehicle Gateway and AI dash cams in the truck, a web dashboard for the office and the Motive Driver App.","use":"ELD / Hours of Service, GPS tracking, engine fault codes, DVIRs, maintenance scheduling and AI dash cam safety.","who":"Safety and compliance, dispatch, fleet managers, maintenance coordinators (faults and DVIRs) and drivers."},"quiz":[{"t":"mc","q":"What was Motive called before 2022?","o":["KeepTruckin","TruckTrack","FleetNet","Speedco"],"a":0,"e":"Motive rebranded from KeepTruckin in 2022."},{"t":"tf","q":"According to Motive's help center, drivers see engine fault codes in the Motive Driver App.","a":false,"e":"Fault codes appear on the fleet dashboard, not in the Driver App. Call the driver for symptoms."},{"t":"mc","q":"Which Motive signal is most clearly a maintenance coordinator's job?","o":["A dash cam event for tailgating","An active engine fault code","A late delivery","An idling report"],"a":1,"e":"Fault codes are maintenance triage. Driving behavior belongs to safety; deliveries to dispatch."}],"sources":[["Motive Help Center — Fault codes","https://helpcenter.gomotive.com/hc/en-us/articles/6161571788061"],["Motive — What are DTCs (diagnostic trouble codes)?","https://gomotive.com/blog/what-does-dtc-mean/"],["Motive — AI Dashcam Plus spec sheet","https://gomotive.com/wp-content/uploads/2026/08/Spec-Sheet_Dual-Facing-AI-Dashcam-Plus.pdf"]]},{"id":"geotab","name":"Geotab","maker":"Geotab","kind":"Telematics platform","icon":"activity","tone":"success","group":"Telematics & diagnostics","url":"https://www.geotab.com","checked":"November 2026","tagline":"A telematics platform: the GO device in the vehicle and the MyGeotab web software, extended by add-ons from the Geotab Marketplace.","card":{"what":"Telematics hardware (the GO device) plus MyGeotab, a web platform for location, engine data, faults and reports.","use":"Tracking, engine fault data, maintenance reminders and reports, with partner add-ons for things like engine-maker diagnostics and roadside help.","who":"Fleet managers, maintenance coordinators, safety staff and data analysts. Usually bought through a Geotab reseller."},"quiz":[{"t":"mc","q":"Where does a coordinator find fault codes in MyGeotab?","o":["Maintenance > Faults","The fuel card portal","The driver's pay stub","The trailer's VIN plate"],"a":0,"e":"Geotab documents fault codes under Maintenance > Faults."},{"t":"tf","q":"A fault with status \"None\" in MyGeotab is no longer active.","a":true,"e":"None means not active now. Still check the history for repeats."},{"t":"scenario","q":"MyGeotab shows the same code three times this week, all now inactive. What do you do?","o":["Nothing: inactive codes mean the problem fixed itself","Plan an inspection, for example with the next PM, and note the history","Replace the part the code names before the next load","Delete the history so the faults page stays clean"],"a":1,"e":"Repeats point to a real problem. Plan a diagnosis before it becomes a road call."}],"sources":[["Geotab Support — Faults","https://support.geotab.com/help/mygeotab/maintenance-and-diagnostics/diagnostics/faults"],["Geotab Support — Faults user guide","https://support.geotab.com/mygeotab/doc/faults-beta-user-guide"],["Geotab — Cummins Connected Diagnostics in MyGeotab","https://www.geotab.com/press-release/cummins-connected-diagnostic-mygeotab"],["Geotab Marketplace — FleetNet America Roadside","https://marketplace.geotab.com/solutions/fleetnet-america-roadside/"]]},{"id":"decisiv","name":"Decisiv","maker":"Decisiv","kind":"Service relationship management","icon":"message","tone":"info","group":"Maintenance & records","url":"https://www.decisiv.com","checked":"November 2026","tagline":"A cloud platform where fleets, dealers and service providers handle a repair together: service request, estimate, approval and status in one shared case.","card":{"what":"A cloud Service Relationship Management (SRM) platform connecting fleets with dealers and service providers.","use":"Sending service requests, tracking repair status, reviewing estimates and communicating with the shop on one shared record.","who":"Maintenance coordinators and fleet managers on the fleet side; service advisors and managers at dealers and shops."},"quiz":[{"t":"mc","q":"What does SRM stand for in Decisiv's description?","o":["Service Relationship Management","Shop Repair Manual","Safety Risk Monitor","Standard Repair Mileage"],"a":0,"e":"Decisiv describes its platform as Service Relationship Management."},{"t":"mc","q":"Who mainly uses Decisiv together?","o":["Fleets and their service providers","Drivers and the brokers who book their loads","Shippers and receivers tracking deliveries","Fuel stations billing fleet accounts"],"a":0,"e":"It connects fleets with dealers and service providers around repairs."},{"t":"tf","q":"An estimate waiting for fleet approval adds to downtime.","a":true,"e":"Every hour an estimate waits is an hour the truck is not being repaired."}],"sources":[["Decisiv","https://www.decisiv.com"],["TT News — Driving asset performance with SRM","https://ttnews.com/articles/driving-asset-performance-srm"],["Truck Parts & Service — Decisiv partnerships (Truckmore, Wabash, Diesel Laptops)","https://www.truckpartsandservice.com/technology/business-operations/article/15739430/decisiv-announces-three-data-partnership-collaborations"],["Karmak — Decisiv integration","https://www.karmak.com/integrations/decisiv"]]},{"id":"trimble-tmt","name":"TMT Fleet Maintenance","brand":"Trimble TMT","maker":"Trimble","kind":"Fleet maintenance software","icon":"wrench","tone":"info","group":"Maintenance & records","url":"https://transportation.trimble.com","checked":"November 2026","tagline":"Maintenance management software for larger fleets (formerly TMW Systems): repair orders, PM, parts, road calls, tires, warranty and VMRS-coded reporting.","card":{"what":"A web-based fleet maintenance management system from Trimble, formerly sold by TMW Systems.","use":"Repair orders, preventive maintenance, parts inventory, road calls, tire tracking, warranty recovery and cost reporting by VMRS code.","who":"Maintenance coordinators, shop managers, technicians, parts staff and fleet managers in mid-size and large fleets."},"quiz":[{"t":"mc","q":"What is VMRS?","o":["A standard coding system for vehicle maintenance","A tire tracking system for retreads","A national network of truck stop shops","A fuel tax reporting program for fleets"],"a":0,"e":"Vehicle Maintenance Reporting Standards, from ATA's Technology & Maintenance Council."},{"t":"mc","q":"Which company sold TMT before Trimble's branding?","o":["TMW Systems","KeepTruckin","Speedco","Comdata"],"a":0,"e":"Trimble TMT Fleet Maintenance was formerly from TMW Systems."},{"t":"tf","q":"Outside repairs do not need to be entered in the fleet's maintenance system.","a":false,"e":"Every repair belongs in the unit's history, or costs, repeats and warranty get lost."}],"sources":[["Trimble — Fleet maintenance solutions","https://transportation.trimble.com/fleet-maintenance-solutions-page"],["Trimble — What TMT Fleet Maintenance can do","https://transportation.trimble.com/node/469"],["Trimble — Master Fleet case study (VMRS reporting)","https://transportation.trimble.com/en/asset-fleet-maintenance/case-studies/master-fleet"],["Trimble developer docs — TMT","https://developer.trimble.com/docs/tmt"]]},{"id":"carrier-transicold","name":"Carrier Transicold","brand":"Carrier","maker":"Carrier","kind":"Transport refrigeration (equipment)","icon":"thermo","tone":"critical","group":"Refrigeration","url":"https://www.carrier.com/truck-trailer/en/north-america/","checked":"November 2026","tagline":"One of the two big makers of trailer and truck refrigeration units, with the Lynx Fleet telematics platform for monitoring reefers remotely.","card":{"what":"Transport refrigeration units (TRUs) for trailers and trucks, plus Lynx Fleet, Carrier Transicold's telematics platform.","use":"Keeping temperature-controlled freight in range, and watching unit temperature, alarms, location and battery status remotely.","who":"Coordinators handling reefer fleets, dispatch for temperature-sensitive loads, and refrigeration technicians at Carrier Transicold dealers."},"quiz":[{"t":"mc","q":"What is Lynx Fleet?","o":["Carrier Transicold's telematics platform for refrigerated fleets","A Carrier Transicold tire monitoring system","A fuel card for refrigerated carriers","A roadside network for reefer breakdowns"],"a":0,"e":"Lynx Fleet monitors refrigeration units remotely."},{"t":"tf","q":"A coordinator may tell the driver to lower the setpoint to protect a load.","a":false,"e":"The setpoint comes from the shipper. Changing it can ruin the freight."},{"t":"mc","q":"Where should you look up what a Carrier reefer alarm code means?","o":["The unit's own manual or a Carrier dealer","Another reefer brand's alarm code chart","The trailer's last annual inspection report","The tractor's engine fault code list"],"a":0,"e":"Codes differ by maker and model. Use the official manual or dealer."}],"sources":[["Carrier — Lynx Fleet platform enhanced monitoring (news)","https://www.carrier.com/carrier/en/worldwide/news/news-article/carrier-transicold-s-lynx-fleet-platform-rolls-out-enhanced-monitoring-of-refrigerated-fleets.html"],["Samsara Marketplace — Carrier Transicold","https://samsara.com/resources/marketplace/carrier-transicold"],["Carrier Transicold — Truck and trailer refrigeration","https://www.carrier.com/truck-trailer/en/north-america/"]]},{"id":"cummins-connected","name":"Cummins Connected Diagnostics","brand":"Cummins","maker":"Cummins","kind":"Engine-maker diagnostics","icon":"zap","tone":"warning","group":"Telematics & diagnostics","url":"https://www.cummins.com","checked":"November 2026","tagline":"Fault alerts from Cummins itself: when a Cummins engine logs a fault, the fleet gets a notice with priority, likely cause and a recommended action.","card":{"what":"A Cummins service that turns engine fault codes into notifications with a priority level and recommended action.","use":"Knowing, from the engine maker, how urgent a Cummins fault is and what to do next, including any coming derate.","who":"Maintenance coordinators and fleet managers running trucks with Cummins engines. Activated through a telematics provider or Cummins."},"quiz":[{"t":"mc","q":"What does a Cummins Connected Diagnostics notification add to a plain fault code?","o":["Priority and a recommended action","The driver's pay","Fuel prices","A delivery appointment"],"a":0,"e":"It states urgency, recommended action, likely cause and derate timing."},{"t":"tf","q":"A derate warning tells you a power limit may come after a set time.","a":true,"e":"Use it as a deadline for the repair."},{"t":"mc","q":"How is the service usually activated?","o":["Through a telematics reseller, a Cummins representative or Cummins Care","Automatically, on every truck with a Cummins engine","By the shipper, for loads that need tracking","Through the fleet's fuel card provider"],"a":0,"e":"Cummins documents activation through these channels."}],"sources":[["Cummins — Mobile apps bring Cummins service anywhere","https://www.cummins.com/news/2016/03/17/mobile-apps-bring-cummins-service-anywhere-you-roam"],["Cummins — Just how serious is that dash light?","https://www.cummins.com/news/2015/12/22/just-how-serious-dash-light"],["Geotab — Cummins Connected Diagnostics in MyGeotab","https://www.geotab.com/press-release/cummins-connected-diagnostic-mygeotab"],["Eaton — IntelliConnect and Cummins integration guide","https://eaton.com.cn/content/dam/eaton/products/transmissions/service-tools/intelliconnect/eaton-intelliconnect-cummins-fcap-integration-rrsl0200.pdf"]]},{"id":"detroit-connect","name":"Detroit Connect","maker":"Detroit (Daimler Truck North America)","kind":"Engine-maker diagnostics","icon":"zap","tone":"warning","group":"Telematics & diagnostics","url":"https://www.demanddetroit.com","checked":"November 2026","tagline":"Remote diagnostics for Detroit engines and powertrains: Virtual Technician sends fault details with severity, and experts follow up on serious events.","card":{"what":"Detroit's connected-vehicle service for trucks with Detroit engines (common on Freightliner and Western Star). Virtual Technician is its remote diagnostics tool.","use":"Fault notifications with severity, expert follow-up on severe events with likely cause and parts, and fault history per VIN in the Detroit Connect portal.","who":"Maintenance coordinators and fleet managers with Detroit-powered trucks; Detroit's Customer Support Center."},"quiz":[{"t":"mc","q":"Who reviews severe Detroit Connect fault events, according to Detroit?","o":["Experts at the Detroit Customer Support Center","The driver, using the Detroit Connect app","The fleet's own telematics provider","The nearest Freightliner dealer's parts desk"],"a":0,"e":"Detroit describes CSC experts analyzing severe events and following up."},{"t":"tf","q":"For severe events, the follow-up can include nearby service locations with the needed parts in stock.","a":true,"e":"That helps you pick the shop that can fix it today."},{"t":"mc","q":"Which trucks commonly use Detroit engines?","o":["Freightliner and Western Star","Only trailers and converter dollies","Reefer units and APUs","Forklifts and yard tractors"],"a":0,"e":"Detroit is part of Daimler Truck North America, maker of Freightliner and Western Star."}],"sources":[["Freightliner (AU) — Detroit Connect Virtual Technician","https://freightliner.com.au/siteassets/documents/detroit-connect-virtual-technician.pdf"],["Western Star — Detroit Connect","https://westernstar-truck-locator.azurewebsites.net/Engines/DetroitConnect"],["TT News — Detroit extends fault code coverage to safety systems","https://www.ttnews.com/articles/detroit-extends-fault-code-coverage-safety-systems"],["Fleet Equipment — Virtual Technician adds DT12 diagnostics","https://www.fleetequipmentmag.com/detroit-connect-virtual-technician-adds-diagnostics-dt12-transmission-fault-events/"]]},{"id":"fleetnet","name":"FleetNet America","maker":"Cox Automotive","kind":"Roadside & repair network","icon":"phone","tone":"warning","group":"Roadside, parts & service","url":"https://fleetnetamerica.com","checked":"November 2026","tagline":"A 24/7 call center and network of tens of thousands of towing, mobile repair and shop providers that handles breakdowns for medium and heavy fleets.","card":{"what":"A roadside assistance and repair management service with a 24/7/365 call center and a large network of service providers.","use":"Getting a tow, mobile repair or shop to a broken-down truck anywhere in the U.S., Canada and Puerto Rico, without finding the vendor yourself.","who":"Fleets that outsource breakdown handling (fully or after hours); coordinators who hand off or follow events."},"quiz":[{"t":"mc","q":"What does FleetNet America mainly provide?","o":["A 24/7 roadside and repair network","Engine fault codes from the truck","Fuel cards for over-the-road fleets","Refrigeration units for trailers"],"a":0,"e":"It triages breakdowns and dispatches providers from its network."},{"t":"tf","q":"Once FleetNet takes an event, the coordinator has nothing more to do.","a":false,"e":"You still authorize, follow up, inform dispatch and record it."},{"t":"mc","q":"Which company owns FleetNet America?","o":["Cox Automotive","Cummins Inc.","Trimble Inc.","Carrier Global"],"a":0,"e":"FleetNet is a Cox Automotive brand."}],"sources":[["FleetNet America — Emergency roadside assistance","https://fleetnetamerica.com/?p=32"],["FleetNet America — Fleet services","https://fleetnetamerica.com/?p=31"],["Cox Automotive — FleetNet America TMC 2024 release","https://www.coxautoinc.com/wp-content/uploads/2024/02/FleetNet-America_TMC-2024_Press-Release_FINAL.pdf"],["Geotab Marketplace — FleetNet America Roadside","https://marketplace.geotab.com/solutions/fleetnet-america-roadside/"]]},{"id":"loves-truck-care","name":"Love's Truck Care & Speedco","brand":"Love's","maker":"Love's Travel Stops","kind":"Truck stop service network","icon":"wrench","tone":"warning","group":"Roadside, parts & service","url":"https://www.loves.com","checked":"November 2026","real":[["Love's Truck Care & Speedco — truck services","https://loves.com/truck-services"]],"tagline":"A national network of truck service bays and roadside trucks at Love's locations: tires, lube, light mechanical, roadside help and DOT inspections.","card":{"what":"Love's Truck Care and Speedco service locations, many at Love's travel stops, plus roadside service trucks.","use":"Tire repair and replacement, lube and PM, light mechanical repairs, roadside service and DOT inspections along major highways.","who":"Coordinators booking on-route service, drivers, and fleets with national accounts."},"quiz":[{"t":"mc","q":"What is Speedco?","o":["Love's quick lube and preventive maintenance brand","A fuel card for Love's customers","A telematics device for Love's fleets","A brand of reefer units"],"a":0,"e":"Love's bought Speedco from Bridgestone in 2017."},{"t":"tf","q":"Booking a PM during the driver's break at an on-route location can avoid extra downtime.","a":true,"e":"The truck is already stopped; the work fits the break."},{"t":"mc","q":"Which service does Love's Truck Care NOT list in its standard menu?","o":["Tire work","Lube and PM","DOT inspections","Freight brokerage"],"a":3,"e":"It is a truck service network, not a freight broker."}],"sources":[["Love's — Truck services","https://loves.com/truck-services"],["Love's — Love's opens five new Speedco locations (2024)","https://www.loves.com/news/2024/april/loves-opens-five-new-speedco-locations"],["Love's — New Love's Truck Care and Speedco locations open (2020)","https://www.loves.com/news/2020/october/new-loves-truck-care-and-speedco-locations-open"],["Business Wire — Love's acquires Speedco (2017)","https://www.businesswire.com/news/home/20171101006122/en"]]},{"id":"fleetpride","name":"FleetPride","maker":"FleetPride","kind":"Heavy-duty parts distributor","icon":"layers","tone":"info","group":"Roadside, parts & service","url":"https://www.fleetpride.com","checked":"November 2026","tagline":"A national distributor of heavy-duty truck and trailer parts with branches across the U.S., an online catalog and service at some locations.","card":{"what":"A heavy-duty truck and trailer parts distributor with 300+ locations in 46 states, according to FleetPride.","use":"Sourcing parts for Class 6–8 trucks and trailers: brakes, wheel-end, driveline, filters, lighting and more, in person or online.","who":"Parts staff, maintenance coordinators, shops and technicians."},"quiz":[{"t":"mc","q":"What is FleetPride?","o":["A heavy-duty parts distributor","A telematics and ELD platform","A fuel card for heavy trucks","A maker of heavy-duty engines"],"a":0,"e":"It sells parts through branches and online."},{"t":"mc","q":"What should you have before searching for a part?","o":["The exact part number or the unit's VIN","The driver's phone number and location","The load number and delivery time","The fuel price at the nearest stop"],"a":0,"e":"Part number or VIN fit avoids ordering the wrong part."},{"t":"tf","q":"If the usual supplier is out of a part, checking other branches can cut downtime.","a":true,"e":"Another branch or dealer may have it today."}],"sources":[["FleetPride — About","https://www.fleetpride.com/About"],["FleetPride — Branch page example (Fargo, ND)","https://branches.fleetpride.com/nd/fargo/truckparts-far.html"]]},{"id":"mcleod","name":"McLeod LoadMaster","maker":"McLeod Software","kind":"Trucking software (TMS)","icon":"route","tone":"warning","group":"Dispatch, TMS & payments","url":"https://www.mcleodsoftware.com","checked":"November 2026","tagline":"A transportation management system (TMS) used by many carriers for orders, dispatch, drivers and billing, often linked to the fleet's maintenance system.","card":{"what":"LoadMaster Enterprise, McLeod's TMS for trucking companies (PowerBroker is its product for brokers).","use":"Orders, dispatch, driver and equipment assignment, and billing. Linked maintenance systems can mark units unavailable or flag PM due.","who":"Dispatchers and planners mainly; maintenance coordinators see unit availability and status."},"quiz":[{"t":"mc","q":"What kind of software is McLeod LoadMaster?","o":["A transportation management system (TMS)","An engine diagnostic tool for shops","A reefer temperature controller","A heavy-duty parts catalog"],"a":0,"e":"It manages loads, dispatch and billing."},{"t":"tf","q":"A unit with an open repair order can be flagged unavailable for dispatch when maintenance and LoadMaster are linked.","a":true,"e":"Maintenance vendors describe this integration."},{"t":"mc","q":"What is the coordinator's main job in the TMS?","o":["Keep unit status and ETR accurate","Book loads for idle trucks","Price freight for customers","Approve driver pay each week"],"a":0,"e":"Dispatch plans from your status and ETR."}],"sources":[["McLeod Software","https://www.mcleodsoftware.com"],["Cetaris — McLeod integration","https://cetaris.com/integrations/mcleod-software"],["FleetOwner — Dossier integrated with LoadMaster Enterprise","https://www.fleetowner.com/technology/article/21684901/dossier-integrated-with-loadmaster-enterprise"],["Samsara Help — Integrate with McLeod LoadMaster","https://kb.samsara.com/hc/articles/360017463232"]]},{"id":"comdata","name":"Comdata","maker":"Comdata","kind":"Fleet fuel cards & payments","icon":"dollar","tone":"warning","group":"Dispatch, TMS & payments","url":"https://www.comdata.com","checked":"November 2026","tagline":"Fleet fuel cards and on-the-road payments, including Comchek Express Codes and one-time virtual cards that can pay for repairs, towing and roadside help.","card":{"what":"A fleet payments company: diesel fuel cards and Comchek products for moving funds on the road.","use":"Fuel purchases, and paying roadside vendors, tows and repair shops when a driver is far from home.","who":"Fleet finance, dispatch and maintenance coordinators who pay roadside vendors; drivers."},"quiz":[{"t":"mc","q":"What can a Comdata Express Code be used for, according to Comdata?","o":["Sending funds to registered payees, like repair shops","Reading engine fault codes from the truck","Booking loads on a freight load board","Setting the reefer unit's temperature"],"a":0,"e":"It transfers funds to registered cardholders, including repair shops."},{"t":"tf","q":"You should verify a vendor through a number you already trust before sending a payment code.","a":true,"e":"Never send money to an unverified contact."},{"t":"mc","q":"How much should you pay a roadside vendor?","o":["Exactly the approved amount","Whatever they ask","Double to be safe","Nothing until next month"],"a":0,"e":"Pay the approved amount and record it."}],"sources":[["Comdata — Comchek","https://www.comdata.com/products-services/comchek"],["Comdata — Fleet payment solutions","https://comdata.com/products-services/fleet-payments"],["Business Wire — Comdata launches Virtual Comchek","https://www.businesswire.com/news/home/20200910005224/en/Comdata-Launches-Virtual-Comchek-a-One-Time-Use-Digital-Payment-Card-for-Fleets-and-Drivers"]]},{"id":"ta-truck-service","name":"TA Truck Service","maker":"TravelCenters of America","kind":"Truck stop service network","icon":"wrench","tone":"warning","group":"Roadside, parts & service","url":"https://www.ta-petro.com","checked":"November 2026","real":[["TA Truck Service — TA & Petro website","https://www.ta-petro.com"]],"tagline":"Truck service bays at TA and Petro travel centers, plus TA's RoadSquad roadside brand: maintenance, tires and repairs along the interstates.","card":{"what":"The truck service and repair network of TravelCenters of America, with service bays at many TA and Petro travel centers.","use":"Preventive maintenance, tires and mechanical repairs on route; roadside help under the RoadSquad name where it is offered.","who":"Coordinators booking on-route service, drivers, and fleets with national accounts."},"quiz":[{"t":"mc","q":"Which travel center brands belong to TravelCenters of America?","o":["TA and Petro","Love's and Speedco","Two fuel card brands","Two parts distributors"],"a":0,"e":"TA and Petro are TravelCenters of America brands."},{"t":"mc","q":"What is RoadSquad?","o":["TA's roadside service brand","A tire size","A fuel card","A telematics device"],"a":0,"e":"Confirm its current coverage before relying on it."},{"t":"tf","q":"Every TA Truck Service location is open 24/7.","a":false,"e":"Hours and bay counts differ by location. Call ahead."}],"sources":[["TA Petro — New TA Truck Service center in Lake City, FL","https://www.ta-petro.com/blog/new-ta-truck-service-center-now-open-in-lake-city-florida/"],["Truck Parts & Service — TA opens new 24/7/365 service facility","https://www.truckpartsandservice.com/home/article/14978797/ta-opens-new-247365-service-facility"],["Fleet Maintenance — Truck and travel stops in the roadside breakdown business","https://www.fleetmaintenance.com/in-the-bay/article/21280220/truck-and-travel-stops-loom-large-in-roadside-breakdown-business"],["Truckers News — TA Petro pauses on-highway emergency roadside service","https://www.truckersnews.com/news/article/15770898/ta-petro-pauses-onhighway-emergency-roadside-assistance-service"]]}];
+const SOFTWARE_MAP = new Map(SOFTWARE.map((s) => [s.id, s]));
+const CONTENT_FILES = {"beginner":"content/beginner.json?v=afc71751d1","advanced":"content/advanced.json?v=cc36c5b384","expert":"content/expert.json?v=8247315c73","operations":"content/operations.json?v=c588288b32","software":"content/software.json?v=bf819cbdc0"};
 // Questions per module quiz, so pages without lesson text loaded can show it.
-const QUIZ_SIZE = {"beginner.m1":7,"beginner.m2":4,"beginner.m3":12,"beginner.m4":4,"beginner.m5":6,"beginner.m6":4,"beginner.m7":4,"beginner.m8":5,"beginner.m9":6,"advanced.m1":5,"advanced.m2":6,"advanced.m3":4,"advanced.m4":7,"advanced.m5":4,"advanced.m6":4,"advanced.m7":4,"advanced.m8":4,"advanced.m9":4,"expert.m1":6,"expert.m2":4,"expert.m3":4,"expert.m4":4,"expert.m5":4,"expert.m6":5,"expert.m7":4,"expert.m8":6,"expert.m9":4,"operations.m1":6,"operations.m2":12};
+const QUIZ_SIZE = {"beginner.m1":7,"beginner.m2":4,"beginner.m3":12,"beginner.m4":4,"beginner.m5":6,"beginner.m6":4,"beginner.m7":4,"beginner.m8":5,"beginner.m9":6,"advanced.m1":5,"advanced.m2":6,"advanced.m3":4,"advanced.m4":9,"advanced.m5":4,"advanced.m6":4,"advanced.m7":4,"advanced.m8":4,"advanced.m9":4,"expert.m1":6,"expert.m2":4,"expert.m3":4,"expert.m4":4,"expert.m5":4,"expert.m6":5,"expert.m7":4,"expert.m8":6,"expert.m9":4,"operations.m1":6,"operations.m2":12};
 /* Photo sources for the Visual Library — all from Wikimedia Commons under free licenses.
    Each entry keeps the author, license and file page for attribution. */
 const LIB_PHOTOS = {
@@ -981,1806 +985,6 @@ const LIBRARY = [
 ];
 const LIB_MAP = new Map(LIBRARY.map((x) => [x.id, x]));
 const LIB_TERM = new Map(LIBRARY.flatMap((x) => (x.terms || []).map((t) => [t.toLowerCase(), x])));
-
-/* ===========================================================================
-   SOFTWARE & PLATFORMS — real-world tools a Maintenance Coordinator meets.
-   Content is limited to what each company publishes on its official website,
-   help center or technical literature (see `sources` on every platform).
-   Fleet names, unit numbers and screens in examples are fictional; record
-   mockups are labeled as simplified educational examples, never as the
-   vendor's real interface. Every page follows the same 14-part structure.
-   =========================================================================== */
-const SW_SECTIONS = [
-  ['what', 'What is it?', 'info'], ['why', 'Why is it used?', 'target'], ['who', 'Who uses it?', 'users'],
-  ['concepts', 'Key concepts', 'book'], ['features', 'Main features', 'grid'], ['how', 'How it works', 'activity'],
-  ['example', 'Real-world trucking example', 'truck'], ['role', "The Maintenance Coordinator's role", 'clipboard'],
-  ['workflow', 'Step-by-step workflow', 'route'], ['visual', 'Visual explanation', 'image'],
-  ['mistakes', 'Common mistakes', 'alert'], ['check', 'Quick knowledge check', 'list-check'],
-  ['scenario', 'Practical scenario', 'message'], ['takeaways', 'Key takeaways', 'check-circle']
-];
-
-const SOFTWARE = [
-  /* ------------------------------------------------------------------ FLEETIO */
-  {
-    id: 'fleetio', name: 'Fleetio', maker: 'Fleetio', kind: 'Fleet maintenance software', icon: 'wrench', tone: 'info',
-    url: 'https://www.fleetio.com', checked: 'October 2026',
-    tagline: 'Fleet management software for vehicle records and maintenance: inspections, issues, work orders, service reminders, parts and fuel.',
-    card: {
-      what: 'Fleet management software, used in a web browser and through the Fleetio Go mobile app.',
-      use: 'Keeping every vehicle\'s record in one place and running maintenance: inspections, issues, work orders, preventive maintenance reminders, parts and fuel.',
-      who: 'Maintenance coordinators, fleet managers, technicians, parts staff and drivers (inspections).'
-    },
-    sections: {
-      what: [
-        "Fleetio is **fleet management software**. A fleet keeps a record for every vehicle and piece of equipment in it, and uses that record to plan and document maintenance. Fleetio calls these records **vehicles** (or assets) and lets teams work in a web browser or on phones and tablets through its mobile app, **Fleetio Go**.",
-        "Think of it as the fleet's maintenance memory. It answers questions like *What's wrong with unit 214? When was its last PM? What did we spend on it this year? Which trucks are overdue?*",
-        { callout: { kind: 'info', title: 'Where Fleetio fits', text: "Fleetio is a maintenance-and-records system — a kind of [[CMMS]]. It is not a dispatch system ([[TMS]]) and it is not a GPS tracker. It can, however, pull data such as odometer readings and engine fault codes in from telematics providers like Samsara through integrations." } }
-      ],
-      why: [
-        "Without a system, maintenance lives in paper folders, spreadsheets and people's memory. Things get missed: a PM goes overdue, a defect from last week's inspection never gets fixed, nobody can say what a truck has cost.",
-        { tiles: [
-          { icon: 'clock', title: 'Nothing slips', text: 'Service reminders flag work that is due soon or overdue, by miles, engine hours or time.' },
-          { icon: 'clipboard', title: 'One history per unit', text: 'Every completed repair becomes part of the vehicle\'s service history.' },
-          { icon: 'dollar', title: 'Real costs', text: 'Work orders break costs into parts and labor lines, so cost per unit can be reported.' },
-          { icon: 'shield', title: 'Defects get closed', text: 'Failed inspection items become issues that stay open until someone resolves them.' }
-        ] }
-      ],
-      who: [
-        { table: { head: ['Role', 'What they typically do in Fleetio'], rows: [
-          ['Maintenance coordinator', 'Watches open issues and due/overdue reminders, opens and follows work orders, records vendor repairs, keeps meters and records accurate.'],
-          ['Fleet / maintenance manager', 'Reviews costs, overdue PMs and reports; sets up service programs and approval rules.'],
-          ['Technician / shop', 'Works assigned issues and work orders, records labor and parts used.'],
-          ['Parts staff', 'Manages parts inventory and stock levels.'],
-          ['Driver', 'Submits inspections and reports problems from the mobile app; may log fuel.']
-        ] } },
-        { callout: { kind: 'tip', text: 'Exactly who does what depends on how each company sets Fleetio up. Learn your company\'s rules: who may open work orders, who approves costs, who closes issues.' } }
-      ],
-      concepts: [
-        "Fleetio uses specific words. Learn them — they appear in every screen and in conversations about the system.",
-        { table: { head: ['Term', 'What it means', 'Trucking example'], rows: [
-          ['Vehicle / asset', 'The record for one unit: identity (VIN, plate, make, model), status, meters, assignments, documents and history.', 'Tractor T-214, 2021 sleeper, VIN ending 4471.'],
-          ['Meter', 'The odometer (miles or km) and/or engine-hour reading kept on the record. Reminders and cost per mile depend on it.', 'T-214 at 412,880 mi. A reefer unit is usually tracked by hours.'],
-          ['Inspection', 'A checklist submitted from the mobile app or web, with photos and comments. Items can pass or fail.', 'Driver\'s pre-trip inspection with a photo of a cracked mirror.'],
-          ['Issue', 'An unplanned problem on a vehicle. It stays Open until it is Resolved or Closed.', '"Left low-beam headlamp out."'],
-          ['Service task', 'A defined job — recurring preventive work or a one-time repair.', '"PM A service", "Replace headlamp".'],
-          ['Service reminder', 'A schedule for a recurring service task, with "due soon" and "overdue" thresholds.', 'PM A every 25,000 mi — due soon at 23,000.'],
-          ['Work order', 'A detailed repair job with line items, each with its own parts and labor.', 'WO for PM A + headlamp, assigned to the in-house shop.'],
-          ['Service entry', 'A simpler log of completed service with summary data — handy for outside vendor work. A completed work order creates one automatically.', 'Logging a roadside tire repair from an outside vendor\'s invoice.'],
-          ['Service history', 'All service entries and completed work orders for a vehicle.', 'Everything done to T-214 since it joined the fleet.'],
-          ['Fault', 'An engine fault code imported from a connected telematics device.', 'A fault code imported from the truck\'s Samsara gateway.']
-        ] } },
-        { note: 'The PM interval in these examples is fictional. Use your fleet\'s own intervals, set from the manufacturer\'s recommendations and company policy.' }
-      ],
-      features: [
-        { ig: 'versus', icon: 'grid', title: 'Main Fleetio feature areas (as described on fleetio.com)', items: [
-          { t: 'Vehicles & equipment', sub: 'Records for each unit: details, meters, assignments, documents, service history.' },
-          { t: 'Inspections', sub: 'Digital inspections with photos and comments. A failed item can be turned into a work order in a few clicks.' },
-          { t: 'Issues', sub: 'Unplanned problems that can be prioritized and assigned to technicians until resolved.' },
-          { t: 'Service reminders', sub: 'Preventive maintenance schedules with due-soon and overdue reminders, also visible in Fleetio Go.' },
-          { t: 'Work orders', sub: 'Repairs with parts and labor line items. They can be created from failed inspection items or engine fault (DTC) alerts.' },
-          { t: 'Parts & inventory', sub: 'On-hand stock goes down automatically when a part is used on a maintenance task.' },
-          { t: 'Fuel', sub: 'Fuel entries from the mobile app, and fuel card integrations that bring in fuel data and flag anomalies.' },
-          { t: 'Integrations', sub: 'Telematics integrations (Samsara among them) can bring in meters, engine faults and DVIR defects automatically.' }
-        ] }
-      ],
-      how: [
-        "Fleetio connects four kinds of information around every vehicle: **what's planned** (service reminders), **what's wrong** (issues and faults), **the work done** (work orders and service entries) and **what it cost** (parts, labor and fuel).",
-        { ig: 'hub', icon: 'activity', title: 'Everything in Fleetio hangs off the vehicle record', center: { icon: 'truck', t: 'Vehicle record' }, items: [
-          { icon: 'gauge', t: 'Meters', d: 'Miles / engine hours' },
-          { icon: 'clock', t: 'Service reminders', d: 'Due soon / overdue' },
-          { icon: 'list-check', t: 'Inspections', d: 'Pass / fail items' },
-          { icon: 'alert', t: 'Issues & faults', d: 'Open → resolved' },
-          { icon: 'wrench', t: 'Work orders', d: 'Parts + labor' },
-          { icon: 'file', t: 'Service history', d: 'Everything completed' }
-        ] },
-        "When a work order is completed, Fleetio creates a service entry from it. Both kinds of record add to the vehicle's service history and update its service reminders, so the next PM due date moves forward on its own — as long as the meter reading on the record is right."
-      ],
-      example: [
-        "**Example fleet (fictional): 60 tractors, 140 dry vans, one in-house shop.** It is Monday morning.",
-        { dialog: [
-          ['note', '06:10 — Driver Luis submits his pre-trip inspection for T-214 in Fleetio Go.'],
-          ['note', 'Item failed: "Lights — left low beam out", with a photo. An issue is opened on T-214.'],
-          ['You', 'I see the failed item on T-214. Is it only the low beam, or the high beam too?'],
-          ['Luis', 'Only the low beam. Everything else passed.'],
-          ['note', 'You open T-214\'s record. Its PM A reminder is "due soon": 1,400 miles left.'],
-          ['You', 'Bring it to the shop at 07:00. They\'ll do the headlamp and the PM A together, so you\'re only stopped once.']
-        ] },
-        "You create **one work order** for T-214 with two line items, the PM A service and the headlamp issue, and assign it to the shop. When the technician finishes, they record parts and labor and the work order is completed. The headlamp issue is resolved, PM A's next due point moves forward, and both jobs appear in the service history."
-      ],
-      role: [
-        "A coordinator usually works in Fleetio every day. Those tasks fall into three groups:",
-        { tabs: [
-          { label: "What you'd see", body: [
-            { ul: [
-              'Open issues on each vehicle, including failed inspection items and imported faults',
-              'Service reminders that are **due soon** or **overdue**',
-              'Open work orders, their status and who they are assigned to',
-              'Each vehicle\'s meters, assignment, service history and costs',
-              'Low-stock parts (if your fleet uses the parts module)'
-            ] }
-          ] },
-          { label: 'What you enter', body: [
-            { ul: [
-              'Work orders, with a line item for each job, plus vendor, parts and labor',
-              'Service entries for outside vendor repairs, matched to the invoice',
-              'Meter readings, whenever they aren\'t imported automatically',
-              'Clear notes: complaint, cause, correction, and who approved it',
-              'Invoice or estimate attachments and photos'
-            ] }
-          ] },
-          { label: 'What you should check', body: [
-            { ul: [
-              'Is the meter reading realistic? A typo like 41,288 instead of 412,880 breaks reminders and cost per mile.',
-              'Is the work on the **right unit**: tractor or trailer?',
-              'Were the related issues resolved when the work was done?',
-              'Did the next PM due point move forward after the PM was completed?',
-              'Do parts and labor totals match the vendor invoice?'
-            ] }
-          ] }
-        ] }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Vehicle', text: 'Every unit has a record: identity, meters, assignment and service schedule.', owner: 'Set up by fleet admin' },
-          { title: 'Inspection', text: 'The driver submits a pre-trip or post-trip inspection, with photos for failed items.', owner: 'Driver' },
-          { title: 'Issue found', text: 'A failed item becomes an issue on the vehicle. Imported fault codes can also open issues. Decide how urgent it is: is it safety-critical?', owner: 'Coordinator reviews' },
-          { title: 'Work order', text: 'Create a work order from the issue. Add any service tasks that are due soon so the unit stops only once.', owner: 'Coordinator' },
-          { title: 'Maintenance', text: 'The shop or vendor does the work, and you track progress and the return-to-service time.', owner: 'Technician / vendor' },
-          { title: 'Parts & labor', text: 'Parts used and labor time are recorded on each line item. Inventory adjusts for in-house parts.', owner: 'Technician / parts' },
-          { title: 'Completed', text: 'Check the work, resolve the issues and complete the work order. Attach the invoice if it\'s an outside vendor.', owner: 'Coordinator' },
-          { title: 'Service history', text: 'A service entry is created. History, costs and the next reminder are updated.', owner: 'Automatic' }
-        ] }
-      ],
-      visual: [
-        { ig: 'process', icon: 'route', title: 'From inspection to service history', items: [
-          { icon: 'truck', t: 'Vehicle', d: 'T-214' }, { icon: 'list-check', t: 'Inspection', d: 'Pre-trip' },
-          { icon: 'alert', t: 'Issue found', d: 'Low beam out' }, { icon: 'clipboard', t: 'Work order', d: '+ PM A due soon' },
-          { icon: 'wrench', t: 'Maintenance', d: 'In-house shop' }, { icon: 'dollar', t: 'Parts / labor', d: 'Line items' },
-          { icon: 'check-circle', t: 'Completed', d: 'Issue resolved' }, { icon: 'file', t: 'Service history', d: 'Reminder reset' }
-        ] },
-        { mock: { label: 'Educational mockup — simplified. Not Fleetio\'s actual screen.', title: 'Work order · T-214', status: 'In progress', rows: [
-          ['Vehicle', 'T-214 · 2021 sleeper tractor'], ['Meter', '412,880 mi'], ['Line 1', 'PM A service — parts $186.40 · labor 2.0 h'],
-          ['Line 2', 'Replace left low-beam headlamp — resolves issue #1182'], ['Assigned to', 'In-house shop'], ['Notes', 'Found at pre-trip 06:10. Combined with PM A due in 1,400 mi.']
-        ] } },
-        { ig: 'versus', icon: 'layers', title: 'Two pairs of terms people mix up', items: [
-          { t: 'Issue vs service task', sub: '**Issue** = unplanned problem (a leak, a lamp out). **Service task** = a defined job, often planned and recurring (oil change, PM).', tone: 'info' },
-          { t: 'Work order vs service entry', sub: '**Work order** = detailed job with parts/labor lines, good for planning shop work. **Service entry** = quick summary log, good for outside vendor work. A completed work order creates a service entry.', tone: 'success' }
-        ] }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: [
-            'Typing a wrong meter reading, which throws off every reminder and cost-per-mile figure',
-            'Logging trailer work on the tractor that was pulling it',
-            'Leaving the issue open after the repair is done, so it looks unresolved forever',
-            'Opening a second work order for a unit that already has one open',
-            'Fixing the defect but ignoring the PM due next week, so the truck stops twice',
-            'Writing notes like "fixed truck" with no complaint, cause or correction'
-          ] },
-          yes: { title: 'Do this instead', items: [
-            'Sanity-check every meter reading against the last one',
-            'Open work on the unit that has the problem',
-            'Resolve issues on the work order that fixed them',
-            'Check open work orders before creating a new one',
-            'Look at due-soon reminders whenever a unit comes in',
-            'Write notes someone else can understand a year from now'
-          ] }
-        } }
-      ],
-      scenario: [
-        { widget: 'sim:workorder' },
-        { exercise: { type: 'choose', prompt: "Trailer V-5502's driver fails the inspection item \"Tires: right rear outer, sidewall bulge\". The trailer is loaded and due out in 40 minutes. What do you do first in Fleetio and with the team?", options: [
-          { text: 'Log a service entry saying the tire was replaced, so the record is complete before the trailer leaves', correct: false, why: 'Never record work that hasn\'t happened. Records must reflect reality.' },
-          { text: 'Treat it as safety-critical: hold the trailer and tell dispatch. Turn the failed item into a work order on V-5502 (the trailer, not the tractor) and arrange a tire replacement', correct: true, why: 'A sidewall bulge can mean the tire is about to fail. Hold the unit, record the work on the correct unit, and arrange the repair.' },
-          { text: 'Wait until the trailer\'s next PM and fix it then, because the issue is already recorded', correct: false, why: 'Recording a problem is not fixing it. Safety-critical defects are handled before the unit moves.' }
-        ] } },
-        { exercise: { type: 'order', prompt: 'Put the Fleetio steps for this repair in order.', items: ['Driver submits the inspection with a failed item', 'An issue is opened on the trailer', 'Work order created from the failed item', 'Tire replaced; parts and labor recorded', 'Issue resolved and work order completed', 'Service entry appears in the trailer\'s service history'] } }
-      ],
-      takeaways: [
-        { ul: [
-          'Fleetio is a **maintenance and fleet-records system**, not a dispatch system or a GPS tracker.',
-          'Issues are unplanned problems. Service tasks and service reminders are the planned, preventive side.',
-          'Work orders hold the detail (parts and labor lines). Completed work flows into the **service history** and updates reminders.',
-          'Records are only as good as the data: correct unit, correct meter, issues resolved, clear notes.',
-          'Combine due-soon PMs with repairs so a unit stops once instead of twice.'
-        ] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'In Fleetio, what is an **issue**?', o: ['A planned, recurring service such as an oil change', 'An unplanned problem on a vehicle that stays open until resolved', 'An invoice from an outside vendor', 'A driver\'s assignment to a truck'], a: 1, e: 'Issues are unplanned problems such as a leak or a lamp out. Planned work is set up as service tasks and service reminders.' },
-      { t: 'mc', q: 'What happens when a work order is completed?', o: ['It is deleted', 'Fleetio creates a service entry, and the vehicle\'s service history and reminders update', 'The driver gets paid', 'Nothing until the invoice is mailed'], a: 1, e: 'A completed work order generates a service entry. That adds to the service history and updates service reminders.' },
-      { t: 'wwyd', q: 'T-118 comes in for a broken mirror. Its PM A reminder shows "due soon". What would you do?', o: ['Fix the mirror only; PMs are someone else\'s problem', 'Add the PM to the same work order so the unit stops once', 'Delete the reminder', 'Wait until the PM is overdue'], a: 1, e: 'Combining due-soon preventive work with a repair avoids a second trip to the shop and extra downtime.' },
-      { t: 'mc', q: 'Which piece of information most affects whether PM reminders are accurate?', o: ['The truck\'s color', 'The meter reading (odometer or engine hours)', 'The driver\'s phone number', 'The vendor\'s address'], a: 1, e: 'Mileage- and hour-based reminders count from the meter. A wrong reading moves every due date.' },
-      { t: 'tf', q: 'A failed item in a Fleetio inspection can be turned into a work order.', a: true, e: 'True. Fleetio describes converting failed inspection items into work orders in a few clicks.' }
-    ],
-    sources: [
-      ['Fleetio — Digital work orders', 'https://www.fleetio.com/features/digital-work-orders'],
-      ['Fleetio — Preventive maintenance scheduling', 'https://www.fleetio.com/features/preventive-maintenance-scheduling'],
-      ['Fleetio — Inspections', 'https://fleetio.com/manage/features/inspections'],
-      ['Fleetio Go mobile app', 'https://www.fleetio.com/go'],
-      ['Fleetio Help — Service tasks vs issues, service entries vs work orders', 'https://help.fleetio.com/maintenance/service-tasks-vs-issues-service-entries-vs-work-orders'],
-      ['Fleetio Help — Samsara integration', 'https://help.fleetio.com/en_US/telematicsgps/samsara-integration-5']
-    ]
-  },
-
-  /* ------------------------------------------------------------------ SAMSARA */
-  {
-    id: 'samsara', name: 'Samsara', maker: 'Samsara', kind: 'Telematics & connected operations', icon: 'activity', tone: 'success',
-    url: 'https://www.samsara.com', checked: 'October 2026',
-    tagline: 'A telematics platform: in-vehicle devices send location, engine and safety data to a cloud dashboard that raises alerts and reports.',
-    card: {
-      what: 'A telematics platform: hardware in the truck (the Vehicle Gateway and AI dash cams) plus a cloud dashboard and driver app.',
-      use: 'GPS tracking, engine fault codes, driver safety events and dash-cam video, ELD/Hours of Service, DVIRs, fuel and idle data, and alerts.',
-      who: 'Fleet managers, safety, dispatch and compliance staff, maintenance coordinators (faults and DVIRs) and drivers.'
-    },
-    sections: {
-      what: [
-        "Samsara is a **[[Telematics|telematics]]** company. It calls its platform **connected operations**. Hardware installed in the vehicle collects data and sends it over the cellular network to Samsara's cloud, where the fleet sees it in a web dashboard and the drivers use the **Samsara Driver App**.",
-        { tiles: [
-          { icon: 'zap', title: 'Vehicle Gateway', text: 'Samsara describes it as a cellular gateway with GPS and a CAN bus interface. It reads location and engine data.' },
-          { icon: 'image', title: 'AI Dash Cams', text: 'Road-facing and multi-camera options that record safety events and detect risky behaviors.' },
-          { icon: 'message', title: 'Driver App', text: 'Used by drivers for Hours of Service (ELD), DVIR inspections and other workflows.' },
-          { icon: 'grid', title: 'Cloud dashboard', text: 'Where the office sees maps, alerts, reports, safety events, faults and maintenance.' }
-        ] }
-      ],
-      why: [
-        "Before telematics, the office knew where a truck was or what was wrong with it only when the driver called. Telematics turns every truck into a live data source.",
-        { ul: [
-          '**Visibility**: where every vehicle, trailer and asset is, right now.',
-          '**Safety**: harsh driving events and AI-detected behaviors feed driver coaching.',
-          '**Compliance**: electronic logging of Hours of Service and digital DVIRs.',
-          '**Maintenance**: engine fault codes and driver-reported defects reach the maintenance team quickly.',
-          '**Cost**: fuel use and idle time show where money is wasted.'
-        ] }
-      ],
-      who: [
-        { table: { head: ['Role', 'What they use Samsara for'], rows: [
-          ['Dispatch / operations', 'Location, ETAs and routing. Seeing which truck is closest.'],
-          ['Safety / compliance', 'Safety events, dash-cam video, coaching, HOS violations, DVIR compliance.'],
-          ['Maintenance coordinator', 'Engine fault alerts, DVIR defects, vehicle location for roadside service, meters, maintenance status.'],
-          ['Fleet manager', 'Fuel, idle, utilization and reports across the fleet.'],
-          ['Driver', 'Logs Hours of Service and completes DVIRs in the Driver App.']
-        ] } }
-      ],
-      concepts: [
-        { table: { head: ['Concept', 'Meaning', 'Example'], rows: [
-          ['Telematics', 'Collecting vehicle data with an on-board device and sending it remotely.', 'The gateway reports T-311\'s position and engine data.'],
-          ['GPS location', 'Where the vehicle is, shown on a live map.', 'T-311 is stopped on I-80 eastbound near mile 142.'],
-          ['Engine fault code (DTC)', 'A code stored by the truck\'s computers when they detect a problem; the gateway reads and reports it. See [[DTC]] and [[SPN / FMI]].', 'An aftertreatment fault appears on T-311.'],
-          ['Safety event', 'A detected harsh-driving event, such as harsh braking, acceleration or turning, or a crash, often with video.', 'A harsh-braking event with a 10-second clip.'],
-          ['AI-detected behavior', 'Behaviors the dash cam detects, such as tailgating, mobile phone use or a rolling stop.', 'A mobile-usage alert on driver 52.'],
-          ['ELD / HOS', 'Electronic logging device records that track drivers\' Hours of Service. See [[ELD]] and [[HOS]].', 'The driver has 2 h 15 min of driving time left.'],
-          ['DVIR', 'Driver vehicle inspection report, completed in the Driver App. See [[DVIR]].', 'A post-trip DVIR notes a cracked windshield.'],
-          ['Alert', 'A rule-based notification sent when something happens.', 'Text and email to maintenance when a fault code appears.']
-        ] } }
-      ],
-      features: [
-        { ig: 'versus', icon: 'grid', title: 'Main Samsara feature areas (as described on samsara.com)', items: [
-          { t: 'GPS & tracking', sub: 'Live map of vehicles, trailers and equipment, plus routing.' },
-          { t: 'Vehicle diagnostics', sub: 'Engine diagnostics, fault codes and idle time from the gateway.' },
-          { t: 'Safety & dash cams', sub: 'Event-based recording of harsh events and AI-detected behaviors, plus coaching workflows.' },
-          { t: 'ELD compliance', sub: 'Hours of Service logs with automated ruleset updates and a compliance dashboard.' },
-          { t: 'DVIR', sub: 'Digital inspections. Driver-reported defects can flow into maintenance and work orders.' },
-          { t: 'Maintenance', sub: 'Fault code alerts with suggested action steps, DVIR defects and work orders in one place.' },
-          { t: 'Fuel', sub: 'Fuel use and idle waste, with fuel-price information for coaching drivers.' },
-          { t: 'Alerts & reports', sub: 'Real-time alerts (for example speeding, harsh braking, idling, unauthorized use) and reports.' }
-        ] }
-      ],
-      how: [
-        { ig: 'process', icon: 'route', title: 'From the truck to a fleet decision', items: [
-          { icon: 'truck', t: 'Truck', d: 'Engine, GPS, driver' },
-          { icon: 'zap', t: 'Sensors / devices', d: 'Gateway + dash cam' },
-          { icon: 'activity', t: 'Samsara platform', d: 'Cellular → cloud' },
-          { icon: 'bar', t: 'Data', d: 'Location, faults, events, HOS' },
-          { icon: 'alert', t: 'Alerts / reports', d: 'Rules notify people' },
-          { icon: 'target', t: 'Fleet decision', d: 'Someone acts' }
-        ] },
-        "The gateway connects to the truck's diagnostic network (Samsara mentions a CAN bus interface), so it can read what the truck's own computers report, such as fault codes and engine data. It adds its own GPS position. Dash cams add video and AI detection. The Driver App adds HOS logs and inspections. All of this lands in one dashboard, where **alert rules** decide who gets notified.",
-        { callout: { kind: 'warning', title: 'Telematics reports, people decide', text: 'Samsara can show that a fault code is active. It cannot inspect the truck. A code tells you what the truck\'s computer detected, not always what the repair is. Talk to the driver and get a qualified technician to diagnose it.' } }
-      ],
-      example: [
-        "**Example fleet (fictional), Tuesday 06:40.** You receive a Samsara alert email.",
-        { dialog: [
-          ['note', 'Alert: T-311 — engine fault code active. Location: I-80 EB, near mile 142. Moving at 61 mph.'],
-          ['You', 'Morning Ray, this is maintenance. Your truck reported an engine fault. Do you have any warning lamps, and does it feel any different?'],
-          ['Ray', 'The check engine light came on about ten minutes ago. Power feels normal, no other lights.'],
-          ['note', 'You check the fault details and suggested action steps in Samsara. Ray has 6 h 10 min of driving time left on his HOS clock.'],
-          ['You', 'Okay. Keep going carefully and call me right away if a red stop lamp comes on or you lose power. I\'m finding a shop near your delivery so we can get it checked this afternoon.']
-        ] },
-        "Samsara gave you the fault, the location and the driver's available hours **before** the driver called. You still talked to the driver, judged urgency from their symptoms, and planned a diagnosis that fits the load."
-      ],
-      role: [
-        "Samsara monitors far more than a maintenance coordinator needs to act on. Know which signals are yours and which belong to someone else.",
-        { ig: 'table', icon: 'target', title: 'What Samsara monitors vs what you act on', head: ['Samsara shows…', 'Usually owned by', 'Does the coordinator act?'], rows: [
-          ['Engine fault code / check-engine alert', 'Maintenance', '**Yes.** Triage it: call the driver, read the details, decide urgency, arrange diagnosis.'],
-          ['DVIR with a defect', 'Maintenance', '**Yes.** A reported defect must be reviewed and repaired (or certified as not needing repair) per procedure.'],
-          ['Vehicle location', 'Dispatch', '**Uses it.** Find the nearest qualified shop or mobile service for a breakdown.'],
-          ['Hours of Service remaining', 'Driver / safety / dispatch', '**Uses it.** Plan repair timing around the driver\'s legal hours.'],
-          ['Harsh braking / AI behavior event', 'Safety (coaching)', '**Usually no.** If the driver reports a mechanical cause (such as brakes pulling), that becomes a maintenance issue.'],
-          ['Dash-cam video of a collision', 'Safety / claims', '**Partly.** Safety owns the event. You coordinate the damage repair.'],
-          ['Fuel use and idle time', 'Fleet manager', '**Rarely.** Sudden fuel-economy changes on one unit may be worth a maintenance look.'],
-          ['Odometer / engine hours', 'Maintenance records', '**Yes.** Meters drive PM schedules, and can sync to systems such as Fleetio.']
-        ] },
-        { callout: { kind: 'tip', title: 'Avoid alert fatigue', text: 'If every alert pings you, you\'ll start ignoring all of them. Work with your manager on which alert rules go to maintenance, such as active engine faults and DVIR defects, and which go to safety or dispatch.' } }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Alert arrives', text: 'For example "Engine fault — T-311". Note the time, unit, code and location.', owner: 'Samsara → coordinator' },
-          { title: 'Read the details', text: 'Look at the fault description, any suggested action steps, whether it\'s still active, and the history: has this happened before?', owner: 'Coordinator' },
-          { title: 'Contact the driver', text: 'Ask about warning lamps, symptoms and power. A red stop lamp, low air or overheating means stop safely.', owner: 'Coordinator + driver' },
-          { title: 'Decide urgency', text: 'Stop now, repair today, or schedule. Check HOS remaining and the load.', owner: 'Coordinator (per procedure)' },
-          { title: 'Arrange service', text: 'Use the location to pick a nearby qualified shop or mobile tech, and tell dispatch.', owner: 'Coordinator' },
-          { title: 'Record it', text: 'Open or update the work order or case in your maintenance system. It may be Samsara\'s own maintenance tools or a connected system like Fleetio.', owner: 'Coordinator' },
-          { title: 'Confirm and close', text: 'After the repair, confirm the fault is no longer active and close the loop with the driver and dispatch.', owner: 'Coordinator' }
-        ] }
-      ],
-      visual: [
-        { mock: { label: 'Educational mockup — simplified. Not Samsara\'s actual screen.', title: 'Alert · Engine fault', status: 'Active', tone: 'warning', rows: [
-          ['Vehicle', 'T-311 · 2020 day cab'], ['Time', 'Tue 06:40'], ['Location', 'I-80 EB near mile 142 · moving 61 mph'], ['Fault', 'Engine fault code — see details for SPN/FMI and description'],
-          ['Driver', 'Ray M. · 6 h 10 min drive time left'], ['Suggested next step', 'Contact driver; check symptoms; schedule diagnosis']
-        ] } },
-        { ig: 'versus', icon: 'alert', title: 'Six alerts and who acts', items: [
-          { t: 'Engine warning', sub: 'Check-engine fault active.', use: 'Maintenance triages: call the driver, assess urgency.', tone: 'warning' },
-          { t: 'Vehicle location', sub: 'Truck stopped on the shoulder.', use: 'Maintenance uses it to find roadside service. Dispatch replans.', tone: 'info' },
-          { t: 'Driver safety event', sub: 'Mobile usage detected by the dash cam.', use: 'Safety coaches the driver. Not a maintenance item.', tone: 'critical' },
-          { t: 'Harsh braking', sub: 'Sudden deceleration event with video.', use: 'Safety reviews it. Maintenance only if a mechanical cause is reported.', tone: 'critical' },
-          { t: 'Diagnostic information', sub: 'Fault history shows the same code three times this month.', use: 'Maintenance: a repeat-failure pattern worth a root-cause check.', tone: 'warning' },
-          { t: 'Maintenance alert', sub: 'DVIR defect: "air leak at glad hand".', use: 'Maintenance reviews and repairs before the unit moves, per procedure.', tone: 'success' }
-        ] }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: [
-            'Treating every fault code as an emergency, or ignoring them all',
-            'Deciding the repair from the code alone without talking to the driver',
-            'Using a safety event (harsh braking) to blame equipment without evidence',
-            'Forgetting HOS: planning a shop visit the driver has no legal hours to reach',
-            'Closing the case without confirming the fault is no longer active'
-          ] },
-          yes: { title: 'Do this instead', items: [
-            'Check severity, whether it\'s active, and the symptoms',
-            'Use the code as a starting point for a qualified diagnosis',
-            'Leave driving behavior to safety; act on reported mechanical symptoms',
-            'Check HOS remaining before you book the repair',
-            'Confirm the fix and document it'
-          ] }
-        } }
-      ],
-      scenario: [
-        { widget: 'sim:alerts' },
-        { exercise: { type: 'classify', prompt: 'Who should act first on each Samsara signal?', categories: ['Maintenance coordinator', 'Safety', 'Dispatch'], items: [
-          { text: 'Engine fault code active on T-311 with a check-engine lamp', answer: 'Maintenance coordinator', why: 'Faults are maintenance triage.' },
-          { text: 'AI dash cam detected tailgating', answer: 'Safety', why: 'Driver behavior is coached by safety.' },
-          { text: 'Truck will arrive 45 minutes late to a delivery appointment', answer: 'Dispatch', why: 'Appointments and customer updates belong to dispatch.' },
-          { text: 'Post-trip DVIR: "brake chamber leaking air"', answer: 'Maintenance coordinator', why: 'A reported safety defect needs maintenance review and repair before the unit is used.' }
-        ] } },
-        { exercise: { type: 'choose', prompt: 'A fault alert for T-402 says "active". The driver says a red STOP ENGINE lamp is on and power is dropping. What next?', options: [
-          { text: 'Tell the driver to keep going to the terminal, 90 miles away', correct: false, why: 'A red stop lamp with power loss means stop safely. Pushing on can cause major damage or a safety risk.' },
-          { text: 'Have the driver stop safely, then use the Samsara location to arrange roadside service or a tow, and tell dispatch', correct: true, why: 'Safety first, then use the location data to bring help to the truck.' },
-          { text: 'Clear the code remotely and see whether it returns', correct: false, why: 'A coordinator does not "clear" a red-lamp fault away. The truck needs a qualified diagnosis.' }
-        ] } }
-      ],
-      takeaways: [
-        { ul: [
-          'Samsara is a **telematics platform**: in-vehicle devices plus a cloud dashboard and driver app.',
-          'It shows location, engine faults, safety events, HOS, DVIRs, fuel and alerts. Much of that belongs to safety and dispatch.',
-          'Your signals: **engine faults, DVIR defects, meters**, and location when a truck needs help.',
-          'A fault code starts a conversation and a diagnosis. It is not a repair order.',
-          'Samsara data can feed maintenance systems, for example meters, faults and DVIRs into Fleetio.'
-        ] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'Which Samsara device reads location and engine data from the truck?', o: ['The Vehicle Gateway', 'The fuel card', 'The trailer kingpin', 'The driver\'s pay statement'], a: 0, e: 'Samsara describes the Vehicle Gateway as a cellular gateway with GPS and a CAN bus interface.' },
-      { t: 'scenario', q: 'Samsara reports a harsh-braking event on T-208. The driver says a car cut in front of them; the brakes felt normal. Who owns the follow-up?', o: ['Maintenance — replace the brakes', 'Safety — review and coach as needed', 'Billing', 'Nobody'], a: 1, e: 'Harsh-braking events are a safety and coaching topic. With no mechanical symptom, there is no maintenance action.' },
-      { t: 'mc', q: 'Which system would most likely tell you where a broken-down truck is right now?', o: ['A parts catalog', 'The telematics platform (Samsara)', 'The truck\'s title', 'The invoice'], a: 1, e: 'GPS location from telematics helps you send roadside service to the right place.' },
-      { t: 'wwyd', q: 'You get an engine fault alert. What would you check first?', o: ['The truck\'s paint color', 'The driver\'s symptoms and warning lamps, then the fault details', 'The fuel price', 'Last month\'s invoices'], a: 1, e: 'Safety and urgency come first. Symptoms and lamp color tell you whether the truck must stop.' },
-      { t: 'tf', q: 'A fault code always tells you exactly which part to replace.', a: false, e: 'False. A code shows what the truck\'s computer detected. A qualified technician diagnoses the cause.' }
-    ],
-    sources: [
-      ['Samsara — Fleet telematics', 'https://www.samsara.com/products/telematics'],
-      ['Samsara — Connected maintenance', 'https://www.samsara.com/products/telematics/fleet-maintenance'],
-      ['Samsara — ELD compliance', 'https://www.samsara.com/products/apps-and-workflows/eld-compliance'],
-      ['Samsara Help — Event-based recording', 'https://kb.samsara.com/hc/en-us/articles/36409226230541-Event-Based-Recording'],
-      ['Samsara Help — Driver coaching workflow', 'https://kb.samsara.com/hc/en-us/articles/360056588511-Driver-Coaching-Workflow'],
-      ['Samsara Help — Work orders for maintenance management', 'https://kb.samsara.com/hc/en-us/articles/32504504318989-Work-Orders-for-Maintenance-Management']
-    ]
-  },
-
-  /* ------------------------------------------------------------ PROTRANSPORT */
-  {
-    id: 'pro-transport', name: 'ProTransport', maker: 'RTS', kind: 'Trucking software (TMS)', icon: 'route', tone: 'warning',
-    url: 'https://www.rtsinc.com/product/pro-transport', checked: 'October 2026',
-    tagline: 'Trucking management software from RTS for loads, dispatch, drivers, documents, accounting and reporting.',
-    card: {
-      what: 'A transportation management system (TMS) made by RTS, a trucking services company.',
-      use: 'Entering loads, dispatching them to drivers, driver trip updates and document uploads, invoicing, driver pay statements, IFTA and safety and maintenance reminders.',
-      who: 'Dispatchers, operations, billing and accounting, drivers through the mobile app, and fleet owners.'
-    },
-    sections: {
-      what: [
-        "**ProTransport** (often written \"Pro Transport\") is trucking software made by **RTS**, a company that also offers factoring and other services to trucking companies. RTS describes it as a [[TMS]] for fleets \"from one to 500 trucks\", with an Enterprise version for high-volume fleets and freight brokerages.",
-        { callout: { kind: 'info', title: 'Which "Pro Transport"?', text: 'Several unrelated businesses use similar names. This page covers **ProTransport by RTS** (rtsinc.com) and only the features RTS lists on its official pages. Companies buy different plans and integrations, so check what your employer actually uses.' } },
-        "Where Fleetio is the *maintenance* system and Samsara is the *telematics* system, a TMS is the **operations and money** system: which load goes on which truck with which driver, and how it gets billed and paid."
-      ],
-      why: [
-        { tiles: [
-          { icon: 'route', title: 'Run dispatch', text: 'Loads are planned and assigned from a dispatch board or scheduler.' },
-          { icon: 'message', title: 'Stay connected to drivers', text: 'Drivers get trip assignments and send status updates from a mobile app.' },
-          { icon: 'file', title: 'Keep documents with the load', text: 'Load paperwork photographed by drivers is attached to the right load.' },
-          { icon: 'dollar', title: 'Get paid and pay drivers', text: 'Invoices, payments, statements, driver pay statements and QuickBooks export.' }
-        ] }
-      ],
-      who: [
-        { table: { head: ['Role', 'What they use ProTransport for'], rows: [
-          ['Dispatcher', 'Builds and assigns loads, watches trip status on the dispatch board, updates brokers.'],
-          ['Driver', 'Sees active trips, upcoming loads and instructions, updates trip status, uploads documents.'],
-          ['Billing / accounting', 'Invoices, payments, statements, driver pay, IFTA and reports.'],
-          ['Owner / manager', 'Reports across loads, trucks and drivers.'],
-          ['Maintenance coordinator', 'Usually a **reader**, not the owner: sees which load and driver a truck is on, and uses safety and maintenance reminders if the company uses them.']
-        ] } }
-      ],
-      concepts: [
-        { table: { head: ['Concept', 'Meaning'], rows: [
-          ['Load', 'A shipment the carrier hauls: pickup, delivery, rate, customer or broker, and its documents.'],
-          ['[[Rate confirmation]]', 'The broker\'s or shipper\'s agreement for the load. ProTransport lists **rate confirmation scanning** to capture load details without retyping.'],
-          ['Dispatch board / scheduler', 'Where dispatch assigns loads to drivers and trucks and follows trip status.'],
-          ['Trip status', 'Updates the driver sends from the app, which appear on the dispatch board right away.'],
-          ['Load documents', 'Paperwork such as the [[BOL]] and [[POD]], photographed in the app and attached to the load automatically.'],
-          ['Load status alerts', 'Updates that keep brokers informed from the dispatch board.'],
-          ['IFTA reporting', 'Fuel-tax reporting across jurisdictions. ProTransport lists IFTA reporting and automatic fuel import.'],
-          ['Safety & maintenance reminders', 'Reminders for safety and maintenance items that are due across the fleet.']
-        ] } }
-      ],
-      features: [
-        { ig: 'versus', icon: 'grid', title: 'ProTransport features listed by RTS', items: [
-          { t: 'Fleet & load management', sub: 'Loads, drivers and trucks in one system (unlimited users, drivers and trucks, per RTS).' },
-          { t: 'Dispatch board / scheduler', sub: 'Plan and assign loads; see trip status update in real time.' },
-          { t: 'Driver Mobile App', sub: 'Trip assignment alerts and push notifications, load details and instructions, status updates, document photo upload.' },
-          { t: 'Rate confirmation scanning', sub: 'Capture load details from the rate con instead of typing them.' },
-          { t: 'Accounting & reports', sub: 'Invoices, payments, statements, driver pay statements, QuickBooks export, CSV reports.' },
-          { t: 'IFTA & fuel import', sub: 'IFTA reporting and automatic fuel import.' },
-          { t: 'Safety & maintenance reminders', sub: 'Alerts to track and manage maintenance and safety across the fleet.' },
-          { t: 'Integrations & documents', sub: 'ELD providers, toll services, QuickBooks, and unlimited digital document storage.' }
-        ] },
-        { note: 'Feature names are taken from RTS\'s official ProTransport pages. Plans differ, so confirm which modules your company has.' }
-      ],
-      how: [
-        "Everything in a TMS revolves around the **load**. A load is created, given a driver and truck, tracked through status updates, delivered, documented and billed.",
-        { flow: ['Rate con', 'Load created', 'Dispatched', 'Driver app', 'Status updates', 'Delivered', 'Documents uploaded', 'Invoice & driver pay'], hl: [2, 6] },
-        "When the driver updates the trip status in the Driver Mobile App, RTS says the update appears on the dispatcher's **dispatch board** right away, without manual entry. Documents the driver photographs are attached to the correct load, so billing can invoice without waiting for paper.",
-        { callout: { kind: 'info', title: 'About tracking', text: 'In ProTransport, "tracking" means **trip status updates** from the driver app and **load status alerts** to brokers. RTS also lists integrations with ELD providers. What location data comes in depends on the provider your company connects, so ask before you assume.' } }
-      ],
-      example: [
-        "**Example fleet (fictional): 35 trucks, dry van, mostly brokered freight.**",
-        { dialog: [
-          ['note', '08:00 — Dispatch scans a rate confirmation for load 77120 (Chicago → Columbus). The details fill in.'],
-          ['note', '08:15 — The load is assigned to driver Ana on truck T-122. Ana gets a trip assignment notification in the app.'],
-          ['note', '13:40 — Ana updates the status to "Loaded". The dispatch board updates and the broker gets a load status alert.'],
-          ['Dispatcher', 'Maintenance, heads up: T-122 is on 77120, delivering in Columbus tomorrow 07:00. Its safety & maintenance reminder shows the annual inspection is due next week.'],
-          ['You', 'Thanks. I\'ll book the inspection near our Columbus shop after delivery, so it doesn\'t touch the load.'],
-          ['note', 'Next day 07:30 — Ana photographs the signed BOL in the app. It\'s attached to load 77120 and billing invoices it.']
-        ] }
-      ],
-      role: [
-        "The coordinator rarely *runs* the TMS, but the TMS answers questions maintenance always has:",
-        { tiles: [
-          { icon: 'route', title: 'Is the unit on a load?', text: 'Before pulling a truck for service, check whether it\'s dispatched, and where the load is due.' },
-          { icon: 'users', title: 'Which driver has it?', text: 'Get the driver assigned to the unit and their trip details.' },
-          { icon: 'clock', title: 'When is it free?', text: 'Plan PMs and repairs around upcoming loads with dispatch.' },
-          { icon: 'alert', title: 'What\'s due?', text: 'If your company uses ProTransport\'s safety & maintenance reminders, include them in your planning.' }
-        ] },
-        { callout: { kind: 'warning', text: 'When a truck goes down, **tell dispatch right away**, with the unit, location, load affected and ETR, so they can replan, recover the load or update the broker. The TMS shows the load; it doesn\'t know the truck is broken until a person tells it.' } }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Load', text: 'The rate confirmation is received, and the load is entered or scanned with pickup, delivery, rate and reference numbers.', owner: 'Dispatch' },
-          { title: 'Dispatch', text: 'The load is assigned on the dispatch board or scheduler.', owner: 'Dispatch' },
-          { title: 'Driver', text: 'The driver gets a trip assignment alert with load details and instructions in the app.', owner: 'Driver' },
-          { title: 'Vehicle', text: 'The truck (and trailer) assigned to the trip. Maintenance confirms it\'s fit for the trip and no service is due mid-trip.', owner: 'Dispatch + maintenance' },
-          { title: 'Trip & status updates', text: 'The driver updates trip status, the dispatch board updates, and brokers get load status alerts.', owner: 'Driver → dispatch' },
-          { title: 'Delivery', text: 'The load is delivered and its status updated.', owner: 'Driver' },
-          { title: 'Documentation', text: 'The driver photographs the BOL/POD in the app, and it attaches to the load.', owner: 'Driver' },
-          { title: 'Billing & pay', text: 'Invoices, payments and driver pay statements are produced, and IFTA and reports run from the same data.', owner: 'Accounting' }
-        ] }
-      ],
-      visual: [
-        { ig: 'process', icon: 'route', title: 'A load\'s life in a TMS', items: [
-          { icon: 'file', t: 'Load', d: 'Rate con scanned' }, { icon: 'route', t: 'Dispatch', d: 'Dispatch board' },
-          { icon: 'users', t: 'Driver', d: 'App alert' }, { icon: 'truck', t: 'Vehicle', d: 'Fit for trip?' },
-          { icon: 'activity', t: 'Trip', d: 'Status updates' }, { icon: 'pin', t: 'Delivery', d: 'Broker alerted' },
-          { icon: 'clipboard', t: 'Documents', d: 'BOL/POD photo' }, { icon: 'dollar', t: 'Billing', d: 'Invoice & pay' }
-        ] },
-        { ig: 'versus', icon: 'layers', title: 'Three systems, three jobs', items: [
-          { t: 'TMS (ProTransport)', sub: 'Loads, dispatch, drivers, documents, billing.', use: 'Answers "which load is this truck on?"', tone: 'warning' },
-          { t: 'Maintenance system (Fleetio)', sub: 'Vehicle records, PMs, issues, work orders, costs.', use: 'Answers "what does this truck need?"', tone: 'info' },
-          { t: 'Telematics (Samsara)', sub: 'Location, engine faults, safety, HOS, DVIR.', use: 'Answers "what is the truck reporting right now?"', tone: 'success' }
-        ], key: 'A coordinator moves between all three. The truck is the same, but each system holds a different part of its story.' }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: [
-            'Pulling a truck into the shop without checking whether it is on a load',
-            'Assuming the TMS "knows" about a breakdown that nobody has told dispatch about',
-            'Assuming every ProTransport customer has the same modules or integrations',
-            'Treating "trip status" as live GPS without confirming the data source',
-            'Booking PMs that clash with scheduled loads'
-          ] },
-          yes: { title: 'Do this instead', items: [
-            'Check the unit\'s dispatch status before scheduling work',
-            'Report down units to dispatch right away with location, load and ETR',
-            'Learn your company\'s plan and connected integrations',
-            'Confirm location with telematics or the driver',
-            'Plan service windows with dispatch'
-          ] }
-        } }
-      ],
-      scenario: [
-        { widget: 'sim:board' },
-        { exercise: { type: 'choose', prompt: 'T-122 needs a 4-hour repair that isn\'t safety-critical. In the TMS you see it\'s dispatched on a load delivering tomorrow at 07:00, 300 miles away. What do you do?', options: [
-          { text: 'Pull it into the shop now; maintenance comes first', correct: false, why: 'If it\'s not safety-critical, don\'t blow up a load. Plan the repair with dispatch.' },
-          { text: 'Agree a service window with dispatch after delivery, near the delivery point if possible, and record the planned work', correct: true, why: 'This protects the load and still gets the repair done promptly.' },
-          { text: 'Do nothing until the driver complains', correct: false, why: 'Known repairs should be scheduled, not forgotten.' }
-        ] } },
-        { exercise: { type: 'order', prompt: 'Put the TMS steps in order.', items: ['Rate confirmation scanned and load created', 'Load assigned to a driver and truck on the dispatch board', 'Driver receives the trip assignment in the app', 'Driver updates trip status; broker gets a load status alert', 'Driver uploads the signed BOL photo after delivery', 'Invoice created for the load'] } }
-      ],
-      takeaways: [
-        { ul: [
-          '**ProTransport is RTS\'s trucking software (TMS)**: loads, dispatch, drivers, documents, accounting and reporting.',
-          'The driver app connects the truck to the office: assignments out, status updates and documents in.',
-          'For maintenance, the TMS answers **"which load and driver is this unit on, and when is it free?"**',
-          'It also lists safety & maintenance reminders, but most fleets keep detailed repair records in a maintenance system.',
-          'Only rely on features your company has actually bought and connected.'
-        ] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What kind of system is ProTransport?', o: ['A transport refrigeration unit', 'A trucking management system (TMS) made by RTS', 'A tire brand', 'An engine diagnostic tool'], a: 1, e: 'ProTransport is RTS\'s trucking software for loads, dispatch, accounting and more.' },
-      { t: 'mc', q: 'A driver photographs the signed BOL in the ProTransport Driver Mobile App. What happens, according to RTS?', o: ['It is emailed to the shop', 'It is attached to the correct load automatically', 'It is deleted after 24 hours', 'It updates the truck\'s PM schedule'], a: 1, e: 'RTS says uploaded documents are attached to the correct load, so office staff can see them right away.' },
-      { t: 'scenario', q: 'You need to know whether T-509 is currently on a load before scheduling a PM. Which system answers that?', o: ['The TMS', 'The tire sidewall', 'The reefer controller', 'The parts catalog'], a: 0, e: 'Load and dispatch assignments live in the TMS.' },
-      { t: 'wwyd', q: 'A dispatched truck breaks down. What should the Maintenance Coordinator do about the TMS side?', o: ['Nothing; the TMS updates itself', 'Tell dispatch immediately: unit, location, load affected and ETR', 'Cancel the load in the TMS yourself', 'Email the broker directly without telling dispatch'], a: 1, e: 'Dispatch owns the load. Give them what they need to replan and update the customer.' },
-      { t: 'tf', q: 'Every company using ProTransport has exactly the same modules and integrations.', a: false, e: 'False. RTS offers different plans and integrations. Learn what your company uses.' }
-    ],
-    sources: [
-      ['RTS — ProTransport trucking software', 'https://www.rtsinc.com/product/pro-transport'],
-      ['RTS — ProTransport Enterprise TMS', 'https://rtsinc.com/trucking-services/trucking-software/enterprise'],
-      ['RTS — ProTransport Driver Mobile App', 'https://rtsinc.com/resources/blogs/protransport-driver-mobile-app']
-    ]
-  },
-
-  /* ------------------------------------------------------------- THERMO KING */
-  {
-    id: 'thermo-king', name: 'Thermo King', maker: 'Trane Technologies', kind: 'Transport refrigeration (equipment)', icon: 'thermo', tone: 'critical',
-    url: 'https://www.thermoking.com', checked: 'October 2026',
-    tagline: 'Transport temperature control: refrigeration units (TRUs) that keep reefer trailers and trucks at the right temperature, plus their controllers and telematics.',
-    card: {
-      what: 'A transport temperature-control brand of Trane Technologies. It makes refrigeration units (TRUs) for trailers, trucks, rail and containers.',
-      use: 'Keeping temperature-sensitive cargo at its setpoint: cooling, heating, defrost, alarms, pretrip tests and temperature records.',
-      who: 'Drivers (pretrip, setpoint checks), dispatch, maintenance coordinators, refrigeration technicians and dealers.'
-    },
-    sections: {
-      what: [
-        "**Thermo King** is not mainly a software company. It makes **equipment**: transport refrigeration and temperature-control systems. It is a brand of **Trane Technologies**, and dates its start to **1938**, when co-founder **Frederick McKinley Jones** designed a mechanical refrigeration unit for trucks. Thermo King's products today cover vans, trucks, trailers, rail and containers.",
-        { libPhoto: 'reeferunit', caption: 'A Thermo King refrigeration unit on the front wall of a semi-trailer' },
-        "For a coordinator, Thermo King means the **refrigeration unit** on the front of a reefer trailer, its **controller** (in North America, Precedent trailer units use the **SR-4 (Smart Reefer 4)** control system), and its connected data (Thermo King's **TracKing** telematics).",
-        { callout: { kind: 'info', title: 'What is a TRU?', text: 'A **transport refrigeration unit (TRU)** is a self-contained cooling and heating system mounted on a trailer, usually on the front wall, or on a truck body. Many trailer TRUs have their own small diesel engine and fuel tank. Hybrid-electric models, such as Thermo King\'s Precedent S-750i, can also plug into shore power.' } }
-      ],
-      why: [
-        "Food, medicine, flowers and some chemicals must stay within a temperature range from pickup to delivery. A [[Reefer]] trailer is an insulated box, but insulation only slows heat down. The TRU actively **removes heat** (or adds it in cold weather) to hold the **setpoint**.",
-        { ig: 'versus', icon: 'thermo', title: 'Dry van vs reefer: same box shape, different risk', items: [
-          { art: 'dryvan', t: 'Dry van', sub: 'No temperature control. A breakdown delays the freight.' },
-          { art: 'reefer', t: 'Reefer + TRU', sub: 'The unit holds the setpoint. A failure can **ruin the load**, and the claim can exceed the repair bill many times over.', tone: 'critical' }
-        ] }
-      ],
-      who: [
-        { table: { head: ['Role', 'Interaction with the unit'], rows: [
-          ['Driver', 'Checks setpoint and mode against the load paperwork, runs or watches the pretrip test, reports alarms.'],
-          ['Dispatch', 'Gives setpoint and mode instructions from the shipper. Reacts to temperature problems with the customer.'],
-          ['Maintenance coordinator', 'Tracks unit PM by engine hours, responds to alarms, books refrigeration-qualified service, keeps records.'],
-          ['Refrigeration technician / dealer', 'Diagnoses and repairs the unit, including refrigerant work, which only qualified technicians should do.'],
-          ['Fleet / safety', 'Reviews temperature records and claims.']
-        ] } }
-      ],
-      concepts: [
-        { table: { head: ['Term', 'Meaning', 'Why it matters'], rows: [
-          ['Setpoint', 'The temperature the unit is told to hold, taken from the shipper\'s instructions.', 'A wrong setpoint can ruin a perfectly working load.'],
-          ['Return air temperature', 'Air coming **back** from the cargo area into the unit.', 'Closest reading to what the cargo space is experiencing.'],
-          ['Discharge (supply) air temperature', 'Air **leaving** the unit after passing the evaporator coil.', 'Shows what the unit is producing. A big gap from return air can point to icing or airflow problems.'],
-          ['Operating modes', 'The SR-4 lists Cool, Modulated Cool, Null, Heat and Defrost modes (diesel and electric).', 'Units heat as well as cool to hold the setpoint.'],
-          ['CYCLE-SENTRY vs Continuous', 'CYCLE-SENTRY starts and stops the unit as needed. Continuous keeps it running.', 'The shipper\'s instructions may specify one. Check the paperwork.'],
-          ['Defrost', 'Melting ice off the evaporator coil. Started automatically (timed or on demand) or manually.', 'Ice blocks airflow and cooling.'],
-          ['Pretrip', 'A self-test the controller runs before loading.', 'Catches problems before cargo is on board.'],
-          ['Alarm codes', 'Numbered codes the controller shows. Thermo King groups them as log, check, prevent and shutdown alarms.', 'The code and its type tell you how urgent it is.'],
-          ['Hourmeters', 'Engine and unit run hours.', 'Reefer PMs are usually scheduled by hours, not miles.']
-        ] } }
-      ],
-      features: [
-        "Thermo King trailer units in North America include the **Precedent** family (for example S-600, S-700, C-600 and S-750i). In Europe there is the **Advancer** range. You don't need to memorize models. You do need to know what every unit has in common:",
-        { ig: 'versus', icon: 'grid', title: 'What a trailer TRU system includes', items: [
-          { t: 'Refrigeration system', sub: 'Compressor, condenser coil, evaporator coil and refrigerant, which move heat out of the box.' },
-          { t: 'Power source', sub: 'A diesel engine on diesel units. Hybrid-electric units can also run on shore power.' },
-          { t: 'Controller (SR-4)', sub: 'Changes setpoint and mode, shows sensor and hourmeter readings, starts defrost, and shows and clears alarms.' },
-          { t: 'Sensors', sub: 'Return air, discharge air and coil temperature sensors referenced by the SR-4.' },
-          { t: 'Pretrip & diagnostics', sub: 'Pretrip and running diagnostics in the SR-4 system.' },
-          { t: 'Telematics (TracKing)', sub: 'Thermo King says new Precedent units come connected from the factory with a TracKing subscription for remote monitoring.' }
-        ] }
-      ],
-      how: [
-        "Every TRU uses the same basic physics as a household refrigerator: refrigerant **absorbs heat inside** the box and **releases it outside**.",
-        { ig: 'process', icon: 'thermo', title: 'The refrigeration workflow', items: [
-          { icon: 'zap', t: 'Refrigeration unit', d: 'Engine or electric power' },
-          { icon: 'rotate', t: 'Cooling system', d: 'Refrigerant cycle' },
-          { icon: 'thermo', t: 'Cold air', d: 'Discharge air' },
-          { icon: 'layers', t: 'Cargo area', d: 'Air flows around the load' },
-          { icon: 'gauge', t: 'Temperature monitoring', d: 'Return / discharge sensors' },
-          { icon: 'target', t: 'Temperature control', d: 'Controller vs setpoint' }
-        ] },
-        { ig: 'anatomy', icon: 'rotate', title: 'The refrigeration cycle (simplified)', art: 'refcycle', w: 560, pins: [
-          { x: 75, y: 79, t: 'Compressor', d: 'Squeezes low-pressure refrigerant gas into hot, high-pressure gas.' },
-          { x: 75, y: 21, t: 'Condenser coil (outside)', d: 'Fans blow outside air across it. The refrigerant gives off heat and condenses to a liquid.' },
-          { x: 25, y: 21, t: 'Expansion device', d: 'Drops the pressure so the liquid becomes very cold.' },
-          { x: 25, y: 79, t: 'Evaporator coil (inside the box)', d: 'Cargo air is blown across it. The refrigerant absorbs that heat and boils back to gas, then returns to the compressor.' }
-        ], note: 'Generic vapor-compression cycle — not a specific Thermo King model. Real units add valves, heat and defrost circuits and controls.' },
-        "The **controller** compares the sensor readings to the setpoint and switches between cooling, null and heating to hold it. **Defrost** periodically warms the evaporator coil to melt ice. The SR-4 starts it on a timer (programmable intervals of 2, 4, 6, 8 or 12 hours) or *on demand* when the return air, discharge air and coil temperatures show icing. A driver can also start it manually."
-      ],
-      example: [
-        "**Example fleet (fictional): reefer division hauling produce.** It's 02:15.",
-        { dialog: [
-          ['Driver', 'My reefer display is showing an alarm. The unit is still running.'],
-          ['You', 'Thanks for calling. What\'s the alarm code number, and what are the setpoint, return air and discharge air temperatures on the display?'],
-          ['Driver', 'Alarm 03. Setpoint 34, return 35, discharge 31.'],
-          ['note', 'Thermo King\'s alarm chart lists code 03 as "Check Return Air Sensor", a check alarm. The chart\'s guidance is to monitor the temperature manually and report the alarm.'],
-          ['You', 'The unit is holding temperature, but the return air sensor needs checking. Please watch the temperatures at every stop and send me a photo of the display. I\'m booking a Thermo King dealer near your delivery for after unload.'],
-          ['note', 'You tell dispatch, open a case on the trailer\'s reefer unit (not the tractor), and note the times and readings.']
-        ] },
-        { callout: { kind: 'safety', text: 'If temperatures move out of range, or a shutdown alarm stops the unit, it becomes a **cargo emergency**. Escalate to dispatch right away so the customer can be told and decisions made about the load, such as a nearby dealer, a trailer swap or a transload, under company procedure.' } }
-      ],
-      role: [
-        { tabs: [
-          { label: 'Before the trip', body: [ { ul: [
-            'Unit PM is current, scheduled by **engine hours** from the hourmeter',
-            'Unit passed its pretrip test; any alarms were cleared by fixing the cause, not just reset',
-            'Unit fuel level is sufficient; reefer fuel is separate from tractor fuel on most trailers',
-            'Door seals and the trailer box are in good condition'
-          ] } ] },
-          { label: 'When an alarm comes in', body: [ { ul: [
-            'Get the **alarm code**, setpoint, return and discharge air temperatures, unit fuel and the trailer number',
-            'Look the code up in Thermo King\'s alarm code chart: is it a log, check, prevent or shutdown alarm?',
-            'Never tell the driver to change the setpoint or mode against the shipper\'s instructions',
-            'Book a **refrigeration-qualified** vendor such as a Thermo King dealer, not just any truck shop',
-            'Tell dispatch whenever the cargo could be at risk'
-          ] } ] },
-          { label: 'After the repair', body: [ { ul: [
-            'Record the work on the **reefer unit or trailer**: hours, alarm, cause, correction, parts',
-            'Keep temperature records or download data when the customer or a claim may need it',
-            'Watch for repeat alarms on the same unit; that points to a root cause, not bad luck'
-          ] } ] }
-        ] }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Pretrip', text: 'Before loading, the unit runs its pretrip self-test and the box is pre-cooled per instructions.', owner: 'Driver / yard' },
-          { title: 'Set and verify', text: 'Setpoint and mode (CYCLE-SENTRY or Continuous) are set to match the load paperwork.', owner: 'Driver' },
-          { title: 'Monitor', text: 'The controller holds the setpoint. Drivers check the display, and telematics such as TracKing can report remotely.', owner: 'Driver / office' },
-          { title: 'Alarm', text: 'Collect the code, readings and fuel. Look up the alarm type and decide urgency.', owner: 'Coordinator' },
-          { title: 'Service', text: 'Book a refrigeration-qualified technician. Plan around the cargo with dispatch.', owner: 'Coordinator + dispatch' },
-          { title: 'Repair and verify', text: 'The technician repairs the unit. Confirm it holds the setpoint and the alarm doesn\'t return.', owner: 'Technician' },
-          { title: 'Document', text: 'Record on the unit: hours, alarm, cause, fix, cost. Reset the PM if service was done.', owner: 'Coordinator' }
-        ] }
-      ],
-      visual: [
-        { h: 'Know the parts' },
-        { ig: 'anatomy', icon: 'search', title: 'Parts of a trailer refrigeration unit (simplified side view)', art: 'tru', w: 620, pins: [
-          { x: 80, y: 20, t: 'Condenser coil & fan', d: 'Outside part of the unit. Releases heat taken from the box. Dirt and debris on the coil reduce cooling.' },
-          { x: 74.5, y: 48.4, t: 'Diesel engine', d: 'Powers the unit on diesel models. Has its own oil, filters and coolant, and is maintained by engine hours.' },
-          { x: 87, y: 49.2, t: 'Compressor', d: 'Pumps refrigerant around the circuit.' },
-          { x: 80.5, y: 36.5, t: 'Belts', d: 'Engine-driven belts turn components such as fans and the alternator. Checked for wear and tension at PM.' },
-          { x: 56.5, y: 17.5, t: 'Evaporator coil', d: 'Inside the box. Cargo air passes through it and gives up heat. Ice here triggers defrost.' },
-          { x: 56.5, y: 33.3, t: 'Evaporator fan', d: 'Moves air through the evaporator coil and out over the load.' },
-          { x: 49.5, y: 10.3, t: 'Discharge air sensor', d: 'Measures air leaving the unit.' },
-          { x: 49.5, y: 38.9, t: 'Return air sensor', d: 'Measures air coming back from the cargo. Alarm 03 on Thermo King\'s chart is "Check Return Air Sensor".' },
-          { x: 87.5, y: 62.7, t: 'Controller / display', d: 'Where the setpoint, mode, readings and alarms are shown, such as the SR-4 HMI on Precedent units. Its location varies by model.' },
-          { x: 71.5, y: 62.7, t: 'Filters', d: 'Fuel, oil and air filters on diesel units. Thermo King cites dual-stage fuel filtration on its Precedent S-Series engine.' },
-          { x: 37.5, y: 92, t: 'Unit fuel tank', d: 'Usually under the trailer and separate from the tractor\'s tanks.' }
-        ], note: 'Simplified, generic layout for learning. It is not a specific Thermo King model, and component positions differ by unit.' },
-        { ig: 'anatomy', icon: 'thermo', title: 'How air moves through a loaded reefer', art: 'reeferflow', w: 640, pins: [
-          { x: 85, y: 22, t: 'Discharge (supply) air', d: 'Cold air leaves the unit near the ceiling and travels toward the rear doors.' },
-          { x: 10, y: 50, t: 'Rear of the load', d: 'Air drops at the back and starts its return trip.' },
-          { x: 50, y: 57, t: 'Return path', d: 'Air comes back toward the front along the floor and through the load, picking up heat.' },
-          { x: 86, y: 47, t: 'Return air', d: 'Warmer air enters the unit and is measured by the return air sensor.' }
-        ], note: 'Loading matters: pallets pushed tight against the front bulkhead or stacked to the ceiling can block this airflow and cause warm spots, even with a healthy unit.' }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: [
-            'Opening the case on the tractor when the problem is the reefer unit',
-            'Scheduling reefer PM by trailer miles instead of unit engine hours',
-            'Clearing an alarm without finding the cause',
-            'Telling a driver to change the setpoint to "help" the unit',
-            'Sending a refrigeration problem to a shop without refrigeration technicians',
-            'Waiting to tell dispatch until the cargo is already out of temperature'
-          ] },
-          yes: { title: 'Do this instead', items: [
-            'Track the unit as its own asset, linked to the trailer',
-            'Use the hourmeter for unit PM',
-            'Record the code and readings, then get it diagnosed',
-            'Follow the shipper\'s setpoint and mode exactly',
-            'Use a refrigeration-qualified vendor or dealer',
-            'Escalate early when the cargo is at risk'
-          ] }
-        } },
-        { callout: { kind: 'safety', text: 'Refrigerant circuits are under pressure and refrigerants are regulated. Only qualified, certified technicians should open the refrigerant system.' } }
-      ],
-      scenario: [
-        { widget: 'sim:reefer' },
-        { exercise: { type: 'extract', prompt: 'Read the driver\'s message and pull out what you need for the case.', sourceLabel: 'Driver text · 03:05', source: 'Trailer R-8841, reefer showing alarm 03. Setpoint 34F, return air 35, discharge 30. Unit fuel about half. Load is produce for Columbus, delivery 09:00.', fields: [
-          { label: 'Trailer / unit', accept: ['R-8841', 'r8841'] },
-          { label: 'Alarm code', accept: ['03', '3'] },
-          { label: 'Setpoint (°F)', accept: ['34', '34f'] },
-          { label: 'Return air (°F)', accept: ['35'] },
-          { label: 'Discharge air (°F)', accept: ['30'] }
-        ] } },
-        { exercise: { type: 'choose', prompt: 'Same load, 05:30: the unit shuts down with a shutdown alarm. The return air is rising and delivery is 3.5 hours away. Best next step?', options: [
-          { text: 'Tell the driver to keep driving; the box is insulated and will hold', correct: false, why: 'Insulation only slows warming. Produce at risk needs action now.' },
-          { text: 'Tell dispatch right away, locate the nearest Thermo King dealer or mobile refrigeration tech on the route, and record times and temperatures', correct: true, why: 'The cargo is at risk. Escalate, get qualified help fast and document everything for the customer and any claim.' },
-          { text: 'Have the driver lower the setpoint to 20°F so it cools faster once restarted', correct: false, why: 'Never change the setpoint against the shipper\'s instructions. It can freeze-damage the produce.' }
-        ] } }
-      ],
-      takeaways: [
-        { ul: [
-          '**Thermo King makes transport refrigeration equipment**: TRUs, their controllers and their telematics. It is a brand of Trane Technologies.',
-          'A TRU moves heat out of the box: compressor → condenser (outside) → expansion → evaporator (inside).',
-          '**Setpoint** is the target. **Return air** is what comes back from the cargo. **Discharge air** is what the unit puts out.',
-          'Defrost keeps the evaporator coil free of ice. Alarms are typed as log, check, prevent or shutdown.',
-          'Coordinator essentials: hours-based PM, alarm code plus readings, qualified refrigeration vendors, early escalation when cargo is at risk.'
-        ] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What does Thermo King primarily make?', o: ['Dispatch software', 'Transport refrigeration and temperature-control units', 'Truck tires', 'Fuel cards'], a: 1, e: 'Thermo King is a transport temperature-control brand of Trane Technologies.' },
-      { t: 'mc', q: 'Which reading shows the air coming back from the cargo area into the unit?', o: ['Discharge air', 'Return air', 'Setpoint', 'Hourmeter'], a: 1, e: 'Return air is the air returning from the load. Discharge (supply) air is what leaves the unit.' },
-      { t: 'mc', q: 'Why does a reefer unit go into defrost?', o: ['To save fuel', 'To melt ice from the evaporator coil so air and heat can move through it', 'To heat the driver\'s cab', 'To charge the battery'], a: 1, e: 'Ice on the evaporator coil blocks airflow and cooling. Defrost removes it.' },
-      { t: 'wwyd', q: 'A driver reports a reefer alarm. Which information is most important to collect first?', o: ['The tractor\'s odometer', 'The alarm code plus setpoint, return and discharge air temperatures', 'The driver\'s home address', 'The trailer\'s paint color'], a: 1, e: 'The alarm code and temperatures tell you how urgent it is and whether the cargo is at risk.' },
-      { t: 'mc', q: 'Reefer unit PM is usually scheduled by…', o: ['Trailer miles', 'Unit engine hours', 'Driver age', 'Fuel price'], a: 1, e: 'The unit runs whether the trailer moves or not. Its hourmeter drives PM.' }
-    ],
-    sources: [
-      ['Thermo King — Single-temperature trailer units (North America)', 'https://www.thermoking.com/na/en/road/trailers/single-temperature-controlled-units.html'],
-      ['Thermo King — Smart Reefer 4 (SR-4) operator literature', 'https://www.emea-user-manuals.thermoking.com/etech-emea-public/thermoking-emea/Minneapolis%20-%20Trailer/Literature/Operation%20or%20Owners/0005641713.xml/$/0005340771'],
-      ['Thermo King — Alarm codes', 'https://thermoking.com/na/en/alarm-codes.html'],
-      ['Thermo King — Frederick Jones inducted into Truck Hall of Fame', 'https://www.thermoking.com/na/en/newsroom/frederick-jones-inducted-into-the-aths-hall-of-fame.html'],
-      ['Thermo King Europe — About', 'https://europe.thermoking.com/about'],
-      ['Thermo King Europe — Advancer', 'https://europe.thermoking.com/advancer']
-    ]
-  }
-];
-const SOFTWARE_MAP = new Map(SOFTWARE.map((s) => [s.id, s]));
-
-/* ===========================================================================
-   SOFTWARE & PLATFORMS (continued) — more tools a Maintenance Coordinator
-   meets. Same rules as 03l-software.js: facts limited to what each company
-   (or an official partner) publishes, cited in `sources`; fleets, units and
-   screens in examples are fictional; mockups are labeled as simplified
-   educational examples, never as the vendor's interface.
-   `group` sorts the hub into sections.
-   =========================================================================== */
-const SW_GROUPS = ['Maintenance & records', 'Telematics & diagnostics', 'Refrigeration', 'Roadside, parts & service', 'Dispatch, TMS & payments'];
-Object.assign(SOFTWARE.find((s) => s.id === 'fleetio'), { group: 'Maintenance & records' });
-Object.assign(SOFTWARE.find((s) => s.id === 'samsara'), { group: 'Telematics & diagnostics' });
-Object.assign(SOFTWARE.find((s) => s.id === 'thermo-king'), { group: 'Refrigeration' });
-Object.assign(SOFTWARE.find((s) => s.id === 'pro-transport'), { group: 'Dispatch, TMS & payments' });
-const swMockLabel = (name) => `Educational mockup — simplified. Not ${name}'s actual screen.`;
-
-SOFTWARE.push(
-  /* ------------------------------------------------------------------ MOTIVE */
-  {
-    id: 'motive', name: 'Motive', maker: 'Motive Technologies', kind: 'Telematics, ELD & safety', icon: 'activity', tone: 'success', group: 'Telematics & diagnostics',
-    url: 'https://gomotive.com', checked: 'November 2026',
-    tagline: 'A telematics, ELD and AI dash cam platform (formerly KeepTruckin) that reports engine fault codes, inspections and location to a fleet dashboard.',
-    card: {
-      what: 'A fleet platform: the Vehicle Gateway and AI dash cams in the truck, a web dashboard for the office and the Motive Driver App.',
-      use: 'ELD / Hours of Service, GPS tracking, engine fault codes, DVIRs, maintenance scheduling and AI dash cam safety.',
-      who: 'Safety and compliance, dispatch, fleet managers, maintenance coordinators (faults and DVIRs) and drivers.'
-    },
-    sections: {
-      what: [
-        "Motive (called **KeepTruckin** until 2022) is a [[Telematics|telematics]] and [[ELD]] company. Like Samsara, it pairs hardware in the truck with a cloud dashboard. Many fleets run one of the two, so a coordinator who knows one can learn the other quickly.",
-        { tiles: [
-          { icon: 'zap', title: 'Vehicle Gateway', text: 'Connects to the truck. Motive says it reads diagnostic trouble codes from the vehicle\'s computer and pushes them to the dashboard in real time.' },
-          { icon: 'image', title: 'AI Dashcam', text: 'Road-facing and dual-facing cameras for safety events. Motive\'s AI Dashcam Plus combines the camera and the gateway in one device.' },
-          { icon: 'message', title: 'Driver App', text: 'Hours of Service logs and inspections (DVIRs).' },
-          { icon: 'grid', title: 'Fleet dashboard', text: 'Where the office sees location, faults, inspections, safety events and maintenance.' }
-        ] }
-      ],
-      why: [
-        "Motive turns each truck into a data source the office can see. For maintenance, the value is speed: a fault code or a DVIR defect reaches you before the driver calls.",
-        { ul: ['**Compliance**: electronic Hours of Service logs and digital DVIRs.', '**Maintenance**: fault codes, plus service scheduling by miles or engine hours.', '**Safety**: AI dash cam events for coaching.', '**Visibility**: where every unit is.'] }
-      ],
-      who: [
-        { table: { head: ['Role', 'Typical use of Motive'], rows: [
-          ['Maintenance coordinator', 'Fault codes, DVIR defects, meters, maintenance schedules, location for roadside help.'],
-          ['Safety / compliance', 'HOS, dash cam events, driver coaching.'],
-          ['Dispatch', 'Location, ETAs, driver hours available.'],
-          ['Driver', 'Logs hours and completes inspections in the Driver App.']
-        ] } }
-      ],
-      concepts: [
-        { table: { head: ['Concept', 'Meaning', 'Example'], rows: [
-          ['Fault code (DTC)', 'A code the truck\'s computer stores when it detects a problem. See [[DTC]].', 'T-208 reports an aftertreatment fault.'],
-          ['Vehicle Gateway', 'The in-cab device that reads the truck\'s data and sends it to Motive.', 'The gateway on T-208 reports location and faults.'],
-          ['DVIR', 'The driver\'s inspection report, done in the app. See [[DVIR]].', 'Post-trip DVIR: "left marker lamp out".'],
-          ['Maintenance schedule', 'Service due by miles or engine hours.', 'PM-A due every 25,000 mi.'],
-          ['Safety event', 'A harsh event or risky behavior caught by the dash cam.', 'Harsh braking at 14:12.']
-        ] } },
-        { callout: { kind: 'info', title: 'Two details from Motive\'s help center', text: 'Fault codes appear on the fleet dashboard, not in the Driver App. And fleet managers can\'t clear fault codes from the dashboard: a technician clears them after the repair.' } }
-      ],
-      features: [
-        { ig: 'versus', icon: 'grid', title: 'Motive feature areas relevant to maintenance (as described by Motive)', items: [
-          { t: 'Fault codes', sub: 'Engine and vehicle trouble codes, sent to the dashboard as they happen.' },
-          { t: 'Maintenance scheduling', sub: 'Service due by engine hours or mileage.' },
-          { t: 'DVIRs', sub: 'Driver inspections and reported defects.' },
-          { t: 'ELD / HOS', sub: 'Electronic logs that show the hours a driver has left.' },
-          { t: 'GPS tracking', sub: 'Live location of vehicles.' },
-          { t: 'AI dash cams', sub: 'Safety events and coaching.' }
-        ] }
-      ],
-      how: [
-        { ig: 'process', icon: 'route', title: 'From the truck to your screen', items: [
-          { icon: 'truck', t: 'Truck computer', d: 'Detects a fault' }, { icon: 'zap', t: 'Vehicle Gateway', d: 'Reads the code' },
-          { icon: 'activity', t: 'Motive cloud', d: 'Over cellular' }, { icon: 'alert', t: 'Dashboard / alert', d: 'Fleet sees it' }, { icon: 'target', t: 'Coordinator', d: 'Triages it' }
-        ] },
-        { callout: { kind: 'warning', title: 'A code is a clue, not a diagnosis', text: 'Motive reports what the truck\'s computer detected. Call the driver for symptoms and lamp color, then get a qualified technician to diagnose.' } }
-      ],
-      example: [
-        "**Example fleet (fictional), Wednesday 05:50.** A Motive fault alert shows T-208 with an active aftertreatment code. The driver's post-trip DVIR from last night also lists \"DEF warning came on twice\".",
-        "You call the driver before the 07:00 departure: amber lamp only, no power loss. You book a diagnosis at a shop on the route for 11:00 and tell dispatch the load leaves on time with a planned stop."
-      ],
-      role: [
-        { ig: 'table', icon: 'target', title: 'What Motive shows vs what you act on', head: ['Motive shows…', 'Owned by', 'Do you act?'], rows: [
-          ['Active engine fault', 'Maintenance', '**Yes.** Triage with the driver.'],
-          ['DVIR defect', 'Maintenance', '**Yes.** Repair or certify before dispatch.'],
-          ['Hours left on the driver\'s clock', 'Dispatch / safety', '**Use it** to plan the repair time.'],
-          ['Dash cam safety event', 'Safety', '**Usually no**, unless a mechanical cause is reported.'],
-          ['Odometer / engine hours', 'Maintenance records', '**Yes.** Meters drive PM due dates.']
-        ] }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Alert or DVIR arrives', text: 'Note unit, time, code or defect, location.', owner: 'Motive → coordinator' },
-          { title: 'Call the driver', text: 'Lamps, symptoms, power, whether it is safe to move.', owner: 'Coordinator' },
-          { title: 'Decide urgency', text: 'Stop now, repair today, or schedule. Check hours left and the load.', owner: 'Coordinator' },
-          { title: 'Arrange and record', text: 'Book service, open the work order in your maintenance system, tell dispatch.', owner: 'Coordinator' },
-          { title: 'Close the loop', text: 'After repair, confirm the code is no longer active and the DVIR is certified.', owner: 'Coordinator' }
-        ] }
-      ],
-      visual: [
-        { mock: { label: swMockLabel('Motive'), title: 'Fault code · T-208', status: 'Active', tone: 'warning', rows: [
-          ['Vehicle', 'T-208 · 2021 sleeper'], ['First seen', 'Wed 05:41'], ['Code', 'Aftertreatment fault — see SPN/FMI in details'], ['Location', 'Terminal, Dallas TX'], ['Related DVIR', 'Post-trip: "DEF warning came on twice"']
-        ] } }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: ['Waiting for the driver to call about a code you already see', 'Expecting the driver to see fault codes in the app', 'Treating the code as the repair order', 'Closing the case while the code is still active'] },
-          yes: { title: 'Do this instead', items: ['Call the driver as soon as an active code appears', 'Read the code details yourself on the dashboard', 'Use the code to brief the shop; let them diagnose', 'Confirm the code is inactive after the repair'] }
-        } }
-      ],
-      scenario: [
-        { exercise: { type: 'choose', prompt: 'Motive shows an active fault on T-208 and a red STOP lamp. The driver is on the highway, 40 miles from the terminal. What do you do?', options: [
-          { text: 'Tell the driver to make it to the terminal shop.', correct: false, why: 'A red stop lamp means stop safely now, not in 40 miles.' },
-          { text: 'Have the driver stop safely, use the location to send roadside service, and tell dispatch.', correct: true, why: 'Safety first, then bring help to the truck.' },
-          { text: 'Clear the code from the dashboard and watch whether it returns.', correct: false, why: 'Codes are not cleared from the dashboard, and clearing hides the problem.' }
-        ] } }
-      ],
-      takeaways: [
-        { ul: ['Motive (formerly KeepTruckin) is a telematics, ELD and dash cam platform.', 'Your signals: **fault codes, DVIR defects, meters**, and location when a truck needs help.', 'Fault codes show on the dashboard, not in the Driver App.', 'A code starts a conversation and a diagnosis; it is not a repair order.'] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What was Motive called before 2022?', o: ['KeepTruckin', 'TruckTrack', 'FleetNet', 'Speedco'], a: 0, e: 'Motive rebranded from KeepTruckin in 2022.' },
-      { t: 'tf', q: 'According to Motive\'s help center, drivers see engine fault codes in the Motive Driver App.', a: false, e: 'Fault codes appear on the fleet dashboard, not in the Driver App. Call the driver for symptoms.' },
-      { t: 'mc', q: 'Which Motive signal is most clearly a maintenance coordinator\'s job?', o: ['A dash cam event for tailgating', 'An active engine fault code', 'A late delivery', 'An idling report'], a: 1, e: 'Fault codes are maintenance triage. Driving behavior belongs to safety; deliveries to dispatch.' }
-    ],
-    sources: [
-      ['Motive Help Center — Fault codes', 'https://helpcenter.gomotive.com/hc/en-us/articles/6161571788061'],
-      ['Motive — What are DTCs (diagnostic trouble codes)?', 'https://gomotive.com/blog/what-does-dtc-mean/'],
-      ['Motive — AI Dashcam Plus spec sheet', 'https://gomotive.com/wp-content/uploads/2026/08/Spec-Sheet_Dual-Facing-AI-Dashcam-Plus.pdf']
-    ]
-  },
-
-  /* ------------------------------------------------------------------ GEOTAB */
-  {
-    id: 'geotab', name: 'Geotab', maker: 'Geotab', kind: 'Telematics platform', icon: 'activity', tone: 'success', group: 'Telematics & diagnostics',
-    url: 'https://www.geotab.com', checked: 'November 2026',
-    tagline: 'A telematics platform: the GO device in the vehicle and the MyGeotab web software, extended by add-ons from the Geotab Marketplace.',
-    card: {
-      what: 'Telematics hardware (the GO device) plus MyGeotab, a web platform for location, engine data, faults and reports.',
-      use: 'Tracking, engine fault data, maintenance reminders and reports, with partner add-ons for things like engine-maker diagnostics and roadside help.',
-      who: 'Fleet managers, maintenance coordinators, safety staff and data analysts. Usually bought through a Geotab reseller.'
-    },
-    sections: {
-      what: [
-        "Geotab is a [[Telematics|telematics]] company. A **GO device** plugs into the vehicle's diagnostic port and sends data to **MyGeotab**, the web software where the fleet works. Geotab sells mostly through **resellers** (partners), so your company's account may carry a partner's name.",
-        { callout: { kind: 'info', title: 'An open platform', text: 'The Geotab Marketplace lists add-ons from other companies that use Geotab data, such as engine-maker diagnostics (Cummins Connected Diagnostics) and roadside networks (FleetNet America).' } }
-      ],
-      why: [
-        "Fleets choose Geotab for its data and its partner add-ons. For maintenance, MyGeotab gathers fault codes, meters and reminders for every unit in one place."
-      ],
-      who: [
-        { table: { head: ['Role', 'Typical use of MyGeotab'], rows: [
-          ['Maintenance coordinator', 'Faults page, maintenance reminders, odometer and engine hours.'],
-          ['Fleet manager', 'Utilization, fuel and cost reports.'],
-          ['Safety', 'Driving behavior rules and reports.'],
-          ['IT / analysts', 'Data exports and integrations through the MyGeotab API.']
-        ] } }
-      ],
-      concepts: [
-        { table: { head: ['Term', 'Meaning', 'Example'], rows: [
-          ['GO device', 'The plug-in telematics unit.', 'GO device on T-311 reports location and faults.'],
-          ['MyGeotab', 'The web platform where the fleet works.', 'Maintenance > Faults shows open fault codes.'],
-          ['Fault source', 'Geotab notes fault data comes from the GO device itself or from the vehicle\'s engine control unit (ECU).', 'An ECU engine code vs a GO device "unplugged" fault.'],
-          ['Fault status "None"', 'Geotab\'s term for a fault that is no longer active.', 'Yesterday\'s code now shows None.'],
-          ['Marketplace', 'Third-party add-ons that use Geotab data.', 'An engine-maker diagnostics add-on.']
-        ] } }
-      ],
-      features: [
-        { ig: 'versus', icon: 'grid', title: 'MyGeotab areas a coordinator uses', items: [
-          { t: 'Faults', sub: 'Maintenance > Faults lists fault codes by vehicle and status.' },
-          { t: 'Maintenance reminders', sub: 'Service due by distance, engine hours or time.' },
-          { t: 'Engine data', sub: 'Odometer, engine hours and measurements.' },
-          { t: 'Map and trips', sub: 'Where a unit is and where it has been.' },
-          { t: 'Rules and notifications', sub: 'Emails or alerts when a condition is met.' },
-          { t: 'Marketplace add-ons', sub: 'Partner tools built on Geotab data.' }
-        ] }
-      ],
-      how: [
-        { ig: 'process', icon: 'route', title: 'How Geotab data reaches you', items: [
-          { icon: 'truck', t: 'Vehicle', d: 'ECU and sensors' }, { icon: 'zap', t: 'GO device', d: 'Reads and records' },
-          { icon: 'activity', t: 'MyGeotab', d: 'Stores and shows' }, { icon: 'grid', t: 'Add-ons', d: 'Partners use the data' }, { icon: 'target', t: 'Coordinator', d: 'Acts' }
-        ] },
-        { callout: { kind: 'warning', title: 'Guidance, not a diagnosis', text: 'Geotab itself says its proactive maintenance reports and fault notifications give guidance only. A qualified technician confirms the cause.' } }
-      ],
-      example: [
-        "**Example fleet (fictional), Monday 08:10.** You open Maintenance > Faults in MyGeotab. T-311 shows the same coolant temperature code three times this week, each now at status None.",
-        "No code is active, but three in one week is a pattern. You book a cooling-system inspection with T-311's next PM on Wednesday and note the history on the work order."
-      ],
-      role: [
-        { ul: ['Check the faults list at the start of each shift; active codes first.', 'Look for repeats: a code that keeps clearing and returning is a real problem.', 'Keep meters accurate so maintenance reminders fire on time.', 'Know which Marketplace add-ons your fleet uses, such as engine-maker alerts.'] }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Review faults', text: 'Sort by active status and severity.', owner: 'Coordinator' },
-          { title: 'Contact the driver', text: 'For active codes: symptoms and lamps.', owner: 'Coordinator' },
-          { title: 'Plan the repair', text: 'Urgent now, or with the next PM.', owner: 'Coordinator' },
-          { title: 'Record it', text: 'Work order in your maintenance system.', owner: 'Coordinator' },
-          { title: 'Verify', text: 'Fault status returns to None and stays there.', owner: 'Coordinator' }
-        ] }
-      ],
-      visual: [
-        { mock: { label: swMockLabel('Geotab'), title: 'Faults · T-311 · last 7 days', status: '3 occurrences', tone: 'warning', rows: [
-          ['Fault', 'Engine coolant temperature — see code details'], ['Source', 'Engine (ECU)'], ['Status', 'None (not active)'], ['Occurrences', 'Mon 14:02 · Wed 16:40 · Fri 15:15'], ['Next PM', 'Wed (PM-A)']
-        ] } }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: ['Ignoring faults because their status is None', 'Treating a GO device fault (like "unplugged") as an engine problem', 'Relying on reminders while meters are wrong'] },
-          yes: { title: 'Do this instead', items: ['Review history for repeats', 'Check the fault source before calling a shop', 'Fix meter problems first'] }
-        } }
-      ],
-      scenario: [
-        { exercise: { type: 'classify', prompt: 'How do you handle each MyGeotab fault entry?', categories: ['Act now', 'Plan with next PM', 'Not a vehicle repair'], items: [
-          { text: 'Active engine oil pressure code, driver reports a red lamp', answer: 'Act now', why: 'Active, severe, with a symptom. Stop safely and send service.' },
-          { text: 'Coolant code three times this week, now not active', answer: 'Plan with next PM', why: 'A repeat pattern worth a planned inspection.' },
-          { text: 'GO device fault: device unplugged', answer: 'Not a vehicle repair', why: 'A telematics device issue for whoever manages the devices, not an engine repair.' }
-        ] } }
-      ],
-      takeaways: [
-        { ul: ['Geotab = GO device + MyGeotab, usually sold through a reseller.', 'Faults come from the GO device or the engine computer; check the source.', 'Status None means not active now, not "never mattered".', 'The Marketplace adds partner tools like engine-maker diagnostics.'] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'Where does a coordinator find fault codes in MyGeotab?', o: ['Maintenance > Faults', 'The fuel card portal', 'The driver\'s pay stub', 'The trailer\'s VIN plate'], a: 0, e: 'Geotab documents fault codes under Maintenance > Faults.' },
-      { t: 'tf', q: 'A fault with status "None" in MyGeotab is no longer active.', a: true, e: 'None means not active now. Still check the history for repeats.' },
-      { t: 'scenario', q: 'MyGeotab shows the same code three times this week, all now inactive. What do you do?', o: ['Nothing, they cleared', 'Plan an inspection, for example with the next PM, and note the history', 'Replace the engine', 'Delete the history'], a: 1, e: 'Repeats point to a real problem. Plan a diagnosis before it becomes a road call.' }
-    ],
-    sources: [
-      ['Geotab Support — Faults', 'https://support.geotab.com/help/mygeotab/maintenance-and-diagnostics/diagnostics/faults'],
-      ['Geotab Support — Faults user guide', 'https://support.geotab.com/mygeotab/doc/faults-beta-user-guide'],
-      ['Geotab — Cummins Connected Diagnostics in MyGeotab', 'https://www.geotab.com/press-release/cummins-connected-diagnostic-mygeotab'],
-      ['Geotab Marketplace — FleetNet America Roadside', 'https://marketplace.geotab.com/solutions/fleetnet-america-roadside/']
-    ]
-  },
-
-  /* ------------------------------------------------------------------ DECISIV */
-  {
-    id: 'decisiv', name: 'Decisiv', maker: 'Decisiv', kind: 'Service relationship management', icon: 'message', tone: 'info', group: 'Maintenance & records',
-    url: 'https://www.decisiv.com', checked: 'November 2026',
-    tagline: 'A cloud platform where fleets, dealers and service providers handle a repair together: service request, estimate, approval and status in one shared case.',
-    card: {
-      what: 'A cloud Service Relationship Management (SRM) platform connecting fleets with dealers and service providers.',
-      use: 'Sending service requests, tracking repair status, reviewing estimates and communicating with the shop on one shared record.',
-      who: 'Maintenance coordinators and fleet managers on the fleet side; service advisors and managers at dealers and shops.'
-    },
-    sections: {
-      what: [
-        "Decisiv calls its platform **Service Relationship Management (SRM)**. Instead of phone calls and emails between you and a dealer, the repair lives in one shared online record that both sides update. Decisiv describes a network of thousands of service locations and fleets using it.",
-        { callout: { kind: 'info', title: 'Where it fits', text: 'Decisiv sits between your fleet and the shop. It is not your maintenance system ([[CMMS]]) and not telematics, but it can connect to both, and many dealers link it to their own dealer management systems.' } }
-      ],
-      why: [
-        { tiles: [
-          { icon: 'clock', title: 'Less waiting', text: 'Status and estimates appear in the shared record instead of in a missed voicemail.' },
-          { icon: 'clipboard', title: 'One record', text: 'Complaint, estimate, approvals and notes stay together.' },
-          { icon: 'users', title: 'Both sides see it', text: 'Fleet and shop look at the same case.' },
-          { icon: 'dollar', title: 'Cleaner approvals', text: 'Estimates are reviewed and approved on the record.' }
-        ] }
-      ],
-      who: [
-        { table: { head: ['Side', 'Who', 'What they do'], rows: [
-          ['Fleet', 'Maintenance coordinator', 'Sends the service request, reviews estimates, approves within limits, tracks status.'],
-          ['Fleet', 'Fleet manager', 'Approves above the coordinator\'s limit; reviews history and costs.'],
-          ['Shop / dealer', 'Service advisor', 'Accepts the request, posts diagnosis, estimate and updates.']
-        ] } }
-      ],
-      concepts: [
-        { table: { head: ['Term', 'Meaning'], rows: [
-          ['SRM', 'Service Relationship Management: managing service events between fleets and providers.'],
-          ['Service event / case', 'One repair visit for one unit, from request to release.'],
-          ['Service request', 'What the fleet sends: unit, complaint, location, authorization.'],
-          ['Estimate', 'The shop\'s proposed repair and cost, reviewed by the fleet. See [[Estimate]].'],
-          ['Status', 'Where the repair is: waiting, diagnosing, waiting on approval or parts, in repair, ready.']
-        ] } }
-      ],
-      features: [
-        { ig: 'versus', icon: 'grid', title: 'What Decisiv describes for fleets', items: [
-          { t: 'Service requests', sub: 'Send a repair request to a provider in the network.' },
-          { t: 'Scheduling', sub: 'Plan work with outside service providers.' },
-          { t: 'Estimates', sub: 'Estimates shared on the case for review.' },
-          { t: 'Communication', sub: 'Messages and updates on the record.' },
-          { t: 'Service calendars and inspections', sub: 'Planned work and standard repair operations.' },
-          { t: 'Integrations', sub: 'Links to dealer systems, fleet maintenance software and partners.' }
-        ] }
-      ],
-      how: [
-        { ig: 'process', icon: 'route', title: 'One repair in Decisiv', items: [
-          { icon: 'file', t: 'Request', d: 'Fleet sends unit + complaint' }, { icon: 'wrench', t: 'Diagnose', d: 'Shop posts findings' },
-          { icon: 'dollar', t: 'Estimate', d: 'Shop posts the cost' }, { icon: 'check-circle', t: 'Approve', d: 'Fleet decides' }, { icon: 'truck', t: 'Repair + release', d: 'Status updates' }
-        ] }
-      ],
-      example: [
-        "**Example fleet (fictional).** T-114 is at a dealer for a coolant leak. At 10:20 the case shows diagnosis complete: water pump leaking. The estimate is $1,540 with an ETR of 16:00. Your approval limit is $2,000.",
-        "You check the unit's history: no earlier water pump. You approve on the case, add the PO number, and tell dispatch the 16:00 ETR. You did it without a single phone call, and the record shows who approved what and when."
-      ],
-      role: [
-        { ul: ['Write a complete service request: unit, VIN, meter, complaint in the driver\'s words, location, your authorization limit.', 'Watch cases waiting on you. An estimate sitting unapproved is downtime you caused.', 'Approve within your limit; route bigger estimates to your manager on the record.', 'Copy key facts into your own maintenance system if the two aren\'t connected.'] }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Open the request', text: 'Unit, complaint, location, authorization.', owner: 'Coordinator' },
-          { title: 'Watch for diagnosis', text: 'Check the case at the times you agreed.', owner: 'Coordinator' },
-          { title: 'Review the estimate', text: 'Compare with history, warranty and your limit.', owner: 'Coordinator' },
-          { title: 'Approve or escalate', text: 'On the record, with a PO.', owner: 'Coordinator / manager' },
-          { title: 'Release and close', text: 'Confirm the repair, final invoice and ETR met.', owner: 'Coordinator' }
-        ] }
-      ],
-      visual: [
-        { mock: { label: swMockLabel('Decisiv'), title: 'Service event · T-114', status: 'Waiting on fleet approval', tone: 'warning', rows: [
-          ['Provider', 'Dealer (fictional), Joplin MO'], ['Complaint', 'Coolant leak, front of engine'], ['Diagnosis', 'Water pump seal leaking'], ['Estimate', '$1,540 · ETR 16:00'], ['Waiting on', 'Fleet approval since 10:20']
-        ] } }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: ['Sending a request with just "check engine"', 'Letting estimates sit unreviewed', 'Approving by phone and never recording it'] },
-          yes: { title: 'Do this instead', items: ['Give the full complaint and meter', 'Check open cases on a schedule', 'Approve on the record with a PO'] }
-        } }
-      ],
-      scenario: [
-        { exercise: { type: 'choose', prompt: 'A Decisiv case for T-101 shows an estimate of $4,820 waiting since 09:00. Your limit is $2,500. It is 11:30. What do you do?', options: [
-          { text: 'Approve it to save time.', correct: false, why: 'It is over your limit. That is not your approval to give.' },
-          { text: 'Route it to the fleet manager on the case now, with the history and your recommendation, and tell the shop when to expect an answer.', correct: true, why: 'Escalate within authority, quickly, and keep the shop informed.' },
-          { text: 'Wait for the shop to call.', correct: false, why: 'The case has been waiting on you for 2.5 hours. That is downtime.' }
-        ] } }
-      ],
-      takeaways: [
-        { ul: ['Decisiv is a shared repair record between fleet and shop (SRM).', 'A complete service request saves hours.', 'Cases waiting on you are your downtime.', 'Approve on the record, within your limit.'] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What does SRM stand for in Decisiv\'s description?', o: ['Service Relationship Management', 'Shop Repair Manual', 'Safety Risk Monitor', 'Standard Repair Mileage'], a: 0, e: 'Decisiv describes its platform as Service Relationship Management.' },
-      { t: 'mc', q: 'Who mainly uses Decisiv together?', o: ['Fleets and their service providers', 'Drivers and brokers', 'Shippers and receivers', 'Fuel stations'], a: 0, e: 'It connects fleets with dealers and service providers around repairs.' },
-      { t: 'tf', q: 'An estimate waiting for fleet approval adds to downtime.', a: true, e: 'Every hour an estimate waits is an hour the truck is not being repaired.' }
-    ],
-    sources: [
-      ['Decisiv', 'https://www.decisiv.com'],
-      ['TT News — Driving asset performance with SRM', 'https://ttnews.com/articles/driving-asset-performance-srm'],
-      ['Truck Parts & Service — Decisiv partnerships (Truckmore, Wabash, Diesel Laptops)', 'https://www.truckpartsandservice.com/technology/business-operations/article/15739430/decisiv-announces-three-data-partnership-collaborations'],
-      ['Karmak — Decisiv integration', 'https://www.karmak.com/integrations/decisiv']
-    ]
-  },
-
-  /* -------------------------------------------------------------- TRIMBLE TMT */
-  {
-    id: 'trimble-tmt', name: 'TMT Fleet Maintenance', brand: 'Trimble TMT', maker: 'Trimble', kind: 'Fleet maintenance software', icon: 'wrench', tone: 'info', group: 'Maintenance & records',
-    url: 'https://transportation.trimble.com', checked: 'November 2026',
-    tagline: 'Maintenance management software for larger fleets (formerly TMW Systems): repair orders, PM, parts, road calls, tires, warranty and VMRS-coded reporting.',
-    card: {
-      what: 'A web-based fleet maintenance management system from Trimble, formerly sold by TMW Systems.',
-      use: 'Repair orders, preventive maintenance, parts inventory, road calls, tire tracking, warranty recovery and cost reporting by VMRS code.',
-      who: 'Maintenance coordinators, shop managers, technicians, parts staff and fleet managers in mid-size and large fleets.'
-    },
-    sections: {
-      what: [
-        "TMT Fleet Maintenance is a [[CMMS]] built for trucking fleets that run their own shops and also send work outside. Trimble describes it as covering repair orders, PM, parts and accounting, with equipment history in one place. A shop-focused version, **TMT Service Center**, serves repair businesses.",
-        { callout: { kind: 'info', title: 'VMRS: the shared language', text: 'TMT reports costs by VMRS codes (Vehicle Maintenance Reporting Standards, from ATA\'s Technology & Maintenance Council). VMRS gives every system and part a standard code, so "brakes" means the same thing on every repair order and every report.' } }
-      ],
-      why: [
-        "In a large fleet, thousands of repair orders a year only become useful if they are coded the same way. TMT turns them into cost per unit, repeat repairs and warranty claims you can actually find."
-      ],
-      who: [
-        { table: { head: ['Role', 'Typical use'], rows: [
-          ['Maintenance coordinator', 'Opens and tracks repair orders, road calls and outside repairs; keeps history accurate.'],
-          ['Shop manager / technicians', 'Work repair orders, record labor and parts.'],
-          ['Parts staff', 'Inventory and reorder reports.'],
-          ['Fleet manager', 'Cost by system, unit and vendor; warranty recovery.']
-        ] } }
-      ],
-      concepts: [
-        { table: { head: ['Term', 'Meaning'], rows: [
-          ['Repair order (RO)', 'The record of work on a unit: complaint, cause, correction, labor and parts. See [[RO]].'],
-          ['VMRS code', 'Standard code for the system, assembly and part worked on, plus the reason for repair.'],
-          ['Road call', 'A breakdown away from the shop, tracked as its own event.'],
-          ['PM schedule', 'Planned service by miles, hours or time. See [[PM]].'],
-          ['Warranty recovery', 'Finding and claiming repairs still under warranty. See [[Warranty]].']
-        ] } }
-      ],
-      features: [
-        { ig: 'versus', icon: 'grid', title: 'TMT areas a coordinator meets', items: [
-          { t: 'Repair orders', sub: 'In-house and outside repairs with history.' },
-          { t: 'Preventive maintenance', sub: 'PM schedules and due lists.' },
-          { t: 'Parts', sub: 'Inventory with reorder reports.' },
-          { t: 'Road calls', sub: 'Breakdowns away from the shop.' },
-          { t: 'Tires', sub: 'Tire tracking by position.' },
-          { t: 'Warranty', sub: 'Recovery on parts and repairs.' }
-        ] }
-      ],
-      how: [
-        { ig: 'process', icon: 'route', title: 'From a repair to a report', items: [
-          { icon: 'file', t: 'Repair order', d: 'Complaint, cause, correction' }, { icon: 'list-check', t: 'VMRS coding', d: 'System, part, reason' },
-          { icon: 'clipboard', t: 'Unit history', d: 'Builds over time' }, { icon: 'bar', t: 'Reports', d: 'Cost, repeats, warranty' }
-        ] }
-      ],
-      example: [
-        "**Example fleet (fictional).** Your manager asks why brake costs on the 2021 day cabs doubled. Because every repair order was coded with VMRS, a report filtered by the brake system and that model year shows the answer in minutes: eleven slack adjuster replacements, eight of them on units from one PM shop. That points to a root cause, not just a cost."
-      ],
-      role: [
-        { ul: ['Code every repair order completely, outside repairs too. Bad coding makes bad reports.', 'Enter meters on every RO so PM and warranty math work.', 'Log road calls as road calls, so breakdowns can be counted.', 'Check warranty before approving a repeat repair.'] }
-      ],
-      workflow: [
-        { timeline: [
-          { title: 'Open the RO', text: 'Unit, meter, complaint.', owner: 'Coordinator' },
-          { title: 'Assign the work', text: 'In-house bay or outside vendor.', owner: 'Coordinator / shop' },
-          { title: 'Record cause and correction', text: 'With VMRS codes, labor and parts.', owner: 'Technician / coordinator' },
-          { title: 'Check warranty', text: 'Before closing, flag any claim.', owner: 'Coordinator' },
-          { title: 'Close', text: 'History complete; unit back in service.', owner: 'Coordinator' }
-        ] }
-      ],
-      visual: [
-        { mock: { label: swMockLabel('Trimble TMT'), title: 'Repair order · T-226', status: 'Closed', tone: 'info', rows: [
-          ['Complaint', 'Brake pulls right'], ['Cause', 'Automatic slack adjuster not adjusting, right drive'], ['Correction', 'Replaced slack adjuster, set stroke'], ['VMRS', 'Brakes system · slack adjuster · reason: worn out'], ['Meter', '388,410 mi']
-        ] } }
-      ],
-      mistakes: [
-        { compare: {
-          no: { title: 'Common mistakes', items: ['Coding everything as "miscellaneous"', 'Skipping meters on outside repairs', 'Closing ROs without cause and correction'] },
-          yes: { title: 'Do this instead', items: ['Use the right VMRS system and part', 'Enter the meter on every RO', 'Write complaint, cause and correction'] }
-        } }
-      ],
-      scenario: [
-        { exercise: { type: 'choose', prompt: 'An outside shop\'s invoice for T-226 says only "brake repair, $1,180". How do you enter it in TMT?', options: [
-          { text: 'One line, "brake repair", no meter.', correct: false, why: 'Nobody can find or analyze this later.' },
-          { text: 'Get the cause, correction and parts from the shop, then code the RO with the brake system and part, and add the meter.', correct: true, why: 'Complete, coded history feeds cost, repeat-repair and warranty reports.' },
-          { text: 'Skip it; it was an outside repair.', correct: false, why: 'Outside repairs belong in the unit\'s history too.' }
-        ] } }
-      ],
-      takeaways: [
-        { ul: ['TMT is a fleet maintenance system for larger fleets (formerly TMW).', 'VMRS coding makes repair data comparable.', 'Every RO needs a meter, cause and correction.', 'Good records find repeats and warranty money.'] }
-      ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What is VMRS?', o: ['A standard coding system for vehicle maintenance', 'A tire brand', 'A truck stop chain', 'A fuel card'], a: 0, e: 'Vehicle Maintenance Reporting Standards, from ATA\'s Technology & Maintenance Council.' },
-      { t: 'mc', q: 'Which company sold TMT before Trimble\'s branding?', o: ['TMW Systems', 'KeepTruckin', 'Speedco', 'Comdata'], a: 0, e: 'Trimble TMT Fleet Maintenance was formerly from TMW Systems.' },
-      { t: 'tf', q: 'Outside repairs do not need to be entered in the fleet\'s maintenance system.', a: false, e: 'Every repair belongs in the unit\'s history, or costs, repeats and warranty get lost.' }
-    ],
-    sources: [
-      ['Trimble — Fleet maintenance solutions', 'https://transportation.trimble.com/fleet-maintenance-solutions-page'],
-      ['Trimble — What TMT Fleet Maintenance can do', 'https://transportation.trimble.com/node/469'],
-      ['Trimble — Master Fleet case study (VMRS reporting)', 'https://transportation.trimble.com/en/asset-fleet-maintenance/case-studies/master-fleet'],
-      ['Trimble developer docs — TMT', 'https://developer.trimble.com/docs/tmt']
-    ]
-  }
-);
-
-SOFTWARE.push(
-  /* -------------------------------------------------------- CARRIER TRANSICOLD */
-  {
-    id: 'carrier-transicold', name: 'Carrier Transicold', brand: 'Carrier', maker: 'Carrier', kind: 'Transport refrigeration (equipment)', icon: 'thermo', tone: 'critical', group: 'Refrigeration',
-    url: 'https://www.carrier.com/truck-trailer/en/north-america/', checked: 'November 2026',
-    tagline: 'One of the two big makers of trailer and truck refrigeration units, with the Lynx Fleet telematics platform for monitoring reefers remotely.',
-    card: {
-      what: 'Transport refrigeration units (TRUs) for trailers and trucks, plus Lynx Fleet, Carrier Transicold\'s telematics platform.',
-      use: 'Keeping temperature-controlled freight in range, and watching unit temperature, alarms, location and battery status remotely.',
-      who: 'Coordinators handling reefer fleets, dispatch for temperature-sensitive loads, and refrigeration technicians at Carrier Transicold dealers.'
-    },
-    sections: {
-      what: [
-        "Carrier Transicold, part of Carrier, builds the refrigeration units ([[TRU|TRUs]]) on many reefer trailers and trucks. If your fleet's reefers are not Thermo King, they are very likely Carrier. The ideas you learned on the Thermo King page carry over: a [[Setpoint|setpoint]], [[Return air|return air]], alarm codes and a pretrip test.",
-        { callout: { kind: 'info', title: 'Lynx Fleet', text: 'Carrier Transicold\'s telematics platform for refrigerated fleets. Carrier and its partners describe it showing unit temperature, location and battery status, with data that can be pulled into other systems. Some telematics providers, such as Samsara, list Carrier Transicold integrations.' } }
-      ],
-      why: [ "A reefer failure risks the whole load, not just the unit. Remote monitoring lets the office see a temperature drift or an alarm before the driver notices, while there is still time to fix it or swap the trailer." ],
-      who: [ { table: { head: ['Role', 'What they do'], rows: [
-        ['Maintenance coordinator', 'Watches reefer alarms and temperatures, books refrigeration-qualified service, tracks reefer PM by engine hours.'],
-        ['Dispatch', 'Protects the load: backup trailer, receiver updates.'],
-        ['Driver', 'Pretrip, setpoint per the bill of lading, reports alarms.'],
-        ['Carrier Transicold dealer', 'Diagnoses and repairs units; warranty work.']
-      ] } } ],
-      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
-        ['Setpoint', 'The temperature the unit is told to hold, from the shipper\'s instructions.'],
-        ['Return air / discharge air', 'Air coming back from the load / air leaving the unit. Return air near setpoint means the box is holding.'],
-        ['Alarm code', 'A code from the unit\'s controller. Its meaning is in the model\'s operator or service manual.'],
-        ['Pretrip', 'A check run before loading. Carrier\'s operator manual says it is not self-diagnosing: someone must watch that the unit runs through all cycles.'],
-        ['Engine hours', 'How reefer PM is usually scheduled.']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: 'What a coordinator meets', items: [
-        { t: 'The unit controller', sub: 'Setpoint, temperatures, mode and alarm codes on the display.' },
-        { t: 'Lynx Fleet', sub: 'Remote temperature, location and battery status.' },
-        { t: 'Dealer network', sub: 'Carrier Transicold dealers for diagnosis, repair and warranty.' },
-        { t: 'Manuals', sub: 'Model operator and service manuals hold the alarm meanings.' }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'From a reefer alarm to a protected load', items: [
-        { icon: 'thermo', t: 'Unit alarm', d: 'Controller flags a condition' }, { icon: 'activity', t: 'Lynx Fleet / driver', d: 'Office hears about it' },
-        { icon: 'clipboard', t: 'Check the manual', d: 'What the code means' }, { icon: 'wrench', t: 'Service', d: 'Qualified tech or dealer' }, { icon: 'truck', t: 'Protect the load', d: 'Backup plan with dispatch' }
-      ] } ],
-      example: [ "**Example fleet (fictional), 01:30.** Lynx Fleet shows TR-551's return air climbing from 35°F to 39°F on a produce load set at 34°F, with an alarm. You call the driver, ask for the alarm code from the display and the reading, book the nearest Carrier Transicold dealer, and ask dispatch to locate a spare reefer trailer within 50 miles in case the repair runs long." ],
-      role: [ { ul: ['Never tell a driver to change the setpoint. It comes from the shipper.', 'Look up alarm codes in the unit\'s own manual, not a random list online.', 'Run repair and load protection in parallel: technician plus backup trailer.', 'Track reefer PM by engine hours, separate from the trailer.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Alarm or temperature drift', text: 'Get the code, setpoint, return air and load type.', owner: 'Coordinator' },
-        { title: 'Judge the clock', text: 'How fast is it drifting, and how far is the load from its limit?', owner: 'Coordinator' },
-        { title: 'Book qualified service', text: 'Carrier Transicold dealer or refrigeration tech.', owner: 'Coordinator' },
-        { title: 'Plan B', text: 'Ask dispatch for a backup trailer if needed.', owner: 'Coordinator + dispatch' },
-        { title: 'Record', text: 'Code, repair, temperatures, outcome.', owner: 'Coordinator' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel('Carrier Transicold'), title: 'Reefer status · TR-551', status: 'Alarm', tone: 'critical', rows: [
-        ['Setpoint', '34°F'], ['Return air', '39°F and rising'], ['Load', 'Produce'], ['Alarm', 'Code shown on unit — check model manual'], ['Location', 'I-40 WB, mile 280']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Lowering the setpoint "to be safe"', 'Guessing an alarm meaning from another brand\'s chart', 'Waiting for the repair before planning a backup'] },
-        yes: { title: 'Do this instead', items: ['Keep the shipper\'s setpoint', 'Use the model\'s Carrier manual or dealer', 'Start the backup plan at the same time'] }
-      } } ],
-      scenario: [ { exercise: { type: 'choose', prompt: 'A Carrier reefer shows an alarm and return air 4°F above setpoint, rising about 1°F per hour. The load can go 6°F above setpoint before it is rejected. What do you do?', options: [
-        { text: 'Wait until it reaches the limit, then call a tech.', correct: false, why: 'By then there is no time left for a repair.' },
-        { text: 'Book a Carrier Transicold dealer now and have dispatch line up a backup trailer, since you have about 2 hours.', correct: true, why: 'Repair and load protection in parallel, while there is still time.' },
-        { text: 'Tell the driver to lower the setpoint 5°F.', correct: false, why: 'Setpoints come from the shipper. Changing it can damage the freight.' }
-      ] } } ],
-      takeaways: [ { ul: ['Carrier Transicold makes many of the reefer units in the field; Lynx Fleet monitors them remotely.', 'Setpoint, return air and alarm code are the first three facts to get.', 'Alarm meanings come from the model\'s own manual or dealer.', 'Protect the load in parallel with the repair.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What is Lynx Fleet?', o: ['Carrier Transicold\'s telematics platform for refrigerated fleets', 'A tire brand', 'A fuel card', 'A roadside network'], a: 0, e: 'Lynx Fleet monitors refrigeration units remotely.' },
-      { t: 'tf', q: 'A coordinator may tell the driver to lower the setpoint to protect a load.', a: false, e: 'The setpoint comes from the shipper. Changing it can ruin the freight.' },
-      { t: 'mc', q: 'Where should you look up what a Carrier reefer alarm code means?', o: ['The unit\'s operator or service manual, or a Carrier Transicold dealer', 'Another brand\'s alarm chart', 'The fuel receipt', 'The truck\'s VIN'], a: 0, e: 'Codes differ by maker and model. Use the official manual or dealer.' }
-    ],
-    sources: [
-      ['Carrier — Lynx Fleet platform enhanced monitoring (news)', 'https://www.carrier.com/carrier/en/worldwide/news/news-article/carrier-transicold-s-lynx-fleet-platform-rolls-out-enhanced-monitoring-of-refrigerated-fleets.html'],
-      ['Samsara Marketplace — Carrier Transicold', 'https://samsara.com/resources/marketplace/carrier-transicold'],
-      ['Carrier Transicold — Truck and trailer refrigeration', 'https://www.carrier.com/truck-trailer/en/north-america/']
-    ]
-  },
-
-  /* ------------------------------------------------- CUMMINS CONNECTED DIAGNOSTICS */
-  {
-    id: 'cummins-connected', name: 'Cummins Connected Diagnostics', brand: 'Cummins', maker: 'Cummins', kind: 'Engine-maker diagnostics', icon: 'zap', tone: 'warning', group: 'Telematics & diagnostics',
-    url: 'https://www.cummins.com', checked: 'November 2026',
-    tagline: 'Fault alerts from Cummins itself: when a Cummins engine logs a fault, the fleet gets a notice with priority, likely cause and a recommended action.',
-    card: {
-      what: 'A Cummins service that turns engine fault codes into notifications with a priority level and recommended action.',
-      use: 'Knowing, from the engine maker, how urgent a Cummins fault is and what to do next, including any coming derate.',
-      who: 'Maintenance coordinators and fleet managers running trucks with Cummins engines. Activated through a telematics provider or Cummins.'
-    },
-    sections: {
-      what: [
-        "Your telematics shows that a fault happened. **Cummins Connected Diagnostics** adds what the engine maker thinks it means. When a Cummins engine logs a fault, data reaches Cummins through the truck's telematics (for example a Geotab GO device), and Cummins sends the fleet a notification.",
-        { callout: { kind: 'info', title: 'Activation', text: 'Cummins says it is activated through your telematics reseller (such as a Geotab partner), your Cummins representative or Cummins Care. Ask your manager whether your fleet has it.' } }
-      ],
-      why: [ "A coordinator can't know every engine code. The notification tells you how urgent it is in plain terms: keep running for now, or get it into a Cummins location soon, and whether a power limit (derate) is coming." ],
-      who: [ { table: { head: ['Role', 'Use'], rows: [
-        ['Maintenance coordinator', 'Reads the notification, decides timing, books a Cummins-certified repair location.'],
-        ['Fleet manager', 'Watches repeat faults across the fleet.'],
-        ['Cummins service location', 'Diagnoses and repairs; warranty work.']
-      ] } } ],
-      concepts: [ { table: { head: ['Item in a notification', 'What it tells you'], rows: [
-        ['Engine serial number and model', 'Which engine; needed by the repair shop and for warranty.'],
-        ['Priority level', 'How urgent: whether immediate action is needed or how long the truck can keep working.'],
-        ['Recommended action', 'For example, contact a Cummins certified repair location; the truck may run a short time with possible power or speed limits.'],
-        ['Root cause', 'Suggested cause based on the primary fault code.'],
-        ['Derate warning', 'A coming power limit, for example a torque reduction after a set number of operating hours.'],
-        ['Service location', 'Links to the nearest Cummins service location.']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: 'What the service adds to a plain fault code', items: [
-        { t: 'Priority', sub: 'Stop now vs plan soon, from the engine maker.' },
-        { t: 'Recommended action', sub: 'What to do next.' },
-        { t: 'Derate timing', sub: 'When a power limit will hit.' },
-        { t: 'Where to go', sub: 'Nearest Cummins service location.' }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'From fault to notification', items: [
-        { icon: 'truck', t: 'Engine fault', d: 'Cummins ECM logs it' }, { icon: 'zap', t: 'Telematics', d: 'Data sent out' },
-        { icon: 'activity', t: 'Cummins', d: 'Analyzes the fault' }, { icon: 'message', t: 'Notification', d: 'Priority + action' }, { icon: 'target', t: 'Coordinator', d: 'Books service' }
-      ] } ],
-      example: [ "**Example fleet (fictional), 13:05.** A notification for T-140's Cummins engine says: aftertreatment fault, priority \"service soon\", recommended action: visit a Cummins certified location; a torque derate is expected after about 8 operating hours. The driver has 5 hours of driving left today. You book a Cummins location near tonight's stop for an early-morning slot, before the derate window, and tell dispatch." ],
-      role: [ { ul: ['Read priority and recommended action before calling anyone.', 'Turn derate timing into a deadline on your plan.', 'Give the shop the engine serial number and fault details.', 'Still call the driver: symptoms beat assumptions.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Notification arrives', text: 'Engine, fault, priority, action, derate timing.', owner: 'Cummins → coordinator' },
-        { title: 'Check with the driver', text: 'Lamps, power, symptoms.', owner: 'Coordinator' },
-        { title: 'Set the deadline', text: 'Before the derate or as the priority says.', owner: 'Coordinator' },
-        { title: 'Book Cummins service', text: 'Nearest certified location on the route.', owner: 'Coordinator' },
-        { title: 'Record and close', text: 'Fault, repair, warranty status.', owner: 'Coordinator' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel('Cummins'), title: 'Fault notification · T-140', status: 'Service soon', tone: 'warning', rows: [
-        ['Engine', 'Cummins X15 · serial ending 7731'], ['Fault', 'Aftertreatment — see code details'], ['Priority', 'Service soon'], ['Recommended action', 'Visit a Cummins certified repair location'], ['Derate', 'Torque reduction expected after ~8 operating hours']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Ignoring the derate timing', 'Booking a shop that can\'t do Cummins warranty work', 'Skipping the driver call'] },
-        yes: { title: 'Do this instead', items: ['Plan the repair before the derate', 'Check warranty and use a certified location when it applies', 'Confirm symptoms with the driver'] }
-      } } ],
-      scenario: [ { exercise: { type: 'choose', prompt: 'A Cummins notification for T-140 warns of a derate in about 8 operating hours. The load delivers in 4 hours. What is the best plan?', options: [
-        { text: 'Ignore it until after the derate happens.', correct: false, why: 'A derated truck on the highway is slow, unsafe and late.' },
-        { text: 'Let the load deliver, then book the nearest Cummins certified location right after, inside the 8-hour window.', correct: true, why: 'The timing allows delivery first, and the repair still happens before the derate.' },
-        { text: 'Tow the truck now.', correct: false, why: 'Unneeded and expensive when the engine maker says it can run a short time.' }
-      ] } } ],
-      takeaways: [ { ul: ['Connected Diagnostics adds the engine maker\'s priority and recommended action to a fault.', 'Derate timing is your deadline.', 'It runs through your telematics provider or Cummins.', 'Use certified locations when warranty applies.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What does a Cummins Connected Diagnostics notification add to a plain fault code?', o: ['Priority and a recommended action', 'The driver\'s pay', 'Fuel prices', 'A delivery appointment'], a: 0, e: 'It states urgency, recommended action, likely cause and derate timing.' },
-      { t: 'tf', q: 'A derate warning tells you a power limit may come after a set time.', a: true, e: 'Use it as a deadline for the repair.' },
-      { t: 'mc', q: 'How is the service usually activated?', o: ['Through a telematics reseller, a Cummins representative or Cummins Care', 'At a truck wash', 'By the shipper', 'Through the fuel card'], a: 0, e: 'Cummins documents activation through these channels.' }
-    ],
-    sources: [
-      ['Cummins — Mobile apps bring Cummins service anywhere', 'https://www.cummins.com/news/2016/03/17/mobile-apps-bring-cummins-service-anywhere-you-roam'],
-      ['Cummins — Just how serious is that dash light?', 'https://www.cummins.com/news/2015/12/22/just-how-serious-dash-light'],
-      ['Geotab — Cummins Connected Diagnostics in MyGeotab', 'https://www.geotab.com/press-release/cummins-connected-diagnostic-mygeotab'],
-      ['Eaton — IntelliConnect and Cummins integration guide', 'https://eaton.com.cn/content/dam/eaton/products/transmissions/service-tools/intelliconnect/eaton-intelliconnect-cummins-fcap-integration-rrsl0200.pdf']
-    ]
-  },
-
-  /* ----------------------------------------------------------- DETROIT CONNECT */
-  {
-    id: 'detroit-connect', name: 'Detroit Connect', maker: 'Detroit (Daimler Truck North America)', kind: 'Engine-maker diagnostics', icon: 'zap', tone: 'warning', group: 'Telematics & diagnostics',
-    url: 'https://www.demanddetroit.com', checked: 'November 2026',
-    tagline: 'Remote diagnostics for Detroit engines and powertrains: Virtual Technician sends fault details with severity, and experts follow up on serious events.',
-    card: {
-      what: 'Detroit\'s connected-vehicle service for trucks with Detroit engines (common on Freightliner and Western Star). Virtual Technician is its remote diagnostics tool.',
-      use: 'Fault notifications with severity, expert follow-up on severe events with likely cause and parts, and fault history per VIN in the Detroit Connect portal.',
-      who: 'Maintenance coordinators and fleet managers with Detroit-powered trucks; Detroit\'s Customer Support Center.'
-    },
-    sections: {
-      what: [
-        "Many Freightliner and Western Star trucks run Detroit engines and DT12 transmissions. **Detroit Connect Virtual Technician** watches for fault events and tells the fleet what happened and how serious it is. Detroit describes severe events being reviewed by experts at the **Detroit Customer Support Center (CSC)**.",
-        { callout: { kind: 'info', title: 'What Detroit describes', text: 'Fault details reach the fleet by email or the Detroit Connect portal shortly after the event, stating severity and whether the driver can resolve it or it needs service. For severe events, CSC experts follow up with the likely cause, the parts needed and nearby service locations with those parts in stock.' } }
-      ],
-      why: [ "The hardest part of a breakdown is often the wait for diagnosis. When the engine maker sends a likely cause and the shops that have the part, you can book the right shop the first time." ],
-      who: [ { table: { head: ['Role', 'Use'], rows: [
-        ['Maintenance coordinator', 'Reads severity, books service where parts are in stock, tracks history per VIN.'],
-        ['Detroit Customer Support Center', 'Reviews severe events and follows up.'],
-        ['Fleet manager', 'Fault trends across the fleet.']
-      ] } } ],
-      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
-        ['Virtual Technician', 'Detroit\'s remote diagnostics for engine, aftertreatment and DT12 transmission faults; Detroit has extended coverage to some safety systems.'],
-        ['Severity', 'How much the fault affects driving, and whether it needs immediate service.'],
-        ['Customer Support Center (CSC)', 'Detroit experts who analyze severe events.'],
-        ['Detroit Connect portal', 'Fault notifications, history per VIN and trends.'],
-        ['Remote updates', 'Detroit Connect also offers remote software updates for some components.']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: 'What a coordinator gets', items: [
-        { t: 'Fault notification', sub: 'Severity and whether the driver can resolve it.' },
-        { t: 'Expert follow-up', sub: 'Likely cause, parts and stocked locations for severe events.' },
-        { t: 'Portal history', sub: 'Fault events and trends per VIN.' },
-        { t: 'Coverage', sub: 'Engine, aftertreatment, DT12 transmission and some safety systems.' }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'A severe fault event', items: [
-        { icon: 'truck', t: 'Fault event', d: 'Detroit powertrain' }, { icon: 'message', t: 'Notification', d: 'Severity + guidance' },
-        { icon: 'users', t: 'CSC review', d: 'Severe events' }, { icon: 'wrench', t: 'Follow-up', d: 'Cause, parts, locations' }, { icon: 'target', t: 'Coordinator', d: 'Books the right shop' }
-      ] } ],
-      example: [ "**Example fleet (fictional), 22:15.** T-133 (Freightliner, Detroit engine) reports a severe aftertreatment event. The follow-up names a likely failed sensor, the part number, and two dealers on I-30: one has the part in stock. You send the truck to the stocked dealer, 20 miles farther, instead of the closer one that would order the part tomorrow." ],
-      role: [ { ul: ['Use severity to decide stop-now vs schedule, then confirm with the driver.', 'Pick the shop that has the part, not just the closest one.', 'Give the shop the event details; it saves diagnosis time.', 'Watch the portal history for repeats by VIN.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Notification', text: 'Severity and guidance.', owner: 'Detroit → coordinator' },
-        { title: 'Driver check', text: 'Symptoms, lamps, safe to move?', owner: 'Coordinator' },
-        { title: 'Expert follow-up', text: 'For severe events: cause, parts, locations.', owner: 'Detroit CSC' },
-        { title: 'Book the stocked shop', text: 'Confirm the part and ETR.', owner: 'Coordinator' },
-        { title: 'Record', text: 'Event, repair, warranty.', owner: 'Coordinator' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel('Detroit Connect'), title: 'Fault event · T-133', status: 'Severe', tone: 'critical', rows: [
-        ['Engine', 'Detroit · VIN ending 4471'], ['Event', 'Aftertreatment — see event details'], ['Severity', 'Service required soon'], ['Likely cause', 'Sensor fault (per follow-up)'], ['Part in stock', 'Dealer B, I-30 exit 98']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Sending the truck to the closest shop by habit', 'Not passing the event details to the shop', 'Ignoring repeat events on one VIN'] },
-        yes: { title: 'Do this instead', items: ['Choose the shop with the part', 'Forward the diagnosis details', 'Review history per VIN'] }
-      } } ],
-      scenario: [ { exercise: { type: 'choose', prompt: 'A Detroit follow-up says the part is in stock at a dealer 25 miles ahead, not at the dealer 5 miles ahead. The truck can be driven per the severity guidance. Which do you choose?', options: [
-        { text: 'The closer dealer; parts can be ordered.', correct: false, why: 'Ordering adds a day of downtime.' },
-        { text: 'The dealer with the part, after confirming stock and an ETR by phone.', correct: true, why: 'Twenty extra miles beats a day waiting for parts.' },
-        { text: 'Wait for the next PM.', correct: false, why: 'A severe event needs service soon.' }
-      ] } } ],
-      takeaways: [ { ul: ['Virtual Technician sends fault severity for Detroit powertrains.', 'Severe events get expert follow-up with cause, parts and stocked locations.', 'Choose the shop with the part.', 'Use the portal for history per VIN.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: 'Who reviews severe Detroit Connect fault events, according to Detroit?', o: ['Experts at the Detroit Customer Support Center', 'The driver', 'The broker', 'The fuel desk'], a: 0, e: 'Detroit describes CSC experts analyzing severe events and following up.' },
-      { t: 'tf', q: 'For severe events, the follow-up can include nearby service locations with the needed parts in stock.', a: true, e: 'That helps you pick the shop that can fix it today.' },
-      { t: 'mc', q: 'Which trucks commonly use Detroit engines?', o: ['Freightliner and Western Star', 'Only trailers', 'Reefer units', 'Forklifts'], a: 0, e: 'Detroit is part of Daimler Truck North America, maker of Freightliner and Western Star.' }
-    ],
-    sources: [
-      ['Freightliner (AU) — Detroit Connect Virtual Technician', 'https://freightliner.com.au/siteassets/documents/detroit-connect-virtual-technician.pdf'],
-      ['Western Star — Detroit Connect', 'https://westernstar-truck-locator.azurewebsites.net/Engines/DetroitConnect'],
-      ['TT News — Detroit extends fault code coverage to safety systems', 'https://www.ttnews.com/articles/detroit-extends-fault-code-coverage-safety-systems'],
-      ['Fleet Equipment — Virtual Technician adds DT12 diagnostics', 'https://www.fleetequipmentmag.com/detroit-connect-virtual-technician-adds-diagnostics-dt12-transmission-fault-events/']
-    ]
-  },
-
-  /* ----------------------------------------------------------- FLEETNET AMERICA */
-  {
-    id: 'fleetnet', name: 'FleetNet America', maker: 'Cox Automotive', kind: 'Roadside & repair network', icon: 'phone', tone: 'warning', group: 'Roadside, parts & service',
-    url: 'https://fleetnetamerica.com', checked: 'November 2026',
-    tagline: 'A 24/7 call center and network of tens of thousands of towing, mobile repair and shop providers that handles breakdowns for medium and heavy fleets.',
-    card: {
-      what: 'A roadside assistance and repair management service with a 24/7/365 call center and a large network of service providers.',
-      use: 'Getting a tow, mobile repair or shop to a broken-down truck anywhere in the U.S., Canada and Puerto Rico, without finding the vendor yourself.',
-      who: 'Fleets that outsource breakdown handling (fully or after hours); coordinators who hand off or follow events.'
-    },
-    sections: {
-      what: [
-        "FleetNet America, a Cox Automotive company, is a **roadside and repair network**. A fleet reports a breakdown; a FleetNet expert triages it and dispatches a provider from its network of tens of thousands of towing companies, mobile repair trucks and shops (Cox cites 65,000+).",
-        { callout: { kind: 'info', title: 'Outsourcing the search, not the responsibility', text: 'FleetNet finds and manages the vendor. You still decide what the fleet authorizes, keep dispatch informed and own the record.' } }
-      ],
-      why: [ "At 02:00 in an unfamiliar state, finding a reliable heavy-duty vendor yourself can take an hour of calls. A network with a 24/7 call center and vetted providers can do it faster, and many fleets use one after hours." ],
-      who: [ { table: { head: ['Role', 'Use'], rows: [
-        ['Maintenance coordinator', 'Reports events or hands off after hours; approves costs within limits; follows status.'],
-        ['Night / weekend coverage', 'Network handles events with fleet-set rules.'],
-        ['Fleet manager', 'Sets authorization rules and reviews spend.']
-      ] } } ],
-      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
-        ['Service event', 'One breakdown handled by the network.'],
-        ['Triage', 'FleetNet\'s expert works out what is needed: tow, mobile repair or shop.'],
-        ['Provider', 'The tow company, mobile tech or shop that does the work.'],
-        ['Authorization', 'The spending limits and rules your fleet sets.']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: 'As FleetNet and Cox describe it', items: [
-        { t: '24/7/365 call center', sub: 'Report by phone, web, in-cab or mobile app.' },
-        { t: 'Large provider network', sub: 'Towing, mobile repair and shops across the U.S., Canada and Puerto Rico.' },
-        { t: 'Triage and dispatch', sub: 'Experts decide what\'s needed and send it.' },
-        { t: 'Medium and heavy duty focus', sub: 'Built for commercial equipment.' }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'A breakdown through the network', items: [
-        { icon: 'phone', t: 'Report', d: 'Phone, web, in-cab, app' }, { icon: 'users', t: 'Triage', d: 'FleetNet expert' },
-        { icon: 'wrench', t: 'Dispatch', d: 'Provider sent' }, { icon: 'clock', t: 'Updates', d: 'Status to the fleet' }, { icon: 'check-circle', t: 'Close', d: 'Invoice and record' }
-      ] } ],
-      example: [ "**Example fleet (fictional), Saturday 01:40.** T-122's driver calls the after-hours line with a trailer tire blowout on I-70 in Kansas. Your fleet uses FleetNet after hours. You open the event with the unit, exact location, tire position and your authorization limit. By 02:05 a mobile tire provider is confirmed with a 45-minute ETA, and you text dispatch." ],
-      role: [ { ul: ['Give complete facts: unit, exact location, problem, position, loaded or not.', 'Know your authorization limits before you call.', 'Follow the event; don\'t assume it\'s handled.', 'Bring the invoice and details into your maintenance records.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Driver reports', text: 'Safety first, then facts.', owner: 'Driver → coordinator' },
-        { title: 'Open the event', text: 'With FleetNet: unit, location, problem, limits.', owner: 'Coordinator' },
-        { title: 'Provider dispatched', text: 'Get ETA; tell dispatch.', owner: 'FleetNet → coordinator' },
-        { title: 'Follow up', text: 'Arrival, repair, release.', owner: 'Coordinator' },
-        { title: 'Close and record', text: 'Invoice, notes, history.', owner: 'Coordinator' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel('FleetNet America'), title: 'Service event · T-122', status: 'Provider en route', tone: 'warning', rows: [
-        ['Problem', 'Trailer tire blowout, axle 2 right outer'], ['Location', 'I-70 EB, mile 183, KS'], ['Provider', 'Mobile tire service (fictional)'], ['ETA', '02:50'], ['Authorized up to', '$900']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Vague locations like "near Salina"', 'No authorization limit given', 'Forgetting to enter the event in your own records'] },
-        yes: { title: 'Do this instead', items: ['Mile marker, direction, GPS pin', 'State your limit and who approves above it', 'Record every network event like any repair'] }
-      } } ],
-      scenario: [ { exercise: { type: 'multi', prompt: 'You open a FleetNet event for a breakdown. What must you give them?', options: [
-        { text: 'Unit number and whether it is loaded', correct: true, why: 'Decides the equipment and the urgency.' },
-        { text: 'Exact location with direction and mile marker', correct: true, why: 'The provider has to find the truck.' },
-        { text: 'The problem and, for tires, the exact position', correct: true, why: 'So the right provider brings the right part.' },
-        { text: 'Your authorization limit', correct: true, why: 'Prevents delays and surprise invoices.' },
-        { text: 'The driver\'s home address', correct: false, why: 'Not needed for the repair.' }
-      ] } } ],
-      takeaways: [ { ul: ['FleetNet America is a 24/7 roadside and repair network for medium and heavy fleets.', 'It finds the provider; you still own the case.', 'Complete facts and clear limits make it fast.', 'Every network event belongs in your records.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What does FleetNet America mainly provide?', o: ['A 24/7 roadside and repair network', 'Engine fault codes', 'Fuel cards', 'Reefer units'], a: 0, e: 'It triages breakdowns and dispatches providers from its network.' },
-      { t: 'tf', q: 'Once FleetNet takes an event, the coordinator has nothing more to do.', a: false, e: 'You still authorize, follow up, inform dispatch and record it.' },
-      { t: 'mc', q: 'Which company owns FleetNet America?', o: ['Cox Automotive', 'Cummins', 'Trimble', 'Carrier'], a: 0, e: 'FleetNet is a Cox Automotive brand.' }
-    ],
-    sources: [
-      ['FleetNet America — Emergency roadside assistance', 'https://fleetnetamerica.com/?p=32'],
-      ['FleetNet America — Fleet services', 'https://fleetnetamerica.com/?p=31'],
-      ['Cox Automotive — FleetNet America TMC 2024 release', 'https://www.coxautoinc.com/wp-content/uploads/2024/02/FleetNet-America_TMC-2024_Press-Release_FINAL.pdf'],
-      ['Geotab Marketplace — FleetNet America Roadside', 'https://marketplace.geotab.com/solutions/fleetnet-america-roadside/']
-    ]
-  },
-
-  /* ---------------------------------------------------------- LOVE'S TRUCK CARE */
-  {
-    id: 'loves-truck-care', name: "Love's Truck Care & Speedco", brand: "Love's", maker: "Love's Travel Stops", kind: 'Truck stop service network', icon: 'wrench', tone: 'warning', group: 'Roadside, parts & service',
-    url: 'https://www.loves.com', checked: 'November 2026',
-    tagline: "A national network of truck service bays and roadside trucks at Love's locations: tires, lube, light mechanical, roadside help and DOT inspections.",
-    card: {
-      what: "Love's Truck Care and Speedco service locations, many at Love's travel stops, plus roadside service trucks.",
-      use: 'Tire repair and replacement, lube and PM, light mechanical repairs, roadside service and DOT inspections along major highways.',
-      who: 'Coordinators booking on-route service, drivers, and fleets with national accounts.'
-    },
-    sections: {
-      what: [
-        "Love's runs a large network of truck service at its travel stops: **Love's Truck Care** and **Speedco** (which Love's bought from Bridgestone in 2017). In 2024 Love's reported more than 430 locations, 1,300+ service bays and 900 roadside service trucks.",
-        { callout: { kind: 'info', title: 'Why it matters to you', text: 'Because the shops sit on the highways your trucks already use, a tire or a PM can often be done at a fuel stop instead of a detour.' } }
-      ],
-      why: [ "On-route service cuts downtime: the truck is already there for fuel and the driver's break. For tires, lube and light repairs, a highway network is often the fastest option." ],
-      who: [ { table: { head: ['Role', 'Use'], rows: [
-        ['Maintenance coordinator', 'Books tire, PM and light repairs on route; sends roadside trucks.'],
-        ['Driver', 'Stops for service, often during fuel or a break.'],
-        ['Fleet manager', 'National account pricing and rules.']
-      ] } } ],
-      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
-        ['Love\'s Truck Care', 'Service locations offering tire, lube, light mechanical, roadside and DOT inspections.'],
-        ['Speedco', 'Love\'s quick lube and preventive maintenance brand.'],
-        ['Roadside service truck', 'A service truck sent to a disabled unit.'],
-        ['DOT inspection', 'A periodic (annual) inspection, which many locations offer.']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: "Services Love's lists", items: [
-        { t: 'Tires', sub: 'Repair and replacement.' }, { t: 'Lube / PM', sub: 'Oil changes and preventive maintenance.' },
-        { t: 'Light mechanical', sub: 'Smaller repairs.' }, { t: 'Roadside', sub: 'Service trucks to disabled units.' },
-        { t: 'DOT inspections', sub: 'Annual inspections.' }, { t: 'Warranty and recalls', sub: "Love's states it does warranty and recall work for Freightliner and International trucks." }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'Planning service on route', items: [
-        { icon: 'route', t: 'Check the route', d: 'Where the truck will be' }, { icon: 'pin', t: 'Pick a location', d: 'With the right service' },
-        { icon: 'clock', t: 'Book a time', d: 'Fits HOS and the load' }, { icon: 'wrench', t: 'Service', d: 'During fuel or break' }, { icon: 'clipboard', t: 'Record', d: 'Invoice into history' }
-      ] } ],
-      example: [ "**Example fleet (fictional).** T-118 is 2,000 miles past its PM, on a run from Dallas to Atlanta. Instead of pulling it off the road, you book a PM at a Speedco on I-20 where the driver will take the 10-hour break. The PM is done before the driver's next shift." ],
-      role: [ { ul: ['Match the service to the location: not every site does every repair.', 'Time it with the driver\'s fuel stops and breaks.', 'Use roadside trucks for tire calls near a location.', 'Bring the invoice into your maintenance records.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Need identified', text: 'PM due, tire wear, small defect.', owner: 'Coordinator' },
-        { title: 'Route check', text: 'Which location fits the trip and HOS.', owner: 'Coordinator + dispatch' },
-        { title: 'Book', text: 'Service, time, authorization.', owner: 'Coordinator' },
-        { title: 'Service done', text: 'Driver continues.', owner: "Love's" },
-        { title: 'Record', text: 'Work and meter into history.', owner: 'Coordinator' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel("Love's"), title: 'Service booking · T-118', status: 'Scheduled', tone: 'info', rows: [
-        ['Location', 'Speedco, I-20 (fictional exit)'], ['Service', 'PM-A with oil and filters'], ['Time', 'Thu 21:00, during 10-hour break'], ['Meter', '377,950 mi'], ['Authorized', 'PM per national account']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Sending a major engine repair to a light-service site', 'Booking a time that breaks the driver\'s HOS plan', 'Losing the invoice from on-route work'] },
-        yes: { title: 'Do this instead', items: ['Check which services the site offers', 'Plan around fuel and rest stops', 'Record every on-route service'] }
-      } } ],
-      scenario: [ { exercise: { type: 'choose', prompt: 'T-118 is overdue for PM and will stop at a Love\'s with a Speedco tonight for a 10-hour break. What do you do?', options: [
-        { text: 'Pull the truck off its load to go to the home terminal.', correct: false, why: 'Costly and unnecessary when service is on the route.' },
-        { text: 'Book the PM at that Speedco during the break and record it after.', correct: true, why: 'PM done with no extra downtime.' },
-        { text: 'Skip the PM until next month.', correct: false, why: 'Overdue PM raises breakdown risk.' }
-      ] } } ],
-      takeaways: [ { ul: ["Love's Truck Care and Speedco are an on-route service network.", 'Tires, lube/PM, light mechanical, roadside and DOT inspections.', 'Time service with fuel stops and breaks.', 'Check which services each site offers.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: "What is Speedco?", o: ["Love's quick lube and preventive maintenance brand", 'A fuel card', 'A telematics device', 'A reefer maker'], a: 0, e: "Love's bought Speedco from Bridgestone in 2017." },
-      { t: 'tf', q: 'Booking a PM during the driver\'s break at an on-route location can avoid extra downtime.', a: true, e: 'The truck is already stopped; the work fits the break.' },
-      { t: 'mc', q: "Which service does Love's Truck Care NOT list in its standard menu?", o: ['Tire work', 'Lube and PM', 'DOT inspections', 'Freight brokerage'], a: 3, e: 'It is a truck service network, not a freight broker.' }
-    ],
-    sources: [
-      ["Love's — Love's opens five new Speedco locations (2024)", 'https://www.loves.com/news/2024/april/loves-opens-five-new-speedco-locations'],
-      ["Love's — New Love's Truck Care and Speedco locations open (2020)", 'https://www.loves.com/news/2020/october/new-loves-truck-care-and-speedco-locations-open'],
-      ['Business Wire — Love\'s acquires Speedco (2017)', 'https://www.businesswire.com/news/home/20171101006122/en']
-    ]
-  },
-
-  /* ----------------------------------------------------------------- FLEETPRIDE */
-  {
-    id: 'fleetpride', name: 'FleetPride', maker: 'FleetPride', kind: 'Heavy-duty parts distributor', icon: 'layers', tone: 'info', group: 'Roadside, parts & service',
-    url: 'https://www.fleetpride.com', checked: 'November 2026',
-    tagline: 'A national distributor of heavy-duty truck and trailer parts with branches across the U.S., an online catalog and service at some locations.',
-    card: {
-      what: 'A heavy-duty truck and trailer parts distributor with 300+ locations in 46 states, according to FleetPride.',
-      use: 'Sourcing parts for Class 6–8 trucks and trailers: brakes, wheel-end, driveline, filters, lighting and more, in person or online.',
-      who: 'Parts staff, maintenance coordinators, shops and technicians.'
-    },
-    sections: {
-      what: [
-        "FleetPride sells parts for heavy-duty trucks and trailers, mainly Class 6–8. It describes 300+ branches in 46 states and an online catalog of more than a million parts. Some locations also do repairs under the **FleetCare** name.",
-        { callout: { kind: 'info', title: 'Where parts come from', text: 'Your fleet may buy from a dealer (OEM parts), a distributor like FleetPride (aftermarket and OEM-equivalent brands) or both. See the Parts Sourcing lesson for [[OEM]], aftermarket and [[Remanufactured|reman]] trade-offs.' } }
-      ],
-      why: [ "When a part is the only thing holding a truck in the shop, a branch nearby with it on the shelf decides the downtime." ],
-      who: [ { table: { head: ['Role', 'Use'], rows: [
-        ['Parts staff', 'Ordering and stocking.'],
-        ['Maintenance coordinator', 'Finds parts that hold up a repair; checks branch stock.'],
-        ['Technicians / shops', 'Pick up or receive parts.']
-      ] } } ],
-      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
-        ['Branch', 'A local FleetPride store with stock and counter staff.'],
-        ['Part fit', 'Matching a part to the exact unit, by make, model and VIN.'],
-        ['Core', 'A deposit on reman parts, refunded when the old part comes back. See [[Core]].'],
-        ['FleetCare', 'FleetPride\'s repair service at some locations.']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: 'What FleetPride describes', items: [
-        { t: 'Branch network', sub: '300+ locations in 46 states.' }, { t: 'Online catalog', sub: '1M+ truck and trailer parts.' },
-        { t: 'Quick order', sub: 'Online ordering for known part numbers.' }, { t: 'Branch services', sub: 'Some branches list brake, wheel-end, driveline and diagnostics services.' }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'Getting a part to a down truck', items: [
-        { icon: 'file', t: 'Part number', d: 'From the shop' }, { icon: 'search', t: 'Find stock', d: 'Nearest branch' },
-        { icon: 'dollar', t: 'Order', d: 'PO and core' }, { icon: 'truck', t: 'Deliver / pick up', d: 'To the shop' }, { icon: 'clipboard', t: 'Record', d: 'Part, cost, core' }
-      ] } ],
-      example: [ "**Example fleet (fictional).** An independent shop has T-226 apart for brakes but its supplier is out of slack adjusters until Thursday. You search FleetPride branches: one 12 miles away has two in stock. You place the order on the fleet account with a PO and send a runner. The truck is back by 15:00 instead of Thursday." ],
-      role: [ { ul: ['Get the exact part number or the VIN for fit before you search.', 'Check stock at nearby branches when a part holds up a repair.', 'Use a PO and record the cost and any core.', 'Return cores on time for the credit.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Part needed', text: 'Exact number or VIN.', owner: 'Shop → coordinator' },
-        { title: 'Stock check', text: 'Nearest branches or online.', owner: 'Coordinator / parts' },
-        { title: 'Order', text: 'Fleet account, PO, core noted.', owner: 'Coordinator / parts' },
-        { title: 'Delivery', text: 'To the shop.', owner: 'Branch / runner' },
-        { title: 'Record and core', text: 'Cost on the RO, core return tracked.', owner: 'Coordinator' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel('FleetPride'), title: 'Parts order · T-226', status: 'Ready for pickup', tone: 'success', rows: [
-        ['Part', 'Automatic slack adjuster × 2'], ['Branch', '12 mi from the shop (fictional)'], ['PO', 'PO 48877'], ['Core', 'None on this part'], ['Ready', '11:30']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Ordering by description only', 'Accepting "Thursday" without checking other branches', 'Forgetting the core return'] },
-        yes: { title: 'Do this instead', items: ['Use part number or VIN fit', 'Check nearby branch stock', 'Track the core credit'] }
-      } } ],
-      scenario: [ { exercise: { type: 'choose', prompt: 'A shop says a part for T-226 is 3 days out from its usual supplier. What is your first move?', options: [
-        { text: 'Accept 3 days of downtime.', correct: false, why: 'Parts delays are often solvable.' },
-        { text: 'Get the part number and check nearby distributor branches and dealers for stock today.', correct: true, why: 'Another source can turn days into hours.' },
-        { text: 'Tow the truck to another state.', correct: false, why: 'Check stock first; the tow costs more than a courier.' }
-      ] } } ],
-      takeaways: [ { ul: ['FleetPride is a heavy-duty parts distributor with a national branch network.', 'Exact part numbers or VIN fit prevent wrong parts.', 'Check other branches before accepting a parts delay.', 'Record the cost and track cores.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What is FleetPride?', o: ['A heavy-duty truck and trailer parts distributor', 'A telematics platform', 'A fuel card', 'An engine maker'], a: 0, e: 'It sells parts through branches and online.' },
-      { t: 'mc', q: 'What should you have before searching for a part?', o: ['The exact part number or the unit\'s VIN', 'The driver\'s phone number', 'The load number', 'The fuel price'], a: 0, e: 'Part number or VIN fit avoids ordering the wrong part.' },
-      { t: 'tf', q: 'If the usual supplier is out of a part, checking other branches can cut downtime.', a: true, e: 'Another branch or dealer may have it today.' }
-    ],
-    sources: [
-      ['FleetPride — About', 'https://www.fleetpride.com/About'],
-      ['FleetPride — Branch page example (Fargo, ND)', 'https://branches.fleetpride.com/nd/fargo/truckparts-far.html']
-    ]
-  },
-
-  /* ---------------------------------------------------------------- MCLEOD */
-  {
-    id: 'mcleod', name: 'McLeod LoadMaster', maker: 'McLeod Software', kind: 'Trucking software (TMS)', icon: 'route', tone: 'warning', group: 'Dispatch, TMS & payments',
-    url: 'https://www.mcleodsoftware.com', checked: 'November 2026',
-    tagline: 'A transportation management system (TMS) used by many carriers for orders, dispatch, drivers and billing, often linked to the fleet\'s maintenance system.',
-    card: {
-      what: 'LoadMaster Enterprise, McLeod\'s TMS for trucking companies (PowerBroker is its product for brokers).',
-      use: 'Orders, dispatch, driver and equipment assignment, and billing. Linked maintenance systems can mark units unavailable or flag PM due.',
-      who: 'Dispatchers and planners mainly; maintenance coordinators see unit availability and status.'
-    },
-    sections: {
-      what: [
-        "LoadMaster is a **[[TMS]]**: the system where loads are entered, planned and dispatched. Like ProTransport, it is dispatch's tool, not maintenance's. You meet it because a down truck is a unit dispatch can't plan.",
-        { callout: { kind: 'info', title: 'Linked to maintenance', text: 'Maintenance software vendors describe LoadMaster integrations where PM due notices pass to dispatch, and a unit with an open repair order is flagged unavailable for dispatch.' } }
-      ],
-      why: [ "When maintenance and dispatch use different systems that don't talk, dispatch books loads on trucks that are in the shop. Linking them, or at least updating status promptly, prevents that." ],
-      who: [ { table: { head: ['Role', 'Use'], rows: [
-        ['Dispatch / planners', 'Plan and dispatch loads.'],
-        ['Maintenance coordinator', 'Updates unit status and ETR; sees upcoming loads before booking PM.'],
-        ['Billing', 'Invoices loads.']
-      ] } } ],
-      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
-        ['Order / load', 'A customer shipment to be moved.'],
-        ['Unit availability', 'Whether a tractor or trailer can be dispatched.'],
-        ['PM due notice', 'A flag from maintenance that service is due.'],
-        ['ETR', 'When a down unit will be ready again. See [[ETR]].']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: 'Where maintenance meets the TMS', items: [
-        { t: 'Unit status', sub: 'Available, in shop, out of service.' }, { t: 'PM due flags', sub: 'From a linked maintenance system.' },
-        { t: 'Load plan', sub: 'Which load each unit is on, and when it is free.' }, { t: 'Integrations', sub: 'Telematics and maintenance systems can connect.' }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'A repair seen from dispatch', items: [
-        { icon: 'wrench', t: 'RO opened', d: 'In maintenance system' }, { icon: 'alert', t: 'Unit flagged', d: 'Unavailable in the TMS' },
-        { icon: 'route', t: 'Dispatch replans', d: 'Other unit or relay' }, { icon: 'clock', t: 'ETR updates', d: 'From the coordinator' }, { icon: 'check-circle', t: 'Unit released', d: 'Available again' }
-      ] } ],
-      example: [ "**Example fleet (fictional).** T-305 goes into the shop at 09:00 with an air leak. Because the open repair order flags it unavailable in LoadMaster, the planner doesn't assign it tomorrow's 05:00 load. You post an ETR of 15:00; at 14:40 you release it and the planner gives it the load." ],
-      role: [ { ul: ['Keep unit status and ETR current; dispatch plans from them.', 'Check the load plan before booking a PM.', 'Release units promptly when repairs finish.', 'Know whether your systems are linked or need manual updates.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Unit goes down', text: 'RO opened; status set.', owner: 'Coordinator' },
-        { title: 'Dispatch sees it', text: 'Unit unavailable; loads replanned.', owner: 'Dispatch' },
-        { title: 'ETR shared', text: 'And updated as it changes.', owner: 'Coordinator' },
-        { title: 'Released', text: 'Status back to available.', owner: 'Coordinator' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel('McLeod'), title: 'Unit status · T-305', status: 'Unavailable — in shop', tone: 'warning', rows: [
-        ['Reason', 'Open repair order: air leak'], ['ETR', 'Today 15:00'], ['Next planned load', 'Tomorrow 05:00 (on hold)'], ['PM due', 'In 1,100 mi']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Leaving a repaired unit marked "in shop"', 'Booking PM over a planned load', 'Assuming systems sync when they don\'t'] },
-        yes: { title: 'Do this instead', items: ['Release units the moment they\'re ready', 'Check the load plan first', 'Know your integration and update manually if needed'] }
-      } } ],
-      scenario: [ { exercise: { type: 'choose', prompt: 'T-305\'s repair finished at 14:40, but LoadMaster still shows it "in shop". What is the risk?', options: [
-        { text: 'None; dispatch will figure it out.', correct: false, why: 'Dispatch plans from status. A ready truck sits idle.' },
-        { text: 'A ready truck sits unused while dispatch looks for another; update the status now.', correct: true, why: 'Lost capacity until someone fixes the status.' },
-        { text: 'The truck breaks again.', correct: false, why: 'The risk is lost use, not a new failure.' }
-      ] } } ],
-      takeaways: [ { ul: ['LoadMaster is a TMS: dispatch\'s system.', 'Maintenance status and ETR drive dispatch planning.', 'Linked systems can flag units unavailable automatically.', 'Release units promptly.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What kind of software is McLeod LoadMaster?', o: ['A transportation management system (TMS)', 'An engine diagnostic tool', 'A reefer controller', 'A parts catalog'], a: 0, e: 'It manages loads, dispatch and billing.' },
-      { t: 'tf', q: 'A unit with an open repair order can be flagged unavailable for dispatch when maintenance and LoadMaster are linked.', a: true, e: 'Maintenance vendors describe this integration.' },
-      { t: 'mc', q: 'What is the coordinator\'s main job in the TMS?', o: ['Keep unit status and ETR accurate', 'Book loads', 'Price freight', 'Pay drivers'], a: 0, e: 'Dispatch plans from your status and ETR.' }
-    ],
-    sources: [
-      ['McLeod Software', 'https://www.mcleodsoftware.com'],
-      ['Cetaris — McLeod integration', 'https://cetaris.com/integrations/mcleod-software'],
-      ['FleetOwner — Dossier integrated with LoadMaster Enterprise', 'https://www.fleetowner.com/technology/article/21684901/dossier-integrated-with-loadmaster-enterprise'],
-      ['Samsara Help — Integrate with McLeod LoadMaster', 'https://kb.samsara.com/hc/articles/360017463232']
-    ]
-  },
-
-  /* ---------------------------------------------------------------- COMDATA */
-  {
-    id: 'comdata', name: 'Comdata', maker: 'Comdata', kind: 'Fleet fuel cards & payments', icon: 'dollar', tone: 'warning', group: 'Dispatch, TMS & payments',
-    url: 'https://www.comdata.com', checked: 'November 2026',
-    tagline: 'Fleet fuel cards and on-the-road payments, including Comchek Express Codes and one-time virtual cards that can pay for repairs, towing and roadside help.',
-    card: {
-      what: 'A fleet payments company: diesel fuel cards and Comchek products for moving funds on the road.',
-      use: 'Fuel purchases, and paying roadside vendors, tows and repair shops when a driver is far from home.',
-      who: 'Fleet finance, dispatch and maintenance coordinators who pay roadside vendors; drivers.'
-    },
-    sections: {
-      what: [
-        "Comdata makes **fleet fuel cards** and **Comchek** payment products. For maintenance, the important part is paying a roadside vendor who won't wait for an invoice: Comdata describes moving funds electronically with **Express Codes**, and a **Virtual Comchek**, a one-time digital card for repairs and roadside help.",
-        { callout: { kind: 'warning', title: 'Treat payment codes like cash', text: 'An Express Code or virtual card number is money. Send it only to the verified vendor, for the approved amount, and record it against the case and PO.' } }
-      ],
-      why: [ "A tow company at 03:00 often wants payment before it hooks up. A fast, controlled way to pay keeps the repair moving without a driver's personal card." ],
-      who: [ { table: { head: ['Role', 'Use'], rows: [
-        ['Maintenance coordinator', 'Pays approved roadside vendors and records the payment.'],
-        ['Finance', 'Sets controls and reconciles payments.'],
-        ['Driver', 'Fuel purchases with the fuel card.']
-      ] } } ],
-      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
-        ['Fuel card', 'A card for diesel and approved purchases, with fleet controls.'],
-        ['Comchek / Express Code', 'A code that moves funds electronically to a registered payee, such as a repair shop.'],
-        ['Virtual Comchek', 'A one-time digital card that Comdata says merchants can accept for repairs and roadside help.'],
-        ['Approval amount', 'The amount you authorized; pay no more.']
-      ] } } ],
-      features: [ { ig: 'versus', icon: 'grid', title: 'What Comdata describes', items: [
-        { t: 'Fleet fuel card', sub: 'Diesel at a large network of locations.' },
-        { t: 'Express Codes', sub: 'Electronic funds to registered payees, including repair shops.' },
-        { t: 'Virtual Comchek', sub: 'One-time card for repairs and roadside.' },
-        { t: 'Controls', sub: 'Fleet-set limits and reporting.' }
-      ] } ],
-      how: [ { ig: 'process', icon: 'route', title: 'Paying a roadside vendor', items: [
-        { icon: 'file', t: 'Approved quote', d: 'Amount and PO' }, { icon: 'shield', t: 'Verify vendor', d: 'Name, phone, job' },
-        { icon: 'dollar', t: 'Issue payment', d: 'Code or virtual card' }, { icon: 'clipboard', t: 'Record', d: 'On the case' }, { icon: 'check-circle', t: 'Reconcile', d: 'Against the invoice' }
-      ] } ],
-      example: [ "**Example fleet (fictional), 03:10.** A tow company quotes $1,450 to tow T-133 and asks for payment before hooking up. You confirm the company name and call-back number from the dispatch record, get your manager's approval (over your limit), issue a one-time payment for exactly $1,450, and note the reference on the case and PO." ],
-      role: [ { ul: ['Pay only after the amount is approved.', 'Verify the vendor through a number you found, not one given in a text.', 'Pay the exact approved amount.', 'Record every payment against the case and PO.'] } ],
-      workflow: [ { timeline: [
-        { title: 'Quote', text: 'Amount and scope from the vendor.', owner: 'Vendor → coordinator' },
-        { title: 'Approve', text: 'Within limit, or escalate.', owner: 'Coordinator / manager' },
-        { title: 'Verify', text: 'Vendor identity and job.', owner: 'Coordinator' },
-        { title: 'Pay', text: 'Code or virtual card for the approved amount.', owner: 'Coordinator' },
-        { title: 'Record and reconcile', text: 'Reference on the case; match the invoice.', owner: 'Coordinator / finance' }
-      ] } ],
-      visual: [ { mock: { label: swMockLabel('Comdata'), title: 'Roadside payment · T-133', status: 'Issued', tone: 'info', rows: [
-        ['Payee', 'Tow company (verified by phone)'], ['Amount', '$1,450.00'], ['Approved by', 'Fleet manager, 03:05'], ['Case / PO', 'Case 2291 · PO 48890'], ['Type', 'One-time payment']
-      ] } } ],
-      mistakes: [ { compare: {
-        no: { title: 'Common mistakes', items: ['Paying before approval', 'Sending a code to an unverified number', 'Not recording the payment'] },
-        yes: { title: 'Do this instead', items: ['Approve first', 'Verify through a known number', 'Record on the case and PO'] }
-      } } ],
-      scenario: [ { exercise: { type: 'choose', prompt: 'You get a text from an unknown number: "Tow driver here, send the payment code to this number to release T-133." What do you do?', options: [
-        { text: 'Send the code; the truck is waiting.', correct: false, why: 'This is how payment fraud works.' },
-        { text: 'Call the tow company on the number from your dispatch record to verify, then pay only the approved amount.', correct: true, why: 'Verify through a channel you trust before sending money.' },
-        { text: 'Ask the driver to pay with a personal card.', correct: false, why: 'Bypasses company controls and records.' }
-      ] } } ],
-      takeaways: [ { ul: ['Comdata provides fuel cards and on-road payments.', 'Express Codes and virtual cards can pay roadside vendors.', 'Approve, verify, pay exactly, record.', 'Payment codes are money: guard them.'] } ]
-    },
-    quiz: [
-      { t: 'mc', q: 'What can a Comdata Express Code be used for, according to Comdata?', o: ['Moving funds electronically to registered payees such as repair shops', 'Reading engine faults', 'Booking loads', 'Setting reefer temperature'], a: 0, e: 'It transfers funds to registered cardholders, including repair shops.' },
-      { t: 'tf', q: 'You should verify a vendor through a number you already trust before sending a payment code.', a: true, e: 'Never send money to an unverified contact.' },
-      { t: 'mc', q: 'How much should you pay a roadside vendor?', o: ['Exactly the approved amount', 'Whatever they ask', 'Double to be safe', 'Nothing until next month'], a: 0, e: 'Pay the approved amount and record it.' }
-    ],
-    sources: [
-      ['Comdata — Comchek', 'https://www.comdata.com/products-services/comchek'],
-      ['Comdata — Fleet payment solutions', 'https://comdata.com/products-services/fleet-payments'],
-      ['Business Wire — Comdata launches Virtual Comchek', 'https://www.businesswire.com/news/home/20200910005224/en/Comdata-Launches-Virtual-Comchek-a-One-Time-Use-Digital-Payment-Card-for-Fleets-and-Drivers']
-    ]
-  }
-);
-
-/* Register the added platforms in the lookup built by 03l-software.js. */
-SOFTWARE.forEach((s) => SOFTWARE_MAP.set(s.id, s));
 
 /* ---------------------------------------------------------------------------
    2. PRACTICE DATA — Glossary
@@ -3940,7 +2144,9 @@ function infographicHTML(b) {
 
     default: return '';
   }
-  return `<figure class="ig ${cls}"><figcaption class="ig__head"><span class="ig__tag">${icon(b.icon || 'bar', 'icon--sm')} Infographic</span><span class="ig__title">${esc(b.title)}</span></figcaption>${inner}${b.note ? `<p class="ig__note">${icon('info', 'icon--sm')}<span>${inline(b.note)}</span></p>` : ''}</figure>`;
+  /* Charts built on made-up numbers say so; real-data charts set real: true. */
+  const exTag = b.real ? '' : ['bars', 'donut', 'waterfall', 'heatmap', 'stackcompare'].includes(b.ig) ? 'Example data · fictional fleet' : b.ig === 'ratings' ? 'General tendencies, not measurements' : '';
+  return `<figure class="ig ${cls}"><figcaption class="ig__head"><span class="ig__tag">${icon(b.icon || 'bar', 'icon--sm')} Infographic</span><span class="ig__title">${esc(b.title)}</span>${exTag ? `<span class="ig__ex">${exTag}</span>` : ''}</figcaption>${inner}${b.note ? `<p class="ig__note">${icon('info', 'icon--sm')}<span>${inline(b.note)}</span></p>` : ''}</figure>`;
 }
 
 /* ---------- Widget: gauge cluster ---------- */
@@ -4405,6 +2611,14 @@ function mergeProgress(a, b) {
     // The Google photo link is filled in by whichever device saw it last.
     if (k === 'avatar' && out.avatar && !out.avatar.google) { const g = (a.avatar || {}).google || (b.avatar || {}).google; if (g) out.avatar.google = g; }
   });
+  // Before/after checks: keep the earliest "before" and the latest "after" per track.
+  out.prepost = {};
+  new Set([...Object.keys(a.prepost || {}), ...Object.keys(b.prepost || {})]).forEach((tid) => {
+    const x = (a.prepost || {})[tid] || {}, y = (b.prepost || {})[tid] || {}; const r = {};
+    const pre = [x.pre, y.pre].filter(Boolean).sort((p, q) => p.at - q.at)[0]; if (pre) r.pre = pre;
+    const post = [x.post, y.post].filter(Boolean).sort((p, q) => q.at - p.at)[0]; if (post) r.post = post;
+    out.prepost[tid] = r;
+  });
   out.theme = a.theme;
   out.motion = a.motion;
   return out;
@@ -4450,6 +2664,7 @@ async function cloudPull() {
     router();
   }
   await cloudPush();
+  attFlush();
 }
 
 /* Where emailed links (confirm sign-up, reset password, confirm new email) return to. */
@@ -4577,6 +2792,15 @@ function swPhotoHTML(id, caption) {
   return `<figure class="lib-figure sw-photo">${libPhotoImg(x, 960, 'lib-photo')}<figcaption><span class="sw-photo__cap">${esc(caption || x.name)}</span> ${libCredit(x)}</figcaption></figure>`;
 }
 
+/* "See the real thing": the vendor's own public pages show its real screens
+   and documents. We link to them rather than copying them. */
+function swRealHTML(s) {
+  const links = [...(s.real || []), [`${s.maker} official website`, s.url]];
+  return `<aside class="sw-real"><div class="sw-real__h">${icon('external', 'icon--sm')}<strong>See the real thing</strong></div>
+    <p>The mockup above is simplified on purpose. ${esc(s.brand || s.name)}'s real screens and documents are shown on its own public pages:</p>
+    <ul>${links.map(([t, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(t)}<span class="sr-only"> (opens in a new tab)</span></a></li>`).join('')}</ul></aside>`;
+}
+
 /* ---------- Hub ---------- */
 function viewSoftware(id) {
   if (id) return viewSoftwarePage(id);
@@ -4641,6 +2865,7 @@ function viewSoftwarePage(id) {
   const x = { key: swCheckKey(s), l: { check: s.quiz } };
   const body = (k) => {
     if (k === 'check') return lessonCheckHTML(x);
+    if (k === 'visual') return renderBlocks(s.sections[k] || []) + swRealHTML(s);
     return renderBlocks(s.sections[k] || []);
   };
   const toc = SW_SECTIONS.map(([k, t, ic], n) => `<li><button type="button" class="sw-toc__link" data-sec="${k}"><span class="sw-toc__n">${n + 1}</span><span>${esc(t)}</span></button></li>`).join('');
@@ -4748,7 +2973,7 @@ const LEARN_TOGETHER = [
   { t: 'Samsara + Telematics + Fleet Monitoring', d: 'Fault codes, location and DVIRs, then how fleets track them across every unit.', items: [{ sw: 'samsara' }, { m: 'advanced.m7', later: true }, { m: 'expert.m9', later: true }] },
   { t: 'Thermo King + Refrigeration + Reefer Maintenance', d: 'Know the reefer trailer first, then the unit, its alarms and its maintenance.', items: [{ m: 'beginner.m3' }, { sw: 'thermo-king' }, { page: ['Reefer unit in the Visual Library', '#/library/reeferunit', 'image'] }] },
   { t: 'Engine-maker alerts + Fault codes', d: 'Read a fault list first, then see how Cummins and Detroit add priority and next steps.', items: [{ m: 'advanced.m2', later: true }, { sw: 'cummins-connected' }, { sw: 'detroit-connect' }] },
-  { t: 'Roadside networks + Breakdowns', d: 'Run the first ten minutes of a breakdown, then hand it to a network, a truck stop shop or a parts branch.', items: [{ m: 'beginner.m5' }, { sw: 'fleetnet' }, { sw: 'loves-truck-care' }, { sw: 'fleetpride' }] },
+  { t: 'Roadside networks + Breakdowns', d: 'Run the first ten minutes of a breakdown, then hand it to a network, a truck stop shop or a parts branch.', items: [{ m: 'beginner.m5' }, { sw: 'fleetnet' }, { sw: 'loves-truck-care' }, { sw: 'ta-truck-service' }, { sw: 'fleetpride' }] },
   { t: 'Dispatch + Loads + Transportation Operations', d: 'How loads, drivers and dispatch work, and how a breakdown affects them.', items: [{ sw: 'pro-transport' }, { m: 'operations.m1' }, { m: 'advanced.m6', later: true }] }
 ];
 const NOT_YET = [
@@ -4868,7 +3093,7 @@ function moduleGuideHTML(t, m) {
    PRIVACY — what the academy stores, where, and how to delete it; account
    deletion for signed-in users; contact.
    =========================================================================== */
-const PRIVACY_UPDATED = 'October 2026';
+const PRIVACY_UPDATED = 'November 2026';
 const CONTACT_EMAIL = 'stanbdev@gmail.com';
 
 /* "Report a problem": an email with the page name and link filled in. */
@@ -4887,15 +3112,16 @@ function viewPrivacy() {
 
     <section class="pv-sec"><h2>Without an account</h2>
       ${row('grid', 'Stored in your browser only', 'Completed lessons, quiz and exam scores, bookmarks, achievements, the name and profile details you type in (role, company, city), your daily goal, the days you studied, and your theme and animation preferences. It is kept in your browser\'s local storage and never leaves your device.')}
-      ${row('rotate', 'How to delete it', 'Use <strong>Reset progress</strong> on your <a href="#/profile">Profile</a> page, or clear this site\'s data in your browser settings.')}
+      ${row('rotate', 'How to delete it', 'Use <strong>Reset progress</strong> on your <a href="#/profile">Profile</a> page, or clear this site\'s data in your browser settings (this also clears answers waiting to upload).')}
     </section>
 
     <section class="pv-sec"><h2>If you create an account</h2>
       ${row('users', 'Your account', 'You can sign in with Google or with your email and a password. With Google, Google shares your name, email address, profile picture link and a Google account ID with our sign-in provider, Supabase. With email, Supabase stores your email address and a securely hashed password (we never see the password itself) and sends the confirmation and password-reset emails. We use these details only to identify your account and show your name.')}
       ${row('image', 'Profile picture (optional)', 'If you upload a picture, it is resized to 256 × 256 pixels in your browser and stored with Supabase. Anyone who has the picture\'s link can view it. Removing the picture or deleting your account deletes it.')}
+      ${row('list-check', 'Your answers to questions', 'Each time you answer a quiz or check question, the app notes which question, the option you picked, whether it was right, how long it took and where you answered it. Signed out, the newest 500 answers stay in your browser only and are never sent anywhere. Signed in, they upload to your account in the background so your answers can improve the questions. Each account can add and read only its own answers; nobody can change them.')}
       ${row('activity', 'Your synced progress', 'The same progress and profile details listed above (except your theme and animation preferences) are stored with your account so they can follow you to other devices. Each account can only read and change its own progress.')}
       ${row('pin', 'Where it is kept', 'In a Supabase database in the European Union (Ireland, region eu-west-1).')}
-      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, profile picture, academy progress, quiz scores and certificates, and can download them as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
+      ${row('users', 'Trainer groups (optional)', 'If you join a group with a code, that group\'s trainer can see your name, profile picture, academy progress, quiz scores and certificates, and how you answered each question (shown as question analysis for the group, to find questions that need fixing), and can download progress as a spreadsheet (CSV) for training records. Modules a trainer assigns, with their due dates, are stored with the group. You can leave a group at any time; trainers can also remove members.')}
       ${row('award', 'Certificate verification (optional)', 'If you ask for a verification code, your name, the track, your final score and the date are stored with that code. Anyone who has the code can check those details on the certificate check page.')}
       ${row('lock', 'Sign-in session', 'While you are signed in, your browser keeps a sign-in token in local storage. Signing out removes it.')}
       ${row('x-circle', 'How to delete it', CLOUD.user ? 'Use <button type="button" class="link-btn" data-delete-account>Delete my account</button> on this page or on your <a href="#/profile">Profile</a> page. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently; the copy in this browser stays until you reset it.' : 'Sign in, then use <strong>Delete account</strong> on your Profile page or here. Your account, its synced progress, profile picture, group memberships and certificates are deleted permanently.')}
@@ -4956,6 +3182,7 @@ function qBank() {
   Q_BANK = new Map();
   LESSONS.forEach((x) => (x.l.check || []).forEach((q, i) => Q_BANK.set(q, { id: `${x.key}#${i}`, q, label: x.l.title, sub: `${x.t.level} · Module ${x.m.id.slice(1)}: ${x.m.title}`, href: lessonHref(x), t: x.t, m: x.m })));
   SOFTWARE.forEach((s) => s.quiz.forEach((q, i) => Q_BANK.set(q, { id: `sw.${s.id}#${i}`, q, label: s.name, sub: 'Software & Platforms', href: swHref(s) })));
+  Object.entries(PREPOST).forEach(([tid, qs]) => qs.forEach((q, i) => Q_BANK.set(q, { id: `pp.${tid}#${i}`, q, label: `Before/after check · ${TRACK_BY_ID[tid].level}`, sub: 'Before and after check', href: `#/pretest/${tid}` })));
   return Q_BANK;
 }
 let Q_BY_ID = null;
@@ -4969,7 +3196,7 @@ const dayStart = (t) => { const d = new Date(t); d.setHours(0, 0, 0, 0); return 
 /* Called by gradeQuestion() for every answered question. Entries saved
    before spaced review existed have no box/due: they count as due now. */
 function noteAnswer(q, ok) {
-  const b = qBank().get(q); if (!b) return;
+  const b = qBank().get(q); if (!b || b.id.startsWith('pp.')) return;
   const cur = state.missed[b.id];
   if (ok) {
     if (!cur || (cur.due || 0) > Date.now()) return; // not on the list, or not due yet
@@ -5629,7 +3856,7 @@ function trainerGroupHTML(g, members, prog, me, assigns) {
     </div>
     ${rows.length ? `<div class="table-wrap"><table class="table tr-table"><thead><tr><th scope="col">Learner</th><th scope="col">Lessons</th><th scope="col">Tracks</th>${mods.length ? '<th scope="col">Assigned</th>' : ''}<th scope="col">Quiz avg</th><th scope="col">To review</th><th scope="col">Last active</th><th scope="col"><span class="sr-only">Remove</span></th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`
       : `<p class="small muted tr-empty">No members yet. Share the join code: learners open <strong>Trainer groups</strong>, sign in and enter it.</p>`}
-    <footer class="tr-group__foot">${rows.length ? `<button type="button" class="btn btn--sm btn--ghost" data-csv="${g.id}">${icon('download', 'icon--sm')} Download CSV</button>` : ''}<button type="button" class="btn btn--sm btn--ghost" data-delete-group="${g.id}">${icon('x-circle', 'icon--sm')} Delete group</button></footer>
+    <footer class="tr-group__foot">${rows.length ? `<a class="btn btn--sm btn--ghost" href="#/trainer/items/${g.id}">${icon('bar', 'icon--sm')} Question analysis</a><button type="button" class="btn btn--sm btn--ghost" data-csv="${g.id}">${icon('download', 'icon--sm')} Download CSV</button>` : ''}<button type="button" class="btn btn--sm btn--ghost" data-delete-group="${g.id}">${icon('x-circle', 'icon--sm')} Delete group</button></footer>
   </article>`;
 }
 
@@ -5742,7 +3969,8 @@ function viewVerify(code) {
 /* ===========================================================================
    LESSON CONTENT ON DEMAND
    script.js carries only the track outline (ids, titles, minutes); each
-   track's lesson text lives in content/<track>.json (CONTENT_FILES, stamped
+   track's lesson text lives in content/<track>.json, and platform page
+   sections in content/software.json (CONTENT_FILES, stamped
    by tools/build.mjs). The router loads what a page needs before rendering
    it (contentFor); the service worker precaches every file for offline use.
    =========================================================================== */
@@ -5752,6 +3980,7 @@ const CONTENT_PENDING = new Map();
 /* Merges a track's lesson text into its outline (same objects, so LESSONS,
    LESSON_MAP and every reference see it). */
 function applyContent(tid, data) {
+  if (tid === 'software') { SOFTWARE.forEach((p) => Object.assign(p, data[p.id] || {})); CONTENT_LOADED.add(tid); return; }
   const t = TRACK_BY_ID[tid]; if (!t) return;
   t.modules.forEach((m) => m.lessons.forEach((l) => Object.assign(l, data[`${m.id}.${l.id}`] || {})));
   CONTENT_LOADED.add(tid);
@@ -5776,6 +4005,7 @@ function loadContent(ids = TRACKS.map((t) => t.id)) {
 function contentFor(path) {
   const m = path.match(/^\/(?:lesson|quiz|cheatsheet)\/(\w+)/);
   if (m) return [m[1]];
+  if (/^\/(?:academy\/)?software\/[\w-]+/.test(path)) return ['software'];
   if (/^\/(?:review|exercises)$/.test(path)) return 'all';
   return null;
 }
@@ -6393,6 +4623,342 @@ function exportProgress() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
   toast({ kind: 'success', title: 'Progress exported', icon: 'download', timeout: 2500 });
 }
+/* ===========================================================================
+   SAMPLE DOCUMENTS — realistic invoices, work orders and service tickets
+   rendered as paper-style documents with numbered hotspots.
+   Block: { doc: { kind, vendor, vendorSub, no, meta, blocks, table, totals,
+   foot, notes } }. Every document carries a fixed "training sample" banner:
+   vendors, fleets, people and numbers are fictional, and layouts are generic
+   to the industry rather than copied from any real company's forms.
+   =========================================================================== */
+function docPin(n) { return n ? `<span class="sdoc__pin" aria-label="Note ${n}">${n}</span>` : ''; }
+function docCell(v) {
+  const s = String(v == null ? '' : v);
+  const num = /^[-−]?\$?[\d,.]+( ?(h|qt|gal|psi|mi|ft-lb|\/32)?)$/.test(s.trim()) || /^[-−]\$/.test(s.trim());
+  return `<td${num ? ' class="num"' : ''}>${inline(s)}</td>`;
+}
+function docHTML(d) {
+  const kv = (rows, cls) => `<dl class="${cls}">${rows.map(([k, v, n]) => `<div><dt>${docPin(n)}${esc(k)}</dt><dd>${inline(String(v))}</dd></div>`).join('')}</dl>`;
+  const t = d.table;
+  return `<figure class="sdoc">
+    <div class="sdoc__banner">${icon('info', 'icon--sm')}<span>Training sample · fictional fleet and vendor · generic layout</span></div>
+    <div class="sdoc__paper">
+      <div class="sdoc__head"><div><strong class="sdoc__vendor">${esc(d.vendor)}</strong>${d.vendorSub ? `<span class="sdoc__sub">${esc(d.vendorSub)}</span>` : ''}</div>
+        <div class="sdoc__kind"><span>${esc(d.kind)}</span>${d.no ? `<strong>${esc(d.no)}</strong>` : ''}</div></div>
+      ${d.meta ? kv(d.meta, 'sdoc__meta') : ''}
+      ${(d.blocks || []).map((b) => `<div class="sdoc__block"><div class="sdoc__label">${docPin(b.n)}${esc(b.t)}</div><p>${inline(b.text)}</p></div>`).join('')}
+      ${t ? `<div class="table-wrap sdoc__table"><table><thead><tr>${t.head.map((h) => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${t.rows.map((r) => `<tr>${r.cells.map((c, i) => (i === 0 ? `<td>${docPin(r.n)}${inline(String(c))}</td>` : docCell(c))).join('')}</tr>`).join('')}</tbody></table></div>` : ''}
+      ${d.totals ? kv(d.totals, 'sdoc__totals') : ''}
+      ${d.foot ? kv(d.foot, 'sdoc__foot') : ''}
+    </div>
+    ${d.notes ? `<figcaption class="sdoc__notes"><ol>${d.notes.map((x) => `<li><span class="sdoc__pin">${x.n}</span><div><strong>${esc(x.t)}</strong><p>${inline(x.d)}</p></div></li>`).join('')}</ol></figcaption>` : ''}
+  </figure>`;
+}
+
+/* ===========================================================================
+   MECHANISM DIAGRAMS — inline SVG, theme-aware (CSS variables), readable in
+   black and white (line styles, not colours, tell circuits apart).
+   Block: { diagram: 'airbrake', caption }.
+   =========================================================================== */
+const DIAGRAMS = {
+  airbrake: () => {
+    const box = (x, y, w, h, t, s, cls = '') => `<g class="dg-box ${cls}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/><text x="${x + w / 2}" y="${y + (s ? h / 2 - 4 : h / 2 + 5)}" text-anchor="middle" class="dg-t">${t}</text>${s ? `<text x="${x + w / 2}" y="${y + h / 2 + 13}" text-anchor="middle" class="dg-s">${s}</text>` : ''}</g>`;
+    const line = (d, cls = '') => `<path d="${d}" class="dg-l ${cls}" marker-end="url(#dg-arrow)"/>`;
+    const lab = (x, y, t, a = 'middle') => `<text x="${x}" y="${y}" text-anchor="${a}" class="dg-lab">${t}</text>`;
+    return `<svg viewBox="0 0 640 590" class="dg" role="img" aria-labelledby="dg-ab-t dg-ab-d">
+      <title id="dg-ab-t">How a tractor-trailer air brake system works</title>
+      <desc id="dg-ab-d">The engine-driven compressor, controlled by the governor, pumps air through the air dryer into the supply tank. One-way check valves feed the primary and secondary tanks. The foot valve sends air to the drive-axle brakes on the primary circuit and the steer-axle brakes on the secondary circuit. The yellow parking valve holds the spring brakes released with air. The red trailer supply valve and the tractor protection valve feed the trailer through the glad hands: red for supply, blue for service. On the trailer, a relay valve and tank apply the trailer brakes.</desc>
+      <defs><marker id="dg-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="dg-head"/></marker></defs>
+      ${box(20, 20, 180, 56, 'Compressor', 'engine-driven')}
+      ${box(230, 20, 180, 56, 'Air dryer', 'removes water and oil')}
+      ${box(440, 20, 180, 56, 'Supply tank', 'wet tank')}
+      ${line('M200 48 H228')}${line('M410 48 H438')}
+      ${box(20, 120, 180, 56, 'Governor', 'off ~125 · on ~100 psi')}
+      <path d="M110 120 V76" class="dg-l dg-ctl"/>${lab(118, 103, 'controls', 'start')}
+      ${box(230, 120, 180, 56, 'Primary tank', '')}
+      ${box(440, 120, 180, 56, 'Secondary tank', '')}
+      ${line('M530 76 V118')}${line('M470 76 V96 H320 V118')}${lab(522, 108, 'check valves', 'end')}
+      ${box(230, 220, 180, 56, 'Foot valve', 'driver\'s brake pedal')}
+      ${line('M320 176 V218')}${line('M470 176 V198 H370 V218')}
+      ${box(440, 220, 180, 56, 'Trailer supply valve', 'red knob on dash')}
+      ${line('M580 176 V218')}
+      ${box(20, 320, 180, 56, 'Drive-axle brakes', 'primary · via relay valve')}
+      ${box(230, 320, 180, 56, 'Steer-axle brakes', 'secondary circuit')}
+      ${line('M270 276 V300 H110 V318', 'dg-pri')}${line('M320 276 V318', 'dg-sec')}
+      ${box(440, 320, 180, 56, 'Tractor protection valve', 'protects tractor air')}
+      ${line('M530 276 V318')}
+      <path d="M410 248 H425 V348 H438" class="dg-l dg-ctl" marker-end="url(#dg-arrow)"/>${lab(430, 300, 'service', 'start')}
+      ${box(20, 420, 180, 56, 'Parking valve', 'yellow knob · air from tanks')}
+      ${box(230, 420, 180, 56, 'Spring brakes', 'apply at ~20–45 psi')}
+      ${line('M200 448 H228')}
+      ${box(440, 420, 180, 56, 'Glad hands', 'red supply · blue service')}
+      ${line('M530 376 V418')}
+      ${box(440, 515, 180, 56, 'Trailer brakes', 'relay valve + tank')}
+      ${line('M530 476 V513')}
+      <g class="dg-key"><path d="M20 512 H56" class="dg-l"/>${lab(64, 516, 'supply air', 'start')}<path d="M20 536 H56" class="dg-l dg-ctl"/>${lab(64, 540, 'control signal', 'start')}<path d="M20 560 H56" class="dg-l dg-pri"/>${lab(64, 564, 'primary circuit', 'start')}<path d="M220 560 H256" class="dg-l dg-sec"/>${lab(264, 564, 'secondary circuit', 'start')}</g>
+    </svg>`;
+  }
+};
+function diagramHTML(id, caption) {
+  const f = DIAGRAMS[id]; if (!f) return '';
+  return `<figure class="dgfig"><div class="dgfig__scroll">${f()}</div>${caption ? `<figcaption>${inline(caption)}</figcaption>` : ''}</figure>`;
+}
+/* ===========================================================================
+   QUESTION ATTEMPTS — what a learner answered, for item analysis
+   Every graded question (lesson checks, module quizzes, review, platform
+   checks, before/after tests) becomes one attempt: question id, option
+   chosen, right or wrong, time on the question, where it was answered.
+   Offline-first, like progress: attempts queue in this browser
+   (localStorage "mca.attempts", newest 500 kept) and upload in batches to
+   public.attempts when the learner is signed in and online. Signed out, they
+   never leave the device. Attempts are not part of the synced progress.
+   =========================================================================== */
+const ATT_KEY = 'mca.attempts';
+const ATT_MAX = 500;
+const ATT = { timer: null, sending: false };
+/* Answer timing: ms since the page appeared, or since the previous answer on it. */
+let Q_CLOCK = Date.now();
+function attLoad() { try { const v = JSON.parse(localStorage.getItem(ATT_KEY) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+function attSave(list) { try { localStorage.setItem(ATT_KEY, JSON.stringify(list.slice(-ATT_MAX))); } catch (e) {} }
+function attContext() {
+  const h = location.hash;
+  return /^#\/lesson\//.test(h) ? 'lesson' : /^#\/quiz\//.test(h) ? 'quiz' : /^#\/review/.test(h) ? 'review'
+    : /^#\/(?:academy\/)?software\//.test(h) ? 'platform' : /^#\/pretest\//.test(h) ? 'pre' : /^#\/posttest\//.test(h) ? 'post' : 'other';
+}
+function recordAttempt(itemId, chosen, correct, ms, ctx) {
+  if (!/^[a-z0-9.#_-]{3,80}$/.test(String(itemId)) || !Number.isInteger(chosen) || chosen < 0 || chosen > 9) return;
+  const list = attLoad();
+  list.push({ i: itemId, c: chosen, ok: !!correct, ms: Number.isFinite(ms) ? Math.max(0, Math.min(3600000, Math.round(ms))) : null, x: ctx || attContext(), at: new Date().toISOString() });
+  attSave(list);
+  attQueue();
+}
+function attQueue() { clearTimeout(ATT.timer); ATT.timer = setTimeout(attFlush, 3000); }
+async function attFlush() {
+  if (ATT.sending || !CLOUD.user || !CLOUD.client || !navigator.onLine) return;
+  const batch = attLoad().slice(0, 100); if (!batch.length) return;
+  ATT.sending = true;
+  try {
+    const { error } = await CLOUD.client.from('attempts').insert(batch.map((a) => ({ item_id: a.i, chosen: a.c, correct: a.ok, ms: a.ms, context: a.x, answered_at: a.at })));
+    if (error) { console.warn('Attempt upload failed:', error.message); return; }
+    const sent = new Set(batch.map((a) => `${a.at}|${a.i}`));
+    const left = attLoad().filter((a) => !sent.has(`${a.at}|${a.i}`));
+    attSave(left);
+    if (left.length) attQueue();
+  } finally { ATT.sending = false; }
+}
+window.addEventListener('online', () => attQueue());
+
+/* ---------- Item analysis (pure; tested by tools/items-test.mjs) ----------
+   Uses each learner's FIRST attempt at each question, outside spaced review,
+   so practice on the same question doesn't inflate the numbers.
+   p = share correct (difficulty: high = easy).
+   d = discrimination: share correct in the top 27% of learners minus the
+       bottom 27%, ranked by their overall share correct (needs 4+ learners).
+   picks = how often each option (by its original index) was chosen. */
+function itemStats(rows) {
+  const first = new Map();
+  rows.filter((r) => r.context !== 'review').slice().sort((a, b) => String(a.answered_at).localeCompare(String(b.answered_at)))
+    .forEach((r) => { const k = `${r.user_id}|${r.item_id}`; if (!first.has(k)) first.set(k, r); });
+  const fr = [...first.values()];
+  const per = new Map();
+  fr.forEach((r) => { const s = per.get(r.user_id) || { n: 0, ok: 0 }; s.n++; if (r.correct) s.ok++; per.set(r.user_id, s); });
+  const score = new Map([...per].map(([u, s]) => [u, s.ok / s.n]));
+  const items = new Map();
+  fr.forEach((r) => {
+    const it = items.get(r.item_id) || { id: r.item_id, n: 0, ok: 0, picks: {}, who: [] };
+    it.n++; if (r.correct) it.ok++; it.picks[r.chosen] = (it.picks[r.chosen] || 0) + 1; it.who.push([score.get(r.user_id), r.correct]);
+    items.set(r.item_id, it);
+  });
+  return [...items.values()].map((it) => {
+    const ranked = it.who.slice().sort((a, b) => b[0] - a[0]);
+    const g = Math.max(1, Math.round(ranked.length * 0.27));
+    const share = (arr) => arr.filter((x) => x[1]).length / arr.length;
+    return { id: it.id, n: it.n, p: it.ok / it.n, d: ranked.length >= 4 ? share(ranked.slice(0, g)) - share(ranked.slice(-g)) : null, picks: it.picks };
+  });
+}
+/* What a trainer should look at first. */
+function itemFlag(s, optionCount) {
+  if (s.n < 5) return { level: 0, text: 'Too few answers yet' };
+  if (s.d != null && s.d < 0) return { level: 3, text: 'Weaker learners do better: check the answer key' };
+  if (s.p < 0.3) return { level: 2, text: 'Very hard, or the key or wording is wrong' };
+  if (s.p > 0.95) return { level: 1, text: 'Almost everyone gets it right' };
+  if (s.d != null && s.d < 0.2) return { level: 2, text: 'Doesn\'t separate strong from weak learners' };
+  const unused = optionCount ? [...Array(optionCount).keys()].filter((i) => !s.picks[i]).length : 0;
+  if (s.n >= 10 && unused) return { level: 1, text: `${unused} option${unused > 1 ? 's' : ''} nobody picks` };
+  return { level: 0, text: 'Working' };
+}
+/* Before/after per track: a learner's "before" score uses their first answer
+   to each before-test question; "after" uses their latest answer to each. */
+function prePostSummary(rows) {
+  const out = {};
+  ['pre', 'post'].forEach((kind) => {
+    const pick = new Map(); // track|user|item -> row
+    rows.filter((r) => r.context === kind && /^pp\./.test(r.item_id)).forEach((r) => {
+      const k = `${r.item_id.slice(3).split('#')[0]}|${r.user_id}|${r.item_id}`; const cur = pick.get(k);
+      const later = cur && String(r.answered_at) > String(cur.answered_at);
+      if (!cur || (kind === 'pre' ? !later && String(r.answered_at) < String(cur.answered_at) : later)) pick.set(k, r);
+    });
+    const per = new Map(); // track|user -> {n, ok}
+    pick.forEach((r, k) => { const tu = k.split('|').slice(0, 2).join('|'); const s = per.get(tu) || { n: 0, ok: 0 }; s.n++; if (r.correct) s.ok++; per.set(tu, s); });
+    per.forEach((s, tu) => { const tid = tu.split('|')[0]; const t = (out[tid] = out[tid] || { pre: [], post: [] }); t[kind].push(s.ok / s.n); });
+  });
+  return out;
+}
+
+/* ---------- Trainer view: #/trainer/items/<group id> ---------- */
+function viewItemAnalysis(gid) {
+  const html = `<div class="page ia">
+    ${pageHead({ eyebrow: `${icon('bar', 'icon--sm')} Trainer groups`, title: 'Question analysis', text: 'How each question performs for this group: how many learners get it right, whether it separates strong from weak learners, and which wrong answers they pick. Based on each learner\'s first try, outside spaced review.' })}
+    <div id="iaRoot"><div class="skeleton" style="height:220px;border-radius:12px"></div></div>
+  </div>`;
+  return { html, title: 'Question analysis', nav: 'trainer', crumbs: [['Trainer groups', '#/trainer'], ['Question analysis']], after: (v) => itemAnalysisLoad($('#iaRoot', v), gid) };
+}
+async function itemAnalysisLoad(root, gid) {
+  try {
+    await cloudInit();
+    if (!CLOUD.user) { root.innerHTML = stateBlock({ ic: 'lock', title: 'Sign in to see your group', text: 'Question analysis is for trainers who run a group.' }); return; }
+    const db = CLOUD.client; const me = CLOUD.user.id;
+    const g = await db.from('groups').select('id,name,owner').eq('id', gid).maybeSingle();
+    if (g.error) throw g.error;
+    if (!g.data || g.data.owner !== me) { root.innerHTML = stateBlock({ ic: 'lock', title: 'Not your group', text: 'Only the trainer who runs a group can see its question analysis.' }); return; }
+    const mem = await db.from('group_members').select('user_id').eq('group_id', gid);
+    if (mem.error) throw mem.error;
+    const ids = (mem.data || []).map((m) => m.user_id).filter((u) => u !== me);
+    let rows = [];
+    for (let from = 0; ids.length; from += 1000) {
+      const r = await db.from('attempts').select('user_id,item_id,chosen,correct,context,answered_at').in('user_id', ids).order('answered_at').range(from, from + 999);
+      if (r.error) throw r.error; rows = rows.concat(r.data || []); if (!r.data || r.data.length < 1000) break;
+    }
+    if (!CONTENT_LOADED.has('beginner')) await loadContent().catch(() => {});
+    root.innerHTML = itemAnalysisHTML(g.data, ids.length, rows);
+  } catch (e) {
+    console.warn('Question analysis failed:', e && e.message);
+    root.innerHTML = stateBlock({ ic: 'alert', title: 'Question analysis isn\'t available right now', text: navigator.onLine ? 'Please try again in a moment.' : 'Connect to the internet to see it.', error: true });
+  }
+}
+function itemAnalysisHTML(g, learners, rows) {
+  const stats = itemStats(rows);
+  const pp = prePostSummary(rows);
+  const mean = (a) => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : null);
+  const ppRows = Object.entries(pp).map(([tid, v]) => { const t = TRACK_BY_ID[tid]; const a = mean(v.pre), b = mean(v.post);
+    return `<tr><td>${esc(t ? t.level : tid)}</td><td class="num">${v.pre.length ? `${pct(a)}% <span class="muted small">(${v.pre.length})</span>` : '—'}</td><td class="num">${v.post.length ? `${pct(b)}% <span class="muted small">(${v.post.length})</span>` : '—'}</td><td class="num">${a != null && b != null ? `${b >= a ? '+' : ''}${pct(b - a)} pts` : '—'}</td></tr>`; }).join('');
+  const rowsHTML = stats.map((s) => {
+    const b = qById(s.id); const q = b && b.q; const opts = q ? (q.t === 'tf' ? ['True', 'False'] : q.o) : [];
+    const correct = q ? (q.t === 'tf' ? (q.a ? 0 : 1) : q.a) : -1;
+    const f = itemFlag(s, opts.length);
+    const picks = opts.map((o, i) => { const c = s.picks[i] || 0; return `<li class="${i === correct ? 'is-key' : ''}"><span class="ia-pick__bar" style="--p:${(c / s.n).toFixed(3)}"></span><span class="ia-pick__t">${i === correct ? icon('check', 'icon--sm') : ''}${esc(String(o).slice(0, 70))}</span><span class="num">${c}</span></li>`; }).join('');
+    return { f, html: `<tr class="ia-row ia-row--${f.level}"><td><div class="ia-q">${q ? inline(q.q) : esc(s.id)}</div><div class="small muted">${b ? `<a href="${b.href}">${esc(b.label)}</a>` : esc(s.id)}</div></td>
+      <td class="num">${s.n}</td><td class="num">${pct(s.p)}%</td><td class="num">${s.d == null ? '—' : s.d.toFixed(2)}</td>
+      <td><ul class="ia-picks">${picks}</ul></td><td><span class="ia-flag ia-flag--${f.level}">${esc(f.text)}</span></td></tr>` };
+  }).sort((a, b) => b.f.level - a.f.level).map((x) => x.html).join('');
+  return `<p class="small muted">${esc(g.name)} · ${learners} learner${learners === 1 ? '' : 's'} · ${rows.length} answers recorded</p>
+    ${ppRows ? `<section class="card card--pad mt-4"><h2 class="ia-h">Before and after</h2><p class="small muted">Average score on each track's 8-question check: first try before, latest try after (number of learners in brackets).</p>
+      <div class="table-wrap"><table class="table"><thead><tr><th scope="col">Track</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Change</th></tr></thead><tbody>${ppRows}</tbody></table></div></section>` : ''}
+    <section class="mt-6"><h2 class="ia-h">Questions</h2>
+      ${stats.length ? `<p class="small muted">Correct % is difficulty (high = easy; most good questions sit between 30% and 90%). Separation is the share correct among the strongest 27% of learners minus the weakest 27%: 0.3 or more is good, below 0.2 is weak, below 0 means check the answer key.</p>
+        <div class="table-wrap"><table class="table ia-table"><thead><tr><th scope="col">Question</th><th scope="col">Answers</th><th scope="col">Correct</th><th scope="col">Separation</th><th scope="col">Options picked</th><th scope="col">Look at</th></tr></thead><tbody>${rowsHTML}</tbody></table></div>`
+        : `<p class="muted">No answers yet. Questions appear here once learners in this group answer them while signed in.</p>`}
+    </section>`;
+}
+/* ===========================================================================
+   BEFORE / AFTER CHECKS — #/pretest/<track> and #/posttest/<track>
+   Eight new questions per maintenance track, aligned to the track outcomes
+   and not used anywhere else, so the "after" score measures learning rather
+   than memory of a lesson check. The same eight are used before and after
+   (options shuffled). The "before" check shows only the score, so it doesn't
+   teach the answers; the "after" check shows the answers and the change.
+   Results: state.prepost[track] = { pre: {score, total, at}, post: {...} };
+   each answer is also recorded as an attempt (context "pre" / "post").
+   =========================================================================== */
+const PREPOST = {
+  beginner: [
+    { t: 'mc', q: 'A driver calls: "My truck is making a weird noise." What do you ask first?', o: ['Which shop the driver would like to use for the repair', 'Which unit it is, where they are, and whether it is safe to keep going', 'How many miles are left until the next PM is due', 'Whether the noise started after the last fuel stop'], a: 1, e: 'Unit, location and safety come first. Everything else depends on them.' },
+    { t: 'mc', q: 'A driver reports that the trailer\'s marker lights are out. Which unit do you open the case on?', o: ['The trailer, using its own unit number', 'The tractor, since it supplies power to the lights', 'Both units, under one shared case number', 'Neither: lights are the driver\'s job to fix'], a: 0, e: 'Tractor and trailer have separate records. The defect is on the trailer.' },
+    { t: 'mc', q: 'Which report means the truck should stop safely now?', o: ['Amber check-engine lamp, power normal', 'Fuel gauge showing a quarter tank', 'Low-air warning with a steady hiss', 'Dash clock showing the wrong time'], a: 2, e: 'A low-air warning with a hiss is a brake-system defect.' },
+    { t: 'mc', q: 'A post-trip DVIR lists a cracked mirror. What must happen before the truck is dispatched again?', o: ['The next driver decides whether to fix it', 'Dispatch signs the report for the driver', 'Nothing, since mirrors are not on the checklist', 'It is repaired, or certified as not needing repair'], a: 3, e: 'A reported defect is repaired or certified before the vehicle runs again (49 CFR 396.11).' },
+    { t: 'mc', q: 'Which update helps dispatch most?', o: ['"T-120 at shop: alternator, ETR 15:00, next update 13:00"', '"Truck is at the shop, I will update you later today"', '"Driver says it should be fine fairly soon"', '"The shop is busy today, not sure when it\'s done"'], a: 0, e: 'Unit, cause, ETR and the next update let dispatch plan.' },
+    { t: 'mc', q: 'Which note belongs in the case record?', o: ['"Driver sounded annoyed on the phone again"', '"Shop is probably overcharging us as usual"', '"08:40 driver reports coolant leak, T-114, mile 142"', '"Same old problem with this truck, nothing new"'], a: 2, e: 'Records are factual: time, unit, what was reported and where.' },
+    { t: 'mc', q: 'What is the U.S. minimum tread depth on a steer tire?', o: ['2/32 in', '4/32 in', '6/32 in', '8/32 in'], a: 1, e: '49 CFR 393.75: 4/32 in on steer tires, 2/32 in on other positions.' },
+    { t: 'mc', q: 'The shop says the repair is done. What comes before closing the case?', o: ['Closing it right away, since the shop said so', 'Paying the invoice before it has arrived', 'Confirming with the driver that the problem is gone', 'Asking dispatch to close the case for you'], a: 2, e: 'Confirm the fix with the driver, then document and close.' }
+  ],
+  advanced: [
+    { t: 'mc', q: 'PM-A is due every 25,000 mi or 90 days, whichever comes first. A truck ran 9,000 mi in 90 days. When is PM-A due?', o: ['At 25,000 miles', 'At 90 days', 'When the driver asks for it', 'At the next annual inspection'], a: 1, e: 'Whichever limit comes first: here, 90 days.' },
+    { t: 'mc', q: 'A coolant temperature fault shows FMI 0. What does that suggest?', o: ['The sensor wiring is shorted to ground', 'The code is left over from a past repair', 'The temperature really is above normal', 'The engine computer needs a software update'], a: 2, e: 'FMI 0: data valid but above the normal range. The condition is real.' },
+    { t: 'mc', q: 'An estimate is $3,900 and your approval limit is $2,500. What do you do?', o: ['Send it to your manager with a short summary', 'Approve it to avoid more downtime', 'Ask the shop to split it into two bills', 'Tell the shop to wait until next week'], a: 0, e: 'Route it within authority, quickly, with the facts.' },
+    { t: 'mc', q: 'A reman starter costs $310 plus a $90 core charge. What is the final cost once the old starter is returned and accepted?', o: ['$220', '$400', '$490', '$310'], a: 3, e: '$310 + $90 paid, then $90 credited back: $310.' },
+    { t: 'mc', q: 'Diagnosis isn\'t finished yet. What do you tell dispatch?', o: ['An ETR of 14:00, just to be safe', 'No ETR yet; diagnosis is due by 11:00', 'That the truck will be ready today', 'Nothing until the repair is finished'], a: 1, e: 'Say what is known and when you will know more.' },
+    { t: 'mc', q: 'A driver waited 3 hours at a shop after driving 6 hours. Is a 30-minute break still due before driving on?', o: ['Yes, after 2 more hours of driving', 'Yes, before driving at all', 'No: the shop wait counts as the break', 'Only if the driver had no lunch'], a: 2, e: 'Any 30 straight minutes not driving, on duty or off, satisfies the break (49 CFR 395.3).' },
+    { t: 'mc', q: 'A unit cost $9,000 in maintenance over 75,000 miles. What is its cost per mile?', o: ['$0.08', '$0.12', '$0.83', '$8.33'], a: 1, e: '$9,000 ÷ 75,000 mi = $0.12 per mile.' },
+    { t: 'mc', q: 'A water pump fails 6 months after a shop replaced it under a 12-month warranty. What first?', o: ['Send the truck to the nearest shop', 'Buy a new pump and file a claim later', 'Call the shop that did it, with the RO', 'Have the driver top up the coolant'], a: 2, e: 'Start with the shop that did the work, before anyone else repairs it.' }
+  ],
+  expert: [
+    { t: 'mc', q: 'Which of these is a root cause, not a failure?', o: ['The alternator stopped charging', 'The battery light came on', 'The truck would not restart', 'Belt checks were missing from the PM list'], a: 3, e: 'A root cause explains why the failure happened and can be fixed in the process.' },
+    { t: 'mc', q: '50 units over 30 days had 1,800 downtime hours in total. What is fleet availability?', o: ['90%', '64%', '95%', '98%'], a: 2, e: '50 × 30 × 24 = 36,000 h; (36,000 − 1,800) ÷ 36,000 = 95%.' },
+    { t: 'mc', q: 'A truck has its third DPF derate in 60 days. What is the best next step?', o: ['Ask for a root-cause diagnosis with the full history', 'Clear the codes and release it again', 'Move it to a new shop without the history', 'Replace the DPF without any diagnosis'], a: 0, e: 'Repeats need the history and a root cause, and a warranty check.' },
+    { t: 'mc', q: 'Three calls at once: a driver stranded on a shoulder at −10°F, a reefer drifting slowly, a yard no-start. Who gets the first mobile truck?', o: ['The yard no-start, since it is closest', 'The reefer load, since cargo is costly', 'Whoever called first this morning', 'The stranded driver on the shoulder'], a: 3, e: 'Life safety first; protect cargo in parallel; low-risk work waits.' },
+    { t: 'mc', q: 'What belongs in a leadership update during a disruption?', o: ['Every message received so far', 'Units down, risks, actions, asks, next update', 'Only the units that are already fixed', 'The phone numbers of every vendor'], a: 1, e: 'A decision-ready summary with a clear ask and the next update time.' },
+    { t: 'mc', q: 'Why must "repeat repair" have a written definition?', o: ['So the number means the same thing every month', 'So shops will accept warranty claims', 'So the number looks lower to management', 'So technicians finish jobs faster'], a: 0, e: 'Without a fixed definition, the KPI can\'t be compared over time.' },
+    { t: 'mc', q: 'Vendor A is fastest but has a 12% comeback rate; Vendor B is slower with 2%. Why can B win on a scorecard?', o: ['B is cheaper per labor hour', 'Comebacks add downtime and repeat cost', 'Scorecards ignore repair speed', 'A has fewer shop locations'], a: 1, e: 'A comeback is a second breakdown, a second invoice and more downtime.' },
+    { t: 'mc', q: 'How does a forecast differ from a budget?', o: ['It never changes during the year', 'It ignores the planned miles', 'It covers only parts, not labor', 'It updates with actual results and known events'], a: 3, e: 'A forecast is the budget updated with what has actually happened.' }
+  ]
+};
+
+function viewPrePost(kind, tid) {
+  const t = TRACK_BY_ID[tid]; const qs = PREPOST[tid];
+  if (!t || !qs || !['pre', 'post'].includes(kind)) return viewNotFound();
+  const prev = (state.prepost[tid] || {})[kind];
+  const pre = (state.prepost[tid] || {}).pre;
+  const order = qs.map((q) => shuffle(q.o.map((_, i) => i)));
+  const html = `<div class="page page--narrow pp">
+    ${pageHead({ eyebrow: `${icon(t.icon, 'icon--sm')} ${esc(t.level)} track`, title: kind === 'pre' ? 'Before you start' : 'After the track', text: kind === 'pre'
+      ? `Eight questions, about 5 minutes. It isn't graded and doesn't affect anything: it shows where you start, so you can see what you learn. Answer what you can; guessing is fine.`
+      : `The same eight questions as the before check. Your result shows how much you have learned${pre ? `, compared with your before score of ${pre.score}/${pre.total}` : ''}.` })}
+    ${prev ? `<p class="callout callout--info small" role="note"><span class="callout__icon">${icon('info')}</span><span>You took this ${kind === 'pre' ? 'before check' : 'after check'} on ${new Date(prev.at).toLocaleDateString()} and scored ${prev.score}/${prev.total}. Taking it again ${kind === 'pre' ? 'won\'t change your before score.' : 'replaces your after score.'}</span></p>` : ''}
+    <form class="pp-form" novalidate>
+      ${qs.map((q, i) => `<div class="q card card--pad" data-qi="${i}">${questionHTML(q, `pp-${tid}-${i}`, order[i])}</div>`).join('')}
+      <div class="q__actions"><button type="submit" class="btn btn--primary">${icon('check')} ${kind === 'pre' ? 'See my starting score' : 'See my result'}</button><span class="small muted" data-pp-status role="status"></span></div>
+    </form>
+    <div data-pp-result aria-live="polite"></div>
+  </div>`;
+  return {
+    html, title: `${kind === 'pre' ? 'Before' : 'After'} check · ${t.level}`, nav: `track-${t.id}`, bottom: 'curriculum',
+    crumbs: [['Curriculum', '#/curriculum'], [t.level, `#/track/${t.id}`], [kind === 'pre' ? 'Before check' : 'After check']],
+    after: (v) => {
+      const form = $('.pp-form', v);
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const qels = $$('.q', form);
+        if (qels.some((el) => !$('input:checked', el))) { $('[data-pp-status]', v).textContent = 'Answer every question first. Guessing is fine.'; return; }
+        let ok = 0;
+        qels.forEach((el, i) => {
+          const q = qs[i]; const sel = $('input:checked', el); const chosen = +sel.value; const good = chosen === q.a; if (good) ok++;
+          recordAttempt(`pp.${tid}#${i}`, chosen, good, null, kind); // answers are submitted together: no per-question time
+          $$('input', el).forEach((x) => { x.disabled = true; });
+          if (kind === 'post') $$('.opt', el).forEach((o) => { const oi = +o.dataset.oi; if (oi === q.a) o.classList.add('is-correct'); else if (oi === chosen) o.classList.add('is-wrong'); });
+        });
+        const res = { score: ok, total: qs.length, at: Date.now() };
+        state.prepost[tid] = Object.assign({}, state.prepost[tid]);
+        if (kind === 'post' || !state.prepost[tid].pre) state.prepost[tid][kind] = res;
+        touch('pp:' + tid); save();
+        $('.q__actions', form).remove();
+        const gain = kind === 'post' && pre ? ok - pre.score : null;
+        $('[data-pp-result]', v).innerHTML = `<div class="card card--pad pp-result mt-4"><h2>${ok}/${qs.length}</h2>
+          <p>${kind === 'pre' ? 'That is your starting point. Work through the track, then take the after check to see the difference.' : gain == null ? 'Take the before check next time you start a track, to see the change.' : gain > 0 ? `Up ${gain} from your before score of ${pre.score}/${pre.total}.` : gain === 0 ? `The same as your before score. Review the lessons on the questions you missed.` : `Down ${-gain} from your before score. Review the lessons on the questions you missed.`}</p>
+          <div class="row row--wrap mt-3"><a class="btn btn--primary" href="#/track/${t.id}">Back to the ${esc(t.level)} track</a></div></div>`;
+      });
+    }
+  };
+}
+/* Card on each track page that has a before/after check. */
+function prePostCardHTML(t) {
+  if (!PREPOST[t.id]) return '';
+  const r = state.prepost[t.id] || {};
+  const cell = (kind, label) => { const x = r[kind]; return `<a class="pp-card__cell ${x ? 'is-done' : ''}" href="#/${kind}test/${t.id}"><span class="small muted">${label}</span><strong>${x ? `${x.score}/${x.total}` : 'Start'}</strong></a>`; };
+  const gain = r.pre && r.post ? r.post.score - r.pre.score : null;
+  return `<section class="card card--pad mb-6 pp-card"><div class="grow"><span class="eyebrow">Before and after check · 8 questions · ~5 min</span>
+      <p class="small mt-2">Take it before you start and again when you finish, to see what you learned${gain != null ? `: <strong>${gain >= 0 ? '+' : ''}${gain}</strong> so far` : ''}.</p></div>
+    <div class="pp-card__cells">${cell('pre', 'Before')}${cell('post', 'After')}</div></section>`;
+}
 
 /* ===========================================================================
    4. ENGINE
@@ -6435,7 +5001,7 @@ const lessonHref = (x) => `#/lesson/${x.t.id}/${x.m.id}/${x.l.id}`;
 
 /* ---------- State (localStorage) ---------- */
 const STORE_KEY = 'mca.v1';
-const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0, profile: { role: '', company: '', city: '' }, avatar: { src: '', url: '', color: '' }, goal: 1, motion: null };
+const DEFAULT_STATE = { completed: {}, checks: {}, quizzes: {}, finals: {}, bookmarks: [], last: null, flash: { known: {} }, scen: {}, trees: {}, glossaryViewed: {}, exercises: {}, calcUsed: {}, achievements: {}, theme: null, name: '', days: [], missed: {}, certIds: {}, edits: {}, resetAt: 0, profile: { role: '', company: '', city: '' }, avatar: { src: '', url: '', color: '' }, goal: 1, motion: null, prepost: {} };
 /* Who the learner is and how they like the app: kept when progress is reset. */
 const PROFILE_KEYS = ['name', 'profile', 'avatar', 'goal', 'theme', 'motion'];
 let storageOk = true;
@@ -6730,6 +5296,8 @@ function renderBlock(b) {
       ${b.tabs.map((t, i) => `<div class="tabpanel prose" role="tabpanel" id="${id}-p${i}" aria-labelledby="${id}-t${i}" ${i ? 'hidden' : ''}>${renderBlocks(t.body)}</div>`).join('')}</div>`;
   }
   if (b.ig) return infographicHTML(b);
+  if (b.doc) return docHTML(b.doc);
+  if (b.diagram) return diagramHTML(b.diagram, b.caption);
   if (b.industry) {
     const x = b.industry;
     return `<aside class="industry" aria-label="Industry example: ${esc(x.name)}"><div class="industry__head"><span class="industry__tag">${icon('pin', 'icon--sm')} Industry example</span><span class="badge badge--outline">${esc(x.cat)}</span></div>`
@@ -6765,6 +5333,9 @@ function gradeQuestion(el, q) {
   });
   $('.opts', el).classList.add('is-locked');
   noteAnswer(q, ok);
+  const qb = qBank().get(q); const now = Date.now();
+  if (qb && !qb.id.startsWith('pp.')) recordAttempt(qb.id, chosen, ok, now - Q_CLOCK);
+  Q_CLOCK = now;
   return { ok, html: `<div class="feedback feedback--${ok ? 'correct' : 'wrong'}" role="status">${icon(ok ? 'check-circle' : 'x-circle')}<div><strong>${ok ? 'Correct' : 'Not quite'}</strong><p>${inline(q.e)}</p></div></div>` };
 }
 
@@ -6960,6 +5531,8 @@ const ROUTES = [
   [/^\/review$/, viewReview],
   [/^\/simulations$/, viewSimulations],
   [/^\/trainer$/, viewTrainer],
+  [/^\/trainer\/items\/([\w-]+)$/, viewItemAnalysis],
+  [/^\/(pre|post)test\/(\w+)$/, viewPrePost],
   [/^\/verify(?:\/([\w-]+))?$/, viewVerify],
   [/^\/cheatsheet\/(\w+)\/(\w+)$/, viewCheatSheet],
   [/^\/achievements$/, viewAchievements],
@@ -7001,6 +5574,7 @@ function router() {
   mountWidgets(view);
   mountExercises(view);
   if (out.after) out.after(view);
+  Q_CLOCK = Date.now(); // question timing starts when the page is shown
   closeSidebar();
   if (!out.keepScroll) window.scrollTo({ top: 0, behavior: 'auto' });
   $('#main').focus({ preventScroll: true });
@@ -7253,6 +5827,7 @@ function viewTrack(tid) {
     <section class="card card--pad mb-6"><span class="eyebrow">What you'll be able to do</span>
       <ul class="grid grid--2 mt-3" style="list-style:none;padding:0;gap:10px">${t.outcomes.map((o) => `<li class="row" style="align-items:flex-start;gap:10px">${icon('check-circle', 'icon--sm')}<span class="small" style="color:var(--text-2)">${esc(o)}</span></li>`).join('')}</ul>
     </section>
+    ${prePostCardHTML(t)}
     <div class="module-list stagger">${t.modules.map((m, i) => moduleHTML(t, m, i, m.id === openMod)).join('')}</div>
     <div class="final-card mt-6 ${fin && fin.passed ? 'is-passed' : ''}">
       <span class="final-card__icon">${icon('award')}</span>
@@ -8408,6 +6983,7 @@ function confirmResetProgress() {
       const keep = Object.fromEntries(PROFILE_KEYS.map((k) => [k, state[k]]));
       const edits = Object.fromEntries(PROFILE_KEYS.filter((k) => state.edits[k]).map((k) => [k, state.edits[k]]));
       state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), keep, { edits, resetAt: Date.now() });
+      attSave([]); // answers waiting to upload go with the reset
       save(); close(); toast({ title: 'Progress reset', text: 'Starting fresh.' }); go('#/dashboard');
     })
   });

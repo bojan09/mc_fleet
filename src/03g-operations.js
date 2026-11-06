@@ -77,9 +77,9 @@ addLesson('beginner', 'm1', {
     ]
   } },
   check: [
-    { t: 'mc', q: 'What is a load board?', o: ['A dispatch whiteboard in the terminal', 'An online marketplace where loads and available trucks are posted', 'A government registry of carriers', 'A type of trailer floor'], a: 1, e: 'Brokers and shippers post loads; carriers post trucks and book loads.' },
+    { t: 'mc', q: 'What is a load board?', o: ['A whiteboard in the terminal where dispatch tracks every truck', 'An online marketplace where loads and available trucks are posted', 'A government registry that lists every licensed carrier', 'The floor panel inside a dry van trailer'], a: 1, e: 'Brokers and shippers post loads; carriers post trucks and book loads.' },
     { t: 'tf', q: 'A freight broker usually owns the trucks that haul its loads.', a: false, e: 'Brokers arrange transportation; carriers haul the freight.' },
-    { t: 'mc', q: 'Before arranging a repair on an unfamiliar tractor, what should you confirm first?', o: ['The driver\'s favorite shop', 'Who owns the unit and who pays for repairs', 'The load\'s commodity code', 'The tractor\'s paint color'], a: 1, e: 'Ownership decides who authorizes and pays for the repair.' }
+    { t: 'mc', q: 'Before arranging a repair on an unfamiliar tractor, what should you confirm first?', o: ['The driver\'s favorite shop in the area', 'Who owns the unit and who pays for repairs', 'The commodity code of the load on board', 'The tractor\'s model year and paint color'], a: 1, e: 'Ownership decides who authorizes and pays for the repair.' }
   ],
   takeaways: ['Carriers haul; brokers arrange; private fleets haul their own goods; owner-operators own their trucks.', 'A load runs: booked → rate confirmed → dispatched → picked up → delivered → invoiced → paid.', 'Dispatch needs status, ETR and early warnings from maintenance.'],
   tips: ['Learn your dispatch board\'s layout — it tells you which loads each repair affects.', 'Keep a list of owner-operator units and their repair arrangements.'],

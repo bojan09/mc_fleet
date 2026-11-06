@@ -16,7 +16,7 @@ Supabase to sync progress and keep a profile. Hosted on Vercel: https://mcfleet-
 | `src/` | Source modules in file-name order. `01`–`03k` build the lessons (run at build time and split into `content/`); the rest are data, views and the engine |
 | `img/library/` | Locally stored Visual Library photos (Wikimedia Commons, credited in the app) |
 | `fonts/` | IBM Plex (SIL Open Font License, `fonts/OFL.txt`), Latin subset plus Sans Cyrillic (for Macedonian names), self-hosted |
-| `supabase/` | SQL migrations for the cloud-sync database, run in number order; `supabase/tests/access.sql` tests the access rules |
+| `supabase/` | SQL migrations for the cloud-sync database (progress, groups, certificates, assignments, avatars, question attempts), run in number order; `supabase/tests/access.sql` tests the access rules |
 | `tools/` | Build and check scripts (no dependencies, Node 22+) |
 | `.github/workflows/` | `ci.yml` runs the build, checks, sweep and feature tests on every push; `supabase-keepalive.yml` queries the database every 3 days so the free Supabase project doesn't pause |
 
@@ -32,6 +32,7 @@ node tools/trainer-test.mjs # signed-in screens (groups, assignments, CSV) with 
 node tools/profile-test.mjs # dashboard and profile signed in: details, picture upload, email/password change, preferences, reset
 node tools/review-test.mjs  # spaced review schedule (1, 3, 7 days) with a simulated clock
 node tools/sims-test.mjs    # DVIR, core charge and warranty simulations grade right and wrong answers
+node tools/items-test.mjs   # question analysis (difficulty, separation, option picks) and before/after scores
 node tools/merge-test.mjs   # two-device sync: newest change wins, removals and resets stick
 node tools/split-test.mjs   # on-demand lesson text: every page renders as with one bundle; offline works
 node tools/qr-test.mjs      # certificate QR codes decode correctly (needs Python + opencv-python)
@@ -42,7 +43,7 @@ into `index.html` (`script.js?v=…`, `styles.css?v=…`) and `sw.js` (`VERSION`
 hash of every file it precaches), so each release gets its own offline cache and
 open pages offer a reload. No manual version bump is needed.
 
-Software & Platforms facts (`src/03l-software.js`, `src/03l2-software-more.js`) are re-checked against the
+Software & Platforms facts (`src/03l-software.js`, `src/03l2-software-more.js`; page sections build into `content/software.json`) are re-checked against the
 official sources every quarter; `tools/check.mjs` warns when a platform's
 `checked` month is 3 or more months old.
 

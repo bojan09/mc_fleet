@@ -24,6 +24,12 @@ const seed = {
       { user_id: 'ana', state: { avatar: { src: 'upload', url: 'https://lqlewiyuhifvnodkpiul.supabase.co/storage/v1/object/public/avatars/ana/avatar.webp?v=1' }, completed: done('beginner', 'm1', ['l1', 'l2', 'l3']), quizzes: { 'beginner.m1': { best: 0.8 }, 'beginner.m4': { best: 0.5 } }, missed: { 'beginner.m3.l1#0': { n: 1 } }, days: ['2026-10-01'] } },
       { user_id: 'ben', state: { avatar: { src: 'upload', url: 'https://tracker.example/pixel.gif', color: 'red;background:url(x)' }, name: 'Benjamin "Ben" Ortiz', completed: {}, missed: { 'beginner.m3.l2#1': { n: 2 }, 'beginner.m3.l1#0': { n: 1 } }, quizzes: { 'beginner.m3': { best: 0.6 } }, days: [] } }
     ],
+    attempts: [
+      { user_id: 'ana', item_id: 'beginner.m1.l1#0', chosen: 1, correct: true, context: 'lesson', answered_at: '2026-02-02T10:00:00Z' },
+      { user_id: 'ben', item_id: 'beginner.m1.l1#0', chosen: 0, correct: false, context: 'lesson', answered_at: '2026-02-04T10:00:00Z' },
+      { user_id: 'ana', item_id: 'pp.beginner#0', chosen: 0, correct: false, context: 'pre', answered_at: '2026-02-01T09:00:00Z' },
+      { user_id: 'ana', item_id: 'pp.beginner#0', chosen: 1, correct: true, context: 'post', answered_at: '2026-03-01T09:00:00Z' }
+    ],
     assignments: [
       { id: 'a1', group_id: 'g1', module: 'beginner.m1', due: day(-2) },
       { id: 'a2', group_id: 'g2', module: 'beginner.m2', due: day(-1) },
@@ -90,6 +96,21 @@ for (const width of [375, 1366]) {
     check(lines.some((l) => l.startsWith(`"'=Ana"`)), 'CSV defuses a name that starts with = (no spreadsheet formula)');
     check(lines.some((l) => l.startsWith('"Benjamin ""Ben"" Ortiz"')), 'CSV uses the name the learner set, quotes escaped');
     check(/"done"/.test(lines.find((l) => l.includes('Ana'))) && /"not done"/.test(lines.find((l) => l.includes('Ben'))), 'CSV marks assigned module done / not done');
+  }
+
+  if (width === 1366) {
+    // Question analysis for the group (attempts seeded above)
+    await b.evaluate(`location.hash = '#/trainer/items/g1', true`);
+    check(await wait(`!!document.querySelector('.ia-table')`), 'question analysis renders');
+    const ia = await text('#view');
+    check(/Before and after/.test(ia) && /\+100 pts/.test(ia), 'before/after summary shows the change');
+    check(/Why does downtime matter|downtime/i.test(ia) && /Too few answers yet/.test(ia), 'question text and "too few answers" flag shown');
+    // Answering a lesson question while signed in uploads an attempt
+    await b.evaluate(`location.hash = '#/lesson/beginner/m1/l1', true`);
+    check(await wait(`!!document.querySelector('[data-check] .q input')`), 'lesson check renders');
+    await b.evaluate(`(() => { const q = document.querySelector('[data-check] .q'); q.querySelector('input').click(); q.querySelector('[data-q-check]').click(); return true; })()`);
+    check(await wait(`(window.__FAKE_DB.tables.attempts || []).some((r) => r.user_id === 'me' && r.item_id === 'beginner.m1.l1#0' && r.context === 'lesson' && Number.isInteger(r.chosen))`, 9000), 'answer uploaded as an attempt');
+    check(await b.evaluate(`JSON.parse(localStorage.getItem('mca.attempts') || '[]').length === 0`), 'upload clears the local queue');
   }
 
   await b.evaluate(`location.hash = '#/dashboard', true`);

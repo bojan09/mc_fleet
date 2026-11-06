@@ -222,7 +222,7 @@ SOFTWARE.push(
     quiz: [
       { t: 'mc', q: 'Where does a coordinator find fault codes in MyGeotab?', o: ['Maintenance > Faults', 'The fuel card portal', 'The driver\'s pay stub', 'The trailer\'s VIN plate'], a: 0, e: 'Geotab documents fault codes under Maintenance > Faults.' },
       { t: 'tf', q: 'A fault with status "None" in MyGeotab is no longer active.', a: true, e: 'None means not active now. Still check the history for repeats.' },
-      { t: 'scenario', q: 'MyGeotab shows the same code three times this week, all now inactive. What do you do?', o: ['Nothing, they cleared', 'Plan an inspection, for example with the next PM, and note the history', 'Replace the engine', 'Delete the history'], a: 1, e: 'Repeats point to a real problem. Plan a diagnosis before it becomes a road call.' }
+      { t: 'scenario', q: 'MyGeotab shows the same code three times this week, all now inactive. What do you do?', o: ['Nothing: inactive codes mean the problem fixed itself', 'Plan an inspection, for example with the next PM, and note the history', 'Replace the part the code names before the next load', 'Delete the history so the faults page stays clean'], a: 1, e: 'Repeats point to a real problem. Plan a diagnosis before it becomes a road call.' }
     ],
     sources: [
       ['Geotab Support — Faults', 'https://support.geotab.com/help/mygeotab/maintenance-and-diagnostics/diagnostics/faults'],
@@ -327,7 +327,7 @@ SOFTWARE.push(
     },
     quiz: [
       { t: 'mc', q: 'What does SRM stand for in Decisiv\'s description?', o: ['Service Relationship Management', 'Shop Repair Manual', 'Safety Risk Monitor', 'Standard Repair Mileage'], a: 0, e: 'Decisiv describes its platform as Service Relationship Management.' },
-      { t: 'mc', q: 'Who mainly uses Decisiv together?', o: ['Fleets and their service providers', 'Drivers and brokers', 'Shippers and receivers', 'Fuel stations'], a: 0, e: 'It connects fleets with dealers and service providers around repairs.' },
+      { t: 'mc', q: 'Who mainly uses Decisiv together?', o: ['Fleets and their service providers', 'Drivers and the brokers who book their loads', 'Shippers and receivers tracking deliveries', 'Fuel stations billing fleet accounts'], a: 0, e: 'It connects fleets with dealers and service providers around repairs.' },
       { t: 'tf', q: 'An estimate waiting for fleet approval adds to downtime.', a: true, e: 'Every hour an estimate waits is an hour the truck is not being repaired.' }
     ],
     sources: [
@@ -427,7 +427,7 @@ SOFTWARE.push(
       ]
     },
     quiz: [
-      { t: 'mc', q: 'What is VMRS?', o: ['A standard coding system for vehicle maintenance', 'A tire brand', 'A truck stop chain', 'A fuel card'], a: 0, e: 'Vehicle Maintenance Reporting Standards, from ATA\'s Technology & Maintenance Council.' },
+      { t: 'mc', q: 'What is VMRS?', o: ['A standard coding system for vehicle maintenance', 'A tire tracking system for retreads', 'A national network of truck stop shops', 'A fuel tax reporting program for fleets'], a: 0, e: 'Vehicle Maintenance Reporting Standards, from ATA\'s Technology & Maintenance Council.' },
       { t: 'mc', q: 'Which company sold TMT before Trimble\'s branding?', o: ['TMW Systems', 'KeepTruckin', 'Speedco', 'Comdata'], a: 0, e: 'Trimble TMT Fleet Maintenance was formerly from TMW Systems.' },
       { t: 'tf', q: 'Outside repairs do not need to be entered in the fleet\'s maintenance system.', a: false, e: 'Every repair belongs in the unit\'s history, or costs, repeats and warranty get lost.' }
     ],
@@ -504,9 +504,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['Carrier Transicold makes many of the reefer units in the field; Lynx Fleet monitors them remotely.', 'Setpoint, return air and alarm code are the first three facts to get.', 'Alarm meanings come from the model\'s own manual or dealer.', 'Protect the load in parallel with the repair.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What is Lynx Fleet?', o: ['Carrier Transicold\'s telematics platform for refrigerated fleets', 'A tire brand', 'A fuel card', 'A roadside network'], a: 0, e: 'Lynx Fleet monitors refrigeration units remotely.' },
+      { t: 'mc', q: 'What is Lynx Fleet?', o: ['Carrier Transicold\'s telematics platform for refrigerated fleets', 'A Carrier Transicold tire monitoring system', 'A fuel card for refrigerated carriers', 'A roadside network for reefer breakdowns'], a: 0, e: 'Lynx Fleet monitors refrigeration units remotely.' },
       { t: 'tf', q: 'A coordinator may tell the driver to lower the setpoint to protect a load.', a: false, e: 'The setpoint comes from the shipper. Changing it can ruin the freight.' },
-      { t: 'mc', q: 'Where should you look up what a Carrier reefer alarm code means?', o: ['The unit\'s operator or service manual, or a Carrier Transicold dealer', 'Another brand\'s alarm chart', 'The fuel receipt', 'The truck\'s VIN'], a: 0, e: 'Codes differ by maker and model. Use the official manual or dealer.' }
+      { t: 'mc', q: 'Where should you look up what a Carrier reefer alarm code means?', o: ['The unit\'s own manual or a Carrier dealer', 'Another reefer brand\'s alarm code chart', 'The trailer\'s last annual inspection report', 'The tractor\'s engine fault code list'], a: 0, e: 'Codes differ by maker and model. Use the official manual or dealer.' }
     ],
     sources: [
       ['Carrier — Lynx Fleet platform enhanced monitoring (news)', 'https://www.carrier.com/carrier/en/worldwide/news/news-article/carrier-transicold-s-lynx-fleet-platform-rolls-out-enhanced-monitoring-of-refrigerated-fleets.html'],
@@ -580,7 +580,7 @@ SOFTWARE.push(
     quiz: [
       { t: 'mc', q: 'What does a Cummins Connected Diagnostics notification add to a plain fault code?', o: ['Priority and a recommended action', 'The driver\'s pay', 'Fuel prices', 'A delivery appointment'], a: 0, e: 'It states urgency, recommended action, likely cause and derate timing.' },
       { t: 'tf', q: 'A derate warning tells you a power limit may come after a set time.', a: true, e: 'Use it as a deadline for the repair.' },
-      { t: 'mc', q: 'How is the service usually activated?', o: ['Through a telematics reseller, a Cummins representative or Cummins Care', 'At a truck wash', 'By the shipper', 'Through the fuel card'], a: 0, e: 'Cummins documents activation through these channels.' }
+      { t: 'mc', q: 'How is the service usually activated?', o: ['Through a telematics reseller, a Cummins representative or Cummins Care', 'Automatically, on every truck with a Cummins engine', 'By the shipper, for loads that need tracking', 'Through the fleet\'s fuel card provider'], a: 0, e: 'Cummins documents activation through these channels.' }
     ],
     sources: [
       ['Cummins — Mobile apps bring Cummins service anywhere', 'https://www.cummins.com/news/2016/03/17/mobile-apps-bring-cummins-service-anywhere-you-roam'],
@@ -652,9 +652,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['Virtual Technician sends fault severity for Detroit powertrains.', 'Severe events get expert follow-up with cause, parts and stocked locations.', 'Choose the shop with the part.', 'Use the portal for history per VIN.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'Who reviews severe Detroit Connect fault events, according to Detroit?', o: ['Experts at the Detroit Customer Support Center', 'The driver', 'The broker', 'The fuel desk'], a: 0, e: 'Detroit describes CSC experts analyzing severe events and following up.' },
+      { t: 'mc', q: 'Who reviews severe Detroit Connect fault events, according to Detroit?', o: ['Experts at the Detroit Customer Support Center', 'The driver, using the Detroit Connect app', 'The fleet\'s own telematics provider', 'The nearest Freightliner dealer\'s parts desk'], a: 0, e: 'Detroit describes CSC experts analyzing severe events and following up.' },
       { t: 'tf', q: 'For severe events, the follow-up can include nearby service locations with the needed parts in stock.', a: true, e: 'That helps you pick the shop that can fix it today.' },
-      { t: 'mc', q: 'Which trucks commonly use Detroit engines?', o: ['Freightliner and Western Star', 'Only trailers', 'Reefer units', 'Forklifts'], a: 0, e: 'Detroit is part of Daimler Truck North America, maker of Freightliner and Western Star.' }
+      { t: 'mc', q: 'Which trucks commonly use Detroit engines?', o: ['Freightliner and Western Star', 'Only trailers and converter dollies', 'Reefer units and APUs', 'Forklifts and yard tractors'], a: 0, e: 'Detroit is part of Daimler Truck North America, maker of Freightliner and Western Star.' }
     ],
     sources: [
       ['Freightliner (AU) — Detroit Connect Virtual Technician', 'https://freightliner.com.au/siteassets/documents/detroit-connect-virtual-technician.pdf'],
@@ -727,9 +727,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['FleetNet America is a 24/7 roadside and repair network for medium and heavy fleets.', 'It finds the provider; you still own the case.', 'Complete facts and clear limits make it fast.', 'Every network event belongs in your records.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What does FleetNet America mainly provide?', o: ['A 24/7 roadside and repair network', 'Engine fault codes', 'Fuel cards', 'Reefer units'], a: 0, e: 'It triages breakdowns and dispatches providers from its network.' },
+      { t: 'mc', q: 'What does FleetNet America mainly provide?', o: ['A 24/7 roadside and repair network', 'Engine fault codes from the truck', 'Fuel cards for over-the-road fleets', 'Refrigeration units for trailers'], a: 0, e: 'It triages breakdowns and dispatches providers from its network.' },
       { t: 'tf', q: 'Once FleetNet takes an event, the coordinator has nothing more to do.', a: false, e: 'You still authorize, follow up, inform dispatch and record it.' },
-      { t: 'mc', q: 'Which company owns FleetNet America?', o: ['Cox Automotive', 'Cummins', 'Trimble', 'Carrier'], a: 0, e: 'FleetNet is a Cox Automotive brand.' }
+      { t: 'mc', q: 'Which company owns FleetNet America?', o: ['Cox Automotive', 'Cummins Inc.', 'Trimble Inc.', 'Carrier Global'], a: 0, e: 'FleetNet is a Cox Automotive brand.' }
     ],
     sources: [
       ['FleetNet America — Emergency roadside assistance', 'https://fleetnetamerica.com/?p=32'],
@@ -743,6 +743,7 @@ SOFTWARE.push(
   {
     id: 'loves-truck-care', name: "Love's Truck Care & Speedco", brand: "Love's", maker: "Love's Travel Stops", kind: 'Truck stop service network', icon: 'wrench', tone: 'warning', group: 'Roadside, parts & service',
     url: 'https://www.loves.com', checked: 'November 2026',
+    real: [["Love's Truck Care & Speedco — truck services", 'https://loves.com/truck-services']],
     tagline: "A national network of truck service bays and roadside trucks at Love's locations: tires, lube, light mechanical, roadside help and DOT inspections.",
     card: {
       what: "Love's Truck Care and Speedco service locations, many at Love's travel stops, plus roadside service trucks.",
@@ -751,7 +752,7 @@ SOFTWARE.push(
     },
     sections: {
       what: [
-        "Love's runs a large network of truck service at its travel stops: **Love's Truck Care** and **Speedco** (which Love's bought from Bridgestone in 2017). In 2024 Love's reported more than 430 locations, 1,300+ service bays and 900 roadside service trucks.",
+        "Love's runs a large network of truck service at its travel stops: **Love's Truck Care** (called Love's Truck Tire Care until 2020) and **Speedco** (which Love's bought from Bridgestone in 2017). Love's truck-services page describes 400+ locations and about 1,400 maintenance bays; a 2024 release also counted 900 roadside service trucks.",
         { callout: { kind: 'info', title: 'Why it matters to you', text: 'Because the shops sit on the highways your trucks already use, a tire or a PM can often be done at a fuel stop instead of a detour.' } }
       ],
       why: [ "On-route service cuts downtime: the truck is already there for fuel and the driver's break. For tires, lube and light repairs, a highway network is often the fastest option." ],
@@ -799,11 +800,12 @@ SOFTWARE.push(
       takeaways: [ { ul: ["Love's Truck Care and Speedco are an on-route service network.", 'Tires, lube/PM, light mechanical, roadside and DOT inspections.', 'Time service with fuel stops and breaks.', 'Check which services each site offers.'] } ]
     },
     quiz: [
-      { t: 'mc', q: "What is Speedco?", o: ["Love's quick lube and preventive maintenance brand", 'A fuel card', 'A telematics device', 'A reefer maker'], a: 0, e: "Love's bought Speedco from Bridgestone in 2017." },
+      { t: 'mc', q: "What is Speedco?", o: ["Love's quick lube and preventive maintenance brand", 'A fuel card for Love\'s customers', 'A telematics device for Love\'s fleets', 'A brand of reefer units'], a: 0, e: "Love's bought Speedco from Bridgestone in 2017." },
       { t: 'tf', q: 'Booking a PM during the driver\'s break at an on-route location can avoid extra downtime.', a: true, e: 'The truck is already stopped; the work fits the break.' },
       { t: 'mc', q: "Which service does Love's Truck Care NOT list in its standard menu?", o: ['Tire work', 'Lube and PM', 'DOT inspections', 'Freight brokerage'], a: 3, e: 'It is a truck service network, not a freight broker.' }
     ],
     sources: [
+      ["Love's — Truck services", 'https://loves.com/truck-services'],
       ["Love's — Love's opens five new Speedco locations (2024)", 'https://www.loves.com/news/2024/april/loves-opens-five-new-speedco-locations'],
       ["Love's — New Love's Truck Care and Speedco locations open (2020)", 'https://www.loves.com/news/2020/october/new-loves-truck-care-and-speedco-locations-open'],
       ['Business Wire — Love\'s acquires Speedco (2017)', 'https://www.businesswire.com/news/home/20171101006122/en']
@@ -869,8 +871,8 @@ SOFTWARE.push(
       takeaways: [ { ul: ['FleetPride is a heavy-duty parts distributor with a national branch network.', 'Exact part numbers or VIN fit prevent wrong parts.', 'Check other branches before accepting a parts delay.', 'Record the cost and track cores.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What is FleetPride?', o: ['A heavy-duty truck and trailer parts distributor', 'A telematics platform', 'A fuel card', 'An engine maker'], a: 0, e: 'It sells parts through branches and online.' },
-      { t: 'mc', q: 'What should you have before searching for a part?', o: ['The exact part number or the unit\'s VIN', 'The driver\'s phone number', 'The load number', 'The fuel price'], a: 0, e: 'Part number or VIN fit avoids ordering the wrong part.' },
+      { t: 'mc', q: 'What is FleetPride?', o: ['A heavy-duty parts distributor', 'A telematics and ELD platform', 'A fuel card for heavy trucks', 'A maker of heavy-duty engines'], a: 0, e: 'It sells parts through branches and online.' },
+      { t: 'mc', q: 'What should you have before searching for a part?', o: ['The exact part number or the unit\'s VIN', 'The driver\'s phone number and location', 'The load number and delivery time', 'The fuel price at the nearest stop'], a: 0, e: 'Part number or VIN fit avoids ordering the wrong part.' },
       { t: 'tf', q: 'If the usual supplier is out of a part, checking other branches can cut downtime.', a: true, e: 'Another branch or dealer may have it today.' }
     ],
     sources: [
@@ -937,9 +939,9 @@ SOFTWARE.push(
       takeaways: [ { ul: ['LoadMaster is a TMS: dispatch\'s system.', 'Maintenance status and ETR drive dispatch planning.', 'Linked systems can flag units unavailable automatically.', 'Release units promptly.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What kind of software is McLeod LoadMaster?', o: ['A transportation management system (TMS)', 'An engine diagnostic tool', 'A reefer controller', 'A parts catalog'], a: 0, e: 'It manages loads, dispatch and billing.' },
+      { t: 'mc', q: 'What kind of software is McLeod LoadMaster?', o: ['A transportation management system (TMS)', 'An engine diagnostic tool for shops', 'A reefer temperature controller', 'A heavy-duty parts catalog'], a: 0, e: 'It manages loads, dispatch and billing.' },
       { t: 'tf', q: 'A unit with an open repair order can be flagged unavailable for dispatch when maintenance and LoadMaster are linked.', a: true, e: 'Maintenance vendors describe this integration.' },
-      { t: 'mc', q: 'What is the coordinator\'s main job in the TMS?', o: ['Keep unit status and ETR accurate', 'Book loads', 'Price freight', 'Pay drivers'], a: 0, e: 'Dispatch plans from your status and ETR.' }
+      { t: 'mc', q: 'What is the coordinator\'s main job in the TMS?', o: ['Keep unit status and ETR accurate', 'Book loads for idle trucks', 'Price freight for customers', 'Approve driver pay each week'], a: 0, e: 'Dispatch plans from your status and ETR.' }
     ],
     sources: [
       ['McLeod Software', 'https://www.mcleodsoftware.com'],
@@ -1010,7 +1012,7 @@ SOFTWARE.push(
       takeaways: [ { ul: ['Comdata provides fuel cards and on-road payments.', 'Express Codes and virtual cards can pay roadside vendors.', 'Approve, verify, pay exactly, record.', 'Payment codes are money: guard them.'] } ]
     },
     quiz: [
-      { t: 'mc', q: 'What can a Comdata Express Code be used for, according to Comdata?', o: ['Moving funds electronically to registered payees such as repair shops', 'Reading engine faults', 'Booking loads', 'Setting reefer temperature'], a: 0, e: 'It transfers funds to registered cardholders, including repair shops.' },
+      { t: 'mc', q: 'What can a Comdata Express Code be used for, according to Comdata?', o: ['Sending funds to registered payees, like repair shops', 'Reading engine fault codes from the truck', 'Booking loads on a freight load board', 'Setting the reefer unit\'s temperature'], a: 0, e: 'It transfers funds to registered cardholders, including repair shops.' },
       { t: 'tf', q: 'You should verify a vendor through a number you already trust before sending a payment code.', a: true, e: 'Never send money to an unverified contact.' },
       { t: 'mc', q: 'How much should you pay a roadside vendor?', o: ['Exactly the approved amount', 'Whatever they ask', 'Double to be safe', 'Nothing until next month'], a: 0, e: 'Pay the approved amount and record it.' }
     ],
@@ -1018,6 +1020,80 @@ SOFTWARE.push(
       ['Comdata — Comchek', 'https://www.comdata.com/products-services/comchek'],
       ['Comdata — Fleet payment solutions', 'https://comdata.com/products-services/fleet-payments'],
       ['Business Wire — Comdata launches Virtual Comchek', 'https://www.businesswire.com/news/home/20200910005224/en/Comdata-Launches-Virtual-Comchek-a-One-Time-Use-Digital-Payment-Card-for-Fleets-and-Drivers']
+    ]
+  }
+);
+
+SOFTWARE.push(
+  /* --------------------------------------------------------- TA TRUCK SERVICE */
+  {
+    id: 'ta-truck-service', name: 'TA Truck Service', maker: 'TravelCenters of America', kind: 'Truck stop service network', icon: 'wrench', tone: 'warning', group: 'Roadside, parts & service',
+    url: 'https://www.ta-petro.com', checked: 'November 2026',
+    real: [['TA Truck Service — TA & Petro website', 'https://www.ta-petro.com']],
+    tagline: 'Truck service bays at TA and Petro travel centers, plus TA\'s RoadSquad roadside brand: maintenance, tires and repairs along the interstates.',
+    card: {
+      what: 'The truck service and repair network of TravelCenters of America, with service bays at many TA and Petro travel centers.',
+      use: 'Preventive maintenance, tires and mechanical repairs on route; roadside help under the RoadSquad name where it is offered.',
+      who: 'Coordinators booking on-route service, drivers, and fleets with national accounts.'
+    },
+    sections: {
+      what: [
+        "TravelCenters of America runs the **TA** and **Petro** travel center brands (bp bought the company in 2023). Many of its centers have a **TA Truck Service** shop: service bays, some open 24/7, doing maintenance, tires and repairs. TA's roadside service brand is **RoadSquad**.",
+        { callout: { kind: 'warning', title: 'Check current roadside coverage', text: 'Trade press has reported TA pausing its on-highway emergency roadside service. Before you rely on RoadSquad for a breakdown, confirm with TA what is offered today in that area.' } }
+      ],
+      why: [ "Like Love's, TA's value is location: the shop is where the truck already stops for fuel and the driver's break. A PM or a tire done there costs no detour." ],
+      who: [ { table: { head: ['Role', 'Use'], rows: [
+        ['Maintenance coordinator', 'Books PM, tires and repairs at centers on the route; follows the work.'],
+        ['Driver', 'Brings the truck in during fuel or rest stops.'],
+        ['Fleet manager', 'National account terms.']
+      ] } } ],
+      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
+        ['TA / Petro', 'TravelCenters of America\'s two main travel center brands. Both can have TA Truck Service shops.'],
+        ['TA Truck Service', 'The service shop network inside the travel centers.'],
+        ['RoadSquad', 'TA\'s roadside service brand. Confirm current availability.'],
+        ['Service bay count and hours', 'Each location lists its own; not every shop is 24/7.']
+      ] } } ],
+      features: [ { ig: 'versus', icon: 'grid', title: 'What a coordinator uses it for', items: [
+        { t: 'Preventive maintenance', sub: 'PM on route, timed with a stop.' }, { t: 'Tires', sub: 'Repair and replacement.' },
+        { t: 'Mechanical repairs', sub: 'At shops with the right bays and staff.' }, { t: 'Roadside', sub: 'RoadSquad, where offered today.' }
+      ] } ],
+      how: [ { ig: 'process', icon: 'route', title: 'Booking on route', items: [
+        { icon: 'route', t: 'Check the route', d: 'Which TA or Petro the truck passes' }, { icon: 'phone', t: 'Call the shop', d: 'Bays, hours, the service you need' },
+        { icon: 'clock', t: 'Set the time', d: 'With HOS and the load' }, { icon: 'wrench', t: 'Service', d: 'While the driver rests' }, { icon: 'clipboard', t: 'Invoice', d: 'Into your records' }
+      ] } ],
+      example: [ "**Example fleet (fictional).** TR-532 needs two trailer tires before its next load. The driver will take a 10-hour break at a Petro on I-20 tonight. You call the TA Truck Service shop there, confirm they have the size in stock and an open bay at 22:00, and send the PO. The tires are on before the driver's next shift." ],
+      role: [ { ul: ['Call ahead: confirm bays, hours, parts and the exact service.', 'Time the work with fuel and rest stops.', 'Confirm current roadside coverage before relying on it.', 'Read the invoice like any other: unit, PO, lines, total.'] } ],
+      workflow: [ { timeline: [
+        { title: 'Need', text: 'PM, tires, or a repair.', owner: 'Coordinator' },
+        { title: 'Pick the center', text: 'On the route, with the right service.', owner: 'Coordinator + dispatch' },
+        { title: 'Book and authorize', text: 'Time, PO, limit.', owner: 'Coordinator' },
+        { title: 'Work done', text: 'Driver continues.', owner: 'TA Truck Service' },
+        { title: 'Record', text: 'Invoice checked and entered.', owner: 'Coordinator' }
+      ] } ],
+      visual: [ { mock: { label: swMockLabel('TA'), title: 'Service booking · TR-532', status: 'Scheduled', tone: 'info', rows: [
+        ['Location', 'Petro, I-20 (fictional exit)'], ['Service', 'Replace 2 trailer tires, axle 1 left'], ['Time', 'Wed 22:00, during 10-hour break'], ['PO', 'PO 48902'], ['Stock', 'Size confirmed by phone']
+      ] } } ],
+      mistakes: [ { compare: {
+        no: { title: 'Common mistakes', items: ['Sending a truck without calling ahead', 'Assuming every center is 24/7', 'Counting on roadside service without checking'] },
+        yes: { title: 'Do this instead', items: ['Confirm bays, stock and time', 'Check that location\'s hours', 'Confirm current roadside coverage'] }
+      } } ],
+      scenario: [ { exercise: { type: 'choose', prompt: 'A driver will stop at a TA tonight. T-118 needs a PM. What do you do first?', options: [
+        { text: 'Tell the driver to ask when he gets there.', correct: false, why: 'The shop may be full or closed at that hour.' },
+        { text: 'Call that location\'s TA Truck Service shop to confirm a bay, the hours and the PM, then send the PO.', correct: true, why: 'Booked work fits the driver\'s break.' },
+        { text: 'Skip it; PM can wait.', correct: false, why: 'On-route PM avoids pulling the truck off a load later.' }
+      ] } } ],
+      takeaways: [ { ul: ['TA Truck Service is the shop network at TA and Petro travel centers.', 'Call ahead: bays, hours and parts differ by location.', 'RoadSquad is TA\'s roadside brand; confirm current coverage.', 'Treat its invoices like any other: check every line.'] } ]
+    },
+    quiz: [
+      { t: 'mc', q: 'Which travel center brands belong to TravelCenters of America?', o: ['TA and Petro', 'Love\'s and Speedco', 'Two fuel card brands', 'Two parts distributors'], a: 0, e: 'TA and Petro are TravelCenters of America brands.' },
+      { t: 'mc', q: 'What is RoadSquad?', o: ['TA\'s roadside service brand', 'A tire size', 'A fuel card', 'A telematics device'], a: 0, e: 'Confirm its current coverage before relying on it.' },
+      { t: 'tf', q: 'Every TA Truck Service location is open 24/7.', a: false, e: 'Hours and bay counts differ by location. Call ahead.' }
+    ],
+    sources: [
+      ['TA Petro — New TA Truck Service center in Lake City, FL', 'https://www.ta-petro.com/blog/new-ta-truck-service-center-now-open-in-lake-city-florida/'],
+      ['Truck Parts & Service — TA opens new 24/7/365 service facility', 'https://www.truckpartsandservice.com/home/article/14978797/ta-opens-new-247365-service-facility'],
+      ['Fleet Maintenance — Truck and travel stops in the roadside breakdown business', 'https://www.fleetmaintenance.com/in-the-bay/article/21280220/truck-and-travel-stops-loom-large-in-roadside-breakdown-business'],
+      ['Truckers News — TA Petro pauses on-highway emergency roadside service', 'https://www.truckersnews.com/news/article/15770898/ta-petro-pauses-onhighway-emergency-roadside-assistance-service']
     ]
   }
 );

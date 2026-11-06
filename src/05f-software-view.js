@@ -26,6 +26,15 @@ function swPhotoHTML(id, caption) {
   return `<figure class="lib-figure sw-photo">${libPhotoImg(x, 960, 'lib-photo')}<figcaption><span class="sw-photo__cap">${esc(caption || x.name)}</span> ${libCredit(x)}</figcaption></figure>`;
 }
 
+/* "See the real thing": the vendor's own public pages show its real screens
+   and documents. We link to them rather than copying them. */
+function swRealHTML(s) {
+  const links = [...(s.real || []), [`${s.maker} official website`, s.url]];
+  return `<aside class="sw-real"><div class="sw-real__h">${icon('external', 'icon--sm')}<strong>See the real thing</strong></div>
+    <p>The mockup above is simplified on purpose. ${esc(s.brand || s.name)}'s real screens and documents are shown on its own public pages:</p>
+    <ul>${links.map(([t, u]) => `<li><a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(t)}<span class="sr-only"> (opens in a new tab)</span></a></li>`).join('')}</ul></aside>`;
+}
+
 /* ---------- Hub ---------- */
 function viewSoftware(id) {
   if (id) return viewSoftwarePage(id);
@@ -90,6 +99,7 @@ function viewSoftwarePage(id) {
   const x = { key: swCheckKey(s), l: { check: s.quiz } };
   const body = (k) => {
     if (k === 'check') return lessonCheckHTML(x);
+    if (k === 'visual') return renderBlocks(s.sections[k] || []) + swRealHTML(s);
     return renderBlocks(s.sections[k] || []);
   };
   const toc = SW_SECTIONS.map(([k, t, ic], n) => `<li><button type="button" class="sw-toc__link" data-sec="${k}"><span class="sw-toc__n">${n + 1}</span><span>${esc(t)}</span></button></li>`).join('');

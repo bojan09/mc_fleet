@@ -390,7 +390,7 @@ addLesson('beginner', 'm3', {
     ]
   } },
   check: [
-    { t: 'mc', q: 'Why do tractors usually have two air pressure gauges?', o: ['One for each tire', 'They show the primary and secondary brake air circuits', 'One is for the trailer landing gear', 'For backup in case of a flat'], a: 1, e: 'The air brake system has primary and secondary circuits, each with its own gauge.' },
+    { t: 'mc', q: 'Why do tractors usually have two air pressure gauges?', o: ['One gauge reads the tractor tires, the other the trailer tires', 'They show the primary and secondary brake air circuits', 'One shows tank pressure, the other the air in the suspension bags', 'The second gauge is a spare in case the first one stops working'], a: 1, e: 'The air brake system has primary and secondary circuits, each with its own gauge.' },
     { t: 'tf', q: 'A HEST (high exhaust system temperature) lamp during a regeneration is, by itself, a sign of a failure.', a: false, e: 'It indicates hot exhaust during regeneration at low speed — a caution to keep clear of flammable material, not a fault by itself.' }
   ],
   takeaways: ['Oil pressure, coolant temperature and air pressure are the "stop now" gauges when abnormal.', 'Lamp color is the first clue; the exact message is the second.', 'Ask whether readings are steady, climbing or falling.', 'Some problems (charging) change what the driver should do before shutting down.'],
@@ -420,7 +420,7 @@ addLesson('beginner', 'm5', {
   } },
   check: [
     { t: 'mc', q: 'Under U.S. rules, how soon must warning devices be placed after a truck stops on the shoulder?', o: ['Within 1 hour', 'Within 10 minutes', 'Only at night', 'Only if the truck is loaded'], a: 1, e: '49 CFR 392.22 requires placement as soon as possible but within 10 minutes.' },
-    { t: 'wwyd', q: 'A driver calls from the shoulder but hasn\'t turned on flashers yet. You:', o: ['Start with the odometer reading', 'Ask them to turn on flashers and place warning devices first, then call back', 'Tell them to keep driving to an exit', 'Hang up and call dispatch'], a: 1, e: 'Safety steps first; information second.' }
+    { t: 'wwyd', q: 'A driver calls from the shoulder but hasn\'t turned on flashers yet. You:', o: ['Start by taking the odometer reading and unit number for the case', 'Ask them to turn on flashers and place warning devices first, then call back', 'Tell them to keep rolling slowly to the next exit before stopping', 'Put them on hold and call dispatch to warn them about the delay'], a: 1, e: 'Safety steps first; information second.' }
   ],
   takeaways: ['Flashers immediately; warning devices within 10 minutes (U.S.).', 'Help the driver in the right order: safe, visible, then informed.', 'Emergency services come first when anyone is at risk.', 'Remind — don\'t direct — trained safety procedures.'],
   tips: ['Ask "Are you somewhere safe and visible?" as your very first sentence.', 'Offer to call back so the driver can finish safety steps.'],
@@ -457,7 +457,7 @@ addLesson('advanced', 'm2', {
     ]
   } },
   check: [
-    { t: 'mc', q: 'Which duty cycle makes DPF loading problems more likely?', o: ['Long steady highway runs', 'Heavy idling and short, stop-and-go trips', 'Running empty', 'Night driving'], a: 1, e: 'Low exhaust temperatures limit passive regeneration.' },
+    { t: 'mc', q: 'Which duty cycle makes DPF loading problems more likely?', o: ['Long, steady highway runs at cruising speed', 'Heavy idling and short, stop-and-go trips', 'Running empty trailers on flat interstate routes', 'Night driving in cold weather on the highway'], a: 1, e: 'Low exhaust temperatures limit passive regeneration.' },
     { t: 'tf', q: 'DEF can freeze in cold weather, which is why DEF tanks and lines are heated.', a: true, e: 'DEF freezes around 12 °F (−11 °C). Systems are designed to thaw it.' }
   ],
   takeaways: ['Exhaust path: engine → DOC → DPF → DEF dosing → SCR → stack.', 'Regeneration can be passive, active or parked.', 'DEF is 32.5% urea and freezes around 12 °F.', 'Repeat DPF loading means an upstream cause still exists.'],
@@ -498,7 +498,7 @@ addLesson('advanced', 'm4', {
   } },
   check: [
     { t: 'mc', q: 'Wear on both shoulders of a tire most often suggests:', o: ['Over-inflation', 'Under-inflation', 'A new tire', 'Too much tread'], a: 1, e: 'Under-inflated tires carry load on the shoulders.' },
-    { t: 'mc', q: 'Why ask "inside or outside dual?"', o: ['It changes the price', 'The vendor needs exact position, and an inside flat can overload the outside tire', 'It doesn\'t matter', 'Only steer tires have duals'], a: 1, e: 'Position precision saves time and prevents a second failure.' }
+    { t: 'mc', q: 'Why ask "inside or outside dual?"', o: ['It changes the price, because inside tires take longer to mount', 'The vendor needs exact position, and an inside flat can overload the outside tire', 'It only matters for steer tires, which are mounted as duals', 'It doesn\'t matter; the vendor checks every tire on the axle anyway'], a: 1, e: 'Position precision saves time and prevents a second failure.' }
   ],
   takeaways: ['A standard tractor-trailer has 18 tires: 2 steer, 8 drive, 8 trailer.', 'Steer tires need at least 4/32″ tread; other positions 2/32″ (U.S.).', 'Wear patterns point to other problems to fix.', 'Give vendors axle, side, dual position, size and location.'],
   tips: ['Ask drivers to photograph the sidewall size when safe.', 'Track tire failures by position — patterns point to alignment or inflation issues.'],
@@ -529,7 +529,7 @@ addLesson('expert', 'm1', {
     ]
   } },
   check: [
-    { t: 'mc', q: 'A forecast differs from a budget because it:', o: ['Never changes', 'Updates the plan with actual results and known upcoming events', 'Ignores miles', 'Only covers tires'], a: 1, e: 'Forecasts are living estimates; budgets are the plan.' },
+    { t: 'mc', q: 'A forecast differs from a budget because it:', o: ['It is set at the start of the year and never changes', 'Updates the plan with actual results and known upcoming events', 'It looks only at last year\'s spend and ignores planned miles', 'It covers only tires and parts, while the budget covers labor'], a: 1, e: 'Forecasts are living estimates; budgets are the plan.' },
     { t: 'mc', q: 'Budget $56,000, actual $63,900. Variance %?', o: ['7.9%', '14.1%', '12.4%', '-14.1%'], a: 1, e: '(63,900 − 56,000) ÷ 56,000 = 14.1% over.' }
   ],
   takeaways: ['Know your budget categories and their shares.', 'Forecast = planned miles × CPM + known major repairs.', 'Always explain variances with causes, not just numbers.', 'Separate one-off events from trend changes.'],
