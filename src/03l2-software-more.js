@@ -743,6 +743,7 @@ SOFTWARE.push(
   {
     id: 'loves-truck-care', name: "Love's Truck Care & Speedco", brand: "Love's", maker: "Love's Travel Stops", kind: 'Truck stop service network', icon: 'wrench', tone: 'warning', group: 'Roadside, parts & service',
     url: 'https://www.loves.com', checked: 'November 2026',
+    real: [["Love's Truck Care & Speedco — truck services", 'https://loves.com/truck-services']],
     tagline: "A national network of truck service bays and roadside trucks at Love's locations: tires, lube, light mechanical, roadside help and DOT inspections.",
     card: {
       what: "Love's Truck Care and Speedco service locations, many at Love's travel stops, plus roadside service trucks.",
@@ -751,7 +752,7 @@ SOFTWARE.push(
     },
     sections: {
       what: [
-        "Love's runs a large network of truck service at its travel stops: **Love's Truck Care** and **Speedco** (which Love's bought from Bridgestone in 2017). In 2024 Love's reported more than 430 locations, 1,300+ service bays and 900 roadside service trucks.",
+        "Love's runs a large network of truck service at its travel stops: **Love's Truck Care** (called Love's Truck Tire Care until 2020) and **Speedco** (which Love's bought from Bridgestone in 2017). Love's truck-services page describes 400+ locations and about 1,400 maintenance bays; a 2024 release also counted 900 roadside service trucks.",
         { callout: { kind: 'info', title: 'Why it matters to you', text: 'Because the shops sit on the highways your trucks already use, a tire or a PM can often be done at a fuel stop instead of a detour.' } }
       ],
       why: [ "On-route service cuts downtime: the truck is already there for fuel and the driver's break. For tires, lube and light repairs, a highway network is often the fastest option." ],
@@ -804,6 +805,7 @@ SOFTWARE.push(
       { t: 'mc', q: "Which service does Love's Truck Care NOT list in its standard menu?", o: ['Tire work', 'Lube and PM', 'DOT inspections', 'Freight brokerage'], a: 3, e: 'It is a truck service network, not a freight broker.' }
     ],
     sources: [
+      ["Love's — Truck services", 'https://loves.com/truck-services'],
       ["Love's — Love's opens five new Speedco locations (2024)", 'https://www.loves.com/news/2024/april/loves-opens-five-new-speedco-locations'],
       ["Love's — New Love's Truck Care and Speedco locations open (2020)", 'https://www.loves.com/news/2020/october/new-loves-truck-care-and-speedco-locations-open'],
       ['Business Wire — Love\'s acquires Speedco (2017)', 'https://www.businesswire.com/news/home/20171101006122/en']
@@ -1018,6 +1020,80 @@ SOFTWARE.push(
       ['Comdata — Comchek', 'https://www.comdata.com/products-services/comchek'],
       ['Comdata — Fleet payment solutions', 'https://comdata.com/products-services/fleet-payments'],
       ['Business Wire — Comdata launches Virtual Comchek', 'https://www.businesswire.com/news/home/20200910005224/en/Comdata-Launches-Virtual-Comchek-a-One-Time-Use-Digital-Payment-Card-for-Fleets-and-Drivers']
+    ]
+  }
+);
+
+SOFTWARE.push(
+  /* --------------------------------------------------------- TA TRUCK SERVICE */
+  {
+    id: 'ta-truck-service', name: 'TA Truck Service', maker: 'TravelCenters of America', kind: 'Truck stop service network', icon: 'wrench', tone: 'warning', group: 'Roadside, parts & service',
+    url: 'https://www.ta-petro.com', checked: 'November 2026',
+    real: [['TA Truck Service — TA & Petro website', 'https://www.ta-petro.com']],
+    tagline: 'Truck service bays at TA and Petro travel centers, plus TA\'s RoadSquad roadside brand: maintenance, tires and repairs along the interstates.',
+    card: {
+      what: 'The truck service and repair network of TravelCenters of America, with service bays at many TA and Petro travel centers.',
+      use: 'Preventive maintenance, tires and mechanical repairs on route; roadside help under the RoadSquad name where it is offered.',
+      who: 'Coordinators booking on-route service, drivers, and fleets with national accounts.'
+    },
+    sections: {
+      what: [
+        "TravelCenters of America runs the **TA** and **Petro** travel center brands (bp bought the company in 2023). Many of its centers have a **TA Truck Service** shop: service bays, some open 24/7, doing maintenance, tires and repairs. TA's roadside service brand is **RoadSquad**.",
+        { callout: { kind: 'warning', title: 'Check current roadside coverage', text: 'Trade press has reported TA pausing its on-highway emergency roadside service. Before you rely on RoadSquad for a breakdown, confirm with TA what is offered today in that area.' } }
+      ],
+      why: [ "Like Love's, TA's value is location: the shop is where the truck already stops for fuel and the driver's break. A PM or a tire done there costs no detour." ],
+      who: [ { table: { head: ['Role', 'Use'], rows: [
+        ['Maintenance coordinator', 'Books PM, tires and repairs at centers on the route; follows the work.'],
+        ['Driver', 'Brings the truck in during fuel or rest stops.'],
+        ['Fleet manager', 'National account terms.']
+      ] } } ],
+      concepts: [ { table: { head: ['Term', 'Meaning'], rows: [
+        ['TA / Petro', 'TravelCenters of America\'s two main travel center brands. Both can have TA Truck Service shops.'],
+        ['TA Truck Service', 'The service shop network inside the travel centers.'],
+        ['RoadSquad', 'TA\'s roadside service brand. Confirm current availability.'],
+        ['Service bay count and hours', 'Each location lists its own; not every shop is 24/7.']
+      ] } } ],
+      features: [ { ig: 'versus', icon: 'grid', title: 'What a coordinator uses it for', items: [
+        { t: 'Preventive maintenance', sub: 'PM on route, timed with a stop.' }, { t: 'Tires', sub: 'Repair and replacement.' },
+        { t: 'Mechanical repairs', sub: 'At shops with the right bays and staff.' }, { t: 'Roadside', sub: 'RoadSquad, where offered today.' }
+      ] } ],
+      how: [ { ig: 'process', icon: 'route', title: 'Booking on route', items: [
+        { icon: 'route', t: 'Check the route', d: 'Which TA or Petro the truck passes' }, { icon: 'phone', t: 'Call the shop', d: 'Bays, hours, the service you need' },
+        { icon: 'clock', t: 'Set the time', d: 'With HOS and the load' }, { icon: 'wrench', t: 'Service', d: 'While the driver rests' }, { icon: 'clipboard', t: 'Invoice', d: 'Into your records' }
+      ] } ],
+      example: [ "**Example fleet (fictional).** TR-532 needs two trailer tires before its next load. The driver will take a 10-hour break at a Petro on I-20 tonight. You call the TA Truck Service shop there, confirm they have the size in stock and an open bay at 22:00, and send the PO. The tires are on before the driver's next shift." ],
+      role: [ { ul: ['Call ahead: confirm bays, hours, parts and the exact service.', 'Time the work with fuel and rest stops.', 'Confirm current roadside coverage before relying on it.', 'Read the invoice like any other: unit, PO, lines, total.'] } ],
+      workflow: [ { timeline: [
+        { title: 'Need', text: 'PM, tires, or a repair.', owner: 'Coordinator' },
+        { title: 'Pick the center', text: 'On the route, with the right service.', owner: 'Coordinator + dispatch' },
+        { title: 'Book and authorize', text: 'Time, PO, limit.', owner: 'Coordinator' },
+        { title: 'Work done', text: 'Driver continues.', owner: 'TA Truck Service' },
+        { title: 'Record', text: 'Invoice checked and entered.', owner: 'Coordinator' }
+      ] } ],
+      visual: [ { mock: { label: swMockLabel('TA'), title: 'Service booking · TR-532', status: 'Scheduled', tone: 'info', rows: [
+        ['Location', 'Petro, I-20 (fictional exit)'], ['Service', 'Replace 2 trailer tires, axle 1 left'], ['Time', 'Wed 22:00, during 10-hour break'], ['PO', 'PO 48902'], ['Stock', 'Size confirmed by phone']
+      ] } } ],
+      mistakes: [ { compare: {
+        no: { title: 'Common mistakes', items: ['Sending a truck without calling ahead', 'Assuming every center is 24/7', 'Counting on roadside service without checking'] },
+        yes: { title: 'Do this instead', items: ['Confirm bays, stock and time', 'Check that location\'s hours', 'Confirm current roadside coverage'] }
+      } } ],
+      scenario: [ { exercise: { type: 'choose', prompt: 'A driver will stop at a TA tonight. T-118 needs a PM. What do you do first?', options: [
+        { text: 'Tell the driver to ask when he gets there.', correct: false, why: 'The shop may be full or closed at that hour.' },
+        { text: 'Call that location\'s TA Truck Service shop to confirm a bay, the hours and the PM, then send the PO.', correct: true, why: 'Booked work fits the driver\'s break.' },
+        { text: 'Skip it; PM can wait.', correct: false, why: 'On-route PM avoids pulling the truck off a load later.' }
+      ] } } ],
+      takeaways: [ { ul: ['TA Truck Service is the shop network at TA and Petro travel centers.', 'Call ahead: bays, hours and parts differ by location.', 'RoadSquad is TA\'s roadside brand; confirm current coverage.', 'Treat its invoices like any other: check every line.'] } ]
+    },
+    quiz: [
+      { t: 'mc', q: 'Which travel center brands belong to TravelCenters of America?', o: ['TA and Petro', 'Love\'s and Speedco', 'Two fuel card brands', 'Two parts distributors'], a: 0, e: 'TA and Petro are TravelCenters of America brands.' },
+      { t: 'mc', q: 'What is RoadSquad?', o: ['TA\'s roadside service brand', 'A tire size', 'A fuel card', 'A telematics device'], a: 0, e: 'Confirm its current coverage before relying on it.' },
+      { t: 'tf', q: 'Every TA Truck Service location is open 24/7.', a: false, e: 'Hours and bay counts differ by location. Call ahead.' }
+    ],
+    sources: [
+      ['TA Petro — New TA Truck Service center in Lake City, FL', 'https://www.ta-petro.com/blog/new-ta-truck-service-center-now-open-in-lake-city-florida/'],
+      ['Truck Parts & Service — TA opens new 24/7/365 service facility', 'https://www.truckpartsandservice.com/home/article/14978797/ta-opens-new-247365-service-facility'],
+      ['Fleet Maintenance — Truck and travel stops in the roadside breakdown business', 'https://www.fleetmaintenance.com/in-the-bay/article/21280220/truck-and-travel-stops-loom-large-in-roadside-breakdown-business'],
+      ['Truckers News — TA Petro pauses on-highway emergency roadside service', 'https://www.truckersnews.com/news/article/15770898/ta-petro-pauses-onhighway-emergency-roadside-assistance-service']
     ]
   }
 );

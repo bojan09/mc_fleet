@@ -43,7 +43,7 @@ const LEARN_TOGETHER = [
   { t: 'Samsara + Telematics + Fleet Monitoring', d: 'Fault codes, location and DVIRs, then how fleets track them across every unit.', items: [{ sw: 'samsara' }, { m: 'advanced.m7', later: true }, { m: 'expert.m9', later: true }] },
   { t: 'Thermo King + Refrigeration + Reefer Maintenance', d: 'Know the reefer trailer first, then the unit, its alarms and its maintenance.', items: [{ m: 'beginner.m3' }, { sw: 'thermo-king' }, { page: ['Reefer unit in the Visual Library', '#/library/reeferunit', 'image'] }] },
   { t: 'Engine-maker alerts + Fault codes', d: 'Read a fault list first, then see how Cummins and Detroit add priority and next steps.', items: [{ m: 'advanced.m2', later: true }, { sw: 'cummins-connected' }, { sw: 'detroit-connect' }] },
-  { t: 'Roadside networks + Breakdowns', d: 'Run the first ten minutes of a breakdown, then hand it to a network, a truck stop shop or a parts branch.', items: [{ m: 'beginner.m5' }, { sw: 'fleetnet' }, { sw: 'loves-truck-care' }, { sw: 'fleetpride' }] },
+  { t: 'Roadside networks + Breakdowns', d: 'Run the first ten minutes of a breakdown, then hand it to a network, a truck stop shop or a parts branch.', items: [{ m: 'beginner.m5' }, { sw: 'fleetnet' }, { sw: 'loves-truck-care' }, { sw: 'ta-truck-service' }, { sw: 'fleetpride' }] },
   { t: 'Dispatch + Loads + Transportation Operations', d: 'How loads, drivers and dispatch work, and how a breakdown affects them.', items: [{ sw: 'pro-transport' }, { m: 'operations.m1' }, { m: 'advanced.m6', later: true }] }
 ];
 const NOT_YET = [

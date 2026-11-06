@@ -335,6 +335,7 @@ function renderBlock(b) {
       ${b.tabs.map((t, i) => `<div class="tabpanel prose" role="tabpanel" id="${id}-p${i}" aria-labelledby="${id}-t${i}" ${i ? 'hidden' : ''}>${renderBlocks(t.body)}</div>`).join('')}</div>`;
   }
   if (b.ig) return infographicHTML(b);
+  if (b.doc) return docHTML(b.doc);
   if (b.industry) {
     const x = b.industry;
     return `<aside class="industry" aria-label="Industry example: ${esc(x.name)}"><div class="industry__head"><span class="industry__tag">${icon('pin', 'icon--sm')} Industry example</span><span class="badge badge--outline">${esc(x.cat)}</span></div>`

@@ -179,3 +179,150 @@ enrich('beginner.m8.l1', { add: [
 lessonAt('beginner.m8.l1').check.push(
   { t: 'mc', q: 'What does the next shift most need from your handover note?', o: ['A copy of every message from today', 'Open cases with status and ETR, items waiting on someone, things due soon, and when to call you', 'Only the cases that are closed', 'Nothing; they can read the case system'], a: 1, e: 'A short note with open cases, waiting items, upcoming due dates and escalation triggers keeps cases from falling through the gap between shifts.' }
 );
+
+/* ===========================================================================
+   SAMPLE DOCUMENTS — realistic, generic layouts with numbered hotspots
+   (rendered by docHTML in 05o-sample-docs.js). All vendors, fleets, people
+   and numbers are fictional; every total below is arithmetically correct.
+   =========================================================================== */
+
+/* ---- Beginner 8.2: reading an on-route service invoice ---- */
+lessonAt('beginner.m8.l2').deep.push({ title: 'Reading a truck-stop service invoice', blocks: [
+  `On-route shops at truck stops send invoices that look much alike: who and what at the top, the story of the repair in the middle, money at the bottom. Learn the parts once and every invoice reads faster. Each number below matches a note under the document.`,
+  { doc: {
+    kind: 'Service invoice', vendor: 'Interstate Truck Service · Center 417', vendorSub: 'I-40 exit 76 · Amarillo, TX · open 24/7', no: 'INV 417-20931',
+    meta: [
+      ['Customer', 'Northline Freight · fleet acct 20417'], ['Unit', 'T-127 (tractor)', 1], ['VIN', '…3HK74471', 1], ['Odometer', '412,880 mi', 1],
+      ['PO', 'PO 48810', 2], ['Authorized by', 'J. Patel, maintenance · 09:12', 2], ['Time in', 'Tue 08:55', 3], ['Time out', 'Tue 10:40', 3], ['Driver', 'R. Diaz']
+    ],
+    blocks: [
+      { t: 'Complaint', n: 4, text: 'Driver reports air leak at the glad hands. PM-A due.' },
+      { t: 'Cause', text: 'Both glad hand seals cracked. PM-A due at 412,500 mi.' },
+      { t: 'Correction', text: 'Replaced both seals; leak test OK. PM-A per fleet checklist: oil and filters, fuel filters, chassis lube, DEF top-off.' }
+    ],
+    table: { head: ['Line', 'Qty', 'Unit price', 'Amount'], rows: [
+      { n: 5, cells: ['Labor · replace glad hand seals', '0.5 h', '$165.00', '$82.50'] },
+      { n: 5, cells: ['Labor · PM-A service (flat rate)', '1', '$135.00', '$135.00'] },
+      { n: 6, cells: ['Glad hand seal', '2', '$4.25', '$8.50'] },
+      { n: 6, cells: ['Engine oil 15W-40', '44 qt', '$5.10', '$224.40'] },
+      { n: 6, cells: ['Oil filter', '2', '$28.75', '$57.50'] },
+      { n: 6, cells: ['Fuel filter set', '1', '$64.90', '$64.90'] },
+      { n: 6, cells: ['DEF', '2.5 gal', '$4.80', '$12.00'] }
+    ] },
+    totals: [['Labor', '$217.50'], ['Parts', '$367.30'], ['Shop supplies (8% of labor, max $45)', '$17.40', 7], ['Environmental fee (used oil, filters)', '$12.00', 7], ['Tax 8.25% (parts and supplies)', '$31.74', 8], ['Total due', '$645.94', 8]],
+    foot: [['Payment', 'Fleet account · net 30', 9], ['Warranty', 'Parts and labor 90 days (shop policy)', 9], ['Driver signature', 'R. Diaz', 10], ['Technician', 'Tech #22', 10]],
+    notes: [
+      { n: 1, t: 'Unit, VIN and odometer', d: 'Match them to your case. The odometer feeds PM schedules and warranty.' },
+      { n: 2, t: 'PO and authorization', d: 'Who approved the work, and when. No approval on record means questions before payment.' },
+      { n: 3, t: 'Time in and out', d: 'This is your downtime: 1 h 45 min here.' },
+      { n: 4, t: 'Complaint, cause, correction', d: 'The story of the repair. All three should be there.' },
+      { n: 5, t: 'Labor', d: 'Hours × rate, or a flat rate for standard jobs like PM. Many shops bill a 0.5 h minimum.' },
+      { n: 6, t: 'Parts', d: 'Quantity × unit price. The oil quantity should match the engine on your PM sheet.' },
+      { n: 7, t: 'Supplies and fees', d: 'Shop supplies are usually a percent of labor with a cap. Disposal fees cover used oil and filters.' },
+      { n: 8, t: 'Tax and total', d: 'Which lines are taxed depends on the state. Check the math.' },
+      { n: 9, t: 'Payment and warranty', d: 'How it is billed, and how long the work is guaranteed. Note the warranty in the unit\'s history.' },
+      { n: 10, t: 'Signatures', d: 'The driver signs for the work; the technician is named. Useful if the repair comes back.' }
+    ]
+  } },
+  { h: 'Practice: find the problems' },
+  `The same truck came back a month later. This invoice has six problems. Find them before you look at the answers.`,
+  { doc: {
+    kind: 'Service invoice', vendor: 'Interstate Truck Service · Center 417', vendorSub: 'I-40 exit 76 · Amarillo, TX', no: 'INV 417-21877',
+    meta: [['Customer', 'Northline Freight · fleet acct 20417'], ['Unit', 'T-127 (tractor)'], ['Odometer', '401,220 mi'], ['PO', '—'], ['Authorized by', '—'], ['Time in / out', 'Thu 13:10 / 16:30']],
+    blocks: [{ t: 'Complaint / correction', text: 'Air leak at glad hands. Replaced seals. PM-A performed.' }],
+    table: { head: ['Line', 'Qty', 'Unit price', 'Amount'], rows: [
+      { cells: ['Labor · replace glad hand seals', '2.0 h', '$165.00', '$330.00'] },
+      { cells: ['Labor · PM-A service (flat rate)', '1', '$135.00', '$135.00'] },
+      { cells: ['Glad hand seal', '2', '$4.25', '$8.50'] },
+      { cells: ['Engine oil 15W-40', '44 qt', '$5.10', '$224.40'] },
+      { cells: ['Oil filter', '2', '$28.75', '$57.50'] },
+      { cells: ['Oil filter', '2', '$28.75', '$57.50'] },
+      { cells: ['Mud flap · TR-540', '1', '$38.00', '$38.00'] },
+      { cells: ['Fuel filter set', '1', '$64.90', '$64.90'] }
+    ] },
+    totals: [['Labor', '$465.00'], ['Parts', '$450.80'], ['Shop supplies (15% of labor)', '$69.75'], ['Environmental fee', '$12.00'], ['Tax 8.25%', '$42.95'], ['Total due', '$1,040.50']]
+  } },
+  { exercise: { type: 'multi', prompt: 'Which lines or fields on invoice 417-21877 do you question before approving payment? Pick all six.', options: [
+    { text: 'Odometer 401,220 mi', correct: true, why: 'Lower than last month\'s 412,880. Odometers do not go backwards: a typo or the wrong unit.' },
+    { text: 'No PO and no authorization', correct: true, why: 'Nobody approved this work on record.' },
+    { text: '2.0 h to replace two glad hand seals', correct: true, why: 'The same job took 0.5 h last month. Ask why.' },
+    { text: 'Oil filter billed twice', correct: true, why: 'A duplicate line: the PM uses two filters, not four.' },
+    { text: 'Mud flap for TR-540', correct: true, why: 'A part for a different unit, which was not here.' },
+    { text: 'Shop supplies 15% with no cap', correct: true, why: 'Last month it was 8% capped at $45.' },
+    { text: 'Fuel filter set $64.90', correct: false, why: 'Same price as last month, and part of PM-A.' },
+    { text: 'Engine oil 44 qt', correct: false, why: 'Matches the engine and last month\'s PM.' }
+  ] } }
+] });
+
+/* ---- Advanced 4.3: reading a tire service work order ---- */
+(lessonAt('advanced.m4.l3').deep ||= []).push({ title: 'Reading a tire service work order', blocks: [
+  `A tire shop's work order records every position it touched, with tread depth, pressure and the tire's age. Read it to confirm the right tires were changed, the law was met and nothing was missed.`,
+  { doc: {
+    kind: 'Tire work order', vendor: 'Highway Tire & Road Service', vendorSub: 'I-20 exit 498 · Terrell, TX', no: 'WO 7731-0442',
+    meta: [['Units', 'T-133 tractor · TR-532 trailer'], ['Odometer', '388,410 mi'], ['PO', 'PO 48851'], ['Authorized by', 'J. Patel · 07:20'], ['Time in / out', 'Wed 06:50 / 08:35'], ['Load', 'Loaded, dry van']],
+    table: { head: ['Position', 'Tread', 'Pressure', 'DOT date', 'Action'], rows: [
+      { n: 1, cells: ['Steer · left', '9/32', '110 psi', 'wk 24 · 2023', 'OK'] },
+      { n: 2, cells: ['Steer · right', '3/32', '108 psi', 'wk 19 · 2021', 'Replaced: below 4/32 steer minimum'] },
+      { cells: ['Drive 1 · left outer', '8/32', '100 psi', 'wk 31 · 2022', 'OK'] },
+      { cells: ['Drive 1 · left inner', '7/32', '98 psi', 'wk 31 · 2022', 'OK'] },
+      { n: 3, cells: ['Drive 2 · right outer', '6/32', '72 psi', 'wk 05 · 2022', 'Slow leak at valve: core replaced, aired to 100 psi'] },
+      { n: 5, cells: ['Trailer 2 · right outer', '—', '0 psi', 'wk 40 · 2020', 'Flat, casing damaged: replaced with retread'] },
+      { n: 6, cells: ['Trailer 2 · right inner', '5/32', '95 psi', 'wk 40 · 2020', 'Checked after partner flat: OK'] }
+    ] },
+    totals: [['New steer tire 295/75R22.5', '$485.00'], ['Retread trailer tire 295/75R22.5', '$245.00', 5], ['Casing credit (old trailer tire)', '−$35.00', 5], ['Mount and demount × 2', '$70.00'], ['Steer tire balance', '$25.00'], ['Valve core and cap', '$6.00'], ['Tire disposal', '$10.00'], ['Tax 8.25% (tires and parts)', '$60.72'], ['Total due', '$866.72', 8]],
+    foot: [['Wheel torque', '475 ft-lb · re-check after 50–100 mi', 7], ['DOT code', 'Last 4 digits = week and year made', 4], ['Driver signature', 'M. Reyes'], ['Technician', 'Tech #9']],
+    notes: [
+      { n: 1, t: 'Position', d: 'Axle, side, and inner or outer on duals. It must match what the driver reported.' },
+      { n: 2, t: 'Legal minimum', d: 'Steer tires need at least 4/32 in of tread, other positions 2/32 in (49 CFR 393.75). 3/32 on a steer is replaced, not watched.' },
+      { n: 3, t: 'Pressure', d: '72 psi against 100 on its partner means a leak. Low pressure ruins casings and causes blowouts.' },
+      { n: 4, t: 'DOT date', d: 'The last four digits of the DOT code are the week and year the tire was made. Old tires are worth flagging.' },
+      { n: 5, t: 'Retread and casing credit', d: 'Retreads are common on trailers and drives. A damaged old tire may earn a smaller credit, or none.' },
+      { n: 6, t: 'The dual partner', d: 'When one dual goes flat, its partner carried double load. Check it.' },
+      { n: 7, t: 'Torque and re-check', d: 'Record the torque and plan a re-check after the first 50–100 miles.' },
+      { n: 8, t: 'Total', d: 'Tires, mounting, balancing, small parts, disposal, minus credits, plus tax.' }
+    ]
+  } }
+] });
+lessonAt('advanced.m4.l3').check.push(
+  { t: 'mc', q: 'On work order 7731-0442, why was the right steer tire replaced?', o: ['It was more than 2 years old', 'Its tread was 3/32 in, below the 4/32 in steer minimum', 'Its pressure was 108 psi', 'The driver asked for it'], a: 1, e: 'Steer tires need at least 4/32 in of tread under 49 CFR 393.75.' },
+  { t: 'mc', q: 'A tire\'s DOT code ends in 1921. When was it made?', o: ['January 2019', 'Week 19 of 2021', 'Year 1921', 'It is the tire size'], a: 1, e: 'The last four digits are the week and year of manufacture.' }
+);
+
+/* ---- Advanced 4.2: reading a roadside service ticket ---- */
+lessonAt('advanced.m4.l2').deep.push({ title: 'Reading a roadside service ticket', blocks: [
+  `Roadside work is billed differently from shop work: a call-out fee, mileage to reach the truck, roadside labor rates and sometimes a parts run. Check each one against what you authorized.`,
+  { doc: {
+    kind: 'Roadside service ticket', vendor: 'Rapid Road Service', vendorSub: 'Mobile heavy-duty repair · Texarkana, TX', no: 'RS-55120',
+    meta: [['Unit', 'T-114 · loaded'], ['Location', 'I-30 EB, mile 142, TX', 2], ['Call received', '14:35', 1], ['Dispatched', '14:42', 1], ['On site', '16:05', 1], ['Completed', '17:40', 1], ['PO', 'PO 48890'], ['Authorized up to', '$1,200 · J. Patel', 8]],
+    blocks: [
+      { t: 'Complaint', text: 'Loud air leak and low-air warning, right rear drive axle.' },
+      { t: 'Correction', text: 'Replaced right rear drive spring brake chamber (type 30/30). Adjusted; brakes tested and released.' }
+    ],
+    table: { head: ['Line', 'Qty', 'Rate', 'Amount'], rows: [
+      { n: 3, cells: ['Service call (call-out fee)', '1', '$195.00', '$195.00'] },
+      { n: 4, cells: ['Mileage, round trip', '64 mi', '$4.50', '$288.00'] },
+      { n: 5, cells: ['Roadside labor', '1.5 h', '$175.00', '$262.50'] },
+      { n: 6, cells: ['Parts run to local supplier', '1', '$75.00', '$75.00'] },
+      { n: 7, cells: ['Spring brake chamber 30/30', '1', '$189.00', '$189.00'] },
+      { n: 7, cells: ['Clamp and hardware', '1', '$14.00', '$14.00'] }
+    ] },
+    totals: [['Subtotal', '$1,023.50'], ['Tax 8.25% (parts)', '$16.75'], ['Total due', '$1,040.25', 8]],
+    foot: [['Payment', 'PO 48890 · fleet account'], ['Warranty', 'Parts 90 days'], ['Technician', 'D. Owens', 9], ['Driver signature', 'K. Lee', 9]],
+    notes: [
+      { n: 1, t: 'The clock', d: 'Response time is call to on-site: 90 minutes here. Repair time on site: 1 h 35 min.' },
+      { n: 2, t: 'Location', d: 'Should match where the truck was. It also explains the mileage.' },
+      { n: 3, t: 'Call-out fee', d: 'A flat fee for coming out. Often higher at night and on weekends.' },
+      { n: 4, t: 'Mileage', d: 'Usually round trip from the vendor\'s base. Check that the distance makes sense.' },
+      { n: 5, t: 'Roadside labor', d: 'Higher than shop rates, often with a one-hour minimum.' },
+      { n: 6, t: 'Parts run', d: 'A charge for fetching a part the truck did not carry. It should match what you approved.' },
+      { n: 7, t: 'Parts', d: 'The exact part fitted. Note it for warranty.' },
+      { n: 8, t: 'Within the limit?', d: '$1,040.25 against a $1,200 authorization: OK. Anything over needs approval first.' },
+      { n: 9, t: 'Signatures', d: 'Technician and driver. Keep the ticket with the case.' }
+    ]
+  } },
+  { exercise: { type: 'extract', prompt: 'Pull the key numbers from ticket RS-55120.', sourceLabel: 'Ticket RS-55120 (above)', source: 'Call received 14:35 · On site 16:05 · Mileage 64 mi round trip · Total due $1,040.25 · Authorized up to $1,200', fields: [
+    { label: 'Response time (minutes)', accept: ['90', '90 min', '90 minutes'] },
+    { label: 'Billed mileage (miles)', accept: ['64', '64 mi'] },
+    { label: 'Amount left under the authorization ($)', accept: ['159.75', '$159.75'] }
+  ] } }
+] });
